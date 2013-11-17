@@ -30,7 +30,9 @@ def index(request):
     )
 
 # product page
-def product(request):
+def product(request, slug):
+    
     return render_to_response('product.html', {
+        'product': get_object_or_404(Book, slug=slug),
     },
     )

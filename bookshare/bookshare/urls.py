@@ -6,8 +6,14 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'bookshare.views.home', name='home'),
-    url(r'^bookshare/', include('bookshare.foo.urls')),
+    # url(r'^$', 'bookshare.views.home', name='home'),
+    # url(r'^bookshare/', include('bookshare.foo.urls')),
+
+    # home page
+    url(r'^$', 'index' name = 'homepage'),
+
+    # product page
+    url(r'^product/(?P<slug>[^\.]+)', 'product', name = 'productpage'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

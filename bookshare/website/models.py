@@ -14,6 +14,10 @@ class Book( models.Mode ):
 
     price = models.IntegerField()
 
+    slug = models.SlugField(max_length = 50)
+
     # for later with moar space --> image upload
 
-    # slugfield
+    # object call
+    def __unicode__(self):
+        return '%s' % self.title

@@ -44,7 +44,7 @@ def create_listing(request):
     },
     )
 
-def my_listings.html(request):
+def my_listings(request):
 
     return render_to_response('my_listings.html', {
 

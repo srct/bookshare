@@ -1,23 +1,29 @@
 from django.db import models
 
 # Create your models here.
-class Book( models.Mode ):
+class Listing( models.Mode ):
+
     title = models.CharField(max_length = 200)
     author = models.CharField(max_length = 200)
-    ISBN = models.CharField(max_length = 200)
+    ISBN = models.CharField(min_length = 10, max_length = 15)
 
-    uploaded = models.DateField(auto_add_now)
-    
+    date_uploaded = models.DateField(auto_add_now)
     condition = TextField()
+    price = models.IntegerField()
+    photo = models.ImageField(max_length = 1000)
 
     sold = models.BooleanField()
 
-    price = models.IntegerField()
-
     slug = models.SlugField(max_length = 50)
-
-    # for later with moar space --> image upload
 
     # object call
     def __unicode__(self):
         return '%s' % self.title
+
+
+class Seller( models.Mode ):
+
+    name = models.CharField(max_length = 200)
+    email = models.CharField(max_length = 200)
+
+    listings = models.ManyToManyField('Listing', blank=True)

@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
@@ -10,7 +11,7 @@ urlpatterns = patterns('',
     # url(r'^bookshare/', include('bookshare.foo.urls')),
 
     # home page
-    url(r'^$', 'index' name = 'homepage'),
+    url(r'^$', 'index', name = 'homepage'),
 
     # product page
     url(r'^product/(?P<slug>[^\.]+)', 'product', name = 'productpage'),

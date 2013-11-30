@@ -30,9 +30,30 @@ def index(request):
     )
 
 # product page
-def product(request, slug):
+def listing(request, slug):
     
-    return render_to_response('product.html', {
-        'product': get_object_or_404(Book, slug=slug),
+    return render_to_response('listing.html', {
+        'listing': get_object_or_404(Book, slug=slug),
+    },
+    )
+
+def create_listing(request):
+
+    return render_to_response('create_listing.html', {
+    
+    },
+    )
+
+def my_listings.html(request):
+
+    return render_to_response('my_listings.html', {
+
+    },
+    )
+
+def seller_profile(request):
+
+    return render_to_response('seller_profile', {
+
     },
     )

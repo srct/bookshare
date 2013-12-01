@@ -32,7 +32,7 @@ def index(request):
     )
 
 # product page
-def listing(request, slug):
+def listings(request, slug):
     # functions--
     # bidding ranking
     # customized commenting
@@ -40,7 +40,14 @@ def listing(request, slug):
     # IF lister, different things in the template appear
 
     return render_to_response('listing.html', {
-        'listing': get_object_or_404(Book, slug=slug),
+        'listing': get_object_or_404(Listing, slug=slug),
+    },
+    )
+
+def all_listings(request):
+    # get all listings from user, sorted by time
+    return render_to_response('all_listings.html', {
+        'listings' : Listing.objects.all(),
     },
     )
 
@@ -48,13 +55,6 @@ def create_listing(request):
     # merely forms
     return render_to_response('create_listing.html', {
     
-    },
-    )
-
-def my_listings(request):
-    # get all listings from user, sorted by time
-    return render_to_response('my_listings.html', {
-        'listings' : Listing.objects.all(),
     },
     )
 

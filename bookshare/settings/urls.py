@@ -13,14 +13,14 @@ urlpatterns = patterns('website.views',
     # home page
     url(r'^$', 'index', name = 'homepage'),
 
-    # listing page
-    url(r'^listing/(?P<slug>[^\.]+)', 'listing', name = 'listing'),
+    # all listings page
+    url(r'^listings$', 'all_listings', name = 'listing'),
+
+    # per-listing page
+    url(r'^listings/(?P<slug>[^\.]+)', 'listings', name = 'listing'),
 
     # create new listing
     url(r'^create/', 'create_listing', name = 'new-listing'),
-
-    # see your listings
-    url(r'^my-listings/', 'my_listings', name = 'my-listings'),
 
     # your seller profile
     url(r'^profile/', 'my_profile', name = 'my-profile'),

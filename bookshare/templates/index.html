@@ -7,12 +7,16 @@ GMU Bookshare &bull; Homepage
 {% block content %}
 
 <div class="container">
-    <div class="col-lg-6">
-        <button type="button" class="btn btn-primary btn-lg btn-block">I have a book</button>
-    </div>
-    <div class="col-lg-6">
-        <button type="button" class="btn btn-primary btn-lg btn-block">I need a book</button>
-    </div>
+  <div class="col-lg-6">
+    <form action="{% url 'create_listing' %}">
+      <input type="submit" class="btn btn-primary btn-lg btn-block" value="I have a book" />
+    </form>
+  </div>
+  <div class="col-lg-6">
+    <form action="{% url 'search' %}">
+      <input type="submit" class="btn btn-primary btn-lg btn-block" value="I need a book" />
+    </form>
+  </div>
 </div>
 
 {% endblock %}

@@ -72,6 +72,13 @@ def create_listing(request):
     },
     )
 
+def search(request):
+    # merely forms
+    return render_to_response('search.html', {
+    
+    },
+    )
+
 def about(request):
     # merely forms
     return render_to_response('about.html', {

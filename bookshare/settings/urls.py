@@ -21,7 +21,7 @@ urlpatterns = patterns('website.views',
     url(r'^create/', 'new-listing', name = 'new-listing'),
 
     # see your listings
-    url(r'^my-listings/', 'my-listings', name = 'my-listings'),
+    url(r'^my-listings/', 'my_listings', name = 'my-listings'),
 
     # your seller profile
     url(r'^profile/', 'my-profile', name = 'my-profile'),

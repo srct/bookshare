@@ -83,3 +83,15 @@ def contact(request):
     return render_to_response('contact.html', {
     },
     )
+
+def privacy(request):
+    # merely forms
+    return render_to_response('privacy.html', {
+    },
+    )
+
+def security(request):
+    # merely forms
+    return render_to_response('security.html', {
+    },
+    )

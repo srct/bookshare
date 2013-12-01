@@ -1,14 +1,14 @@
 {% extends 'layouts/base.html' %}
 
 {% block title %}
-GMU Bookshare &bull; User's Listings
+GMU Bookshare &bull; {{ seller.name }}'s Listings
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
 
-  <h1>User's Listings</h1>
+  <h1>{{ seller.name }}'s Listings</h1>
 
   {% if listings %}
 
@@ -35,7 +35,8 @@ GMU Bookshare &bull; User's Listings
     </div>
 
   {% else %}
-  Have you considered listing your textbooks on Bookshare? 
+    {{ seller.name }} doesn't have any listings posted yet. Have you
+    considered listing your textbooks on Bookshare? 
   {% endif %}
 
 </div>

@@ -47,6 +47,7 @@ def user_listings(request, slug):
     listings = Listing.objects.filter(seller__username=slug)
 
     return render_to_response('user_listings.html', {
+        'seller' : seller,
         'listings': listings,
     },
     )
@@ -68,5 +69,17 @@ def create_listing(request):
     # merely forms
     return render_to_response('create_listing.html', {
     
+    },
+    )
+
+def about(request):
+    # merely forms
+    return render_to_response('about.html', {
+    },
+    )
+
+def contact(request):
+    # merely forms
+    return render_to_response('contact.html', {
     },
     )

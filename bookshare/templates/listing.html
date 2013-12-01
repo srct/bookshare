@@ -1,7 +1,48 @@
 {% extends 'layouts/base.html' %}
 
-Dolla dolla bill, y'all
+<div class="alert">
+Well shucks... this listing is closed. Bummer.
+</div>
+
+Note: this doesn't actually look decent >_>
+
+{% block title %}
+{{listing.something}}
+{% endblock %}
 
 {% block content %}
+
+<div class="container">
+
+<div class ="row">
+  <div class="col-md-6">
+  <h2>Book's Title</h2>
+  <h3>Book's Author</h3>
+  <h3>Book's ISBN</h3>
+  <h3>Book's Condition</h3>
+  <h4>Description</h4>
+  </div>
+
+  <div class="col-md-4">
+  <h2>PRICE</h3>
+  Picture of the book
+  </div>
+
+  <div class="col-md-2">
+  Date of the listing
+  (Date delisted)
+  Report
+  </div>
+    
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+  The Bidding Platform
+  </div>
+  <div class="col-md-8">
+  Custom commenting system
+  </div>
+</div>
 
 {% endblock %}

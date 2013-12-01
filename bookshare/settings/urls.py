@@ -18,13 +18,13 @@ urlpatterns = patterns('website.views',
     url(r'^listing/(?P<slug>[^\.]+)', 'listing', name = 'listing'),
 
     # create new listing
-    url(r'^create/', 'new-listing', name = 'new-listing'),
+    url(r'^create/', 'create_listing', name = 'new-listing'),
 
     # see your listings
     url(r'^my-listings/', 'my_listings', name = 'my-listings'),
 
     # your seller profile
-    url(r'^profile/', 'my-profile', name = 'my-profile'),
+    url(r'^profile/', 'my_profile', name = 'my-profile'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

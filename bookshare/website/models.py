@@ -9,6 +9,7 @@ class Listing( models.Model ):
     ISBN = models.CharField(max_length = 15)
 
     date_created = models.DateField()
+    date_sold = models.DateField()
     condition = models.TextField()
     description = models.TextField()
     price = models.IntegerField()
@@ -29,3 +30,7 @@ class Seller( models.Model ):
     email = models.CharField(max_length = 200)
 
     listings = models.ManyToManyField('Listing', blank=True, related_name='+')
+
+    # object call
+    def __unicode__(self):
+        return '%s' % self.name

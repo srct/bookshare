@@ -6,7 +6,6 @@ GMU Bookshare &bull; All Listings
 
 {% block content %}
 
-
 <div class="container">
 
   <h1>All Listings</h1>
@@ -25,11 +24,11 @@ GMU Bookshare &bull; All Listings
         {% for listing in listings %}
           <tr>
             <td><img src="{{ listing.photo }}" /></td>
-            <td>{{ listing.title }}</td>
+            <td><a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a></td>
             {% if listing.active %}
-              <td class="text-center">Active</td>
+              <td class="text-center"><span class="label label-success">Active</span></td>
             {% else %}
-              <td class="text-center">Inactive</td>
+              <td class="text-center"><span class="label">Inactive</span></td>
             {% endif %}
           </tr>
         {% endfor %}
@@ -38,7 +37,7 @@ GMU Bookshare &bull; All Listings
     </div>
 
   {% else %}
-  <strong>No listings posted.</strong>
+  Have you considered listing your textbooks on Bookshare? 
   {% endif %}
 
 </div>

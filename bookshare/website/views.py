@@ -1,5 +1,6 @@
-from website.models import *
+from website.models import Listing, Seller
 from django.http import Http404
+from django.conf import settings
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
@@ -62,6 +63,7 @@ def listing(request, slug, book_slug):
 
     return render_to_response('listing.html', {
         'listing' : listing,
+        'media' : settings.MEDIA_URL,
     },
     )
 

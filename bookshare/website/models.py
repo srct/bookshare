@@ -9,6 +9,7 @@ class Listing( models.Model ):
     ISBN = models.CharField(max_length = 15)
 
     date_created = models.DateField()
+    date_sold = models.DateField()
     condition = models.TextField()
     description = models.TextField()
     price = models.IntegerField()

@@ -13,7 +13,7 @@ class Listing( models.Model ):
     condition = models.TextField()
     description = models.TextField()
     price = models.IntegerField()
-    photo = models.ImageField(max_length = 1000,upload_to='media/listing_photos')
+    photo = models.ImageField(max_length = 1000,upload_to='listing_photos')
 
     sold = models.BooleanField()
 

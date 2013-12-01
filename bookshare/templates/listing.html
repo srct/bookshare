@@ -9,23 +9,18 @@ GMU Bookshare &bull; {{listing.title}}
 <div class="container">
 
 <div class ="row">
-  <div class="col-md-6">
-  <h2>{{ listing.title }}</h2>
-  <h3>{{ listing.author }}</h3>
-  <h3>{{ listing.isbn }}</h3>
-  <h3>{{ listing.condition }}</h3>
-  <h4>{{ listing.description }}</h4>
+  <div class="col-md-8">
+    <h1><em>{{ listing.title }}</em></h1>
+    <h3>Author: {{ listing.author }}</h3>
+    <h2>{{ listing.isbn }}</h2>
+    <h2>{{ listing.condition }}</h2>
+    <p>{{ listing.description }}</p>
   </div>
 
-  <div class="col-md-4">
-  <h2>PRICE</h3>
-  Picture of the book
-  </div>
-
-  <div class="col-md-2">
-  Date of the listing
-  (Date delisted)
-  Report
+  <div class="col-md-4 text-right">
+  <h2>${{ listing.price }}</h2>
+  <img src="{{ listing.photo }}" alt="User submitted textbook photo" class="img-thumbnail" />
+  Listed {{ listing.date_created }}<br />
   </div>
     
 </div>

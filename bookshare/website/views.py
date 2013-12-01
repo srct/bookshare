@@ -1,5 +1,3 @@
-# Create your views here.
-
 from django.shortcuts import render_to_response, get_object_or_404
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -23,36 +21,46 @@ def index(request):
 #        blogs = paginator.page(paginator.num_pages)
     
     # need to figure out what needs to be displayed/accessed
+
+    # ability to create and display saved searches
+    # pull all comments from listings user has posted on and their listings
+    # make pagination work
+    # NEED TO HAVE THE SEARCH WORK--- YAY HAYSTACK
     return render_to_response('index.html', {
-        # titles
-        # ISBN
+
     },
     )
 
 # product page
 def listing(request, slug):
-    
+    # functions--
+    # bidding ranking
+    # customized commenting
+    # if enters bid, comment
+    # IF lister, different things in the template appear
+
     return render_to_response('listing.html', {
         'listing': get_object_or_404(Book, slug=slug),
     },
     )
 
 def create_listing(request):
-
+    # merely forms
     return render_to_response('create_listing.html', {
     
     },
     )
 
 def my_listings(request):
-
+    # get all listings from user, sorted by time
     return render_to_response('my_listings.html', {
 
     },
     )
 
 def seller_profile(request):
-
+    # retrieve user object
+    # IF the seller, different things in the templates appear
     return render_to_response('seller_profile', {
 
     },

@@ -40,7 +40,7 @@ def listings(request, slug):
     # IF lister, different things in the template appear
 
     return render_to_response('listing.html', {
-        'listing': get_object_or_404(Listing, slug=slug),
+        'listing': get_object_or_404(Listing, pk=slug),
     },
     )
 

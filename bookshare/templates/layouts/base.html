@@ -7,24 +7,21 @@
 <link href="/static/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
 <script src="/static/js/bootstrap.min.js"></script>
 
-<title>
-{% block title %}
-{% endblock %}
-</title>
+<title>{% block title %}{% endblock %}</title>
 
 </head>
+  <body>
 
-<body>
+  {% include 'layouts/navbar.html' %}
 
-{% include 'layouts/navbar.html' %}
+  {% block pagetitle %}
 
-{% block pagetitle %}
+  {% endblock %}
 
-{% endblock %}
+  {% block content %}
 
-{% block content %}
+  {% endblock %}
 
-{% endblock %}
-
-</body>
+  {% include 'layouts/footer.html' %}
+  </body>
 </html>

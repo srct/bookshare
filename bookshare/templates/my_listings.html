@@ -6,4 +6,39 @@ GMU Bookshare &bull; My Listings
 
 {% block content %}
 
+
+<div class="container">
+
+  <h1>My Listings</h1>
+
+  {% if listings %}
+
+    <div class="table-responsive">
+      <table class="table table-bordered">
+
+        <thead>
+          <th class="col-md-10">Title</th>
+          <th class="col-md-2 text-center">Listing Status</th>
+        </thead>
+
+        {% for listing in listings %}
+          <tr>
+            <td>{{ listing.title }}</td>
+            {% if listing.active %}
+              <td class="text-center">Active</td>
+            {% else %}
+              <td class="text-center">Inactive</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+
+      </table>
+    </div>
+
+  {% else %}
+  <strong>No listings posted.</strong>
+  {% endif %}
+
+</div>
+
 {% endblock %}

@@ -54,6 +54,7 @@ def create_listing(request):
 def my_listings(request):
     # get all listings from user, sorted by time
     return render_to_response('my_listings.html', {
+        'listings' : Listing.objects.all(),
     },
     )
 

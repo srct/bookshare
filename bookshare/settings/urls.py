@@ -14,7 +14,7 @@ urlpatterns = patterns('website.views',
     url(r'^$', 'index', name = 'homepage'),
 
     # all listings page
-    url(r'^listings$', 'all_listings', name = 'listing'),
+    url(r'^listings/?$', 'all_listings', name = 'listing'),
 
     # per-listing page
     url(r'^listings/(?P<slug>[^\.]+)', 'listings', name = 'listing'),

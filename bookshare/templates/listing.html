@@ -1,11 +1,5 @@
 {% extends 'layouts/base.html' %}
 
-<div class="alert">
-Well shucks... this listing is closed. Bummer.
-</div>
-
-Note: this doesn't actually look decent >_>
-
 {% block title %}
 {{listing.something}}
 {% endblock %}
@@ -16,11 +10,11 @@ Note: this doesn't actually look decent >_>
 
 <div class ="row">
   <div class="col-md-6">
-  <h2>Book's Title</h2>
-  <h3>Book's Author</h3>
-  <h3>Book's ISBN</h3>
-  <h3>Book's Condition</h3>
-  <h4>Description</h4>
+  <h2>{{ listing.title }}</h2>
+  <h3>{{ listing.author }}</h3>
+  <h3>{{ listing.isbn }}</h3>
+  <h3>{{ listing.condition }}</h3>
+  <h4>{{ listing.description }}</h4>
   </div>
 
   <div class="col-md-4">

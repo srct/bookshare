@@ -31,23 +31,29 @@ def index(request):
     },
     )
 
-# product page
-def listings(request, slug):
+# User profile page
+def profile(request, slug):
+    return render_to_response('profile.html', {
+        'seller': get_object_or_404(Seller, username=slug),
+    },
+    )
+
+# User listings page
+def user_listings(request, slug):
+    return render_to_response('user_listings.html', {
+        'listings': Listing.objects.filter(seller__username=slug),
+    },
+    )
+
+# Listing page
+def listing(request, slug, book_slug):
     # functions--
     # bidding ranking
     # customized commenting
     # if enters bid, comment
     # IF lister, different things in the template appear
-
     return render_to_response('listing.html', {
-        'listing': get_object_or_404(Listing, pk=slug),
-    },
-    )
-
-def all_listings(request):
-    # get all listings from user, sorted by time
-    return render_to_response('all_listings.html', {
-        'listings' : Listing.objects.all(),
+        'listing' : get_object_or_404(Listing,pk=book_slug),
     },
     )
 
@@ -55,21 +61,5 @@ def create_listing(request):
     # merely forms
     return render_to_response('create_listing.html', {
     
-    },
-    )
-
-def seller_profile(request):
-    # retrieve user object
-    # IF the seller, different things in the templates appear
-    return render_to_response('seller_profile', {
-
-    },
-    )
-
-def my_profile(request):
-    # retrieve user object
-    # IF the seller, different things in the templates appear
-    return render_to_response('seller_profile', {
-
     },
     )

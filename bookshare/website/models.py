@@ -1,14 +1,16 @@
 from django.db import models
 
 # Create your models here.
-class Listing( models.Mode ):
+class Listing( models.Model ):
+    seller = models.ForeignKey('Seller')
 
     title = models.CharField(max_length = 200)
     author = models.CharField(max_length = 200)
-    ISBN = models.CharField(min_length = 10, max_length = 15)
+    ISBN = models.CharField(max_length = 15)
 
-    date_created = models.DateField(auto_add_now)
-    condition = TextField()
+    date_created = models.DateField()
+    condition = models.TextField()
+    description = models.TextField()
     price = models.IntegerField()
     photo = models.ImageField(max_length = 1000)
 
@@ -21,9 +23,9 @@ class Listing( models.Mode ):
         return '%s' % self.title
 
 
-class Seller( models.Mode ):
+class Seller( models.Model ):
 
-    name = models.CharField(max_length = 200)
+    name = models.CharField(max_length = 200, primary_key=True)
     email = models.CharField(max_length = 200)
 
     listings = models.ManyToManyField('Listing', blank=True)

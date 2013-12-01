@@ -12,7 +12,7 @@ class Listing( models.Model ):
     condition = models.TextField()
     description = models.TextField()
     price = models.IntegerField()
-    photo = models.ImageField(max_length = 1000)
+    photo = models.ImageField(max_length = 1000,upload_to='listing_photos')
 
     sold = models.BooleanField()
 
@@ -28,4 +28,4 @@ class Seller( models.Model ):
     name = models.CharField(max_length = 200, primary_key=True)
     email = models.CharField(max_length = 200)
 
-    listings = models.ManyToManyField('Listing', blank=True)
+    listings = models.ManyToManyField('Listing', blank=True, related_name='+')

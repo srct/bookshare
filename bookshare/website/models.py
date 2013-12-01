@@ -23,14 +23,16 @@ class Listing( models.Model ):
     def __unicode__(self):
         return '%s' % self.title
 
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('listing', args=[self.seller.username, str(self.id)])
+
 
 class Seller( models.Model ):
 
     name = models.CharField(max_length = 200, primary_key=True)
     username = models.CharField(max_length = 200)
     email = models.CharField(max_length = 200)
-
-    listings = models.ManyToManyField('Listing', blank=True, related_name='+')
 
     # object call
     def __unicode__(self):

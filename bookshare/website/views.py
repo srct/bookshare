@@ -1,4 +1,5 @@
 from website.models import *
+from django.http import Http404
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
@@ -40,20 +41,26 @@ def profile(request, slug):
 
 # User listings page
 def user_listings(request, slug):
+
+    # verify that the user exists
+    seller = get_object_or_404(Seller, username=slug)
+    listings = Listing.objects.filter(seller__username=slug)
+
     return render_to_response('user_listings.html', {
-        'listings': Listing.objects.filter(seller__username=slug),
+        'listings': listings,
     },
     )
 
 # Listing page
 def listing(request, slug, book_slug):
-    # functions--
-    # bidding ranking
-    # customized commenting
-    # if enters bid, comment
-    # IF lister, different things in the template appear
+
+    seller = get_object_or_404(Seller,username=slug)
+    listing = get_object_or_404(Listing,pk=book_slug)
+    if listing.seller != seller:
+        raise Http404("Seller does not match listing.")
+
     return render_to_response('listing.html', {
-        'listing' : get_object_or_404(Listing,pk=book_slug),
+        'listing' : listing,
     },
     )
 

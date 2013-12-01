@@ -27,8 +27,8 @@ urlpatterns = patterns('website.views',
     url(r'^contact/?$', 'contact', name = 'contact'),
     # privacy policy
     url(r'^privacy/?$', 'privacy', name = 'privacy'),
-    # security policy
-    url(r'^security/?$', 'security', name = 'security'),
+#    # security policy
+#    url(r'^security/?$', 'security', name = 'security'),
 
     #### LISTING MANAGEMENT PAGES ####
     # create new listing

@@ -97,8 +97,8 @@ def privacy(request):
     },
     )
 
-def security(request):
-    # merely forms
-    return render_to_response('security.html', {
-    },
-    )
+#def security(request):
+#    # merely forms
+#    return render_to_response('security.html', {
+#    },
+#    )

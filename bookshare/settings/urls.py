@@ -19,8 +19,14 @@ urlpatterns = patterns('website.views',
     # user listings page
     url(r'^u/(?P<slug>\w+)/listings/?$', 'user_listings', name = 'user_listings'),
 
+    # about page
+    url(r'^about/?$', 'about', name = 'about'),
+
     # book listing page
     url(r'^u/(?P<slug>\w+)/listings/(?P<book_slug>\w+)$', 'listing', name = 'listing'),
+
+    # contact staff
+    url(r'^contact/?$', 'contact', name = 'contact'),
 
 #    # create new listing
 #    url(r'^create$', 'create_listing', name = 'new-listing'),

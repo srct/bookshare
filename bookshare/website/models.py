@@ -27,6 +27,7 @@ class Listing( models.Model ):
 class Seller( models.Model ):
 
     name = models.CharField(max_length = 200, primary_key=True)
+    username = models.CharField(max_length = 200)
     email = models.CharField(max_length = 200)
 
     listings = models.ManyToManyField('Listing', blank=True, related_name='+')

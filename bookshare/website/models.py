@@ -7,7 +7,7 @@ class Listing( models.Mode ):
     author = models.CharField(max_length = 200)
     ISBN = models.CharField(min_length = 10, max_length = 15)
 
-    date_uploaded = models.DateField(auto_add_now)
+    date_created = models.DateField(auto_add_now)
     condition = TextField()
     price = models.IntegerField()
     photo = models.ImageField(max_length = 1000)

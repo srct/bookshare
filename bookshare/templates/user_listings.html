@@ -1,14 +1,14 @@
 {% extends 'layouts/base.html' %}
 
 {% block title %}
-GMU Bookshare &bull; All Listings
+GMU Bookshare &bull; User's Listings
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
 
-  <h1>All Listings</h1>
+  <h1>User's Listings</h1>
 
   {% if listings %}
 
@@ -16,14 +16,12 @@ GMU Bookshare &bull; All Listings
       <table class="table table-bordered">
 
         <thead>
-          <th class="col-md-1">Photo</th>
           <th class="col-md-10">Title</th>
           <th class="col-md-1 text-center">Status</th>
         </thead>
 
         {% for listing in listings %}
           <tr>
-            <td><img src="{{ listing.photo }}" /></td>
             <td><a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a></td>
             {% if listing.active %}
               <td class="text-center"><span class="label label-success">Active</span></td>

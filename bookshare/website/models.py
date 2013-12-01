@@ -30,3 +30,7 @@ class Seller( models.Model ):
     email = models.CharField(max_length = 200)
 
     listings = models.ManyToManyField('Listing', blank=True, related_name='+')
+
+    # object call
+    def __unicode__(self):
+        return '%s' % self.name

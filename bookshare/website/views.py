@@ -65,3 +65,11 @@ def seller_profile(request):
 
     },
     )
+
+def my_profile(request):
+    # retrieve user object
+    # IF the seller, different things in the templates appear
+    return render_to_response('seller_profile', {
+
+    },
+    )

@@ -1,38 +1,18 @@
 {% extends 'layouts/base.html' %}
 
 {% block title %}
-GMU Bookshare &bull; Homepage
+GMU Bookshare &middot; Homepage
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
-
-  <div class="row">
-    <div class="col-md-12"><h4>Create a new Listing</h4>
-  </div>
-
-  <!-- notifications -->
-  <div class="row">
-    <div class="col-md-12"><h4>Notifications</h4>
-
-    <div class="row">
-      <div><h3>Look... here's some stuff that's happened on one
-      of your listings</h3></div>
+    <div class="col-lg-6">
+        <button type="button" class="btn btn-primary btn-lg btn-block">I have a book</button>
     </div>
+    <div class="col-lg-6">
+        <button type="button" class="btn btn-primary btn-lg btn-block">I need a book</button>
     </div>
-  </div>
-
-  <!-- stuff that you're looking for -->
-  <div class="row">
-    <div class="col-md-12">
-
-    <div class="row">
-       <div><h3>A lovely book listing</h3></div>
-    </div>
-    </div>
-  </div>
-
 </div>
 
 {% endblock %}

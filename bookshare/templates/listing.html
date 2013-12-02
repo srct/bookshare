@@ -11,6 +11,12 @@ GMU Bookshare &bull; {{listing.title}}
 
   <div class ="row">
 
+    {% if listing.sold %}
+      <div class="alert alert-warning">
+        <strong>This listing has been sold.</strong>
+      </div>
+    {% endif %}
+
     {% if old %}
       <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"

@@ -3,7 +3,7 @@ from django.http import Http404
 from django.conf import settings
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from datetime import date,timedelta
+from datetime import datetime,timedelta
 
 import pyisbn
 import requests
@@ -89,7 +89,7 @@ def listing(request, slug, book_slug):
     listing = get_object_or_404(Listing,pk=book_slug)
 
     # if the listing is over a week old, it's old
-    old_threshold = date.today() - timedelta(weeks=3)
+    old_threshold = datetime.now() - timedelta(weeks=3)
 
     # make a thumbnail of the image
 #    from PIL import Image

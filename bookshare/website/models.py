@@ -8,7 +8,7 @@ class Listing( models.Model ):
     author = models.CharField(max_length = 200)
     ISBN = models.CharField(max_length = 15)
     year = models.IntegerField()
-    edition = models.CharField()
+    edition = models.CharField(max_length = 30)
 
     date_created = models.DateField()
     date_sold = models.DateField()

@@ -21,6 +21,8 @@ class Listing( models.Model ):
 
     slug = models.SlugField(max_length = 50)
 
+    finalPrice = models.IntegerField()
+
     # object call
     def __unicode__(self):
         return '%s' % self.title

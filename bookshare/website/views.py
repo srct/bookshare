@@ -8,6 +8,7 @@ from datetime import date,timedelta
 import pyisbn
 import requests
 
+# pulls worldcat metadata from ISBNs
 def ISBNMetadata(standardISBN):
   url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + standardISBN + "?method=getMetadata&format=json&fl=title,year,author"
   metadata = request.get(url)
@@ -15,6 +16,14 @@ def ISBNMetadata(standardISBN):
   dejson = metadata.json()
   metadataDict = dejson['list'][0]
   return metadataDict
+
+# gamification
+def totalSold(seller):
+  soldList = Listing.objects.filter(seller__username=seller)
+  totalSold = 0
+  for book in soldList:
+    totalSold += book.finalPrice
+  return totalSold
 
 # home page
 def index(request):

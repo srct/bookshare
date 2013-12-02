@@ -23,7 +23,7 @@ urlpatterns = patterns('website.views',
     # book listing page
     url(r'^u/(?P<slug>\w+)/listings/(?P<book_slug>\w+)$', 'listing', name = 'listing'),
 
-    #### META PAGES ####
+    #### STATIC PAGES ####
     # home page
     url(r'^$', 'index', name = 'homepage'),
     # about page
@@ -46,4 +46,8 @@ urlpatterns = patterns('website.views',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+
+    #### COMMENTS APP ####
+    (r'^comments/', include('django.contrib.comments.urls')),
+
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

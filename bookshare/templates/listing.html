@@ -64,12 +64,14 @@ GMU Bookshare &bull; {{listing.title}}
       <p>{{ listing.book_condition }}</p>
     </div>
 
-    {% if listing.description %}
-      <div class="col-md-8">
-        <h4>Description</h4>
+    <div class="col-md-8">
+      <h4>Description</h4>
+      {% if listing.description %}
         <p>{{ listing.description }}</p>
-      </div>
-    {% endif %}
+      {% else %}
+        <p>None provided.</p>
+      {% endif %}
+    </div>
 
     <div class="col-md-3 col-sm-12 col-xs-12">
       <div class="panel panel-default" style="margin-top:10px;">

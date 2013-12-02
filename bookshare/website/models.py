@@ -10,7 +10,7 @@ class Listing( models.Model ):
     year = models.IntegerField(null=True,blank=True)
     edition = models.CharField(blank=True,max_length = 30)
 
-    date_created = models.DateField()
+    date_created = models.DateTimeField(auto_add_now=True)
     date_sold = models.DateField(null=True,blank=True)
     condition = models.TextField()
     description = models.TextField(blank=True)

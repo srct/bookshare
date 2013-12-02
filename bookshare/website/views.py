@@ -29,9 +29,9 @@ def totalSold(seller):
     return totalSold
 
 # validation of new listing forms
+    # <3 test cases
 
 # relevant comments
-
 def relevantComments(seller):
     sellerListings = Listing.objects.filter(seller__username=seller).order_by("-date_created")
     # all listings that seller has commented on (preferably ordered in reverse)
@@ -40,8 +40,19 @@ def relevantComments(seller):
     return False
 
 # saved searches
+    # need to implement haystack stuff first
 
 # seller's rating
+def ratingsAverage(seller):
+    sellerRating = Seller.objects.filter(seller__username=seller)
+    ratingNumber = 0
+    ratingTotal = 0
+    ratingAverage = 0
+    for rating in sellerRating:
+        ratingNumber += 1
+        ratingTotal += rating
+    ratingAverage = ratingTotal/ratingNumber
+    return ratingNumber
 
 # home page
 def index(request):

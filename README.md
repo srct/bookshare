@@ -25,3 +25,4 @@ To-do
 * Fix the damn grid system on the create listing template so the dropdown doesn't extend across the whole stupid page
 * Have title, etc fields autopopulate when user inputs ISBN
 * User accounts! (and GMU authentication)
+* image thumbnails on listings

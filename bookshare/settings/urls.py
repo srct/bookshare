@@ -18,8 +18,8 @@ urlpatterns = patterns('website.views',
     #### USER PAGES ####
     # user profile page
     url(r'^u/(?P<slug>\w+)/?$', 'profile', name = 'profile'),
-    # user listings page
-    url(r'^u/(?P<slug>\w+)/listings/?$', 'user_listings', name = 'user_listings'),
+#    # user listings page
+#    url(r'^u/(?P<slug>\w+)/listings/?$', 'user_listings', name = 'user_listings'),
     # book listing page
     url(r'^u/(?P<slug>\w+)/listings/(?P<book_slug>\w+)$', 'listing', name = 'listing'),
 

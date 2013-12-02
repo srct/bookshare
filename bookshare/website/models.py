@@ -7,13 +7,13 @@ class Listing( models.Model ):
     title = models.CharField(max_length = 200)
     author = models.CharField(max_length = 200)
     ISBN = models.CharField(max_length = 15)
-    year = models.IntegerField()
-    edition = models.CharField(max_length = 30)
+    year = models.IntegerField(blank=True)
+    edition = models.CharField(blank=True,max_length = 30)
 
     date_created = models.DateField()
-    date_sold = models.DateField()
+    date_sold = models.DateField(blank=True)
     condition = models.TextField()
-    description = models.TextField()
+    description = models.TextField(blank=True)
     price = models.IntegerField()
     photo = models.ImageField(max_length = 1000,upload_to='listing_photos')
 

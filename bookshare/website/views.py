@@ -3,6 +3,7 @@ from django.http import Http404
 from django.conf import settings
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from datetime import date,timedelta
 
 # home page
 def index(request):
@@ -58,12 +59,27 @@ def listing(request, slug, book_slug):
 
     seller = get_object_or_404(Seller,username=slug)
     listing = get_object_or_404(Listing,pk=book_slug)
+
+    # if the listing is over a week old, it's old
+    old_threshold = date.today() - timedelta(weeks=3)
+
+    # make a thumbnail of the image
+#    from PIL import Image
+#    size = (100, 100)
+#    image = Image.open( listing.photo )
+#    image.thumbnail(size, Image.ANTIALIAS)
+#    background = Image.new('RGBA', size, (255, 255, 255, 0))
+#    background.paste( image,
+#        ((size[0] - image.size[0]) / 2, (size[1] - image.size[1]) / 2))
+
     if listing.seller != seller:
         raise Http404("Seller does not match listing.")
 
     return render_to_response('listing.html', {
         'listing' : listing,
         'media' : settings.MEDIA_URL,
+        'old' : listing.date_created < old_threshold,
+#        'thumbnail' : background,
     },
     )
 

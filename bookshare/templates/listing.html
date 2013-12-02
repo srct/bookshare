@@ -10,19 +10,37 @@ GMU Bookshare &bull; {{listing.title}}
 
 <div class ="row">
   <div class="col-md-8">
-    <h1><em>{{ listing.title }}</em></h1>
-    <h3>Author: {{ listing.author }}</h3>
-    <h2>{{ listing.isbn }}</h2>
-    <h2>{{ listing.condition }}</h2>
-    <p>{{ listing.description }}</p>
+    <h1><em>{{ listing.title }}</em>
+    </h1>
+    <h4>{{ listing.author }} | <em>{{ listing.ISBN }}</em></h4>
+  </div>
+  <div class="col-md-4 text-right">
+    <h1>${{ listing.price }}</h1>
+    <h4>Listed {{ listing.date_created }}
+      {% if old %}
+        <span class="label label-danger">OLD</span>
+      {% endif %}
+    </h4>
   </div>
 
-  <div class="col-md-4 text-right">
-  <h2>${{ listing.price }}</h2>
-  <img src="{{ media }}{{ listing.photo }}" alt="User submitted textbook photo" class="img-thumbnail" />
-  Listed {{ listing.date_created }}<br />
+  <div class="col-md-4 col-sm-12 col-xs-12">
+    <div class="text-center">
+      <a href="{{ media }}{{ listing.photo }}" class="thumbnail">
+        <img src="{{ media }}{{ listing.photo }}" alt="User submitted textbook photo" class="img-thumbnail" />
+      </a>
+      <div class="caption">Click to enlarge.</div>
+    </div>
   </div>
-    
+
+  <div class="col-md-8">
+    <h4>Condition</h4>
+    <p>{{ listing.condition }}</p>
+    {% if listing.description %}
+      <h4>Description</h4>
+      <p>{{ listing.description }}</p>
+    {% endif %}
+  </div>
+
 </div>
 
 <div class="row">

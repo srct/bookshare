@@ -2,4 +2,4 @@
 *.swp
 /.virtualenv
 media
-website/migrations
+bookshare/website/migrations

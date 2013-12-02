@@ -1,9 +1,19 @@
-from website.models import Listing, Seller
+from website.models import *
 from django.http import Http404
-from django.conf import settings
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from datetime import date,timedelta
+
+import pyisbn
+import requests
+
+def ISBNMetadata(standardISBN):
+  url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + standardISBN + "?method=getMetadata&format=json&fl=title,year,author"
+  metadata = request.get(url)
+  # format into a dictionary
+  dejson = metadata.json()
+  metadataDict = dejson['list'][0]
+  return metadataDict
 
 # home page
 def index(request):

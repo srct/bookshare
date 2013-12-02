@@ -9,6 +9,13 @@ GMU Bookshare &bull; {{listing.title}}
 <div class="container">
 
 <div class ="row">
+  {% if old %}
+    <div class="alert alert-warning alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert"
+      aria-hidden="true">&times;</button>
+      Heads up, this listing is <strong>over a month old</strong> and may no longer be valid!
+    </div>
+  {% endif %}
   <div class="col-md-8">
     <h1><em>{{ listing.title }}</em>
     </h1>
@@ -16,11 +23,7 @@ GMU Bookshare &bull; {{listing.title}}
   </div>
   <div class="col-md-4 text-right">
     <h1>${{ listing.price }}</h1>
-    <h4>Listed {{ listing.date_created }}
-      {% if old %}
-        <span class="label label-danger">OLD</span>
-      {% endif %}
-    </h4>
+    <h4>Listed {{ listing.date_created }}</h4>
   </div>
 
   <div class="col-md-4 col-sm-12 col-xs-12">

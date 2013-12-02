@@ -47,8 +47,15 @@ def index(request):
 
 # User profile page
 def profile(request, slug):
+
+    # verify that the user exists
+    seller = get_object_or_404(Seller, username=slug)
+    listings = Listing.objects.filter(seller__username=slug)
+
     return render_to_response('profile.html', {
-        'seller': get_object_or_404(Seller, username=slug),
+        'seller' : seller,
+        'listings': listings,
+        'total_sold' : totalSold( slug ),
     },
     )
 

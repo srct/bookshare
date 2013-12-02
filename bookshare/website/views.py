@@ -12,7 +12,7 @@ import requests
 
 # pulls worldcat metadata from ISBNs
 def ISBNMetadata(standardISBN):
-    url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + standardISBN + "?method=getMetadata&format=json&fl=title,year,author"
+    url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + standardISBN + "?method=getMetadata&format=json&fl=title,year,author,ed"
     metadata = request.get(url)
     # format into a dictionary
     dejson = metadata.json()
@@ -27,6 +27,21 @@ def totalSold(seller):
         if book.finalPrice:
             totalSold += book.finalPrice
     return totalSold
+
+# validation of new listing forms
+
+# relevant comments
+
+def relevantComments(seller):
+    sellerListings = Listing.objects.filter(seller__username=seller).order_by("-date_created")
+    # all listings that seller has commented on (preferably ordered in reverse)
+    # put those lists together
+    # return that list
+    return False
+
+# saved searches
+
+# seller's rating
 
 # home page
 def index(request):

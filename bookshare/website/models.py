@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 # Create your models here.
 class Listing( models.Model ):
@@ -10,18 +11,17 @@ class Listing( models.Model ):
     year = models.IntegerField(null=True,blank=True)
     edition = models.CharField(blank=True,max_length = 30)
 
-    date_created = models.DateTimeField()
-    date_sold = models.DateField(null=True,blank=True)
-    condition = models.TextField()
+    date_created = models.DateTimeField(default=datetime.now())
+    date_sold = models.DateTimeField(null=True,blank=True)
+    book_condition = models.TextField()
     description = models.TextField(blank=True)
     price = models.IntegerField()
     photo = models.ImageField(max_length = 1000,upload_to='listing_photos')
 
     sold = models.BooleanField()
+    finalPrice = models.IntegerField(null=True,blank=True)
 
     slug = models.SlugField(max_length = 50)
-
-    finalPrice = models.IntegerField(null=True,blank=True)
 
     # object call
     def __unicode__(self):

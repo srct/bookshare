@@ -1,9 +1,11 @@
 from website.models import Listing,Seller
+from website.forms import ListingForm
 from django.http import Http404
 from django.conf import settings
 from django.shortcuts import render_to_response, get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from datetime import datetime, timedelta
+from django.utils import timezone
+from datetime import datetime,timedelta
 
 import pyisbn
 import requests
@@ -104,7 +106,7 @@ def listing(request, slug, book_slug):
     listing = get_object_or_404(Listing,pk=book_slug)
 
     # if the listing is over a week old, it's old
-    old_threshold = datetime.now() - timedelta(weeks=3)
+    old_threshold = timezone.now() - timedelta(weeks=3)
 
     # make a thumbnail of the image
 #    from PIL import Image
@@ -127,9 +129,15 @@ def listing(request, slug, book_slug):
     )
 
 def create_listing(request):
-    # merely forms
+    if request.method == 'POST':
+        form = ListingForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('/create')
+    else:
+        form = ListingForm()
+
     return render_to_response('create_listing.html', {
-    
+        'form' : form,
     },
     )
 

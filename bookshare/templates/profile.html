@@ -19,13 +19,21 @@ GMU Bookshare &bull; Seller Profile
     <div class="col-md-3 text-right">
       <h3>Buyer Rating</h3>
       <p>
-        <span class="glyphicon glyphicon-star"></span>
-        <span class="glyphicon glyphicon-star"></span>
-        <span class="glyphicon glyphicon-star-empty"></span>
-        <span class="glyphicon glyphicon-star-empty"></span>
-        <span class="glyphicon glyphicon-star-empty"></span>
+        {% if seller.rating %}
+          <span class="glyphicon glyphicon-star"></span>
+          <span class="glyphicon glyphicon-star"></span>
+          <span class="glyphicon glyphicon-star"></span>
+          <span class="glyphicon glyphicon-star-empty"></span>
+          <span class="glyphicon glyphicon-star-empty"></span>
+        {% else %}
+          No ratings yet.
+        {% endif %}
       </p>
     </div>
+
+  </div>
+
+  <div class="row">
 
     <div class="col-md-12">
       <h3>Listings</h3>

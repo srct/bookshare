@@ -2,10 +2,11 @@ from website.models import Listing,Seller
 from website.forms import ListingForm
 from django.http import Http404
 from django.conf import settings
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, render_to_response, get_object_or_404, redirect
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.utils import timezone
 from datetime import datetime,timedelta
+from django.contrib.auth.decorators import login_required
 
 import pyisbn
 import requests
@@ -21,7 +22,7 @@ def ISBNMetadata(standardISBN):
 
 # gamification
 def totalSold(seller):
-    soldList = Listing.objects.filter(seller__username=seller)
+    soldList = Listing.objects.filter(seller__user__username=seller)
     totalSold = 0
     for book in soldList:
         if book.finalPrice:
@@ -33,7 +34,7 @@ def totalSold(seller):
 
 # relevant comments
 def relevantComments(seller):
-    sellerListings = Listing.objects.filter(seller__username=seller).order_by("-date_created")
+    sellerListings = Listing.objects.filter(seller__user__username=seller).order_by("-date_created")
     # all listings that seller has commented on (preferably ordered in reverse)
     # put those lists together
     # return that list
@@ -44,7 +45,7 @@ def relevantComments(seller):
 
 # seller's rating
 def ratingsAverage(seller):
-    sellerRating = Seller.objects.filter(seller__username=seller)
+    sellerRating = Seller.objects.filter(user__username=seller)
     ratingNumber = 0
     ratingTotal = 0
     ratingAverage = 0
@@ -54,7 +55,15 @@ def ratingsAverage(seller):
     ratingAverage = ratingTotal/ratingNumber
     return ratingNumber
 
+
+############# VIEWS #######################
+
+
+
 # home page
+# Maybe don't login_require this, and allow anonymous users to browse a
+# list of currently potsed books? idk.
+@login_required
 def index(request):
 
 #    # front page of the site shows the 12 most recent listings
@@ -78,19 +87,20 @@ def index(request):
     # pull all comments from listings user has posted on and their listings
     # make pagination work
     # NEED TO HAVE THE SEARCH WORK--- YAY HAYSTACK
-    return render_to_response('index.html', {
+    return render(request, 'index.html', {
 
     },
     )
 
 # User profile page
+@login_required
 def profile(request, slug):
 
     # verify that the user exists
-    seller = get_object_or_404(Seller, username=slug)
-    listings = Listing.objects.filter(seller__username=slug)
+    seller = get_object_or_404(Seller, user__username=slug)
+    listings = Listing.objects.filter(seller__user__username=slug)
 
-    return render_to_response('profile.html', {
+    return render(request, 'profile.html', {
         'seller' : seller,
         'listings': listings,
         'total_sold' : totalSold( slug ),
@@ -98,22 +108,24 @@ def profile(request, slug):
     )
 
 # User listings page
+@login_required
 def user_listings(request, slug):
 
     # verify that the user exists
-    seller = get_object_or_404(Seller, username=slug)
-    listings = Listing.objects.filter(seller__username=slug)
+    seller = get_object_or_404(Seller, user__username=slug)
+    listings = Listing.objects.filter(seller__user__username=slug)
 
-    return render_to_response('user_listings.html', {
+    return render(request, 'user_listings.html', {
         'seller' : seller,
         'listings': listings,
     },
     )
 
 # Listing page
+@login_required
 def listing(request, slug, book_slug):
 
-    seller = get_object_or_404(Seller,username=slug)
+    seller = get_object_or_404(Seller,user__username=slug)
     listing = get_object_or_404(Listing,pk=book_slug)
 
     # if the listing is over a week old, it's old
@@ -131,7 +143,7 @@ def listing(request, slug, book_slug):
     if listing.seller != seller:
         raise Http404("Seller does not match listing.")
 
-    return render_to_response('listing.html', {
+    return render(request, 'listing.html', {
         'listing' : listing,
         'media' : settings.MEDIA_URL,
         'old' : listing.date_created < old_threshold,
@@ -139,46 +151,46 @@ def listing(request, slug, book_slug):
     },
     )
 
+@login_required
 def create_listing(request):
+
+    listing_form = ListingForm()    # default
+
     if request.method == 'POST':
-        form = ListingForm(request.POST)
-        if form.is_valid():
+        listing_form = ListingForm(request.POST)
+        if listing_form.is_valid():
+            listing = listing_form.save(commit=False)
             return HttpResponseRedirect('/create')
     else:
         form = ListingForm()
 
-    return render_to_response('create_listing.html', {
+    return render(request, 'create_listing.html', {
         'form' : form,
     },
     )
 
+@login_required
 def search(request):
     # merely forms
-    return render_to_response('search.html', {
+    return render(request, 'search.html', {
     
     },
     )
 
 def about(request):
     # merely forms
-    return render_to_response('about.html', {
+    return render(request, 'about.html', {
     },
     )
 
 def contact(request):
     # merely forms
-    return render_to_response('contact.html', {
+    return render(request, 'contact.html', {
     },
     )
 
 def privacy(request):
     # merely forms
-    return render_to_response('privacy.html', {
+    return render(request, 'privacy.html', {
     },
     )
-
-#def security(request):
-#    # merely forms
-#    return render_to_response('security.html', {
-#    },
-#    )

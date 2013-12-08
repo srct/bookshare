@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 from django.db import models
 from datetime import datetime
 
@@ -18,7 +20,7 @@ class Listing( models.Model ):
     price = models.IntegerField()
     photo = models.ImageField(max_length = 1000,upload_to='listing_photos')
 
-    sold = models.BooleanField()
+    sold = models.BooleanField(default=False)
     finalPrice = models.IntegerField(null=True,blank=True)
 
     slug = models.SlugField(max_length = 50)
@@ -34,11 +36,18 @@ class Listing( models.Model ):
 
 class Seller( models.Model ):
 
-    name = models.CharField(max_length = 200, primary_key=True)
-    username = models.CharField(max_length = 200)
-    email = models.CharField(max_length = 200)
+    user = models.OneToOneField(User)
+    #    name = models.CharField(max_length = 200, primary_key=True)
+    #    username = models.CharField(max_length = 200)
+    #    email = models.CharField(max_length = 200)
     rating = models.IntegerField(null=True,blank=True)
 
     # object call
     def __unicode__(self):
-        return '%s' % self.name
+        return '%s' % self.user
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Seller.objects.create(user=instance)
+
+post_save.connect(create_user_profile, sender=User)

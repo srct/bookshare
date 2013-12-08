@@ -18,8 +18,6 @@ urlpatterns = patterns('website.views',
     #### USER PAGES ####
     # user profile page
     url(r'^u/(?P<slug>\w+)/?$', 'profile', name = 'profile'),
-#    # user listings page
-#    url(r'^u/(?P<slug>\w+)/listings/?$', 'user_listings', name = 'user_listings'),
     # book listing page
     url(r'^u/(?P<slug>\w+)/listings/(?P<book_slug>\w+)$', 'listing', name = 'listing'),
 
@@ -32,8 +30,6 @@ urlpatterns = patterns('website.views',
     url(r'^contact/?$', 'contact', name = 'contact'),
     # privacy policy
     url(r'^privacy/?$', 'privacy', name = 'privacy'),
-#    # security policy
-#    url(r'^security/?$', 'security', name = 'security'),
 
     #### LISTING MANAGEMENT PAGES ####
     # create new listing
@@ -50,4 +46,11 @@ urlpatterns = patterns('website.views',
     #### COMMENTS APP ####
     (r'^comments/', include('django.contrib.comments.urls')),
 
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+)
+
+urlpatterns += patterns('django.contrib.auth.views',                               
+    #### AUTH PAGES ####                                                           
+    url(r'^login$', 'login', {'template_name': 'login.html'},                      
+        name='website_login'),                                                     
+    url(r'^logout$', 'logout', {'next_page': '/'}, name='website_logout'),         
+)

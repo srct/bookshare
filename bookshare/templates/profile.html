@@ -38,13 +38,15 @@ GMU Bookshare &bull; Seller Profile
         <table class="table table-bordered">
 
           <thead>
-            <th class="col-md-10">Title</th>
+            <th class="col-md-2">ISBN</th>
+            <th class="col-md-8">Title</th>
             <th class="col-md-1 text-center">Price</th>
             <th class="col-md-1 text-center">Status</th>
           </thead>
 
           {% for listing in listings %}
             <tr>
+              <td>{{ listing.ISBN }}</td>
               <td><a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a></td>
               <td class="text-center">${{ listing.price }}</td>
               {% if listing.sold %}
@@ -60,9 +62,10 @@ GMU Bookshare &bull; Seller Profile
           {% endfor %}
             
           <tr>
+            <td class="text-center">-</td>
             <td class="text-right"><strong>Total:</strong></td>
             <td class="text-center">${{ total_sold }}</td>
-            <td></td>
+            <td class="text-center">-</td>
           </tr>
 
         </table>

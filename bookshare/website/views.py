@@ -172,6 +172,11 @@ def create_listing(request):
     },
     )
 
+def delete_listing(request, slug):
+    return render(request, 'delete.html', {
+    },
+    )
+
 @login_required
 def search(request):
     # merely forms

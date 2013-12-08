@@ -12,8 +12,17 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav">
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'create_listing' %}">Create Listing</a></li>
+            <li><a href="{% url 'profile' request.user.username %}">My Listings</a></li>
+          {% endif %}
+          </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{% url 'about' %}">About</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="/logout">Log Out</a></li>
+            {% endif %}
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container -->

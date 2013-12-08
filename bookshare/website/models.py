@@ -69,6 +69,10 @@ class Seller( models.Model ):
     def __unicode__(self):
         return '%s' % self.user
 
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('profile', args=[self.user.username])
+
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Seller.objects.create(user=instance)

@@ -108,18 +108,18 @@ def profile(request, slug):
     )
 
 # User listings page
-@login_required
-def user_listings(request, slug):
-
-    # verify that the user exists
-    seller = get_object_or_404(Seller, user__username=slug)
-    listings = Listing.objects.filter(seller__user__username=slug)
-
-    return render(request, 'user_listings.html', {
-        'seller' : seller,
-        'listings': listings,
-    },
-    )
+#@login_required
+#def user_listings(request, slug):
+#
+#    # verify that the user exists
+#    seller = get_object_or_404(Seller, user__username=slug)
+#    listings = Listing.objects.filter(seller__user__username=slug)
+#
+#    return render(request, 'user_listings.html', {
+#        'seller' : seller,
+#        'listings': listings,
+#    },
+#    )
 
 # Listing page
 @login_required
@@ -154,18 +154,21 @@ def listing(request, slug, book_slug):
 @login_required
 def create_listing(request):
 
-    listing_form = ListingForm()    # default
-
     if request.method == 'POST':
-        listing_form = ListingForm(request.POST)
+        listing_form = ListingForm(request.POST, request.FILES, request=request)
         if listing_form.is_valid():
             listing = listing_form.save(commit=False)
-            return HttpResponseRedirect('/create')
+            listing.seller = request.user.seller
+            listing.slug = listing.title + listing.author
+            listing.save()
+
+            #listing.save()
+            return redirect( 'listing', listing.seller.user.username, listing.pk )
     else:
-        form = ListingForm()
+        listing_form = ListingForm(request=request)
 
     return render(request, 'create_listing.html', {
-        'form' : form,
+        'form' : listing_form,
     },
     )
 

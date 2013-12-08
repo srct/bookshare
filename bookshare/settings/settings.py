@@ -1,5 +1,8 @@
 # Django settings for bookshare project.
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+DEVELOPMENT = False
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -11,13 +14,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'bookshare',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'bookshare',
         'USER': 'bookshare',
         'PASSWORD': 'password',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -48,32 +50,21 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/var/www/example.com/media/"
-MEDIA_ROOT = 'media/'
-
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
-# Examples: "http://example.com/media/", "http://media.example.com/"
 MEDIA_URL = '/media/'
-
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
-
-# URL prefix for static files.
-# Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = '/static/'
-
-# Additional locations of static files
-STATICFILES_DIRS = (
-    'static',
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+MEDIA_ROOT = (os.path.join(BASE_DIR, 'media/'))
+MEDIAFILES_DIRS = (
 )
+
+STATIC_URL = '/static/'
+if DEVELOPMENT:
+    STATIC_ROOT = ''
+    STATICFILES_DIRS = (
+        (os.path.join(BASE_DIR, 'static/')),
+    )
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+    STATICFILES_DIRS = (
+    )
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -91,6 +82,11 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    'django.contrib.auth.context_processors.auth',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -161,3 +157,56 @@ LOGGING = {
         },
     }
 }
+
+
+LOGIN_URL = '/login'
+LOGOUT_URL = '/logout'
+LOGIN_REDIRECT_URL = '/'
+
+
+# Authentication
+# http://pythonhosted.org/django-auth-ldap
+
+import ldap
+# Baseline configuration
+
+# Keep ModelBackend around for per-user permissions and maybe a local
+# superuser.
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+AUTH_LDAP_SERVER_URI = "ldaps://directory.gmu.edu:636"  # server url
+
+AUTH_LDAP_BIND_DN = "ou=people,o=gmu.edu"               # bind DN
+
+AUTH_LDAP_BIND_AS_AUTHENTICATING_USER = True            # use the user
+
+AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=people,o=gmu.edu"
+
+AUTH_LDAP_GLOBAL_OPTIONS = {                            # ignore UAC cert.
+    ldap.OPT_X_TLS : ldap.OPT_X_TLS_DEMAND,
+    ldap.OPT_X_TLS_REQUIRE_CERT : ldap.OPT_X_TLS_NEVER,
+}
+
+# Populate the Django user from the LDAP directory.
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail"
+}
+#AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+#    "is_active": "cn=active,ou=django,ou=groups,dc=example,dc=com",
+#    "is_staff": "cn=staff,ou=django,ou=groups,dc=example,dc=com",
+#    "is_superuser": "cn=superuser,ou=django,ou=groups,dc=example,dc=com"
+#}
+#AUTH_LDAP_PROFILE_FLAGS_BY_GROUP = {
+#    "is_awesome": "cn=awesome,ou=django,ou=groups,dc=example,dc=com",
+#}
+
+# This is the default, but I like to be explicit.
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+
+# This is used because the Seller is a "profile" model of the User model
+AUTH_PROFILE_MODULE = 'website.Seller'

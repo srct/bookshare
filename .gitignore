@@ -3,3 +3,4 @@
 /.virtualenv
 media
 bookshare/website/migrations
+bookshare/static/admin

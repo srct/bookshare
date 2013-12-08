@@ -31,7 +31,7 @@ GMU Bookshare &bull; {{listing.title}}
 {% endif %}
 
   <div class="row">
-    <div class="col-md-9 col-sm-6 col-xs-12">
+    <div class="col-md-8 col-sm-6 col-xs-12">
       <h1>
         <em>{{ listing.title }}</em>
       </h1>
@@ -51,10 +51,14 @@ GMU Bookshare &bull; {{listing.title}}
       </h4>
     </div>
 
-    <div class="col-md-3 col-sm-6 col-xs-12 text-right">
+    <div class="col-md-4 col-sm-6 col-xs-12 text-right">
       <h1>${{ listing.price }}</h1>
       <h4>Listed {{ listing.date_created }}</h4>
-      <a class="btn btn-danger" href="#">Report Listing</a>
+      {% if request.user = listing.seller.user %}
+      <a href="{% url 'delete_listing' listing.id %}">Delete Listing</a> | 
+      {% endif %}
+      <a href="{{ listing.seller.get_absolute_url }}">Contact Seller</a> | 
+      <a href="#">Report Listing</a>
     </div>
   </div>
 </div>
@@ -67,7 +71,25 @@ GMU Bookshare &bull; {{listing.title}}
         <img src="{{ media }}{{ listing.photo }}" alt="User submitted textbook photo" class="img-thumbnail" />
       </a>
     </div>
+  </div>
 
+  <div class="col-md-6 col-sm-12 col-xs-12">
+    <div class="col-md-9 col-sm-12 col-xs-12">
+      <h4>Condition</h4>
+      <p>{{ listing.book_condition }}</p>
+    </div>
+
+    <div class="col-md-9 col-sm-12 col-xs-12">
+      <h4>Description</h4>
+      {% if listing.description %}
+        <p>{{ listing.description }}</p>
+      {% else %}
+        <p>None provided.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="col-md-3 col-sm-12 col-xs-12">
     <div class="panel panel-default" style="margin-top:10px;">
       <div class="panel-heading">
         <h4 class="panel-title">
@@ -82,24 +104,9 @@ GMU Bookshare &bull; {{listing.title}}
         </div>
       </div>
     </div>
-
   </div>
 
-  <div class="col-md-9 col-sm-12 col-xs-12">
-    <h4>Condition</h4>
-    <p>{{ listing.book_condition }}</p>
-  </div>
-
-  <div class="col-md-9 col-sm-12 col-xs-12">
-    <h4>Description</h4>
-    {% if listing.description %}
-      <p>{{ listing.description }}</p>
-    {% else %}
-      <p>None provided.</p>
-    {% endif %}
-  </div>
-
-  <div class="col-md-9 col-sm-12 col-xs-12">
+  <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="panel panel-default" style="margin-top:10px;">
       <div class="panel-heading">
         <h4 class="panel-title">
@@ -117,13 +124,6 @@ GMU Bookshare &bull; {{listing.title}}
       </div>
     </div>
   </div>
-
-</div>
-<div class="row">
-
-  <div class="col-md-3 col-sm-12 col-xs-12">
-  </div>
-
 
 </div>
 

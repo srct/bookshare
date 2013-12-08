@@ -6,19 +6,14 @@ GMU Bookshare &bull; Seller Profile
 
 {% block content %}
 
-<div class="container">
+<div class="page-header" id="banner">
   <div class="row">
-
-    <div class="col-md-9">
-      <h1>
-        {{ seller.name }}
-        <a href="mailto:{{ seller.email }}">{ contact }</a>
-      </h1>
-    </div>
-
-    <div class="col-md-3 text-right">
-      <h3>Buyer Rating</h3>
-      <p>
+    <div class="col-lg-12">
+      <h1>{{ seller.user.first_name }} {{ seller.user.last_name }}
+      <span class="pull-right">
+        <a href="mailto:{{ seller.user.email }}">{ contact }</a>
+      </span></h1>
+      <p class="lead">
         {% if seller.rating %}
           <span class="glyphicon glyphicon-star"></span>
           <span class="glyphicon glyphicon-star"></span>
@@ -30,55 +25,53 @@ GMU Bookshare &bull; Seller Profile
         {% endif %}
       </p>
     </div>
-
   </div>
+</div>
 
-  <div class="row">
+<div class="row">
 
-    <div class="col-md-12">
-      <h3>Listings</h3>
-      {% if listings %}
+  <div class="col-md-12">
+    <h3>Listings</h3>
+    {% if listings %}
 
-        <div class="table-responsive">
-          <table class="table table-bordered">
+      <div class="table-responsive">
+        <table class="table table-bordered">
 
-            <thead>
-              <th class="col-md-10">Title</th>
-              <th class="col-md-1 text-center">Price</th>
-              <th class="col-md-1 text-center">Status</th>
-            </thead>
+          <thead>
+            <th class="col-md-10">Title</th>
+            <th class="col-md-1 text-center">Price</th>
+            <th class="col-md-1 text-center">Status</th>
+          </thead>
 
-            {% for listing in listings %}
-              <tr>
-                <td><a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a></td>
-                <td class="text-center">${{ listing.price }}</td>
-                {% if listing.sold %}
-                  <td class="text-center">
-                    <span class="label label-danger">Sold</span>
-                  </td>
-                {% else %}
-                  <td class="text-center">
-                    <span class="label label-success">Unsold</span>
-                  </td>
-                {% endif %}
-              </tr>
-            {% endfor %}
-              
+          {% for listing in listings %}
             <tr>
-              <td class="text-right"><strong>Total:</strong></td>
-              <td class="text-center">${{ total_sold }}</td>
-              <td></td>
+              <td><a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a></td>
+              <td class="text-center">${{ listing.price }}</td>
+              {% if listing.sold %}
+                <td class="text-center">
+                  <span class="label label-danger">Sold</span>
+                </td>
+              {% else %}
+                <td class="text-center">
+                  <span class="label label-success">Unsold</span>
+                </td>
+              {% endif %}
             </tr>
+          {% endfor %}
+            
+          <tr>
+            <td class="text-right"><strong>Total:</strong></td>
+            <td class="text-center">${{ total_sold }}</td>
+            <td></td>
+          </tr>
 
-          </table>
-        </div>
+        </table>
+      </div>
 
-      {% else %}
-        {{ seller.name }} doesn't have any listings posted yet.
-      {% endif %}
-    </div>
+    {% else %}
+      {{ seller.name }} doesn't have any listings posted yet.
+    {% endif %}
   </div>
-
 </div>
 
 {% endblock %}

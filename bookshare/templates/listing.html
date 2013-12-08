@@ -7,33 +7,31 @@ GMU Bookshare &bull; {{listing.title}}
 
 {% block content %}
 
-<div class="container">
-
-  <div class ="row">
-
-    {% if listing.sold %}
-      <div class="alert alert-warning">
+<div class="page-header" id="banner">
+{% if listing.sold %}
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="alert alert-danger alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">&times;</button>
         <strong>This listing has been sold.</strong>
       </div>
-    {% endif %}
-
-    {% if old %}
+    </div>
+  </div>
+{% elif old %}
+  <div class="row">
+    <div class="col-lg-12">
       <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
         aria-hidden="true">&times;</button>
         Heads up, this listing is <strong>over a month old</strong> and may no longer be valid!
       </div>
-    {% endif %}
-
-    <div class="col-md-3 col-sm-12 col-xs-12">
-      <div class="text-center">
-        <a href="{{ media }}{{ listing.photo }}" class="thumbnail">
-          <img src="{{ media }}{{ listing.photo }}" alt="User submitted textbook photo" class="img-thumbnail" />
-        </a>
-      </div>
     </div>
+  </div>
+{% endif %}
 
-    <div class="col-md-6 col-sm-12 col-xs-12">
+  <div class="row">
+    <div class="col-md-6 col-sm-6 col-xs-12">
       <h1>
         <em>{{ listing.title }}</em>
       </h1>
@@ -53,63 +51,79 @@ GMU Bookshare &bull; {{listing.title}}
       </h4>
     </div>
 
-    <div class="col-md-3 text-right">
+    <div class="col-md-6 col-sm-6 col-xs-12 text-right">
       <h1>${{ listing.price }}</h1>
       <h4>Listed {{ listing.date_created }}</h4>
       <a class="btn btn-danger" href="#">Report Listing</a>
     </div>
+  </div>
+</div>
 
-    <div class="col-md-8">
-      <h4>Condition</h4>
-      <p>{{ listing.book_condition }}</p>
+<div class ="row">
+
+  <div class="col-md-3 col-sm-12 col-xs-12">
+    <div class="text-center">
+      <a href="{{ media }}{{ listing.photo }}" class="thumbnail">
+        <img src="{{ media }}{{ listing.photo }}" alt="User submitted textbook photo" class="img-thumbnail" />
+      </a>
     </div>
 
-    <div class="col-md-8">
-      <h4>Description</h4>
-      {% if listing.description %}
-        <p>{{ listing.description }}</p>
-      {% else %}
-        <p>None provided.</p>
-      {% endif %}
-    </div>
-
-    <div class="col-md-3 col-sm-12 col-xs-12">
-      <div class="panel panel-default" style="margin-top:10px;">
-        <div class="panel-heading">
-          <h4 class="panel-title">
-            <a data-toggle="collapse" href="#bids">
-              Bids
-            </a>
-          </h4>
-        </div>
-        <div id="bids" class="panel-collapse collapse in">
-          <div class="panel-body">
-            Bid system goes here.
-          </div>
-        </div>
+    <div class="panel panel-default" style="margin-top:10px;">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#bids">
+            Bids
+          </a>
+        </h4>
       </div>
-    </div>
-
-    <div class="col-md-9 col-sm-12 col-xs-12">
-      <div class="panel panel-default" style="margin-top:10px;">
-        <div class="panel-heading">
-          <h4 class="panel-title">
-            {% get_comment_count for listing as comment_count %}
-            <a data-toggle="collapse" href="#comments">
-              Comments ({{ comment_count }})
-            </a>
-          </h4>
-        </div>
-        <div id="comments" class="panel-collapse collapse in">
-          <div class="panel-body">
-            Comments go here.
-            {% render_comment_list for listing %}
-          </div>
+      <div id="bids" class="panel-collapse collapse in">
+        <div class="panel-body">
+          Bid system goes here.
         </div>
       </div>
     </div>
 
   </div>
+
+  <div class="col-md-9 col-sm-12 col-xs-12">
+    <h4>Condition</h4>
+    <p>{{ listing.book_condition }}</p>
+  </div>
+
+  <div class="col-md-9 col-sm-12 col-xs-12">
+    <h4>Description</h4>
+    {% if listing.description %}
+      <p>{{ listing.description }}</p>
+    {% else %}
+      <p>None provided.</p>
+    {% endif %}
+  </div>
+
+  <div class="col-md-9 col-sm-12 col-xs-12">
+    <div class="panel panel-default" style="margin-top:10px;">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          {% get_comment_count for listing as comment_count %}
+          <a data-toggle="collapse" href="#comments">
+            Comments ({{ comment_count }})
+          </a>
+        </h4>
+      </div>
+      <div id="comments" class="panel-collapse collapse in">
+        <div class="panel-body">
+          Comments go here.
+          {% render_comment_list for listing %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="row">
+
+  <div class="col-md-3 col-sm-12 col-xs-12">
+  </div>
+
 
 </div>
 

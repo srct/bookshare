@@ -207,6 +207,3 @@ AUTH_LDAP_USER_ATTR_MAP = {
 
 # This is the default, but I like to be explicit.
 AUTH_LDAP_ALWAYS_UPDATE_USER = True
-
-# This is used because the Seller is a "profile" model of the User model
-AUTH_PROFILE_MODULE = 'website.Seller'

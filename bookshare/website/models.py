@@ -40,7 +40,7 @@ class Seller( models.Model ):
     #    name = models.CharField(max_length = 200, primary_key=True)
     #    username = models.CharField(max_length = 200)
     #    email = models.CharField(max_length = 200)
-    rating = models.IntegerField(null=True,blank=True)
+    rating = models.IntegerField(null=True,default=0)
 
     # object call
     def __unicode__(self):

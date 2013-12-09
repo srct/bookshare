@@ -52,13 +52,19 @@ GMU Bookshare &bull; {{listing.title}}
     </div>
 
     <div class="col-md-4 col-sm-6 col-xs-12 text-right">
-      <h1>${{ listing.price }}</h1>
+      <h1>
+        {% if listing.sold %}
+          ${{ listing.finalPrice }}
+        {% else %}
+          ${{ listing.price }}
+        {% endif %}
+      </h1>
       <h4>Listed {{ listing.date_created }}</h4>
-      {% if request.user = listing.seller.user %}
-      <a href="{% url 'delete_listing' listing.id %}">Delete Listing</a> | 
-      {% endif %}
       <a href="{{ listing.seller.get_absolute_url }}">Contact Seller</a> | 
       <a href="#">Report Listing</a>
+      {% if request.user = listing.seller.user %}
+      <br /><a href="{% url 'profile' request.user.username %}">Manage Listing</a>
+      {% endif %}
     </div>
   </div>
 </div>

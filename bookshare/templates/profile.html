@@ -10,6 +10,9 @@ GMU Bookshare &bull; Seller Profile
   <div class="row">
     <div class="col-lg-12">
       <h1>{{ seller.user.first_name }} {{ seller.user.last_name }}
+      {% if seller.user = request.user %}
+      (me)
+      {% endif %}
       <span class="pull-right">
         <a href="mailto:{{ seller.user.email }}">{ contact }</a>
       </span></h1>
@@ -38,17 +41,33 @@ GMU Bookshare &bull; Seller Profile
         <table class="table table-bordered">
 
           <thead>
-            <th class="col-md-2">ISBN</th>
-            <th class="col-md-8">Title</th>
+            <th class="col-md-1 text-center">ISBN</th>
+            <th class="col-md-7">Title</th>
             <th class="col-md-1 text-center">Price</th>
             <th class="col-md-1 text-center">Status</th>
+            <th class="col-md-1 text-center">Close</th>
           </thead>
 
           {% for listing in listings %}
             <tr>
-              <td>{{ listing.ISBN }}</td>
-              <td><a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a></td>
-              <td class="text-center">${{ listing.price }}</td>
+              <td class="text-center">{{ listing.ISBN }}</td>
+
+              <td>
+                {% if listing.active %}
+                <a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a>
+                {% else %}
+                {{ listing.title }}
+                {% endif %}
+              </td>
+
+              <td class="text-center">
+                {% if listing.sold %}
+                  ${{ listing.finalPrice }}
+                {% else %}
+                  ${{ listing.price }}
+                {% endif %}
+              </td>
+
               {% if listing.sold %}
                 <td class="text-center">
                   <span class="label label-danger">Sold</span>
@@ -58,15 +77,28 @@ GMU Bookshare &bull; Seller Profile
                   <span class="label label-success">Unsold</span>
                 </td>
               {% endif %}
+
+              <td class="text-center">
+                {% if listing.active %}
+                <a href="{% url 'close_listing' listing.pk %}"
+                onclick="return confirm('Are you sure you want to close this listing? This cannot be undone.')">Close</a>
+                {% else %}
+                <span style="cursor:not-allowed;">Closed</span>
+                {% endif %}
+              </td>
+
             </tr>
           {% endfor %}
-            
+
+          {% if seller.user = request.user %}
           <tr>
             <td class="text-center">-</td>
-            <td class="text-right"><strong>Total:</strong></td>
+            <td class="text-right"><strong>Total Proceeds:</strong></td>
             <td class="text-center">${{ total_sold }}</td>
             <td class="text-center">-</td>
+            <td class="text-center">-</td>
           </tr>
+          {% endif %}
 
         </table>
       </div>

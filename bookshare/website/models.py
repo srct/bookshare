@@ -41,20 +41,24 @@ class Listing( models.Model ):
     photo = models.ImageField(max_length = 1000,upload_to='listing_photos')
 
     sold = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
     finalPrice = models.IntegerField(null=True,blank=True)
-
-    slug = models.SlugField(max_length = 50)
 
     # object call
     def __unicode__(self):
-        return '%s' % self.title
+        if not self.active:
+            return '[Inactive] %s : %s' % (self.ISBN, self.title)
+        return '%s : %s' % (self.ISBN, self.title)
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
+        if not self.active:
+            return reverse('profile', args=[self.seller.user.username])
         return reverse('listing', args=[self.seller.user.username, str(self.id)])
 
     class Meta:
-        unique_together = (("ISBN", "seller"),)
+        #unique_together = (("ISBN", "seller"),)
+        ordering = ['sold', '-ISBN']
 
 
 class Seller( models.Model ):

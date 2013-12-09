@@ -17,9 +17,9 @@ urlpatterns = patterns('website.views',
 
     #### USER PAGES ####
     # user profile page
-    url(r'^u/(?P<slug>\w+)/?$', 'profile', name = 'profile'),
+    url(r'^u/(?P<username>\w+)/?$', 'profile', name = 'profile'),
     # book listing page
-    url(r'^u/(?P<slug>\w+)/listings/(?P<book_slug>\w+)$', 'listing', name = 'listing'),
+    url(r'^u/(?P<username>\w+)/listings/(?P<book_id>\w+)$', 'listing', name = 'listing'),
 
     #### STATIC PAGES ####
     # home page
@@ -37,9 +37,9 @@ urlpatterns = patterns('website.views',
     # search for listing
     url(r'^search/?$', 'search', name = 'search'),
     # close listing
-    url(r'^close/(?P<book_slug>\w+)$', 'close_listing', name='close_listing'),
+    url(r'^close/(?P<book_id>\w+)$', 'close_listing', name='close_listing'),
     # sell listing
-    url(r'^sell/(?P<book_slug>\w+)$', 'sell_listing', name='sell_listing'),
+    url(r'^sell/(?P<book_id>\w+)$', 'sell_listing', name='sell_listing'),
 
     #### ADMIN PAGES ####
     # Uncomment the admin/doc line below to enable admin documentation:

@@ -94,39 +94,25 @@ def index(request):
 
 # User profile page
 @login_required
-def profile(request, slug):
+def profile(request, username):
 
     # verify that the user exists
-    seller = get_object_or_404(Seller, user__username=slug)
-    listings = Listing.objects.filter(seller__user__username=slug)
+    seller = get_object_or_404(Seller, user__username=username)
+    listings = Listing.objects.filter(seller__user__username=username)
 
     return render(request, 'profile.html', {
         'seller' : seller,
         'listings': listings,
-        'total_sold' : totalSold( slug ),
+        'total_sold' : totalSold( username ),
     },
     )
 
-# User listings page
-#@login_required
-#def user_listings(request, slug):
-#
-#    # verify that the user exists
-#    seller = get_object_or_404(Seller, user__username=slug)
-#    listings = Listing.objects.filter(seller__user__username=slug)
-#
-#    return render(request, 'user_listings.html', {
-#        'seller' : seller,
-#        'listings': listings,
-#    },
-#    )
-
 # Listing page
 @login_required
-def listing(request, slug, book_slug):
+def listing(request, username, book_id):
 
-    seller = get_object_or_404(Seller,user__username=slug)
-    listing = get_object_or_404(Listing,pk=book_slug)
+    seller = get_object_or_404(Seller,user__username=username)
+    listing = get_object_or_404(Listing,pk=book_id)
 
     # if the listing is over a week old, it's old
     old_threshold = timezone.now() - timedelta(weeks=3)
@@ -162,7 +148,6 @@ def create_listing(request):
         if listing_form.is_valid():
             listing = listing_form.save(commit=False)
             listing.seller = request.user.seller
-            listing.slug = listing.title + listing.author
             listing.save()
 
             #listing.save()
@@ -176,9 +161,9 @@ def create_listing(request):
     )
 
 @login_required
-def close_listing(request, book_slug):
+def close_listing(request, book_id):
     user = request.user
-    listing = Listing.objects.get(pk=book_slug)
+    listing = Listing.objects.get(pk=book_id)
 
     if listing.seller.user == user:
         listing.active = False
@@ -188,9 +173,9 @@ def close_listing(request, book_slug):
 
 
 @login_required
-def sell_listing(request, book_slug):
+def sell_listing(request, book_id):
     user = request.user
-    listing = Listing.objects.get(pk=book_slug)
+    listing = Listing.objects.get(pk=book_id)
 
     if listing.seller.user == user:
         listing.sold = True

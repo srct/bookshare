@@ -14,7 +14,7 @@ class ListingForm( ModelForm ):
         fields = ('ISBN', 'title', 'author', 'year', 'edition',
         'book_condition', 'price', 'description', 'photo')
         exclude = ('seller', 'date_created', 'date_sold', 'sold',
-        'finalPrice', 'slug')
+        'finalPrice')
         widgets = {
             'ISBN': TextInput(attrs={
                 'class': 'form-control',
@@ -54,24 +54,18 @@ class ListingForm( ModelForm ):
         }
 
     def clean(self):
+        error_message = "You've already posted a listing with this ISBN. Close that listing first."
         cleaned_data = super(ListingForm, self).clean()
 
         try:
-            print "IM TRYING BUT IDK WHATS HAPPENING TO ME"
-            print cleaned_data
             cleaned_isbn = cleaned_data.get('ISBN')
             cleaned_seller = self.request.user.seller
 
             b = Listing.objects.get(ISBN=cleaned_isbn,
                                     seller=cleaned_seller)
-            print "Succeeded."
-            print b
-        #except Listing.DoesNotExist:
-        except Listing.DoesNotExist as e:
-            print "AN ERROR OCCURRECDD"
-            print e
-            print type(e)
+        except Listing.DoesNotExist:
             pass
         else:
-            raise ValidationError("Listing with this ISBN already exists for this seller.")
+            if b and b.active:
+                raise ValidationError(error_message)
         return cleaned_data

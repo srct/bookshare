@@ -42,7 +42,7 @@ class Listing( models.Model ):
 
     sold = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
-    finalPrice = models.IntegerField(null=True,blank=True)
+    finalPrice = models.IntegerField(null=True,blank=True,default=0)
 
     # object call
     def __unicode__(self):

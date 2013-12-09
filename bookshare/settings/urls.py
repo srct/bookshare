@@ -38,6 +38,8 @@ urlpatterns = patterns('website.views',
     url(r'^search/?$', 'search', name = 'search'),
     # close listing
     url(r'^close/(?P<book_slug>\w+)$', 'close_listing', name='close_listing'),
+    # sell listing
+    url(r'^sell/(?P<book_slug>\w+)$', 'sell_listing', name='sell_listing'),
 
     #### ADMIN PAGES ####
     # Uncomment the admin/doc line below to enable admin documentation:

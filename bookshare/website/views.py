@@ -25,7 +25,7 @@ def totalSold(seller):
     soldList = Listing.objects.filter(seller__user__username=seller)
     totalSold = 0
     for book in soldList:
-        if book.finalPrice:
+        if book.sold and book.finalPrice:
             totalSold += book.finalPrice
     return totalSold
 
@@ -175,6 +175,7 @@ def create_listing(request):
     },
     )
 
+@login_required
 def close_listing(request, book_slug):
     user = request.user
     listing = Listing.objects.get(pk=book_slug)
@@ -184,6 +185,20 @@ def close_listing(request, book_slug):
         listing.save()
 
     return redirect('profile', request.user.username)
+
+
+@login_required
+def sell_listing(request, book_slug):
+    user = request.user
+    listing = Listing.objects.get(pk=book_slug)
+
+    if listing.seller.user == user:
+        listing.sold = True
+        listing.active = False
+        listing.save()
+
+    return redirect('profile', request.user.username)
+
 
 @login_required
 def search(request):

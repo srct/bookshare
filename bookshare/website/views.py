@@ -143,6 +143,9 @@ def listing(request, slug, book_slug):
     if listing.seller != seller:
         raise Http404("Seller does not match listing.")
 
+    if not listing.active:
+        raise Http404("Listing inactive.")
+
     return render(request, 'listing.html', {
         'listing' : listing,
         'media' : settings.MEDIA_URL,
@@ -172,10 +175,15 @@ def create_listing(request):
     },
     )
 
-def delete_listing(request, slug):
-    return render(request, 'delete.html', {
-    },
-    )
+def close_listing(request, book_slug):
+    user = request.user
+    listing = Listing.objects.get(pk=book_slug)
+
+    if listing.seller.user == user:
+        listing.active = False
+        listing.save()
+
+    return redirect('profile', request.user.username)
 
 @login_required
 def search(request):

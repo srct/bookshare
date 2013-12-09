@@ -9,7 +9,7 @@ GMU Bookshare &bull; Login
 <div class="page-header" id="banner">
   <div class="row">
     <div class="col-lg-12">
-      <h1 class="text-center"><strong>Log In</strong></h1>
+      <h1 class="text-center"><strong>GMU</strong>BOOKSHARE</h1>
     </div>
   </div>
 </div>
@@ -32,6 +32,7 @@ GMU Bookshare &bull; Login
       <form id="login-form" method="post" class="form-horizontal"
       action="{% url 'django.contrib.auth.views.login' %}"> {% csrf_token %}
         <fieldset>
+          <legend>Log In</legend>
           
           <div class="form-group{%if form.errors%} has-error{%endif%}">
             <label class="col-lg-2 control-label" for="username">Username</label>

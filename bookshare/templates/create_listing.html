@@ -8,22 +8,21 @@ GMU Bookshare &bull; Create Listing
 
 <div class="page-header" id="banner">
   <div class="row">
-    <div class="col-lg-12">
-      <h1>Create Listing</h1>
-      <p class="lead">desc</p>
+    <div class="col-lg-12 text-center">
+      <h1><strong>GMU</strong>BOOKSHARE</h1>
     </div>
   </div>
 </div>
 
 <div class="row">
 
-  <div class="col-lg-6">
+  <div class="col-lg-8 col-lg-offset-2">
     <div class="well">
       <form class="form-horizontal" action="" method="post" role="form"
       enctype="multipart/form-data">
         {% csrf_token %}
         <fieldset>
-          <legend>Textbook Information</legend>
+          <legend>Textbook Listing Information</legend>
 
           <div class="form-group{%if form.errors%} has-error{%endif%}">
             {% for error in form.non_field_errors %}

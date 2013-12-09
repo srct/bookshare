@@ -42,10 +42,15 @@ GMU Bookshare &bull; Seller Profile
 
           <thead>
             <th class="col-md-1 text-center">ISBN</th>
-            <th class="col-md-7">Title</th>
+            <th class="col-md-9">Title</th>
             <th class="col-md-1 text-center">Price</th>
-            <th class="col-md-1 text-center">Status</th>
-            <th class="col-md-1 text-center">Close</th>
+            <th class="col-md-1 text-center">
+              {% if seller.user = request.user %}
+              Action
+              {% else %}
+              Status
+              {% endif %}
+            </th>
           </thead>
 
           {% for listing in listings %}
@@ -54,36 +59,34 @@ GMU Bookshare &bull; Seller Profile
 
               <td>
                 {% if listing.active %}
-                <a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a>
-                {% else %}
-                {{ listing.title }}
+                  <a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a>
+                  {% else %}
+                  {{ listing.title }}
                 {% endif %}
               </td>
 
               <td class="text-center">
                 {% if listing.sold %}
                   ${{ listing.finalPrice }}
+                {% elif not listing.active %}
+                  $0
                 {% else %}
                   ${{ listing.price }}
                 {% endif %}
               </td>
 
-              {% if listing.sold %}
-                <td class="text-center">
-                  <span class="label label-danger">Sold</span>
-                </td>
-              {% else %}
-                <td class="text-center">
-                  <span class="label label-success">Unsold</span>
-                </td>
-              {% endif %}
-
               <td class="text-center">
-                {% if listing.active %}
-                <a href="{% url 'close_listing' listing.pk %}"
-                onclick="return confirm('Are you sure you want to close this listing? This cannot be undone.')">Close</a>
+                {% if listing.sold %}
+                <span class="label label-danger">Sold</span>
+                {% elif not listing.active %}
+                <span class="label label-default">Closed</span>
                 {% else %}
-                <span style="cursor:not-allowed;">Closed</span>
+                  {% if seller.user = request.user %}
+                  <a href="{% url 'close_listing' listing.pk %}">Close</a> / 
+                  <a href="{% url 'sell_listing' listing.pk %}">Sold</a>
+                  {% else %}
+                  <span class="label label-success">Unsold</span>
+                  {% endif %}
                 {% endif %}
               </td>
 
@@ -95,7 +98,6 @@ GMU Bookshare &bull; Seller Profile
             <td class="text-center">-</td>
             <td class="text-right"><strong>Total Proceeds:</strong></td>
             <td class="text-center">${{ total_sold }}</td>
-            <td class="text-center">-</td>
             <td class="text-center">-</td>
           </tr>
           {% endif %}

@@ -12,30 +12,25 @@ There are many things that can be done with this project (see the "To Do" sectio
 
 If you need help at all please contact any SRCT member. We want people to contribute, so if you are struggling, or just want to learn we are more than willing to help.
 
-The project lead for this project is **Eric Cawi**. *ecawi@gmu.edu*
+The project lead for this project is **Eric Cawi** ( *ecawi@gmu.edu* ) and lead developer is **Michel Rouly** ( *jrouly@gmu.edu* ).
 
 Please visit the [SRCT Wiki](http://wiki.srct.gmu.edu/) for more information on this and other SRCT projects, along with other helpful links and tutorials.
 
 Setting everything up for development
 ---
-You'll need to create a mysql database 'bookshare' with username 'bookshare' and password 'password' to run it out of the box locally. (Otherwise, you'll need to configure it for the database of your choice in the `settings.py` file.)
+You'll need to create a mysql database 'bookshare' with username 'bookshare' and an appropriate password  to run it out of the box locally. (Otherwise, you'll need to configure it for the database of your choice in the `settings.py` file.)
 
 Make sure to install everything you need in your virtual environment from the requirements file.
-
-Then `python manage.py syncdb` and `python manage.py runserver` your way to happiness.
 
 To-do
 ---
 
 * Set up Haystack with ElasticSearch
-* CSRF tokens!!
 * Save searches, and display saved search results on user's home page
+* Set up Bidding and Commenting systems
 * Display comments on user's listings, or the comments on listings for which the user has bid.
 * Make links more prevalent on the site.
-* Form validation
 * Seller's rating
 * Comment system customization-- comment submission contingent on submission of bid (in fact, just a comment system to begin with)
-* Fix the damn grid system on the create listing template so the dropdown doesn't extend across the whole stupid page
 * Have title, etc fields autopopulate when user inputs ISBN
-* User accounts! (and GMU authentication)
-* image thumbnails on listings
+* Generate image thumbnails for listings

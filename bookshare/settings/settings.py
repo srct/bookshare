@@ -1,4 +1,6 @@
 # Django settings for bookshare project.
+
+import secret
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -14,10 +16,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bookshare',
-        'USER': 'bookshare',
-        'PASSWORD': 'password',
-        'HOST': '',
+        'NAME': secret.DB_NAME,
+        'USER': secret.DB_USER,
+        'PASSWORD': secret.DB_PASSWORD,
+        'HOST': secret.DB_HOST,
         'PORT': '',
     }
 }
@@ -68,7 +70,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'tu6zdsqi(up_s$9w^6!f@#(jj-7uhiez(=a^e=e=^b7mk^9byi'
+SECRET_KEY = secret.SECRET_KEY
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (

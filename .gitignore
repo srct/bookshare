@@ -4,3 +4,4 @@
 media
 bookshare/website/migrations
 bookshare/static/admin
+bookshare/settings/secret.py

@@ -10,6 +10,9 @@ from django.conf.urls import patterns, include, url
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
 
+handle404 = "error_404"
+handle500 = "error_500"
+
 urlpatterns = patterns('website.views',
     # Examples:
     # url(r'^$', 'bookshare.views.home', name='home'),

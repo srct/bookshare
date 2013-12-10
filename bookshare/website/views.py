@@ -58,7 +58,17 @@ def ratingsAverage(seller):
 
 ############# VIEWS #######################
 
+def error_404(request):
+    # merely forms
+    return render(request, '404.html', {
+    },
+    )
 
+def error_500(request):
+    # merely forms
+    return render(request, '500.html', {
+    },
+    )
 
 # home page
 # Maybe don't login_require this, and allow anonymous users to browse a

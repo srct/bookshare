@@ -27,7 +27,7 @@ class Listing( models.Model ):
 
     title = models.CharField(max_length = 200)
     author = models.CharField(max_length = 200)
-    ISBN = models.CharField(max_length = 15)
+    ISBN = models.CharField(max_length = 20)
     year = models.IntegerField(null=True,blank=True)
     edition = models.CharField(blank=True,max_length = 30)
 

@@ -30,7 +30,9 @@ GMU Bookshare &bull; Create Listing
               <span class="col-lg-10 help-block">{{ error }}</span>
             {% endfor %}
           </div>
-          <div class="form-group{%if form.ISBN.errors%} has-error{%endif%}">
+
+          <div id="form-group-ISBN"
+          class="form-group{%if form.ISBN.errors%} has-error{%endif%}">
             <label for="{{form.ISBN.id_for_label}}" class="col-lg-2 control-label">ISBN</label>
             <div class="col-lg-10">
               {{ form.ISBN }}
@@ -43,8 +45,9 @@ GMU Bookshare &bull; Create Listing
             </div>
           </div>
 
+          <hr />
+
           {% if form.errors %}
-            <hr />
             <div id="section-collapse" class="collapse in">
           {% else %}
             <div id="section-collapse" class="collapse">
@@ -90,9 +93,9 @@ GMU Bookshare &bull; Create Listing
               </div>
             </div>
 
-          </div>
+            <hr />
 
-          <hr />
+          </div>
 
           <div class="form-group{%if form.book_condition.errors%} has-error{%endif%}">
             <label for="{{form.book_condition.id_for_label}}" class="col-lg-2 control-label">Condition</label>

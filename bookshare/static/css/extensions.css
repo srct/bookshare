@@ -1,3 +1,8 @@
 .table > tbody > tr > td {
   vertical-align: middle;
 }
+@media screen and (max-width: 379px) {
+  .page-header h1 {
+    font-size: 3.2em;
+  }
+}

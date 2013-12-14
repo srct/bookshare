@@ -157,6 +157,10 @@ def create_listing(request):
         listing_form = ListingForm(request.POST, request.FILES, request=request)
         if listing_form.is_valid():
             listing = listing_form.save(commit=False)
+            if len(listing.author) >= 2 and listing.author[:2].lower() == "by":
+                listing.author = listing.author[2:]
+                listing.save()
+
             listing.seller = request.user.seller
             listing.save()
 

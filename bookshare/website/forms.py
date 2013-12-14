@@ -57,15 +57,14 @@ class ListingForm( ModelForm ):
         error_message = "You've already posted a listing with this ISBN. Close that listing first."
         cleaned_data = super(ListingForm, self).clean()
 
-        try:
-            cleaned_isbn = cleaned_data.get('ISBN')
-            cleaned_seller = self.request.user.seller
+        cleaned_isbn = cleaned_data.get('ISBN')
+        cleaned_seller = self.request.user.seller
 
-            b = Listing.objects.get(ISBN=cleaned_isbn,
-                                    seller=cleaned_seller)
-        except Listing.DoesNotExist:
-            pass
-        else:
-            if b and b.active:
-                raise ValidationError(error_message)
+        existing_listings = Listing.objects.filter(ISBN=cleaned_isbn,
+                                                    seller=cleaned_seller,
+                                                    active=True)
+
+        if len( existing_listings ) > 0:
+            raise ValidationError(error_message)
+
         return cleaned_data

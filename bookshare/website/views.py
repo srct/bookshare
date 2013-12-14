@@ -155,6 +155,12 @@ def create_listing(request):
         if listing_form.is_valid():
             listing = listing_form.save(commit=False)
 
+            # Trim unnecessary whitespace chars from the sides.
+            listing.title = listing.title.strip()
+            listing.author = listing.author.strip()
+            listing.edition = listing.edition.strip()
+
+            # Trim the word "by" if it starts the author field.
             if len(listing.author) >= 2 and listing.author[:2].lower() == "by":
                 listing.author = listing.author[2:]
 

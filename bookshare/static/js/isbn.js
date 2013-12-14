@@ -15,15 +15,14 @@ $(function() {
       $('#id_year').val( '' );
       $('#id_edition').val( '' );
     } else {
-      title = "grabbed title";
-      author = "grabbed author";
-      year = "grabbed_year";
-      edition = "grabbed_edition";
 
-      $('#id_title').val( title );
-      $('#id_author').val( author );
-      $('#id_year').val( year );
-      $('#id_edition').val( edition );
+      var url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + isbn + "?method=getMetadata&format=json&fl=title,author,year,ed"
+
+      $.ajax({
+        dataType: "jsonp",
+        url: url,
+      }).done( function(data) { process_ISBN_json(data); } );
+
     }
 
     if( ! is_valid ) {
@@ -36,6 +35,29 @@ $(function() {
 
   });
 });
+
+
+function process_ISBN_json( json ) {
+
+  var title = "No results found.";
+  var author = "No results found.";
+  var year = "No results found.";
+  var edition = "No results found.";
+
+  // There should only ever be a single element, if any.
+  if( json.list[0] ){
+    title = json.list[0].title;
+    author = json.list[0].author;
+    year = json.list[0].year;
+    edition = json.list[0].ed;
+    
+  }
+
+  $('#id_title').val( title );
+  $('#id_author').val( author );
+  $('#id_year').val( year );
+  $('#id_edition').val( edition );
+}
 
 
 function isValidISBN (isbn) { 

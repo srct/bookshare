@@ -139,9 +139,6 @@ def listing(request, username, book_id):
     if listing.seller != seller:
         raise Http404("Seller does not match listing.")
 
-    if not listing.active:
-        raise Http404("Listing inactive.")
-
     return render(request, 'listing.html', {
         'listing' : listing,
         'media' : settings.MEDIA_URL,

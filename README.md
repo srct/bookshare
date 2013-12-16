@@ -22,6 +22,10 @@ You'll need to create a mysql database 'bookshare' with username 'bookshare' and
 
 Make sure to install everything you need in your virtual environment from the requirements file.
 
+Debian and Ubuntu Installation Instructions
+---
+`$ sudo apt-get update && apt-get install libldap2-dev python-dev libmysqlclient-dev python-mysqldb`
+
 To-do
 ---
 

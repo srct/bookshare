@@ -22,6 +22,8 @@ You'll need to create a mysql database 'bookshare' with username 'bookshare' and
 
 Make sure to install everything you need in your virtual environment from the requirements file.
 
+When you run `$ pip install -r requirements.txt` to install all Python modules, make sure to run `$ pip migrate website && pip migrate bids && pip migrate easy_thumbnails`.
+
 Debian and Ubuntu Installation Instructions
 ---
 `$ sudo apt-get update && apt-get install libldap2-dev python-dev libmysqlclient-dev python-mysqldb`
@@ -35,6 +37,3 @@ To-do
 * Display comments on user's listings, or the comments on listings for which the user has bid.
 * Make links more prevalent on the site.
 * Seller's rating
-* Comment system customization-- comment submission contingent on submission of bid (in fact, just a comment system to begin with)
-* Have title, etc fields autopopulate when user inputs ISBN
-* Generate image thumbnails for listings

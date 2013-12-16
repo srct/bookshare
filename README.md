@@ -22,6 +22,8 @@ You'll need to create a mysql database 'bookshare' with username 'bookshare' and
 
 Make sure to install everything you need in your virtual environment from the requirements file.
 
+When you run `$ pip install -r requirements.txt` to install all Python modules, make sure to run `$ pip migrate website && pip migrate bids && pip migrate easy_thumbnails`.
+
 Debian and Ubuntu Installation Instructions
 ---
 `$ sudo apt-get update && apt-get install libldap2-dev python-dev libmysqlclient-dev python-mysqldb`

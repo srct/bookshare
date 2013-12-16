@@ -4,7 +4,7 @@ import secret
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -115,6 +115,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.comments',
     'website',
+    'bids',
     'south',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
@@ -157,6 +158,21 @@ LOGGING = {
 LOGIN_URL = '/login'
 LOGOUT_URL = '/logout'
 LOGIN_REDIRECT_URL = '/'
+
+#LOGIN_URL = 'https://shibboleth.gmu.edu/idp/shibboleth'
+#AUTHENTICATION_BACKENDS = (
+#    'django.contrib.auth.backends.RemoteUserBackend',
+#)
+#MIDDLEWARE_CLASSES += (
+#    'shibboleth.middleware.ShibbolethRemoteUserMiddleware',
+#)
+#SHIBBOLETH_ATTRIBUTE_MAP = {
+#   "Shibboleth-user": (True, "username"),
+#   "Shibboleth-givenName": (True, "first_name"),
+#   "Shibboleth-sn": (True, "last_name"),
+#   "Shibboleth-mail": (True, "email"),
+#}
+
 
 
 # Authentication

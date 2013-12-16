@@ -18,4 +18,4 @@ class Bid( models.Model ):
                                    self.listing)
 
     class Meta:
-        ordering = ['date_created']
+        ordering = ['-date_created']

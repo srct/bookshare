@@ -74,32 +74,25 @@ def error_500(request):
 
 # home page
 # Maybe don't login_require this, and allow anonymous users to browse a
-# list of currently potsed books? idk.
+# list of currently posted books? idk.
 @login_required
 def index(request):
-
-#    # front page of the site shows the 12 most recent listings
-#    products = Book.objects.all().order_by("-uploaded")
-#    paginator = Paginator(products, 12)
-#
-#    # can we get a first page please?
-#    try:
-#        page = int(request.GET.get("page", '1'))
-#    except ValueError: page = 1
-#
-#    # how many pages do we have?
-#    try:
-#        products = paginator.page(page)
-#    except (InvalidPage, EmptyPage):
-#        blogs = paginator.page(paginator.num_pages)
-    
-    # need to figure out what needs to be displayed/accessed
 
     # ability to create and display saved searches
     # pull all comments from listings user has posted on and their listings
     # make pagination work
     # NEED TO HAVE THE SEARCH WORK--- YAY HAYSTACK
+
+    listings = []
+
     return render(request, 'index.html', {
+        'listings' : listing,
+    },
+    )
+
+def lookout(request, username):
+
+    return render(request, 'lookout.html', {
 
     },
     )

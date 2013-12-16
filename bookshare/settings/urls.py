@@ -19,14 +19,16 @@ urlpatterns = patterns('website.views',
     # url(r'^bookshare/', include('bookshare.foo.urls')),
 
     #### USER PAGES ####
+    # home page
+    url(r'^$', 'index', name = 'homepage'),
     # user profile page
     url(r'^u/(?P<username>\w+)/?$', 'profile', name = 'profile'),
     # book listing page
     url(r'^u/(?P<username>\w+)/listings/(?P<book_id>\w+)$', 'listing', name = 'listing'),
+    # manage books you're looking for
+    url(r'^u/(?P<username>\w+)/lookout/$', 'lookout', name = 'lookout'),
 
     #### STATIC PAGES ####
-    # home page
-    url(r'^$', 'index', name = 'homepage'),
     # about page
     url(r'^about/?$', 'about', name = 'about'),
     # contact staff

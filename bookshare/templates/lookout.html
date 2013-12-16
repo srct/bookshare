@@ -6,4 +6,108 @@ GMU Bookshare &bull; Lookouts
 
 {% block content %}
 
+<div class="page-header" id="banner">
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h1><strong>GMU</strong>&#8203;BOOKSHARE</h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col-lg-8 col-lg-offset-2">
+    <div class="well">
+      <form class="form-horizontal" action="" method="post" role="form"
+      enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset>
+          <legend>Textbook Listing Information</legend>
+
+          <div class="form-group{%if form.errors%} has-error{%endif%}">
+            {% for error in form.non_field_errors %}
+              <span class="col-lg-2 control-label"></span>
+              <span class="col-lg-10 help-block">{{ error }}</span>
+            {% endfor %}
+          </div>
+
+          <div id="form-group-ISBN"
+          class="form-group{%if form.ISBN.errors%} has-error{%endif%}">
+            <label for="{{form.ISBN.id_for_label}}" class="col-lg-2 control-label">ISBN</label>
+            <div class="col-lg-10">
+              {{ form.ISBN }}
+              {% if not form.ISBN.errors %}
+                <span class="help-block">Ex: 1590366727</span>
+              {% endif %}
+              {% for error in form.ISBN.errors %}
+                <span class="help-block">{{ error }}</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <hr />
+
+          {% if form.errors %}
+            <div id="section-collapse" class="collapse in">
+          {% else %}
+            <div id="section-collapse" class="collapse">
+          {% endif %}
+
+            <div class="form-group{%if form.title.errors%} has-error{%endif%}">
+              <label for="{{form.title.id_for_label}}" class="col-lg-2 control-label">Title</label>
+              <div class="col-lg-10">
+                {{ form.title }}
+                {% for error in form.title.errors %}
+                  <span class="help-block">{{ error }}</span>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="form-group{%if form.author.errors%} has-error{%endif%}">
+              <label for="{{form.author.id_for_label}}" class="col-lg-2 control-label">Author</label>
+              <div class="col-lg-10">
+                {{ form.author }}
+                {% for error in form.author.errors %}
+                  <span class="help-block">{{ error }}</span>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="form-group{%if form.year.errors%} has-error{%endif%}">
+              <label for="{{form.year.id_for_label}}" class="col-lg-2 control-label">Year</label>
+              <div class="col-lg-10">
+                {{ form.year }}
+                {% for error in form.year.errors %}
+                  <span class="help-block">{{ error }}</span>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="form-group{%if form.edition.errors%} has-error{%endif%}">
+              <label for="{{form.edition.id_for_label}}" class="col-lg-2 control-label">Edition</label>
+              <div class="col-lg-10">
+                {{ form.edition }}
+                {% for error in form.edition.errors %}
+                  <span class="help-block">{{ error }}</span>
+                {% endfor %}
+              </div>
+            </div>
+
+            <hr />
+
+          </div>
+
+          <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+              <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+            </div>
+          </div>
+
+        </fieldset>
+      </form>
+    </div>
+  </div>
+
+</div>
+
 {% endblock %}

@@ -31,10 +31,6 @@ To-do
 
 * Set up Haystack with ElasticSearch
 * Save searches, and display saved search results on user's home page
-* Set up Bidding and Commenting systems
-* Display comments on user's listings, or the comments on listings for which the user has bid.
 * Make links more prevalent on the site.
 * Seller's rating
-* Comment system customization-- comment submission contingent on submission of bid (in fact, just a comment system to begin with)
-* Have title, etc fields autopopulate when user inputs ISBN
 * Generate image thumbnails for listings

@@ -106,7 +106,24 @@ GMU Bookshare &bull; {{listing.title}}
       </div>
       <div id="bids" class="panel-collapse collapse in">
         <div class="panel-body">
-          Bid system goes here.
+
+          {% for bid in bids %}
+            <div class="row">
+              <div class="col-lg-12">
+                <a href="{{ bid.bidder.get_absolute_url }}">
+                  {{ bid.bidder.user.first_name }}
+                  {{ bid.bidder.user.last_name }}
+                </a>
+                <h4>
+                  ${{ bid.price }}
+                  <span class="pull-right">{{ bid.date_created.date }}</span>
+                </h4>
+                <h5>{{ bid.text }}</h5>
+                <hr />
+              </div>
+            </div>
+          {% endfor %}
+
         </div>
       </div>
     </div>

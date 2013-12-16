@@ -1,5 +1,6 @@
 from website.models import Listing,Seller
 from website.forms import ListingForm
+from bids.models import Bid
 from django.http import Http404
 from django.conf import settings
 from django.shortcuts import render, render_to_response, get_object_or_404, redirect
@@ -127,7 +128,11 @@ def listing(request, username, book_id):
     # if the listing is over a week old, it's old
     old_threshold = timezone.now() - timedelta(weeks=3)
 
+    # get all bids associated with this listing
+    bids = Bid.objects.filter( listing = listing )
+
     # make a thumbnail of the image
+    # note: make sure to check if a thumbnail already exists tho!!
 #    from PIL import Image
 #    size = (100, 100)
 #    image = Image.open( listing.photo )
@@ -143,6 +148,7 @@ def listing(request, username, book_id):
         'listing' : listing,
         'media' : settings.MEDIA_URL,
         'old' : listing.date_created < old_threshold,
+        'bids' : bids,
 #        'thumbnail' : background,
     },
     )

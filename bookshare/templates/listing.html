@@ -95,56 +95,111 @@ GMU Bookshare &bull; {{listing.title}}
     </div>
   </div>
 
-  <div class="col-md-3 col-sm-12 col-xs-12">
-    <div class="panel panel-default" style="margin-top:10px;">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a data-toggle="collapse" href="#bids">
-            Bids
-          </a>
-        </h4>
-      </div>
-      <div id="bids" class="panel-collapse collapse in">
-        <div class="panel-body">
-
-          {% for bid in bids %}
-            <div class="row">
-              <div class="col-lg-12">
-
-                <a href="{{ bid.bidder.get_absolute_url }}">
-                  {{ bid.bidder.user.first_name }}
-                  {{ bid.bidder.user.last_name }}
-                </a>
-                <span class="pull-right">{{ bid.date_created.date }}</span>
-
-                <h4><strong>${{ bid.price }}</strong></h4>
-                {{ bid.text }}
-
-                <hr />
-              </div>
-            </div>
-          {% endfor %}
-
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="panel panel-default" style="margin-top:10px;">
       <div class="panel-heading">
         <h4 class="panel-title">
-          {% get_comment_count for listing as comment_count %}
-          <a data-toggle="collapse" href="#comments">
-            Comments ({{ comment_count }})
+          <a data-toggle="collapse" href="#bids">
+            Hide/Show Bids ({{ bid_count }})
           </a>
         </h4>
       </div>
-      <div id="comments" class="panel-collapse collapse in">
-        <div class="panel-body">
-          Comments go here.
-          {% render_comment_list for listing %}
+      <div class="panel-body">
+
+        {% if bids %}
+        <div id="bids" class="panel-collapse collapse in">
+        {% endif %}
+
+        {% for bid in bids %}
+        <!-- BID DISPLAY -->
+          <div class="row">
+
+            <div class="col-lg-3">
+              <a href="{{ bid.bidder.get_absolute_url }}">
+                {{ bid.bidder.user.first_name }}
+                {{ bid.bidder.user.last_name }}
+              </a>
+              <br />
+              {{ bid.date_created }}
+            </div>
+
+            <div class="col-lg-7">
+              <h5>
+              {% if bid.text %}
+                {{ bid.text }}
+              {% else %}
+                No comment posted.
+              {% endif %}
+              </h5>
+            </div>
+
+            <div class="col-lg-2 text-center">
+              <h4><strong>${{ bid.price }}</strong></h4>
+            </div>
+
+          </div>
+
+          <hr/>
+
+        <!-- BID DISPLAY -->
+        {% endfor %}
+
+        {% if bids %}
         </div>
+        {% endif %}
+
+        <!-- BID FORM -->
+        <div class="row">
+          <div class="col-lg-12">
+            <form class="form-horizontal" action="" method="post" role="form">
+              {% csrf_token %}
+              <fieldset>
+                <legend>Your Bid</legend>
+
+                <div class="form-group{%if bid_form.price.errors%} has-error{%endif%}">
+                  <label for="{{bid_form.price.id_for_label}}"
+                  class="col-lg-2 control-label">
+                    {{bid_form.price.label}}
+                  </label>
+
+                  <div class="col-lg-10">
+                    <div class="input-group">
+                      <span class="input-group-addon"> $ </span>
+                      {{bid_form.price}}
+                    </div>
+                    {%for error in bid_form.price.errors%}
+                      <span class="help-block">{{ error }}</span>
+                    {%endfor%}
+                  </div>
+                </div>
+
+                <div class="form-group{%if bid_form.text.errors%} has-error{%endif%}">
+                  <label for="{{bid_form.text.id_for_label}}"
+                  class="col-lg-2 control-label">
+                    {{bid_form.text.label}}
+                  </label>
+
+                  <div class="col-lg-10">
+                    {{bid_form.text}}
+                    {%for error in bid_form.text.errors%}
+                      <span class="help-block">{{ error }}</span>
+                    {%endfor%}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-lg-10 col-lg-offset-2">
+                    <button type="submit" class="btn btn-primary"
+                    value="Submit">Submit a Bid</button>
+                  </div>
+                </div>
+
+              </fieldset>
+            </form>
+          </div>
+        </div>
+        <!-- BID FORM -->
+
       </div>
     </div>
   </div>

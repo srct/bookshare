@@ -51,6 +51,13 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
+THUMBNAIL_ALIASES = {'': {
+    'listing_photo': {
+        'size': (333, 250),
+        'crop': True,
+    },
+},}
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = (os.path.join(BASE_DIR, 'media/'))
 MEDIAFILES_DIRS = (
@@ -117,6 +124,7 @@ INSTALLED_APPS = (
     'website',
     'bids',
     'south',
+    'easy_thumbnails',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

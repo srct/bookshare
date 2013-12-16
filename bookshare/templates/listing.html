@@ -1,5 +1,5 @@
 {% extends 'layouts/base.html' %}
-{% load comments %}
+{% load thumbnail %}
 
 {% block title %}
 GMU Bookshare &bull; {{listing.title}}
@@ -74,7 +74,8 @@ GMU Bookshare &bull; {{listing.title}}
   <div class="col-md-3 col-sm-12 col-xs-12">
     <div class="text-center">
       <a href="{{ media }}{{ listing.photo }}" class="thumbnail">
-        <img src="{{ media }}{{ listing.photo }}" alt="User submitted textbook photo" class="img-thumbnail" />
+        <img src="{{ listing.photo|thumbnail_url:'listing_photo' }}"
+        alt="User submitted textbook photo" class="img-thumbnail" />
       </a>
     </div>
   </div>

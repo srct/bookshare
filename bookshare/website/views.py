@@ -131,6 +131,7 @@ def listing(request, username, book_id):
 
     # get all bids associated with this listing
     bids = Bid.objects.filter( listing = listing )
+    bid_count = len(bids)
 
     # make a thumbnail of the image
     # note: make sure to check if a thumbnail already exists tho!!
@@ -160,6 +161,7 @@ def listing(request, username, book_id):
         'listing' : listing,
         'media' : settings.MEDIA_URL,
         'old' : listing.date_created < old_threshold,
+        'bid_count' : bid_count,
         'bids' : bids,
         'bid_form' : bid_form,
 #        'thumbnail' : background,

@@ -33,4 +33,3 @@ To-do
 * Save searches, and display saved search results on user's home page
 * Make links more prevalent on the site.
 * Seller's rating
-* Generate image thumbnails for listings

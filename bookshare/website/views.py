@@ -1,6 +1,7 @@
 from website.models import Listing,Seller
 from website.forms import ListingForm
 from bids.models import Bid
+from bids.forms import BidForm
 from django.http import Http404
 from django.conf import settings
 from django.shortcuts import render, render_to_response, get_object_or_404, redirect
@@ -144,11 +145,23 @@ def listing(request, username, book_id):
     if listing.seller != seller:
         raise Http404("Seller does not match listing.")
 
+    bid_form = BidForm()
+    if request.method == 'POST':
+        bid_form = BidForm( request.POST )
+        if bid_form.is_valid():
+            bid = bid_form.save(commit=False)
+            bid.bidder = request.user.seller
+            bid.listing = listing
+            bid.save()
+ 
+            return redirect( 'listing', listing.seller.user.username, listing.pk )
+
     return render(request, 'listing.html', {
         'listing' : listing,
         'media' : settings.MEDIA_URL,
         'old' : listing.date_created < old_threshold,
         'bids' : bids,
+        'bid_form' : bid_form,
 #        'thumbnail' : background,
     },
     )

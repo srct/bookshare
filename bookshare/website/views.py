@@ -90,6 +90,8 @@ def index(request):
     },
     )
 
+
+# User's lookouts page.
 def lookouts(request, username):
 
     return render(request, 'lookouts.html', {

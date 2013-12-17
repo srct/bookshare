@@ -92,6 +92,7 @@ def index(request):
 
 
 # User's lookouts page.
+@login_required
 def lookouts(request, username):
 
     return render(request, 'lookouts.html', {

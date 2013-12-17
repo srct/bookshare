@@ -1,7 +1,18 @@
 from django.core.exceptions import ValidationError
+from django import forms
 from django.db import models
 from django.forms import ModelForm, Textarea, TextInput, NumberInput, Select, FileInput
 from website.models import Seller, Listing
+
+
+class FinalPriceForm( forms.Form ):
+    final_price = forms.CharField(
+        required = True,
+        label = 'Final Selling Price',
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+        }),
+    )
 
 
 class ListingForm( ModelForm ):

@@ -8,8 +8,8 @@ class Lookout( models.Model ):
     owner = models.ForeignKey(Seller)
     date_created = models.DateTimeField(default=timezone.now())
 
-    ISBN = models.CharField(max_length = 20)
-    title = models.CharField(max_length = 200)
+    ISBN = models.CharField(max_length = 20, blank=True)
+    title = models.CharField(max_length = 200, blank=True)
 
     def __unicode__(self):
         return '<Lookout: %s>' % self.owner.user.username
@@ -17,6 +17,7 @@ class Lookout( models.Model ):
     def get_listings(self):
         isbn_listings = models.Q( ISBN=self.ISBN, active=True )
         title_listings = models.Q( title=self.title, active=True )
+        return Listing.objects.filter( isbn_listings | title_listings )
 
     class Meta:
         ordering = ['ISBN', 'title']

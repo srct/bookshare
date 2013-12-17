@@ -58,7 +58,7 @@ class Listing( models.Model ):
 
     class Meta:
         #unique_together = (("ISBN", "seller"),)
-        ordering = ['-ISBN', 'title']
+        ordering = ['ISBN', 'title']
 
 
 class Seller( models.Model ):

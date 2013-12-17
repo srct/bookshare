@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'website',
     'bids',
+    'lookouts',
     'south',
     'easy_thumbnails',
     # Uncomment the next line to enable the admin:

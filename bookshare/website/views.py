@@ -159,6 +159,7 @@ def listing(request, username, book_id):
         'bid_count' : bid_count,
         'bids' : bids,
         'bid_form' : bid_form,
+#        'thumbnail' : background,
     },
     )
 

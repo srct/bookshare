@@ -119,13 +119,45 @@ function finalPrice_action( target ){
       </div>
 
     {% else %}
-      {{ seller.name }} doesn't have any listings posted yet.
+      {% if seller.user = request.user %}
+      You don't
+      {% else %}
+      {{ seller.user.first_name }} {{ seller.user.last_name }} doesn't 
+      {% endif %}
+      have any listings posted yet.
+    {% endif %}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <h3>Lookouts</h3>
+    {% if lookouts %}
+
+      <div class="table-responsive">
+        <table class="table table-bordered">
+
+          <thead>
+            <th class="col-md-1 text-center">ISBN</th>
+          </thead>
+
+          {% for lookout in lookouts %}
+          {% endfor %}
+        </table>
+      </div>
+    {% else %}
+      {% if seller.user = request.user %}
+      You don't
+      {% else %}
+      {{ seller.user.first_name }} {{ seller.user.last_name }} doesn't 
+      {% endif %}
+      have any lookouts posted yet.
     {% endif %}
   </div>
 </div>
 
 
-<!-- Modal -->
+<!-- Final Price Modal -->
 <div class="modal fade" id="FinalPrice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -163,7 +195,7 @@ function finalPrice_action( target ){
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<!-- Modal -->
+<!-- Close Confirm Modal -->
 <div class="modal fade" id="CloseConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

@@ -2,6 +2,7 @@ from website.models import Listing,Seller
 from website.forms import ListingForm, FinalPriceForm
 from bids.models import Bid
 from bids.forms import BidForm
+from lookouts.models import Lookout
 from django.http import Http404
 from django.conf import settings
 from django.shortcuts import render, render_to_response, get_object_or_404, redirect
@@ -107,11 +108,13 @@ def profile(request, username):
     # verify that the user exists
     seller = get_object_or_404(Seller, user__username=username)
     listings = Listing.objects.filter(seller__user__username=username)
+    lookouts = Lookout.objects.filter(owner__user__username=username)
     FinalPrice_form = FinalPriceForm()
 
     return render(request, 'profile.html', {
         'seller' : seller,
         'listings': listings,
+        'lookouts': lookouts,
         'total_sold' : totalSold( username ),
         'FinalPrice_form' : FinalPrice_form,
     },

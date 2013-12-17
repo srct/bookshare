@@ -84,10 +84,16 @@ def index(request):
     # make pagination work
     # NEED TO HAVE THE SEARCH WORK--- YAY HAYSTACK
 
+    lookouts = Lookout.objects.filter(
+        owner__user__username = request.user.username )
+
     listings = []
+    for lookout in lookouts:
+        lookout_listings = lookout.get_listings()
+        listings.extend( list(lookout_listings) )
 
     return render(request, 'index.html', {
-        'listings' : listing,
+        'listings' : listings,
     },
     )
 

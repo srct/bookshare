@@ -90,9 +90,9 @@ def index(request):
     },
     )
 
-def lookout(request, username):
+def lookouts(request, username):
 
-    return render(request, 'lookout.html', {
+    return render(request, 'lookouts.html', {
 
     },
     )

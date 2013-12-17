@@ -1,10 +1,13 @@
 <div class="panel panel-info">
   <div class="panel-body">
     <h4>
+      <span class="pull-right"><strong>${{ listing.price }}</strong></span>
       <a href="{{ listing.get_absolute_url }}">
         {{ listing.title }}
       </a>
     </h4>
-    by {{listing.author }} | {{ listing.ISBN }}
+    <p>Author(s): {{listing.author }}</p>
+    <p>ISBN: {{ listing.ISBN }}</p>
+    <p>Condition: {{ listing.book_condition }}</p>
   </div>
 </div>

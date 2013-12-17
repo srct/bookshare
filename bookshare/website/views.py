@@ -79,11 +79,6 @@ def error_500(request):
 @login_required
 def index(request):
 
-    # ability to create and display saved searches
-    # pull all comments from listings user has posted on and their listings
-    # make pagination work
-    # NEED TO HAVE THE SEARCH WORK--- YAY HAYSTACK
-
     lookouts = Lookout.objects.filter(
         owner__user__username = request.user.username )
 

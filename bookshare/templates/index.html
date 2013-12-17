@@ -48,14 +48,16 @@ then it just shows the most recent new postings -->
 
       {% else %}
         <div class="col-lg-12 text-center">
-          <p>
-          <h3 style="margin:0px;">No lookout results found.</h3>
-          </p>
-          <p>
-            You may not have set any, try
-            <a href="{%url 'lookouts' request.user.username%}">
-              setting some</a>.
-          </p>
+          <div class="panel panel-warning">
+            <div class="panel-body">
+              <h3>No lookout results found.</h3>
+              <p>
+                You may not have set any, try
+                <a href="{%url 'lookouts' request.user.username%}">
+                  setting some</a>.
+              </p>
+            </div>
+          </div>
         </div>
       {% endif %}
     </div>

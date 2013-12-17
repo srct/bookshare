@@ -1,5 +1,5 @@
 from website.models import Listing,Seller
-from website.forms import ListingForm
+from website.forms import ListingForm, FinalPriceForm
 from bids.models import Bid
 from bids.forms import BidForm
 from django.http import Http404
@@ -111,11 +111,13 @@ def profile(request, username):
     # verify that the user exists
     seller = get_object_or_404(Seller, user__username=username)
     listings = Listing.objects.filter(seller__user__username=username)
+    FinalPrice_form = FinalPriceForm()
 
     return render(request, 'profile.html', {
         'seller' : seller,
         'listings': listings,
         'total_sold' : totalSold( username ),
+        'FinalPrice_form' : FinalPrice_form,
     },
     )
 
@@ -214,6 +216,15 @@ def sell_listing(request, book_id):
     listing = Listing.objects.get(pk=book_id)
 
     if listing.seller.user == user:
+
+        if request.method == 'POST':
+            finalPrice_form = FinalPriceForm( request.POST )
+            if finalPrice_form.is_valid():
+                try:
+                    listing.finalPrice = int(finalPrice_form.cleaned_data['final_price'])
+                except ValueError, TypeError:
+                    listing.finalPrice = listing.price
+
         listing.sold = True
         listing.active = False
         listing.save()

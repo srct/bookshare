@@ -6,7 +6,7 @@ from lookouts.models import Lookout
 from django.http import Http404
 from django.conf import settings
 from django.shortcuts import render, render_to_response, get_object_or_404, redirect
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
 from datetime import datetime,timedelta
 from django.contrib.auth.decorators import login_required
@@ -86,9 +86,21 @@ def index(request):
     for lookout in lookouts:
         lookout_listings = lookout.get_listings()
         listings.extend( list(lookout_listings) )
+    paginator = Paginator(listings, 6) # Show 6 listings per page
+
+    page = request.GET.get('page')
+    try:
+        listings = paginator.page(page)
+    except PageNotAnInteger:
+        # if page is NaN, deliver the first page
+        listings = paginator.page(1)
+    except EmptyPage:
+        # if the page is empty, deliver the last page
+        listings = paginator.page(paginator.num_pages)
 
     return render(request, 'index.html', {
         'listings' : listings,
+        'page_range' : range(1, int(listings.paginator.num_pages)+1),
     },
     )
 

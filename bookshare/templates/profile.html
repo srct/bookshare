@@ -129,6 +129,7 @@ function finalPrice_action( target ){
   </div>
 </div>
 
+{% if seller.user = request.user %}
 <div class="row">
   <div class="col-md-12">
     <h3>Lookouts</h3>
@@ -143,18 +144,15 @@ function finalPrice_action( target ){
 
           {% for lookout in lookouts %}
           {% endfor %}
+
         </table>
       </div>
     {% else %}
-      {% if seller.user = request.user %}
-      You don't
-      {% else %}
-      {{ seller.user.first_name }} {{ seller.user.last_name }} doesn't 
-      {% endif %}
-      have any lookouts posted yet.
+      You don't have any lookouts posted yet.
     {% endif %}
   </div>
 </div>
+{% endif %}
 
 
 <!-- Final Price Modal -->

@@ -36,44 +36,30 @@ then it just shows the most recent new postings -->
 
 <div class="row">
   <div class="col-lg-12">
-    <div class="well">
 
-<!--
-      {% if not listings %}
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="alert alert-danger alert-dismissable text-center">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            You haven't picked anything to look for! <a href="{% url 'lookout'
-            request.user.username %}">Manage those textbooks here.</a>
-          </div>
-        </div>
-      </div>
-      {% endif %}
--->
+    <div class="row">
+      {% if listings %}
 
-      <div class="row">
-        {% if listings %}
         {% for listing in listings %}
           <div class="col-lg-4">
-            This is one listing cell.
+            {% include 'listing_preview_panel.html' %}
           </div>
         {% endfor %}
-        {% else %}
-          <div class="col-lg-12 text-center">
-            <p>
-            <h3 style="margin:0px;">No lookouts found.</h3>
-            </p>
-            <p>
-              You may not have set any, try
-              <a href="{%url 'lookouts' request.user.username%}">
-                setting some</a>.
-            </p>
-          </div>
-        {% endif %}
-      </div>
 
+      {% else %}
+        <div class="col-lg-12 text-center">
+          <p>
+          <h3 style="margin:0px;">No lookout results found.</h3>
+          </p>
+          <p>
+            You may not have set any, try
+            <a href="{%url 'lookouts' request.user.username%}">
+              setting some</a>.
+          </p>
+        </div>
+      {% endif %}
     </div>
+
   </div>
 </div>
 

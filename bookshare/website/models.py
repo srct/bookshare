@@ -42,7 +42,7 @@ class Listing( models.Model ):
 
     sold = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
-    finalPrice = models.IntegerField(null=True,blank=True,default=0)
+    finalPrice = models.IntegerField(blank=True,default=0)
 
     # object call
     def __unicode__(self):
@@ -58,7 +58,7 @@ class Listing( models.Model ):
 
     class Meta:
         #unique_together = (("ISBN", "seller"),)
-        ordering = ['sold', '-ISBN']
+        ordering = ['-ISBN', 'title']
 
 
 class Seller( models.Model ):

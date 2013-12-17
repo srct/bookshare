@@ -30,39 +30,50 @@ GMU Bookshare &bull; Homepage
 
 </div>
 
-  <hr/>
-<!-- if the user is not signed in, or doesn't have anything on the lookout for
-then it just shows the most recent new postings -->
+<hr/>
 
-<div class="row">
-  <div class="col-lg-12">
+  <!-- Ideally this will be focused on columns, like Pinterest. -->
+  {% if listings %}
 
+    {% for listing in listings %}
+
+      <!-- Add the first row -->
+      {% if forloop.counter == 1 %}
+      <div class="row">
+      {% endif %}
+
+      <div class="col-md-4">
+        {% include 'listing_preview_panel.html' %}
+      </div>
+
+      <!-- Add the middle row splitter -->
+      {% if forloop.counter == 3%}
+      </div>
+      <div class="row">
+      {% endif %}
+
+      <!-- Close the last row finally. -->
+      {% if forloop.counter == 6 %}
+      </div>
+      {% endif %}
+
+    {% endfor %}
+
+  {% else %}
     <div class="row">
-      {% if listings %}
-
-        {% for listing in listings %}
-          <div class="col-lg-4">
-            {% include 'listing_preview_panel.html' %}
-          </div>
-        {% endfor %}
-
-      {% else %}
-        <div class="col-lg-12 text-center">
-          <div class="panel panel-warning">
-            <div class="panel-body">
-              <h3>No lookout results found.</h3>
-              <p>
-                You may not have set any, try
-                <a href="{%url 'lookouts' request.user.username%}">
-                  setting some</a>.
-              </p>
-            </div>
+      <div class="col-lg-12 text-center">
+        <div class="panel panel-warning">
+          <div class="panel-body">
+            <h3>No lookout results found.</h3>
+            <p>
+              You may not have set any, try
+              <a href="{%url 'lookouts' request.user.username%}">
+                setting some</a>.
+            </p>
           </div>
         </div>
-      {% endif %}
+      </div>
     </div>
-
-  </div>
-</div>
+  {% endif %}
 
 {% endblock %}

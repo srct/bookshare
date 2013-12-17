@@ -15,30 +15,66 @@ GMU Bookshare &bull; Homepage
 </div>
 
 <div class="row">
+
   <div class="col-lg-6">
-    <a href="{% url 'create_listing' %}" class="btn btn-primary btn-lg btn-block">I have a book</a>
+    <a href="{% url 'create_listing' %}" class="btn btn-primary btn-lg btn-block">
+      I have a book
+    </a>
   </div>
+
   <div class="col-lg-6">
-    <a href="{% url 'search' %}" class="btn btn-primary btn-lg btn-block">I need a book</a>
+    <a href="{% url 'search' %}" class="btn btn-primary btn-lg btn-block">
+      I need a book
+    </a>
   </div>
+
 </div>
 
+  <hr/>
 <!-- if the user is not signed in, or doesn't have anything on the lookout for
 then it just shows the most recent new postings -->
 
-<div class="alert alert-danger alert-dismissable">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  You haven't picked anything you're looking for! <a href="{% url 'lookout' %}">Manage those textbooks here.</a>
-</div>
-
-{% if listings %}
 <div class="row">
-  {% for listing in listings %}
-    <div class="col-lg-6">
-       
+  <div class="col-lg-12">
+    <div class="well">
+
+<!--
+      {% if not listings %}
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="alert alert-danger alert-dismissable text-center">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            You haven't picked anything to look for! <a href="{% url 'lookout'
+            request.user.username %}">Manage those textbooks here.</a>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+-->
+
+      <div class="row">
+        {% if listings %}
+        {% for listing in listings %}
+          <div class="col-lg-4">
+            This is one listing cell.
+          </div>
+        {% endfor %}
+        {% else %}
+          <div class="col-lg-12 text-center">
+            <p>
+            <h3 style="margin:0px;">No lookouts found.</h3>
+            </p>
+            <p>
+              You may not have set any, try
+              <a href="{%url 'lookouts' request.user.username%}">
+                setting some</a>.
+            </p>
+          </div>
+        {% endif %}
+      </div>
+
     </div>
-  {% endfor %}
+  </div>
 </div>
-{% endif %}
 
 {% endblock %}

@@ -6,6 +6,17 @@ GMU Bookshare &bull; Seller Profile
 
 {% block content %}
 
+<script>
+function confirm_close_action( target ){
+  var button = document.getElementById("CloseConfirmButton");
+  button.href = target;
+}
+function finalPrice_action( target ){
+  var form = document.getElementById("FinalPriceForm");
+  form.action = target;
+}
+</script>
+
 <div class="page-header" id="banner">
   <div class="row">
     <div class="col-lg-12">
@@ -77,15 +88,17 @@ GMU Bookshare &bull; Seller Profile
 
               <td class="text-center">
                 {% if listing.sold %}
-                <span class="label label-danger">Sold</span>
+                  <span class="label label-danger">Sold</span>
                 {% elif not listing.active %}
-                <span class="label label-default">Closed</span>
+                  <span class="label label-default">Closed</span>
                 {% else %}
                   {% if seller.user = request.user %}
-                  <a href="{% url 'close_listing' listing.pk %}">Close</a> / 
-                  <a href="{% url 'sell_listing' listing.pk %}">Sold</a>
+                    <a href="#" onclick="confirm_close_action('{% url 'close_listing' listing.pk %}');"
+                    data-toggle="modal" data-target="#CloseConfirm">Close</a> / 
+                    <a href="#" onclick="finalPrice_action('{% url 'sell_listing' listing.pk %}');"
+                    data-toggle="modal" data-target="#FinalPrice">Sold</a>
                   {% else %}
-                  <span class="label label-success">Unsold</span>
+                    <span class="label label-success">Unsold</span>
                   {% endif %}
                 {% endif %}
               </td>
@@ -110,5 +123,63 @@ GMU Bookshare &bull; Seller Profile
     {% endif %}
   </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="FinalPrice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form-horizontal" id="FinalPriceForm" method="post" role="form">
+        {%csrf_token%}
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Final Selling Price</h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group{%if FinalPrice_form.final_price.errors%} has-error{%endif%}">
+            <label class="col-lg-3 control-label" for="{{FinalPrice_form.final_price.id_for_label}}">
+              {{FinalPrice_form.final_price.label}}
+            </label>
+            <div class="col-lg-9">
+              <div class="input-group">
+                <span class="input-group-addon"> $ </span>
+                {{FinalPrice_form.final_price}}
+              </div>
+            </div>
+            <span class="help-block col-lg-9 col-lg-offset-3">
+              Enter the final price you sold your book for (optional).
+            </span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <a class="btn btn-default btn-sm" data-dismiss="modal">Close</a>
+          <input type="submit" class="btn btn-primary btn-sm" value="Mark as Sold" />
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="CloseConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Confirm Listing Closure</h4>
+      </div>
+      <div class="modal-body text-center">
+        Are you sure? This action cannot be undone!
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-default btn-sm" data-dismiss="modal">Cancel</a>
+        <a class="btn btn-primary btn-sm" id="CloseConfirmButton">Close Listing</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 {% endblock %}

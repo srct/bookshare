@@ -14,7 +14,7 @@ GMU Bookshare &bull; Homepage
   </div>
 </div>
 
-<div class="container">
+<div class="row">
   <div class="col-lg-6">
     <a href="{% url 'create_listing' %}" class="btn btn-primary btn-lg btn-block">I have a book</a>
   </div>
@@ -22,5 +22,23 @@ GMU Bookshare &bull; Homepage
     <a href="{% url 'search' %}" class="btn btn-primary btn-lg btn-block">I need a book</a>
   </div>
 </div>
+
+<!-- if the user is not signed in, or doesn't have anything on the lookout for
+then it just shows the most recent new postings -->
+
+<div class="alert alert-danger alert-dismissable">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  You haven't picked anything you're looking for! <a href="{% url 'lookout' %}">Manage those textbooks here.</a>
+</div>
+
+{% if listings %}
+<div class="row">
+  {% for listing in listings %}
+    <div class="col-lg-6">
+       
+    </div>
+  {% endfor %}
+</div>
+{% endif %}
 
 {% endblock %}

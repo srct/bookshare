@@ -86,6 +86,9 @@ def index(request):
     for lookout in lookouts:
         lookout_listings = lookout.get_listings()
         listings.extend( list(lookout_listings) )
+
+    # Listings will be shown in 3 columns and 2 rows, for a total of 6
+    # entries per page.
     paginator = Paginator(listings, 6) # Show 6 listings per page
 
     page = request.GET.get('page')
@@ -100,7 +103,6 @@ def index(request):
 
     return render(request, 'index.html', {
         'listings' : listings,
-        'page_range' : range(1, int(listings.paginator.num_pages)+1),
     },
     )
 

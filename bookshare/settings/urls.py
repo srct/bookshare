@@ -39,10 +39,6 @@ urlpatterns = patterns('website.views',
     #### LISTING MANAGEMENT PAGES ####
     # create new listing
     url(r'^create/?$', 'create_listing', name = 'create_listing'),
-    # close listing
-    url(r'^close/(?P<book_id>\w+)$', 'close_listing', name='close_listing'),
-    # sell listing
-    url(r'^sell/(?P<book_id>\w+)$', 'sell_listing', name='sell_listing'),
 
     #### SEARCHES ####
     # points to a SearchView Instance

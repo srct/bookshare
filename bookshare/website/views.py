@@ -3,6 +3,8 @@ from website.forms import ListingForm, FinalPriceForm, CloseForm
 from bids.models import Bid
 from bids.forms import BidForm
 from lookouts.models import Lookout
+from lookouts.forms import LookoutForm
+
 from django.http import Http404
 from django.conf import settings
 from django.shortcuts import render, render_to_response, get_object_or_404, redirect
@@ -11,6 +13,7 @@ from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from datetime import datetime,timedelta
 from django.contrib.auth.decorators import login_required
+from django.forms.models import modelformset_factory
 
 import math
 import pyisbn
@@ -246,19 +249,33 @@ def create_listing(request):
 
 @login_required
 def lookouts(request):
-    # merely forms
-    return render(request, 'lookouts.html', {
-    
-    },
+
+    lookouts = Lookout.objects.filter(owner=request.user.seller)
+
+    LookoutFormset = modelformset_factory(
+        Lookout,
+        form=LookoutForm,
+        extra=0,
     )
 
+    formset = LookoutFormset( queryset=lookouts )
+
+    if request.method == 'POST':
+        formset = LookoutFormset( request.POST, queryset=lookouts )
+        if formset.is_valid():
+            pass # do something
+
+    return render(request, 'lookouts.html', {
+        'lookouts': lookouts,
+        'formset': formset,
+    },
+    )
 
 
 @login_required
 def search(request):
     # merely forms
     return render(request, 'search.html', {
-    
     },
     )
 

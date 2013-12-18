@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib import auth
 from django.conf.urls import patterns, include, url
+import haystack
 
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()

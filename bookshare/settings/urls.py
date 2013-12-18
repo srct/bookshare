@@ -39,25 +39,20 @@ urlpatterns = patterns('website.views',
     #### LISTING MANAGEMENT PAGES ####
     # create new listing
     url(r'^create/?$', 'create_listing', name = 'create_listing'),
-    # search for listing
-    url(r'^search/?$', 'search', name = 'search'),
     # close listing
     url(r'^close/(?P<book_id>\w+)$', 'close_listing', name='close_listing'),
     # sell listing
     url(r'^sell/(?P<book_id>\w+)$', 'sell_listing', name='sell_listing'),
+
+    #### SEARCHES ####
+    # points to a SearchView Instance
+    url(r'^search/', include('haystack.urls')),
 
     #### ADMIN PAGES ####
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-
-    #### SEARCHES ####
-    # points to a SearchView Instance
-    url(r'^search/?', include('haystack.urls')),
-
-    #### COMMENTS APP ####
-    (r'^comments/', include('django.contrib.comments.urls')),
 
 )
 

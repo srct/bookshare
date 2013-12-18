@@ -6,7 +6,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib import auth
 from django.conf.urls import patterns, include, url
-import haystack
 
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
@@ -54,8 +53,8 @@ urlpatterns = patterns('website.views',
     url(r'^admin/', include(admin.site.urls)),
 
     #### SEARCHES ####
-    url(r'^search/', include(haystack.urls)),
     # points to a SearchView Instance
+    url(r'^search/?', include('haystack.urls')),
 
     #### COMMENTS APP ####
     (r'^comments/', include('django.contrib.comments.urls')),

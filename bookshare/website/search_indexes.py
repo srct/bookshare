@@ -1,6 +1,6 @@
 from haystack import indexes
 from django.utils import timezone
-from .models import Listing
+from website.models import Listing
 
 class ListingIndex(indexes.SearchIndex, indexes.Indexable):
 
@@ -18,4 +18,4 @@ class ListingIndex(indexes.SearchIndex, indexes.Indexable):
 
     def index_queryset(self, using=None):
         """When the entire index for model is updated."""
-	return self.get_model().objects.filter(timestamp__lte=timezone.now())
+	return self.get_model().objects.filter(date_created=timezone.now())

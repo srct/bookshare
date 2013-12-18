@@ -25,8 +25,6 @@ urlpatterns = patterns('website.views',
     url(r'^u/(?P<username>\w+)/?$', 'profile', name = 'profile'),
     # book listing page
     url(r'^u/(?P<username>\w+)/listings/(?P<book_id>\w+)$', 'listing', name = 'listing'),
-    # manage books you're looking for
-    url(r'^lookouts/$', 'lookouts', name = 'lookouts'),
 
     #### STATIC PAGES ####
     # about page
@@ -52,9 +50,9 @@ urlpatterns = patterns('website.views',
 
 )
 
-urlpatterns += patterns('django.contrib.auth.views',                               
-    #### AUTH PAGES ####                                                           
-    url(r'^login$', 'login', {'template_name': 'login.html'},                      
-        name='website_login'),                                                     
-    url(r'^logout$', 'logout', {'next_page': '/'}, name='website_logout'),         
+urlpatterns += patterns('django.contrib.auth.views',
+    #### AUTH PAGES ####
+    url(r'^login$', 'login', {'template_name': 'login.html'},
+        name='website_login'),
+    url(r'^logout$', 'logout', {'next_page': '/'}, name='website_logout'),
 )

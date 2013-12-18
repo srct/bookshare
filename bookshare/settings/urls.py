@@ -38,6 +38,10 @@ urlpatterns = patterns('website.views',
     # create new listing
     url(r'^create/?$', 'create_listing', name = 'create_listing'),
 
+    #### LOOKOUT MANAGEMENT PAGES ####
+    # create and manage lookouts
+    url(r'^lookouts/?$', 'lookouts', name = 'lookouts'),
+
     #### SEARCHES ####
     # points to a SearchView Instance
     url(r'^search/', include('haystack.urls')),

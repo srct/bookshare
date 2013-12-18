@@ -245,6 +245,16 @@ def create_listing(request):
 
 
 @login_required
+def lookouts(request):
+    # merely forms
+    return render(request, 'lookouts.html', {
+    
+    },
+    )
+
+
+
+@login_required
 def search(request):
     # merely forms
     return render(request, 'search.html', {

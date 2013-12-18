@@ -128,7 +128,7 @@ function insert_target( source, target ){
 {% if seller.user = request.user %}
 <div class="row">
   <div class="col-md-12">
-    <h3>Lookouts</h3>
+    <h3>Lookouts (<a href="{% url 'lookouts' %}">Edit</a>)</h3>
     {% if lookouts %}
 
       <div class="table-responsive">
@@ -144,7 +144,7 @@ function insert_target( source, target ){
         </table>
       </div>
     {% else %}
-      You don't have any lookouts posted yet.
+      You don't have any lookouts set yet.
     {% endif %}
   </div>
 </div>

@@ -26,7 +26,7 @@ urlpatterns = patterns('website.views',
     # book listing page
     url(r'^u/(?P<username>\w+)/listings/(?P<book_id>\w+)$', 'listing', name = 'listing'),
     # manage books you're looking for
-    url(r'^u/(?P<username>\w+)/lookouts/$', 'lookouts', name = 'lookouts'),
+    url(r'^lookouts/$', 'lookouts', name = 'lookouts'),
 
     #### STATIC PAGES ####
     # about page

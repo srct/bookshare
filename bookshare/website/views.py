@@ -123,7 +123,7 @@ def index(request):
 
 # User's lookouts page.
 @login_required
-def lookouts(request, username):
+def lookouts(request):
 
     return render(request, 'lookouts.html', {
 

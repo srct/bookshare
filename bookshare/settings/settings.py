@@ -231,9 +231,8 @@ AUTH_LDAP_ALWAYS_UPDATE_USER = True
 
 HAYSTACK_CONNECTIONS = {
     'default' : {
-        'ENGINE' : 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-        'URL' : 'http://127.0.0.1:9200/',
-	'INDEX_NAME': 'haystack',
+        'ENGINE' : 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH' : os.path.join(os.path.dirname(__file__), 'whoosh_index'),
     },
 }
 

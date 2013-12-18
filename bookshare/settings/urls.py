@@ -52,6 +52,10 @@ urlpatterns = patterns('website.views',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
+    #### SEARCHES ####
+    url(r'^search/', include(haystack.urls)),
+    # points to a SearchView Instance
+
     #### COMMENTS APP ####
     (r'^comments/', include('django.contrib.comments.urls')),
 

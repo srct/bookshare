@@ -6,12 +6,23 @@ from website.models import Seller, Listing
 
 
 class FinalPriceForm( forms.Form ):
-    final_price = forms.CharField(
+    book_id = forms.IntegerField(
         required = True,
+        widget=forms.HiddenInput(),
+    )
+    final_price = forms.CharField(
+        required = False,
         label = 'Final Selling Price',
         widget=forms.NumberInput(attrs={
             'class': 'form-control',
         }),
+    )
+
+
+class CloseForm( forms.Form ):
+    book_id = forms.IntegerField(
+        required = True,
+        widget=forms.HiddenInput(),
     )
 
 

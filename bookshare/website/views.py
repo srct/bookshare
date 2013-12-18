@@ -82,10 +82,17 @@ def index(request):
     lookouts = Lookout.objects.filter(
         owner__user__username = request.user.username )
 
-    listings = []
+    # This unwieldy double forloop grabs the pk of each listing that shows
+    # up for your lookout, and adds it to a list.
+    listing_pks = []
     for lookout in lookouts:
         lookout_listings = lookout.get_listings()
-        listings.extend( list(lookout_listings) )
+        for lookout_listing in lookout_listings:
+            listing_pks.append( lookout_listing.pk )
+
+    # The list of pks is then used to create a queryset, ordered by newest
+    # listing first.
+    listings = Listing.objects.filter(pk__in=listing_pks).order_by('-date_created')
 
     # Listings will be shown in 3 columns and 2 rows, for a total of 6
     # entries per page.

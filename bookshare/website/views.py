@@ -11,6 +11,7 @@ from django.utils import timezone
 from datetime import datetime,timedelta
 from django.contrib.auth.decorators import login_required
 
+import math
 import pyisbn
 import requests
 
@@ -108,8 +109,14 @@ def index(request):
         # if the page is empty, deliver the last page
         listings = paginator.page(paginator.num_pages)
 
+    # the rows variable is >= 1, and is determined by the number of
+    # entries on this page. this is intended to cause the listing
+    # previews to fill in rows first, rather than columns.
+    rows = int(math.ceil( len(listings) / 3.0 )) or 1
+
     return render(request, 'index.html', {
         'listings' : listings,
+        'rows' : rows,
     },
     )
 

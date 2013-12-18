@@ -26,7 +26,7 @@ When you run `$ pip install -r requirements.txt` to install all Python modules, 
 
 Debian and Ubuntu Installation Instructions
 ---
-`$ sudo apt-get update && sudo apt-get install libldap2-dev python-dev libmysqlclient-dev python-mysqldb`
+`$ sudo apt-get update && sudo apt-get install libldap2-dev python-dev libmysqlclient-dev python-mysqldb`elasticsearch
 
 To-do
 ---

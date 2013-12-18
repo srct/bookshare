@@ -125,6 +125,7 @@ INSTALLED_APPS = (
     'bids',
     'south',
     'easy_thumbnails',
+    'haystack',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -226,3 +227,13 @@ AUTH_LDAP_USER_ATTR_MAP = {
 
 # This is the default, but I like to be explicit.
 AUTH_LDAP_ALWAYS_UPDATE_USER = True
+
+HAYSTACK_CONNECTIONS = {
+    'default' : {
+        'ENGINE' : 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL' : 'http://127.0.0.1:9200/',
+	'INDEX_NAME': 'haystack',
+    },
+}
+
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'

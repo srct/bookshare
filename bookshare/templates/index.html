@@ -38,14 +38,13 @@ GMU Bookshare &bull; Homepage
 
     {% comment %}
       Essentially the logic here is to create 3 columns where
-      there are n rows in each, where n=2 (in this case).
+      there are n rows in each.
 
       The first conditional will add an initial column tag if the loop is
       beginning a new column. The second conditional adds a closing column
       tag when the loop ends a column.
     {% endcomment %}
 
-    {% with rows=2 %}
     {% for listing in listings %}
 
       {% if forloop.counter|add:-1|divisibleby:rows %}
@@ -59,7 +58,6 @@ GMU Bookshare &bull; Homepage
       {% endif %}
 
     {% endfor %}
-    {% endwith %}
 
   </div>
 

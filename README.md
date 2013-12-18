@@ -24,6 +24,10 @@ Make sure to install everything you need in your virtual environment from the re
 
 When you run `$ pip install -r requirements.txt` to install all Python modules, make sure to run `$ pip migrate website && pip migrate bids && pip migrate easy_thumbnails`.
 
+Make sure you have elasticsearch installed on your machine. (Not pyelasticsearch). Furthermore:
+
+> Using the standard SearchIndex, your search index content is only updated whenever you run either ./manage.py update_index or start afresh with ./manage.py rebuild_index.
+
 Debian and Ubuntu Installation Instructions
 ---
 `$ sudo apt-get update && sudo apt-get install libldap2-dev python-dev libmysqlclient-dev python-mysqldb`elasticsearch
@@ -31,7 +35,7 @@ Debian and Ubuntu Installation Instructions
 To-do
 ---
 
-* Set up Haystack with ElasticSearch
+* Regarding Haystack-- something about RealTimeSignalProcessor, or a search cronjob
 * Save searches, and display saved search results on user's home page
 * Make links more prevalent on the site.
 * Seller's rating

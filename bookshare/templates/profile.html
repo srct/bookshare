@@ -7,13 +7,16 @@ GMU Bookshare &bull; Seller Profile
 {% block content %}
 
 <script>
-function confirm_close_action( target ){
-  var button = document.getElementById("CloseConfirmButton");
-  button.href = target;
-}
-function finalPrice_action( target ){
-  var form = document.getElementById("FinalPriceForm");
-  form.action = target;
+function insert_target( source, target ){
+  var form = document.getElementById(source);
+  var input = document.getElementById("book_id");
+  if( ! input ){
+    input = document.createElement("input");
+  }
+  input.setAttribute("type", "hidden");
+  input.setAttribute("id", "book_id");
+  input.setAttribute("value", target);
+  form.appendChild( input );
 }
 </script>
 
@@ -93,9 +96,9 @@ function finalPrice_action( target ){
                   <span class="label label-default">Closed</span>
                 {% else %}
                   {% if seller.user = request.user %}
-                    <a href="#" onclick="confirm_close_action('{% url 'close_listing' listing.pk %}');"
+                    <a href="#" onclick="insert_target('CloseConfirmForm', '{{ listing.pk }}');"
                     data-toggle="modal" data-target="#CloseConfirm">Close</a> / 
-                    <a href="#" onclick="finalPrice_action('{% url 'sell_listing' listing.pk %}');"
+                    <a href="#" onclick="insert_target('FinalPriceForm', '{{ listing.pk }}');"
                     data-toggle="modal" data-target="#FinalPrice">Sold</a>
                   {% else %}
                     <span class="label label-success">Unsold</span>
@@ -159,7 +162,8 @@ function finalPrice_action( target ){
 <div class="modal fade" id="FinalPrice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form class="form-horizontal" id="FinalPriceForm" method="post" role="form">
+      <form class="form-horizontal" id="FinalPriceForm" method="post"
+      action="" role="form">
         {%csrf_token%}
 
         <div class="modal-header">
@@ -197,17 +201,27 @@ function finalPrice_action( target ){
 <div class="modal fade" id="CloseConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Confirm Listing Closure</h4>
-      </div>
-      <div class="modal-body text-center">
-        Are you sure? This action cannot be undone!
-      </div>
-      <div class="modal-footer">
-        <a class="btn btn-default btn-sm" data-dismiss="modal">Cancel</a>
-        <a class="btn btn-primary btn-sm" id="CloseConfirmButton">Close Listing</a>
-      </div>
+      <form class="form-horizontal" id="CloseConfirmForm" method="post"
+      action="" role="form">
+        {%csrf_token%}
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="myModalLabel">Confirm Listing Closure</h4>
+        </div>
+
+        <div class="modal-body text-center">
+          Are you sure? This action cannot be undone!
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-default btn-sm" data-dismiss="modal">
+            Cancel
+          </button>
+          <input type="submit" class="btn btn-primary btn-sm" value="Close Listing" />
+        </div>
+
+      </form>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->

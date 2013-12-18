@@ -163,16 +163,6 @@ def listing(request, username, book_id):
     bids = Bid.objects.filter( listing = listing )
     bid_count = len(bids)
 
-    # make a thumbnail of the image
-    # note: make sure to check if a thumbnail already exists tho!!
-#    from PIL import Image
-#    size = (100, 100)
-#    image = Image.open( listing.photo )
-#    image.thumbnail(size, Image.ANTIALIAS)
-#    background = Image.new('RGBA', size, (255, 255, 255, 0))
-#    background.paste( image,
-#        ((size[0] - image.size[0]) / 2, (size[1] - image.size[1]) / 2))
-
     if listing.seller != seller:
         raise Http404("Seller does not match listing.")
 

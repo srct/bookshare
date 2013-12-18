@@ -8,15 +8,8 @@ GMU Bookshare &bull; Seller Profile
 
 <script>
 function insert_target( source, target ){
-  var form = document.getElementById(source);
-  var input = document.getElementById("book_id");
-  if( ! input ){
-    input = document.createElement("input");
-  }
-  input.setAttribute("type", "hidden");
-  input.setAttribute("id", "book_id");
-  input.setAttribute("value", target);
-  form.appendChild( input );
+  var element = document.getElementById( source );
+  element.setAttribute("value", target);
 }
 </script>
 
@@ -96,9 +89,9 @@ function insert_target( source, target ){
                   <span class="label label-default">Closed</span>
                 {% else %}
                   {% if seller.user = request.user %}
-                    <a href="#" onclick="insert_target('CloseConfirmForm', '{{ listing.pk }}');"
+                    <a href="#" onclick="insert_target('{{close_form.book_id.id_for_label}}', '{{ listing.pk }}');"
                     data-toggle="modal" data-target="#CloseConfirm">Close</a> / 
-                    <a href="#" onclick="insert_target('FinalPriceForm', '{{ listing.pk }}');"
+                    <a href="#" onclick="insert_target('{{FinalPrice_form.book_id.id_for_label}}', '{{ listing.pk }}');"
                     data-toggle="modal" data-target="#FinalPrice">Sold</a>
                   {% else %}
                     <span class="label label-success">Unsold</span>
@@ -159,15 +152,18 @@ function insert_target( source, target ){
 
 
 <!-- Final Price Modal -->
-<div class="modal fade" id="FinalPrice" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="FinalPrice" tabindex="-1" role="dialog"
+aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <form class="form-horizontal" id="FinalPriceForm" method="post"
       action="" role="form">
         {%csrf_token%}
+        {{FinalPrice_form.book_id}}
 
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <button type="button" class="close" data-dismiss="modal"
+          aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Final Selling Price</h4>
         </div>
 
@@ -190,7 +186,8 @@ function insert_target( source, target ){
 
         <div class="modal-footer">
           <a class="btn btn-default btn-sm" data-dismiss="modal">Close</a>
-          <input type="submit" class="btn btn-primary btn-sm" value="Mark as Sold" />
+          <input type="submit" class="btn btn-primary btn-sm"
+          value="Mark as Sold" name="sold" />
         </div>
       </form>
     </div><!-- /.modal-content -->
@@ -198,15 +195,19 @@ function insert_target( source, target ){
 </div><!-- /.modal -->
 
 <!-- Close Confirm Modal -->
-<div class="modal fade" id="CloseConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="CloseConfirm" tabindex="-1" role="dialog"
+aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <form class="form-horizontal" id="CloseConfirmForm" method="post"
       action="" role="form">
         {%csrf_token%}
+        {{ close_form.book_id }}
+        
 
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <button type="button" class="close" data-dismiss="modal"
+          aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="myModalLabel">Confirm Listing Closure</h4>
         </div>
 
@@ -218,7 +219,8 @@ function insert_target( source, target ){
           <button class="btn btn-default btn-sm" data-dismiss="modal">
             Cancel
           </button>
-          <input type="submit" class="btn btn-primary btn-sm" value="Close Listing" />
+          <input type="submit" class="btn btn-primary btn-sm"
+          value="Close Listing" name="closed" />
         </div>
 
       </form>

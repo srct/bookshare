@@ -1,5 +1,5 @@
 from website.models import Listing,Seller
-from website.forms import ListingForm, FinalPriceForm
+from website.forms import ListingForm, FinalPriceForm, CloseForm
 from bids.models import Bid
 from bids.forms import BidForm
 from lookouts.models import Lookout
@@ -7,6 +7,7 @@ from django.http import Http404
 from django.conf import settings
 from django.shortcuts import render, render_to_response, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from datetime import datetime,timedelta
 from django.contrib.auth.decorators import login_required
@@ -121,15 +122,6 @@ def index(request):
     )
 
 
-# User's lookouts page.
-@login_required
-def lookouts(request):
-
-    return render(request, 'lookouts.html', {
-
-    },
-    )
-
 # User profile page
 @login_required
 def profile(request, username):
@@ -138,7 +130,40 @@ def profile(request, username):
     seller = get_object_or_404(Seller, user__username=username)
     listings = Listing.objects.filter(seller__user__username=username)
     lookouts = Lookout.objects.filter(owner__user__username=username)
-    FinalPrice_form = FinalPriceForm()
+    FinalPrice_form = FinalPriceForm(prefix="finalPrice")
+    close_form = CloseForm(prefix="close")
+
+    if request.method == 'POST':
+        # Parse the ClosedForm input fields
+        if 'closed' in request.POST:
+            close_form = CloseForm( request.POST, prefix="close" )
+            if close_form.is_valid():
+                book_id = close_form.cleaned_data.get('book_id')
+                listing = Listing.objects.get(pk=book_id)
+                if listing.seller == request.user.seller:
+                    listing.active = False
+                    listing.save()
+                    return redirect('profile', username)
+                else:
+                    raise PermissionDenied("You do not own this listing.")
+        # Parse the FinalPriceForm input fields
+        elif 'sold' in request.POST:
+            FinalPrice_form = FinalPriceForm( request.POST, prefix="finalPrice" )
+            if FinalPrice_form.is_valid():
+                book_id = FinalPrice_form.cleaned_data.get('book_id')
+                listing = Listing.objects.get(pk=book_id)
+                try:
+                    final_price = int(FinalPrice_form.cleaned_data.get('final_price'))
+                except ValueError, TypeError:
+                    final_price = 0
+                if listing.seller == request.user.seller:
+                    listing.finalPrice = final_price
+                    listing.sold = True
+                    listing.active = False
+                    listing.save()
+                    return redirect('profile', username)
+                else:
+                    raise PermissionDenied("You do not own this listing.")
 
     return render(request, 'profile.html', {
         'seller' : seller,
@@ -146,6 +171,7 @@ def profile(request, username):
         'lookouts': lookouts,
         'total_sold' : totalSold( username ),
         'FinalPrice_form' : FinalPrice_form,
+        'close_form' : close_form,
     },
     )
 
@@ -216,39 +242,6 @@ def create_listing(request):
         'form' : listing_form,
     },
     )
-
-@login_required
-def close_listing(request, book_id):
-    user = request.user
-    listing = Listing.objects.get(pk=book_id)
-
-    if listing.seller.user == user:
-        listing.active = False
-        listing.save()
-
-    return redirect('profile', request.user.username)
-
-
-@login_required
-def sell_listing(request, book_id):
-    user = request.user
-    listing = Listing.objects.get(pk=book_id)
-
-    if listing.seller.user == user:
-
-        if request.method == 'POST':
-            finalPrice_form = FinalPriceForm( request.POST )
-            if finalPrice_form.is_valid():
-                try:
-                    listing.finalPrice = int(finalPrice_form.cleaned_data['final_price'])
-                except ValueError, TypeError:
-                    listing.finalPrice = listing.price
-
-        listing.sold = True
-        listing.active = False
-        listing.save()
-
-    return redirect('profile', request.user.username)
 
 
 @login_required

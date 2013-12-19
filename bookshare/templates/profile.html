@@ -135,10 +135,15 @@ function insert_target( source, target ){
         <table class="table table-bordered">
 
           <thead>
-            <th class="col-md-1 text-center">ISBN</th>
+            <th class="col-md-2">Date Created</th>
+            <th class="col-md-10">ISBN</th>
           </thead>
 
           {% for lookout in lookouts %}
+          <tr>
+            <td>{{lookout.date_created.date}}</td>
+            <td>{{lookout.ISBN}}</td>
+          </tr>
           {% endfor %}
 
         </table>

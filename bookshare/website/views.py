@@ -79,8 +79,6 @@ def error_500(request):
     )
 
 # home page
-# Maybe don't login_require this, and allow anonymous users to browse a
-# list of currently posted books? idk.
 @login_required
 def index(request):
 
@@ -123,7 +121,6 @@ def index(request):
         'rows' : rows,
     },
     )
-
 
 # User profile page
 @login_required
@@ -178,11 +175,50 @@ def profile(request, username):
     },
     )
 
+
+@login_required
+def create_lookout(request, username):
+
+    lookouts = Lookout.objects.filter(owner=request.user.seller)
+
+    LookoutFormset = modelformset_factory(
+        Lookout,
+        form=LookoutForm,
+        extra=0,
+    )
+
+    formset = LookoutFormset( queryset=lookouts )
+
+    if request.method == 'POST':
+        formset = LookoutFormset( request.POST, queryset=lookouts )
+        if formset.is_valid():
+            pass # do something
+
+    return render(request, 'create_lookout.html', {
+        'lookouts': lookouts,
+        'formset': formset,
+    },
+    )
+
+
+@login_required
+def delete_lookout(request, username, lookout_id):
+    return redirect('profile', username)
+
+
+@login_required
+def all_listings(request):
+    listings = Listing.objects.all().order_by('-date_created')
+    return render(request, 'all_listings.html', {
+    },
+    )
+
+
 # Listing page
 @login_required
-def listing(request, username, book_id):
+def view_listing(request, book_id):
 
-    seller = get_object_or_404(Seller,user__username=username)
+    # Grab the listing itself
     listing = get_object_or_404(Listing,pk=book_id)
 
     # if the listing is over a week old, it's old
@@ -192,19 +228,16 @@ def listing(request, username, book_id):
     bids = Bid.objects.filter( listing = listing )
     bid_count = len(bids)
 
-    if listing.seller != seller:
-        raise Http404("Seller does not match listing.")
-
     bid_form = BidForm()
     if request.method == 'POST':
-        bid_form = BidForm( request.POST )
-        if bid_form.is_valid():
-            bid = bid_form.save(commit=False)
-            bid.bidder = request.user.seller
-            bid.listing = listing
-            bid.save()
- 
-            return redirect( 'listing', listing.seller.user.username, listing.pk )
+        if listing.active and not listing.sold:
+            bid_form = BidForm( request.POST )
+            if bid_form.is_valid():
+                bid = bid_form.save(commit=False)
+                bid.bidder = request.user.seller
+                bid.listing = listing
+                bid.save()
+                return redirect( 'view_listing', listing.pk )
 
     return render(request, 'listing.html', {
         'listing' : listing,
@@ -213,10 +246,10 @@ def listing(request, username, book_id):
         'bid_count' : bid_count,
         'bids' : bids,
         'bid_form' : bid_form,
-#        'thumbnail' : background,
     },
     )
 
+# Allow user to create a listing
 @login_required
 def create_listing(request):
 
@@ -237,45 +270,12 @@ def create_listing(request):
             listing.seller = request.user.seller
             listing.save()
 
-            return redirect( 'listing', listing.seller.user.username, listing.pk )
+            return redirect( 'view_listing', listing.pk )
     else:
         listing_form = ListingForm(request=request)
 
     return render(request, 'create_listing.html', {
         'form' : listing_form,
-    },
-    )
-
-
-@login_required
-def lookouts(request):
-
-    lookouts = Lookout.objects.filter(owner=request.user.seller)
-
-    LookoutFormset = modelformset_factory(
-        Lookout,
-        form=LookoutForm,
-        extra=0,
-    )
-
-    formset = LookoutFormset( queryset=lookouts )
-
-    if request.method == 'POST':
-        formset = LookoutFormset( request.POST, queryset=lookouts )
-        if formset.is_valid():
-            pass # do something
-
-    return render(request, 'lookouts.html', {
-        'lookouts': lookouts,
-        'formset': formset,
-    },
-    )
-
-
-@login_required
-def search(request):
-    # merely forms
-    return render(request, 'search.html', {
     },
     )
 
@@ -296,3 +296,11 @@ def privacy(request):
     return render(request, 'privacy.html', {
     },
     )
+
+@login_required
+def search(request):
+    # merely forms
+    return render(request, 'search.html', {
+    },
+    )
+

@@ -16,7 +16,7 @@ GMU Bookshare &bull; Lookouts
 
 <div class="row">
 
-  <div class="col-lg-8 col-lg-offset-2">
+  <div class="col-lg-10 col-lg-offset-1">
     <div class="well">
       <form class="form-horizontal" action="" method="post" role="form"
       enctype="multipart/form-data">
@@ -28,9 +28,6 @@ GMU Bookshare &bull; Lookouts
               <label for="{{form.ISBN.id_for_label}}" class="col-lg-2 control-label">ISBN</label>
               <div class="col-lg-10">
                 {{ form.ISBN }}
-                {% if not form.ISBN.errors %}
-                  <span class="help-block">Ex: 1590366727</span>
-                {% endif %}
                 {% for error in form.ISBN.errors %}
                   <span class="help-block">{{ error }}</span>
                 {% endfor %}

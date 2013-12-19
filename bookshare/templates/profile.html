@@ -41,7 +41,12 @@ function insert_target( source, target ){
 <div class="row">
 
   <div class="col-md-12">
+    {% if seller == request.user.seller %}
+    <h3>Listings (<a href="{%url 'create_listing'%}">Create</a>)</h3>
+    {% else %}
     <h3>Listings</h3>
+    {% endif %}
+
     {% if listings %}
 
       <div class="table-responsive">
@@ -126,23 +131,32 @@ function insert_target( source, target ){
 </div>
 
 {% if seller.user = request.user %}
+
+<hr/>
+
 <div class="row">
   <div class="col-md-12">
-    <h3>Lookouts (<a href="{% url 'lookouts' %}">Edit</a>)</h3>
+    <h3>Your Lookouts (<a href="{% url 'create_lookout' request.user.username %}">Create</a>)</h3>
     {% if lookouts %}
 
       <div class="table-responsive">
         <table class="table table-bordered">
 
           <thead>
-            <th class="col-md-2">Date Created</th>
-            <th class="col-md-10">ISBN</th>
+            <th class="col-md-1 text-center">ISBN</th>
+            <th class="col-md-10">Title</th>
+            <th class="col-md-1 text-center">Action</th>
           </thead>
 
           {% for lookout in lookouts %}
           <tr>
-            <td>{{lookout.date_created.date}}</td>
-            <td>{{lookout.ISBN}}</td>
+            <td class="text-center">{{lookout.ISBN}}</td>
+            <td>{{lookout.get_info.title}}</td>
+            <td class="text-center">
+              <a href="{% url 'delete_lookout' request.user.username lookout.pk %}">
+                Delete
+              </a>
+            </td>
           </tr>
           {% endfor %}
 

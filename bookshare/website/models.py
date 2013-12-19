@@ -54,7 +54,7 @@ class Listing( models.Model ):
         from django.core.urlresolvers import reverse
         if not self.active:
             return reverse('profile', args=[self.seller.user.username])
-        return reverse('listing', args=[self.seller.user.username, str(self.id)])
+        return reverse('view_listing', args=[str(self.id)])
 
     class Meta:
         #unique_together = (("ISBN", "seller"),)

@@ -108,7 +108,7 @@ GMU Bookshare &bull; Homepage
           <h3>No lookout results found.</h3>
           <p>
             You may not have set any, try
-            <a href="{% url 'lookouts' %}">
+            <a href="{% url 'create_lookout' request.user.username %}">
               setting some</a>.
           </p>
         </div>

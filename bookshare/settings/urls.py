@@ -21,8 +21,6 @@ urlpatterns = patterns('website.views',
     url(r'^u/(?P<username>\w+)/?$', 'profile', name = 'profile'),
     # create lookout
     url(r'^u/(?P<username>\w+)/create-lookout/?$', 'create_lookout', name = 'create_lookout'),
-    # delete lookout
-    url(r'^u/(?P<username>\w+)/delete-lookout/(?P<lookout_id>\w+)$', 'delete_lookout', name = 'delete_lookout'),
 
     #### LISTING PAGES ####
     # global new listings page

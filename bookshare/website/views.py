@@ -3,7 +3,7 @@ from website.forms import ListingForm, FinalPriceForm, CloseForm
 from bids.models import Bid
 from bids.forms import BidForm
 from lookouts.models import Lookout
-from lookouts.forms import LookoutForm
+from lookouts.forms import LookoutForm, DeleteLookoutForm
 
 from django.http import Http404
 from django.conf import settings
@@ -132,6 +132,7 @@ def profile(request, username):
     lookouts = Lookout.objects.filter(owner__user__username=username)
     FinalPrice_form = FinalPriceForm(prefix="finalPrice")
     close_form = CloseForm(prefix="close")
+    DeleteLookout_form = DeleteLookoutForm()
 
     if request.method == 'POST':
         # Parse the ClosedForm input fields
@@ -164,6 +165,17 @@ def profile(request, username):
                     return redirect('profile', username)
                 else:
                     raise PermissionDenied("You do not own this listing.")
+        # Parse the DeleteLookoutForm input fields
+        elif 'lookout' in request.POST:
+            DeleteLookout_form = DeleteLookoutForm( request.POST )
+            if DeleteLookout_form.is_valid():
+                lookout_id = DeleteLookout_form.cleaned_data.get('lookout_id')
+                lookout = Lookout.objects.get(pk=lookout_id)
+                if lookout.owner == request.user.seller:
+                    lookout.delete()
+                    return redirect('profile', username)
+                else:
+                    raise PermissionDenied("You do not own this lookout.")
 
     return render(request, 'profile.html', {
         'seller' : seller,
@@ -172,6 +184,7 @@ def profile(request, username):
         'total_sold' : totalSold( username ),
         'FinalPrice_form' : FinalPrice_form,
         'close_form' : close_form,
+        'DeleteLookout_form' : DeleteLookout_form,
     },
     )
 
@@ -199,21 +212,6 @@ def create_lookout(request, username):
         'formset': formset,
     },
     )
-
-
-@login_required
-def delete_lookout(request, username, lookout_id):
-    lookout = Lookout.objects.get(id=lookout_id)
-
-    if request.user.username == username:
-        if lookout.owner == request.user.seller:
-            lookout.delete()
-        else:
-            raise PermissionDenied("You do not own this lookout.")
-    else:
-        raise PermissionDenied("You do not own this lookout.")
-
-    return redirect('profile', username)
 
 
 @login_required

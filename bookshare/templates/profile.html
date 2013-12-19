@@ -153,9 +153,8 @@ function insert_target( source, target ){
             <td class="text-center">{{lookout.ISBN}}</td>
             <td>{{lookout.get_info.title}}</td>
             <td class="text-center">
-              <a href="{% url 'delete_lookout' request.user.username lookout.pk %}">
-                Delete
-              </a>
+              <a href="#" onclick="insert_target('{{DeleteLookout_form.lookout_id.id_for_label}}', '{{ lookout.pk }}');"
+              data-toggle="modal" data-target="#DeleteLookout">Delete</a>
             </td>
           </tr>
           {% endfor %}
@@ -172,7 +171,7 @@ function insert_target( source, target ){
 
 <!-- Final Price Modal -->
 <div class="modal fade" id="FinalPrice" tabindex="-1" role="dialog"
-aria-labelledby="myModalLabel" aria-hidden="true">
+aria-labelledby="FinalPriceLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <form class="form-horizontal" id="FinalPriceForm" method="post"
@@ -183,7 +182,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"
           aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">Final Selling Price</h4>
+          <h4 class="modal-title" id="FinalPriceLabel">Final Selling Price</h4>
         </div>
 
         <div class="modal-body">
@@ -215,7 +214,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
 
 <!-- Close Confirm Modal -->
 <div class="modal fade" id="CloseConfirm" tabindex="-1" role="dialog"
-aria-labelledby="myModalLabel" aria-hidden="true">
+aria-labelledby="CloseConfirmLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <form class="form-horizontal" id="CloseConfirmForm" method="post"
@@ -227,7 +226,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"
           aria-hidden="true">&times;</button>
-          <h4 class="modal-title" id="myModalLabel">Confirm Listing Closure</h4>
+          <h4 class="modal-title" id="CloseConfirmLabel">Confirm Listing Closure</h4>
         </div>
 
         <div class="modal-body text-center">
@@ -240,6 +239,39 @@ aria-labelledby="myModalLabel" aria-hidden="true">
           </button>
           <input type="submit" class="btn btn-primary btn-sm"
           value="Close Listing" name="closed" />
+        </div>
+
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Delete Lookout Modal -->
+<div class="modal fade" id="DeleteLookout" tabindex="-1" role="dialog"
+aria-labelledby="DeleteLookoutLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form-horizontal" id="DeleteLookoutForm" method="post"
+      action="" role="form">
+        {%csrf_token%}
+        {{ DeleteLookout_form.lookout_id }}
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+          aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="DeleteLookoutLabel">Confirm Lookout Deletion</h4>
+        </div>
+
+        <div class="modal-body text-center">
+          Are you sure? This action cannot be undone!
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-default btn-sm" data-dismiss="modal">
+            Cancel
+          </button>
+          <input type="submit" class="btn btn-primary btn-sm"
+          value="Delete Lookout" name="lookout" />
         </div>
 
       </form>

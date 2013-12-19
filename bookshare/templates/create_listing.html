@@ -22,7 +22,7 @@ GMU Bookshare &bull; Create Listing
       enctype="multipart/form-data">
         {% csrf_token %}
         <fieldset>
-          <legend>Textbook Listing Information</legend>
+          <legend>Create Listing</legend>
 
           <div class="form-group{%if form.errors%} has-error{%endif%}">
             {% for error in form.non_field_errors %}

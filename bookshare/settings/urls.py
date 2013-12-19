@@ -14,17 +14,23 @@ handle404 = "error_404"
 handle500 = "error_500"
 
 urlpatterns = patterns('website.views',
-    # Examples:
-    # url(r'^$', 'bookshare.views.home', name='home'),
-    # url(r'^bookshare/', include('bookshare.foo.urls')),
-
     #### USER PAGES ####
     # home page
     url(r'^$', 'index', name = 'homepage'),
     # user profile page
     url(r'^u/(?P<username>\w+)/?$', 'profile', name = 'profile'),
+    # create lookout
+    url(r'^u/(?P<username>\w+)/create-lookout/?$', 'create_lookout', name = 'create_lookout'),
+    # delete lookout
+    url(r'^u/(?P<username>\w+)/delete-lookout/(?P<lookout_id>\w+)$', 'delete_lookout', name = 'delete_lookout'),
+
+    #### LISTING PAGES ####
+    # global new listings page
+    url(r'^listings/?$', 'all_listings', name = 'all_listings'),
+    # create new listing
+    url(r'^listings/create/?$', 'create_listing', name = 'create_listing'),
     # book listing page
-    url(r'^u/(?P<username>\w+)/listings/(?P<book_id>\w+)$', 'listing', name = 'listing'),
+    url(r'^listings/(?P<book_id>\d+)$', 'view_listing', name = 'view_listing'),
 
     #### STATIC PAGES ####
     # about page
@@ -34,15 +40,7 @@ urlpatterns = patterns('website.views',
     # privacy policy
     url(r'^privacy/?$', 'privacy', name = 'privacy'),
 
-    #### LISTING MANAGEMENT PAGES ####
-    # create new listing
-    url(r'^create/?$', 'create_listing', name = 'create_listing'),
-
-    #### LOOKOUT MANAGEMENT PAGES ####
-    # create and manage lookouts
-    url(r'^lookouts/?$', 'lookouts', name = 'lookouts'),
-
-    #### SEARCHES ####
+    #### SEARCH PAGES ####
     # points to a SearchView Instance
     url(r'^search/', include('haystack.urls')),
 

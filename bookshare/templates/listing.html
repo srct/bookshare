@@ -11,10 +11,16 @@ GMU Bookshare &bull; {{listing.title}}
 {% if listing.sold %}
   <div class="row">
     <div class="col-lg-12">
-      <div class="alert alert-danger alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert"
-        aria-hidden="true">&times;</button>
+      <div class="alert alert-danger">
         <strong>This listing has been sold.</strong>
+      </div>
+    </div>
+  </div>
+{% elif not listing.active %}
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="alert alert-danger text-center">
+        <strong>This listing has been closed.</strong>
       </div>
     </div>
   </div>
@@ -152,51 +158,59 @@ GMU Bookshare &bull; {{listing.title}}
         <!-- BID FORM -->
         <div class="row">
           <div class="col-lg-12">
-            <form class="form-horizontal" action="" method="post" role="form">
-              {% csrf_token %}
-              <fieldset>
-                <legend>Your Bid</legend>
 
-                <div class="form-group{%if bid_form.price.errors%} has-error{%endif%}">
-                  <label for="{{bid_form.price.id_for_label}}"
-                  class="col-lg-2 control-label">
-                    {{bid_form.price.label}}
-                  </label>
+            {% if listing.active and not listing.sold %}
+              <form class="form-horizontal" action="" method="post" role="form">
+                {% csrf_token %}
+                <fieldset>
+                  <legend>Your Bid</legend>
 
-                  <div class="col-lg-10">
-                    <div class="input-group">
-                      <span class="input-group-addon"> $ </span>
-                      {{bid_form.price}}
+                  <div class="form-group{%if bid_form.price.errors%} has-error{%endif%}">
+                    <label for="{{bid_form.price.id_for_label}}"
+                    class="col-lg-2 control-label">
+                      {{bid_form.price.label}}
+                    </label>
+
+                    <div class="col-lg-10">
+                      <div class="input-group">
+                        <span class="input-group-addon"> $ </span>
+                        {{bid_form.price}}
+                      </div>
+                      {%for error in bid_form.price.errors%}
+                        <span class="help-block">{{ error }}</span>
+                      {%endfor%}
                     </div>
-                    {%for error in bid_form.price.errors%}
-                      <span class="help-block">{{ error }}</span>
-                    {%endfor%}
                   </div>
-                </div>
 
-                <div class="form-group{%if bid_form.text.errors%} has-error{%endif%}">
-                  <label for="{{bid_form.text.id_for_label}}"
-                  class="col-lg-2 control-label">
-                    {{bid_form.text.label}}
-                  </label>
+                  <div class="form-group{%if bid_form.text.errors%} has-error{%endif%}">
+                    <label for="{{bid_form.text.id_for_label}}"
+                    class="col-lg-2 control-label">
+                      {{bid_form.text.label}}
+                    </label>
 
-                  <div class="col-lg-10">
-                    {{bid_form.text}}
-                    {%for error in bid_form.text.errors%}
-                      <span class="help-block">{{ error }}</span>
-                    {%endfor%}
+                    <div class="col-lg-10">
+                      {{bid_form.text}}
+                      {%for error in bid_form.text.errors%}
+                        <span class="help-block">{{ error }}</span>
+                      {%endfor%}
+                    </div>
                   </div>
-                </div>
 
-                <div class="form-group">
-                  <div class="col-lg-10 col-lg-offset-2">
-                    <button type="submit" class="btn btn-primary"
-                    value="Submit">Submit a Bid</button>
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      <button type="submit" class="btn btn-primary"
+                      value="Submit">Submit a Bid</button>
+                    </div>
                   </div>
-                </div>
 
-              </fieldset>
-            </form>
+                </fieldset>
+              </form>
+            {% else %}
+
+              <h5 class="text-center">You cannot bid on an incative listing.</h5>
+
+            {% endif %}
+
           </div>
         </div>
         <!-- BID FORM -->

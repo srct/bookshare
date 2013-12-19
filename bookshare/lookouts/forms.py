@@ -16,3 +16,9 @@ class LookoutForm( ModelForm ):
                 'placeholder': 'Book ISBN',
             }),
         }
+
+class DeleteLookoutForm( forms.Form ):
+    lookout_id = forms.IntegerField(
+        required = True,
+        widget=forms.HiddenInput()
+    )

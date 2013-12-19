@@ -203,6 +203,16 @@ def create_lookout(request, username):
 
 @login_required
 def delete_lookout(request, username, lookout_id):
+    lookout = Lookout.objects.get(id=lookout_id)
+
+    if request.user.username == username:
+        if lookout.owner == request.user.seller:
+            lookout.delete()
+        else:
+            raise PermissionDenied("You do not own this lookout.")
+    else:
+        raise PermissionDenied("You do not own this lookout.")
+
     return redirect('profile', username)
 
 

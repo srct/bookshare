@@ -23,6 +23,8 @@
         <li><a href="{% url 'haystack_search' %}">Search</a></li>
         <li><a href="{% url 'profile' request.user.username %}">My Account</a></li>
         <li><a href="/logout">Log Out</a></li>
+        {% else %}
+        <li><a href="/login">Log In</a></li>
         {% endif %}
       </ul>
     </div><!-- /.navbar-collapse -->

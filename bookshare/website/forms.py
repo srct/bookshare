@@ -3,6 +3,17 @@ from django import forms
 from django.db import models
 from django.forms import ModelForm, Textarea, TextInput, NumberInput, Select, FileInput
 from website.models import Seller, Listing
+from haystack.forms import SearchForm
+
+
+class StyledSearchForm( SearchForm ):
+    q = forms.CharField(
+        required = False,
+        label = 'Search',
+        widget = forms.TextInput(attrs={
+            'class': 'form-control',
+        }),
+    )
 
 
 class FinalPriceForm( forms.Form ):

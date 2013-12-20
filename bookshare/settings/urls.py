@@ -6,6 +6,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib import auth
 from django.conf.urls import patterns, include, url
+from website.forms import StyledSearchForm
+from haystack.views import SearchView
 
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
@@ -40,7 +42,15 @@ urlpatterns = patterns('website.views',
 
     #### SEARCH PAGES ####
     # points to a SearchView Instance
-    url(r'^search/', include('haystack.urls')),
+    #url(r'^search/', include('haystack.urls')),
+    url(
+        r'^search/?',
+        SearchView(
+            form_class = StyledSearchForm,
+            results_per_page = 20,
+        ),
+        name = 'haystack_search',
+    ),
 
     #### ADMIN PAGES ####
     # Uncomment the admin/doc line below to enable admin documentation:

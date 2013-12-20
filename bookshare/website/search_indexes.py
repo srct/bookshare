@@ -12,6 +12,7 @@ class ListingIndex(indexes.SearchIndex, indexes.Indexable):
 
     # search filtering
     title = indexes.CharField( model_attr = 'title' )
+    author = indexes.CharField( model_attr = 'author' )
     ISBN = indexes.CharField( model_attr = 'ISBN' )
 
     def get_model(self):

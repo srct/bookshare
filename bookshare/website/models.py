@@ -52,8 +52,6 @@ class Listing( models.Model ):
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
-        if not self.active:
-            return reverse('profile', args=[self.seller.user.username])
         return reverse('view_listing', args=[str(self.id)])
 
     class Meta:

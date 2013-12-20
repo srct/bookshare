@@ -327,6 +327,12 @@ def privacy(request):
     },
     )
 
+def privacy_opt_out(request):
+    # merely forms
+    return render(request, 'privacy_opt_out.html', {
+    },
+    )
+
 @login_required
 def search(request):
     # merely forms

@@ -39,6 +39,8 @@ urlpatterns = patterns('website.views',
     url(r'^contact/?$', 'contact', name = 'contact'),
     # privacy policy
     url(r'^privacy/?$', 'privacy', name = 'privacy'),
+    # privacy opt-out (for piwik)
+    url(r'^privacy/opt-out/?$', 'privacy_opt_out', name='privacy_opt_out'),
 
     #### SEARCH PAGES ####
     # points to a SearchView Instance

@@ -10,25 +10,45 @@ GMU Bookshare &bull; Privacy Policy
   <div class="row">
     <div class="col-lg-12">
       <h1>Privacy Policy</h1>
-      <p class="lead">What will we do with your information?</p>
     </div>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-lg-12">
-    <p>All of your information that you create via this site is visible
-    to everyone at GMU, should they sign in. Your information will not
-    leave that systemto be sold to anyone, rest assured.</p>
-    <p>We collect your background web data via Piwick analytics. This is
-    self-hosted and open-sourced, so we're not basically funneling your
-    information to Google. Like most of the sites you visit online.
-    Seriously, you should install something to <a
-    href="https://www.eff.org/deeplinks/2012/04/4-simple-changes-protect-your-privacy-online">block
-    your web trackers</a>. That stuff is creepy. Anyway, Piwick
-    is more for our idle curiosity, and the information that's collected
-    is not going to be sold. Period.</p>
+
+  <div class="col-lg-4">
+    <h2>What data do we collect?</h2>
+    <p>
+      We keep basic historical information on your use of this website via
+      <a href="//piwik.org/">Piwik</a> analytics. This is self-hosted and
+      open-sourced, so none of your information will leave our server or be
+      sold to any third parties.
+    </p>
+    <p>
+      Ever.
+    </p>
   </div>
+
+  <div class="col-lg-4">
+    <h2>Why do we collect data?</h2>
+    <p>
+      Knowing how many users a service has and how often it gets used
+      tells us how popular that service is.
+    </p>
+    <p>
+      If a service is getting a lot of use, we will try to provide more
+      support and focus our attention on that service.
+    </p>
+  </div>
+
+  <div class="col-lg-4">
+    <h2>Can I opt out?</h2>
+    <p>
+      Of course! You can <a href="{% url 'privacy_opt_out' %}">opt out</a>
+      (or in) at any time if our privacy policy becomes unacceptable.
+    </p>
+  </div>
+
 </div>
 
 {% endblock %}

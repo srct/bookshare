@@ -237,4 +237,12 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+
+# Haystack Signal Processor
+# The RealtimeSignalProcessor allows for objects to be indexed as soon as
+# they are created --- in real time.
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# Piwik configurations
+PIWIK_SITE_ID = secret.PIWIK_SITE_ID
+PIWIK_URL = secret.PIWIK_URL

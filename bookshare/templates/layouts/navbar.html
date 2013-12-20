@@ -20,6 +20,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
+        <li><a href="{% url 'haystack_search' %}">Search</a></li>
         <li><a href="{% url 'profile' request.user.username %}">My Account</a></li>
         <li><a href="/logout">Log Out</a></li>
         {% endif %}

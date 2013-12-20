@@ -1,4 +1,5 @@
 {% extends 'layouts/base.html' %}
+{% load website_extras %}
 
 {% block title %}
 GMU Bookshare &bull; Seller Profile
@@ -151,7 +152,7 @@ function insert_target( source, target ){
           {% for lookout in lookouts %}
           <tr>
             <td class="text-center">{{lookout.ISBN}}</td>
-            <td>{{lookout.get_info.title}}</td>
+            <td>{{lookout.ISBN|get_isbn_data:"title"}}</td>
             <td class="text-center">
               <a href="#" onclick="insert_target('{{DeleteLookout_form.lookout_id.id_for_label}}', '{{ lookout.pk }}');"
               data-toggle="modal" data-target="#DeleteLookout">Delete</a>

@@ -21,12 +21,15 @@ import requests
 
 # pulls worldcat metadata from ISBNs
 def ISBNMetadata(standardISBN):
-    url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + standardISBN + "?method=getMetadata&format=json&fl=title,year,author,ed"
-    metadata = request.get(url)
+    url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + str(standardISBN) + "?method=getMetadata&format=json&fl=title,year,author,ed"
+    metadata = requests.get(url)
     # format into a dictionary
     dejson = metadata.json()
-    metadataDict = dejson['list'][0]
-    return metadataDict
+    try:
+        metadataDict = dejson.get('list')
+        return metadataDict[0]
+    except:
+        return None
 
 # gamification
 def totalSold(seller):

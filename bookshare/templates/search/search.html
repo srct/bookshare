@@ -18,14 +18,12 @@ GMU Bookshare &bull; Search Listings
   <div class="col-lg-8 col-lg-offset-2">
     <form class="form-horizontal" role="form" method="get">
       
-      <div class="form-group">
         <div class="input-group">
           <span class="input-group-addon">
             <span class="glyphicon glyphicon-search"></span>
           </span>
           {{ form.q }}
         </div>
-      </div>
 
     </form>
   </div>
@@ -37,13 +35,40 @@ GMU Bookshare &bull; Search Listings
 <div class="row">
   <div class="col-lg-8 col-lg-offset-2">
 
+    {% if page.object_list %}
+      <h3 class="text-center">Search Results</h3>
+      <table class="table table-bordered">
+
+        <thead>
+          <th class="col-md-1 text-center">ISBN</th>
+          <th class="col-md-7">Title</th>
+          <th class="col-md-3 text-center">Author</th>
+          <th class="col-md-1 text-center">Price</th>
+        </thead>
+    {% endif %}
+
     {% for result in page.object_list %}
-      <p>
-        <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
-      </p>
+      <tr>
+        <td class="text-center">
+          <a href="{{ result.object.get_absolute_url }}">{{ result.object.ISBN }}</a>
+        </td>
+        <td>
+          <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
+        </td>
+        <td class="text-center">
+          <a href="{{ result.object.get_absolute_url }}">{{ result.object.author }}</a>
+        </td>
+        <td class="text-center">
+          <a href="{{ result.object.get_absolute_url }}">${{ result.object.price }}</a>
+        </td>
+      </tr>
     {% empty %}
-      <h4 class="text-center">No results found.</h4>
+      <h3 class="text-center">No results found.</h3>
     {% endfor %}
+
+    {% if page.object_list %}
+      </table>
+    {% endif %}
 
   </div>
 </div>

@@ -15,16 +15,21 @@
 </head>
   <body>
 
-    {% include 'layouts/navbar.html' %}
+    <div id="wrap">
+      {% include 'layouts/navbar.html' %}
 
-    <div class="container">
+      <div class="container">
 
-      {% block content %}
+        {% block content %}
 
-      {% endblock %}
+        {% endblock %}
 
+      </div>
     </div>
 
-    {% include 'layouts/footer.html' %}
+    <div id="footer">
+      {% include 'layouts/footer.html' %}
+    </div>
+
   </body>
 </html>

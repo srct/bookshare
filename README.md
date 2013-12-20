@@ -35,7 +35,6 @@ Debian and Ubuntu Installation Instructions
 To-do
 ---
 
-* Implement Haystack search.
-* Require some sort of ISBN format, either integer only or only accept valid ones
-* Make links more prevalent on the site.
+* merge the lookout-creator form onto the profile page in a modal popup
+* Require some sort of ISBN format for lookouts, either integer only or only accept valid ones
 * Seller's rating

@@ -11,11 +11,12 @@ class ListingIndex(indexes.SearchIndex, indexes.Indexable):
     # with the fields that we want to display when returning results
 
     # search filtering
-    date_created = indexes.DateTimeField(model_attr='date_created')
+    title = indexes.CharField( model_attr = 'title' )
+    ISBN = indexes.CharField( model_attr = 'ISBN' )
 
     def get_model(self):
         return Listing
 
     def index_queryset(self, using=None):
         """When the entire index for model is updated."""
-	return self.get_model().objects.filter(date_created=timezone.now())
+	return self.get_model().objects.filter(active=True,sold=False)

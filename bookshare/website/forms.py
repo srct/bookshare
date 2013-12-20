@@ -13,6 +13,7 @@ class StyledSearchForm( SearchForm ):
         widget = forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'ISBN, Title, Author',
+            'autofocus': 'autofocus',
         }),
     )
 

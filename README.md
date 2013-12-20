@@ -35,7 +35,7 @@ Debian and Ubuntu Installation Instructions
 To-do
 ---
 
-* Regarding Haystack-- something about RealTimeSignalProcessor, or a search cronjob
-* Save searches, and display saved search results on user's home page
+* Implement Haystack search.
+* Require some sort of ISBN format, either integer only or only accept valid ones
 * Make links more prevalent on the site.
 * Seller's rating

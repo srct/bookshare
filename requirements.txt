@@ -2,6 +2,7 @@ Django==1.6.1
 MySQL-python==1.2.4
 Pillow==2.2.1
 South==0.8.4
+Whoosh==2.5.5
 argparse==1.2.1
 django-auth-ldap==1.1.7
 django-haystack==2.1.0

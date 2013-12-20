@@ -2,6 +2,9 @@
   <div class="panel-body">
     <h4>
       <span class="pull-right"><strong>${{ listing.price }}</strong></span>
+      {% if listing.sold or not listing.active %}
+        [Closed]
+      {% endif %}
       <a href="{{ listing.get_absolute_url }}">
         {{ listing.title }}
       </a>

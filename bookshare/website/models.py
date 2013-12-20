@@ -38,7 +38,10 @@ class Listing( models.Model ):
                                       default=GOOD)
     description = models.TextField(blank=True)
     price = models.IntegerField()
-    photo = models.ImageField(max_length = 1000,upload_to='listing_photos')
+    photo = models.ImageField(
+        max_length = 1000,
+        upload_to = 'listing_photos',
+        default = 'listing_photos/default_listing_photo.png' )
 
     sold = models.BooleanField(default=False)
     active = models.BooleanField(default=True)

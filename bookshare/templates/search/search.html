@@ -50,16 +50,16 @@ GMU Bookshare &bull; Search Listings
     {% for result in page.object_list %}
       <tr>
         <td class="text-center">
-          <a href="{{ result.object.get_absolute_url }}">{{ result.object.ISBN }}</a>
+          {{ result.object.ISBN }}
         </td>
         <td>
           <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
         </td>
         <td class="text-center">
-          <a href="{{ result.object.get_absolute_url }}">{{ result.object.author }}</a>
+          {{ result.object.author }}
         </td>
         <td class="text-center">
-          <a href="{{ result.object.get_absolute_url }}">${{ result.object.price }}</a>
+          ${{ result.object.price }}
         </td>
       </tr>
     {% empty %}

@@ -15,6 +15,12 @@ GMU Bookshare &bull; Homepage
 </div>
 
 <div class="row">
+  <div class="col-sm-12 centered">
+  <h2>A place for GMU students to sell and purchase their textbooks.</h2>
+  </div>
+</div>
+
+<div class="row">
 
   <div class="col-sm-6">
     <a href="{% url 'create_listing' %}" class="btn btn-primary btn-lg btn-block">
@@ -107,9 +113,10 @@ GMU Bookshare &bull; Homepage
         <div class="panel-body">
           <h3>No lookout results found.</h3>
           <p>
-            You may not have set any, try
+            Lookouts are books you have an eye out for. You can
             <a href="{% url 'create_lookout' request.user.username %}">
-              setting some</a>.
+              set some</a>, and we'll automatically show them here when a
+	      selling goes up.
           </p>
         </div>
       </div>

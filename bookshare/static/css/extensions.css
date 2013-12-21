@@ -31,3 +31,7 @@ padding: 0 0 50px;
 #footer {
 height: 50px;
 }
+
+.centered{
+text-align: center;
+}

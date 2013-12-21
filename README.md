@@ -30,7 +30,7 @@ Make sure you have elasticsearch installed on your machine. (Not pyelasticsearch
 
 Debian and Ubuntu Installation Instructions
 ---
-`$ sudo apt-get update && sudo apt-get install libldap2-dev python-dev libmysqlclient-dev python-mysqldb`elasticsearch
+`$ sudo apt-get update && sudo apt-get install libldap2-dev python-dev libmysqlclient-dev python-mysqldb`elasticsearch libsasl2-dev
 
 To-do
 ---

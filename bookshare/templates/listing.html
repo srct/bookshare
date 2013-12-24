@@ -165,6 +165,14 @@ GMU Bookshare &bull; {{listing.title}}
                 <fieldset>
                   <legend>Your Bid</legend>
 
+                  <div class="form-group{%if bid_form.non_field_errors%} has-error{%endif%}">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      {% for error in bid_form.non_field_errors %}
+                        <span class="help-block">{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                  </div>
+
                   <div class="form-group{%if bid_form.price.errors%} has-error{%endif%}">
                     <label for="{{bid_form.price.id_for_label}}"
                     class="col-lg-2 control-label">

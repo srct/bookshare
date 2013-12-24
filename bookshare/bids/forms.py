@@ -1,9 +1,9 @@
 from django.db import models
-from django.forms import ModelForm, Textarea, NumberInput
+from django import forms
 from bids.models import Bid
 
 
-class BidForm( ModelForm ):
+class BidForm( forms.ModelForm ):
     class Meta:
         model = Bid
         fields = ('price', 'text')
@@ -13,11 +13,11 @@ class BidForm( ModelForm ):
             'text': 'Comments (Optional)',
         }
         widgets = {
-            'price': NumberInput(attrs={
+            'price': forms.NumberInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Price',
             }),
-            'text': Textarea(attrs={
+            'text': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 3,
             }),

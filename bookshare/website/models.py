@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 from datetime import datetime
@@ -37,7 +38,7 @@ class Listing( models.Model ):
                                       max_length=20,
                                       default=GOOD)
     description = models.TextField(blank=True)
-    price = models.IntegerField()
+    price = models.IntegerField( validators = [MinValueValidator(0)] )
     photo = models.ImageField(
         max_length = 1000,
         upload_to = 'listing_photos',

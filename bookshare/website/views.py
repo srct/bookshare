@@ -262,7 +262,7 @@ def view_listing(request, book_id):
     bid_count = len(bids)
 
     bid_form = BidForm()
-    if request.method == 'POST':
+    if request.method == 'POST' and listing.active and not listing.sold:
         if listing.active and not listing.sold:
             bid_form = BidForm( request.POST.copy() )
 

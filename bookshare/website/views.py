@@ -264,7 +264,14 @@ def view_listing(request, book_id):
     bid_form = BidForm()
     if request.method == 'POST':
         if listing.active and not listing.sold:
-            bid_form = BidForm( request.POST )
+            bid_form = BidForm( request.POST.copy() )
+
+            # Override whatever the user may have input into the bidder and
+            # listing fields (hopefully they will not have set these values
+            # anyway).
+            bid_form.data['bidder'] = bidder.pk
+            bid_form.data['listing'] = listing.pk
+
             if bid_form.is_valid():
                 bid = bid_form.save(commit=False)
                 bid.bidder = bidder

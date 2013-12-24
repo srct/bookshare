@@ -266,6 +266,7 @@ def view_listing(request, book_id):
                 bid = bid_form.save(commit=False)
                 bid.bidder = request.user.seller
                 bid.listing = listing
+                bid.full_clean()
                 bid.save()
                 return redirect( 'view_listing', listing.pk )
 

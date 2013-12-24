@@ -251,6 +251,9 @@ def view_listing(request, book_id):
     # Grab the listing itself
     listing = get_object_or_404(Listing,pk=book_id)
 
+    # grab the bidder
+    bidder = request.user.seller
+
     # if the listing is over a week old, it's old
     old_threshold = timezone.now() - timedelta(weeks=3)
 
@@ -264,7 +267,7 @@ def view_listing(request, book_id):
             bid_form = BidForm( request.POST )
             if bid_form.is_valid():
                 bid = bid_form.save(commit=False)
-                bid.bidder = request.user.seller
+                bid.bidder = bidder
                 bid.listing = listing
                 bid.full_clean()
                 bid.save()

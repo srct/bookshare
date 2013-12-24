@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.utils import timezone
 from datetime import datetime
@@ -28,7 +28,10 @@ class Listing( models.Model ):
 
     title = models.CharField(max_length = 200)
     author = models.CharField(max_length = 200)
-    ISBN = models.CharField(max_length = 20)
+    ISBN = models.CharField(
+        max_length = 20,
+        validators = [RegexValidator('[0-9-]{10,20}', message='Enter a valid ISBN.')]
+    )
     year = models.IntegerField(null=True,blank=True)
     edition = models.CharField(blank=True,max_length = 30)
 

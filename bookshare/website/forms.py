@@ -50,10 +50,22 @@ class ListingForm( ModelForm ):
         'book_condition', 'price', 'description', 'photo')
         exclude = ('seller', 'date_created', 'date_sold', 'sold',
         'finalPrice')
+        labels = {
+            'ISBN': 'ISBN',
+            'title': 'Title',
+            'author': 'Author',
+            'year': 'Year',
+            'edition': 'Edition',
+            'book_condition': 'Condition',
+            'price': 'Price',
+            'description': 'Description',
+            'photo': 'Photo',
+        }
         widgets = {
             'ISBN': TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Book ISBN',
+                'pattern': '[0-9xX-]{10,20}',
             }),
             'title': TextInput(attrs={
                 'class': 'form-control',
@@ -83,7 +95,6 @@ class ListingForm( ModelForm ):
                 'class': 'form-control',
             }),
             'photo': FileInput(attrs={
-                #'class': 'form-control',
                 'placeholder': 'Asking Price',
             }),
         }

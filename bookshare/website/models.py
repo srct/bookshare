@@ -30,7 +30,7 @@ class Listing( models.Model ):
     author = models.CharField(max_length = 200)
     ISBN = models.CharField(
         max_length = 20,
-        validators = [RegexValidator('[0-9-]{10,20}', message='Enter a valid ISBN.')]
+        validators = [RegexValidator('[0-9xX-]{10,20}', message='Enter a valid ISBN.')]
     )
     year = models.IntegerField(null=True,blank=True)
     edition = models.CharField(blank=True,max_length = 30)

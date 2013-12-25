@@ -2,7 +2,6 @@
 *.swp
 /.virtualenv
 media
-bookshare/website/migrations
 bookshare/static/admin
 bookshare/settings/secret.py
 bookshare/settings/whoosh_index/

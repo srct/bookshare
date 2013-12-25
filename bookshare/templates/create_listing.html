@@ -33,15 +33,14 @@ GMU Bookshare &bull; Create Listing
 
           <div id="form-group-ISBN"
           class="form-group{%if form.ISBN.errors%} has-error{%endif%}">
-            <label for="{{form.ISBN.id_for_label}}" class="col-lg-2 control-label">ISBN</label>
+            <label for="{{form.ISBN.id_for_label}}" class="col-lg-2
+            control-label">{{form.ISBN.label}}</label>
             <div class="col-lg-10">
               {{ form.ISBN }}
-              {% if not form.ISBN.errors %}
-                <span class="help-block">Ex: 1590366727</span>
-              {% endif %}
               {% for error in form.ISBN.errors %}
                 <span class="help-block">{{ error }}</span>
               {% endfor %}
+              <span class="help-block">Ex: 1590366727</span>
             </div>
           </div>
 
@@ -54,7 +53,8 @@ GMU Bookshare &bull; Create Listing
           {% endif %}
 
             <div class="form-group{%if form.title.errors%} has-error{%endif%}">
-              <label for="{{form.title.id_for_label}}" class="col-lg-2 control-label">Title</label>
+              <label for="{{form.title.id_for_label}}" class="col-lg-2
+              control-label">{{form.title.label}}</label>
               <div class="col-lg-10">
                 {{ form.title }}
                 {% for error in form.title.errors %}
@@ -64,7 +64,8 @@ GMU Bookshare &bull; Create Listing
             </div>
 
             <div class="form-group{%if form.author.errors%} has-error{%endif%}">
-              <label for="{{form.author.id_for_label}}" class="col-lg-2 control-label">Author</label>
+              <label for="{{form.author.id_for_label}}" class="col-lg-2
+              control-label">{{form.author.label}}</label>
               <div class="col-lg-10">
                 {{ form.author }}
                 {% for error in form.author.errors %}
@@ -74,7 +75,8 @@ GMU Bookshare &bull; Create Listing
             </div>
 
             <div class="form-group{%if form.year.errors%} has-error{%endif%}">
-              <label for="{{form.year.id_for_label}}" class="col-lg-2 control-label">Year</label>
+              <label for="{{form.year.id_for_label}}" class="col-lg-2
+              control-label">{{form.year.label}}</label>
               <div class="col-lg-10">
                 {{ form.year }}
                 {% for error in form.year.errors %}
@@ -84,7 +86,8 @@ GMU Bookshare &bull; Create Listing
             </div>
 
             <div class="form-group{%if form.edition.errors%} has-error{%endif%}">
-              <label for="{{form.edition.id_for_label}}" class="col-lg-2 control-label">Edition</label>
+              <label for="{{form.edition.id_for_label}}" class="col-lg-2
+              control-label">{{form.edition.label}}</label>
               <div class="col-lg-10">
                 {{ form.edition }}
                 {% for error in form.edition.errors %}
@@ -98,7 +101,8 @@ GMU Bookshare &bull; Create Listing
           </div>
 
           <div class="form-group{%if form.book_condition.errors%} has-error{%endif%}">
-            <label for="{{form.book_condition.id_for_label}}" class="col-lg-2 control-label">Condition</label>
+            <label for="{{form.book_condition.id_for_label}}" class="col-lg-2
+            control-label">{{form.book_condition.label}}</label>
             <div class="col-lg-10">
               {{ form.book_condition }}
               {% for error in form.book_condition.errors %}
@@ -108,7 +112,8 @@ GMU Bookshare &bull; Create Listing
           </div>
 
           <div class="form-group{%if form.price.errors%} has-error{%endif%}">
-            <label for="{{form.price.id_for_label}}" class="col-lg-2 control-label">Price</label>
+            <label for="{{form.price.id_for_label}}" class="col-lg-2
+            control-label">{{form.price.label}}</label>
             <div class="col-lg-10">
               <div class="input-group">
                 <span class="input-group-addon"> $ </span>
@@ -124,7 +129,8 @@ GMU Bookshare &bull; Create Listing
           </div>
 
           <div class="form-group{%if form.description.errors%} has-error{%endif%}">
-            <label for="{{form.description.id_for_label}}" class="col-lg-2 control-label">Description</label>
+            <label for="{{form.description.id_for_label}}" class="col-lg-2
+            control-label">{{form.description.label}}</label>
             <div class="col-lg-10">
               {{ form.description }}
               {% for error in form.description.errors %}
@@ -134,7 +140,8 @@ GMU Bookshare &bull; Create Listing
           </div>
 
           <div class="form-group{%if form.photo.errors%} has-error{%endif%}">
-            <label for="{{form.photo.id_for_label}}" class="col-lg-2 control-label">Photo</label>
+            <label for="{{form.photo.id_for_label}}" class="col-lg-2
+            control-label">{{form.photo.label}}</label>
             <div class="col-lg-10">
               {{ form.photo }}
               {% for error in form.photo.errors %}

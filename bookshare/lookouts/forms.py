@@ -14,6 +14,7 @@ class LookoutForm( ModelForm ):
             'ISBN': TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Book ISBN',
+                'pattern': '[0-9xX-]{10,20}',
             }),
         }
 

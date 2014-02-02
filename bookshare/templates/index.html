@@ -109,7 +109,7 @@ GMU Bookshare &bull; Homepage
           <h3>No lookout results found.</h3>
           <p>
             Lookouts are books you have an eye out for. You can
-            <a href="{% url 'create_lookout' request.user.username %}">
+            <a data-toggle="modal" data-target="#CreateLookout" href="#">
               set some</a>, and we'll automatically show them here when a
 	      selling goes up.
           </p>
@@ -119,5 +119,7 @@ GMU Bookshare &bull; Homepage
   </div>
 
 {% endif %}
+
+{% include 'create_lookout_modal.html' %}
 
 {% endblock %}

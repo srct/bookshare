@@ -127,7 +127,7 @@ def index(request):
             lookout.ISBN = lookout.ISBN.strip()
             lookout.owner = request.user.seller
             lookout.save()
-            return redirect( 'index' )
+            return redirect( 'homepage' )
 
     return render(request, 'index.html', {
         'listings' : listings,

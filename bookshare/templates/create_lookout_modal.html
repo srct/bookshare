@@ -15,7 +15,43 @@ aria-labelledby="CreateLookoutLabel" aria-hidden="true">
         </div>
 
         <div class="modal-body text-center">
-          Content of the form goes here.
+          <form class="form-horizontal" action="" method="post" role="form">
+        {% csrf_token %}
+        <fieldset>
+          <legend>Create Lookout</legend>
+
+          <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+              <span class="help-block">
+                <strong>Lookouts</strong> help you find the textbooks you
+                need. Input the ISBN of a textbook you'd like to look out
+                for, and any new listings with that ISBN will show up on
+                your homepage, automatically!
+              </span>
+            </div>
+          </div>
+          <div id="form-group-ISBN"
+          class="form-group{%if lookout_form.ISBN.errors%} has-error{%endif%}">
+            <label for="{{lookout_form.ISBN.id_for_label}}"
+            class="col-lg-2 control-label">{{form.ISBN.label}}</label>
+            <div class="col-lg-10">
+              {{ lookout_form.ISBN }}
+              {% for error in lookout_form.ISBN.errors %}
+                <span class="help-block">{{ error }}</span>
+              {% endfor %}
+              <span class="help-block">Ex: 1590366727</span>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-10">
+              <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+            </div>
+          </div>
+
+        </fieldset>
+      </form>
         </div>
 
         <div class="modal-footer">

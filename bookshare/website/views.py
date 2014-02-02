@@ -85,6 +85,7 @@ def error_500(request):
 @login_required
 def index(request):
 
+    lookout_form = LookoutForm()
     lookouts = Lookout.objects.filter(
         owner__user__username = request.user.username )
 
@@ -119,9 +120,19 @@ def index(request):
     # previews to fill in rows first, rather than columns.
     rows = int(math.ceil( len(listings) / 3.0 )) or 1
 
+    if request.method == 'POST':
+        lookout_form = LookoutForm( request.POST )
+        if lookout_form.is_valid():
+            lookout = lookout_form.save(commit=False)
+            lookout.ISBN = lookout.ISBN.strip()
+            lookout.owner = request.user.seller
+            lookout.save()
+            return redirect( 'index' )
+
     return render(request, 'index.html', {
         'listings' : listings,
         'rows' : rows,
+        'CreateLookout_form': lookout_form,
     },
     )
 

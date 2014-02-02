@@ -136,6 +136,7 @@ def profile(request, username):
     FinalPrice_form = FinalPriceForm(prefix="finalPrice")
     close_form = CloseForm(prefix="close")
     DeleteLookout_form = DeleteLookoutForm()
+    lookout_form = LookoutForm()
 
     if request.method == 'POST':
         # Parse the ClosedForm input fields
@@ -179,6 +180,14 @@ def profile(request, username):
                     return redirect('profile', username)
                 else:
                     raise PermissionDenied("You do not own this lookout.")
+        elif 'lookout-create' in request.POST:
+            lookout_form = LookoutForm( request.POST )
+            if lookout_form.is_valid():
+                lookout = lookout_form.save(commit=False)
+                lookout.ISBN = lookout.ISBN.strip()
+                lookout.owner = request.user.seller
+                lookout.save()
+                return redirect( 'profile', username )
 
     return render(request, 'profile.html', {
         'seller' : seller,
@@ -188,6 +197,7 @@ def profile(request, username):
         'FinalPrice_form' : FinalPrice_form,
         'close_form' : close_form,
         'DeleteLookout_form' : DeleteLookout_form,
+        'CreateLookout_form': lookout_form,
     },
     )
 

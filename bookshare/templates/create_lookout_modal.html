@@ -1,0 +1,64 @@
+<!-- Create Lookout Modal -->
+<div class="modal fade" id="CreateLookout" tabindex="-1" role="dialog"
+aria-labelledby="CreateLookoutLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form-horizontal" id="CreateLookoutForm" method="post"
+      action="" role="form">
+        {%csrf_token%}
+
+        {{ CreateLookout_form.lookout_id }}
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"
+          aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="CreateLookoutLabel">Create Lookout</h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+              <fieldset>
+
+                <div class="form-group">
+                  <div class="col-lg-12">
+                    <span class="help-block">
+                      <strong>Lookouts</strong> help you find the textbooks you
+                      need. Input the ISBN of a textbook you'd like to look out
+                      for, and any new listings with that ISBN will show up on
+                      your homepage, automatically!
+                    </span>
+                  </div>
+                </div>
+
+                <div id="form-group-ISBN"
+                class="form-group{%if CreateLookout_form.ISBN.errors%} has-error{%endif%}">
+                  <label for="{{CreateLookout_form.ISBN.id_for_label}}"
+                  class="col-lg-2 control-label">{{CreateLookout_form.ISBN.label}}</label>
+                  <div class="col-lg-10">
+                    {{ CreateLookout_form.ISBN }}
+                    {% for error in CreateLookout_form.ISBN.errors %}
+                      <span class="help-block">{{ error }}</span>
+                    {% endfor %}
+                    <span class="help-block">Ex: 1590366727</span>
+                  </div>
+                </div>
+
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-default btn-sm" data-dismiss="modal">
+            Cancel
+          </button>
+          <input type="submit" class="btn btn-primary btn-sm"
+          value="Create Lookout" name="lookout-create" />
+        </div>
+
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+

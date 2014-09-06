@@ -137,7 +137,8 @@ function insert_target( source, target ){
 
 <div class="row">
   <div class="col-md-12">
-    <h3>Your Lookouts (<a href="{% url 'create_lookout' request.user.username %}">Create</a>)</h3>
+    <h3>Your Lookouts (<a data-toggle="modal" data-target="#CreateLookout"
+    href="#">Create</a>)</h3>
     {% if lookouts %}
 
       <div class="table-responsive">
@@ -279,5 +280,7 @@ aria-labelledby="DeleteLookoutLabel" aria-hidden="true">
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+{% include 'create_lookout_modal.html' %}
 
 {% endblock %}

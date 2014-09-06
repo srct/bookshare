@@ -42,6 +42,8 @@ Now run
 To-do
 ---
 
-* merge the lookout-creator form onto the profile page in a modal popup
-* Require some sort of ISBN format for lookouts, either integer only or only accept valid ones
 * Seller's rating
+* Report listings
+* Admin/moderator interface
+* Professor's approval interface
+* Refactor listing ui

@@ -30,6 +30,13 @@ Make sure you have elasticsearch installed on your machine. (Not pyelasticsearch
 
 Debian and Ubuntu Installation Instructions
 ---
+
+Add elasticsearch to your repositories by adding the public signing key
+
+`wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -` and adding `deb http://packages.elasticsearch.org/elasticsearch/1.3/debian stable main` to your /etc/apt/sources.list.
+
+Now run
+
 `$ sudo apt-get update && sudo apt-get install libldap2-dev python-dev libmysqlclient-dev python-mysqldb`elasticsearch libsasl2-dev
 
 To-do

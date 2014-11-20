@@ -86,7 +86,7 @@ to install all of the packages needed for the project.
 
 You'll need to create a mysql database 'bookshare' with username 'bookshare' and an appropriate password  to run it out of the box locally. (Otherwise, you'll need to configure it for the database of your choice in the `settings.py` file.)
 
-When you run `$ pip install -r requirements.txt` to install all Python modules, make sure to run `$ pip migrate website && pip migrate bids && pip migrate easy_thumbnails`.
+make sure to run `$ pip migrate website && pip migrate bids && pip migrate easy_thumbnails`.
 
 ### Keys
 
@@ -94,15 +94,23 @@ Django uses a key to
 
 ### Elasticsearch Configuration
 
-Make sure you have elasticsearch installed on your machine. (Not pyelasticsearch). Furthermore:
-
 > Using the standard SearchIndex, your search index content is only updated whenever you run either ./manage.py update_index or start afresh with ./manage.py rebuild_index.
 
 ### Media
 
 A separate directory to manage user-uploaded files
 
-### Docker
+### Servers
+
+You have two options to choose from to locally serve your project.
+
+*Apache*
+
+
+
+*Gunicorn*
+
+### Docker and Deployment
 
 For server deployment, not for most local work
 

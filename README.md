@@ -60,9 +60,27 @@ If prompted to install other required packages, install those as well.
 
 ### The Virtual Environment
 
-The virtual environment is 
+Virtual environments are used to keep separate a projects packages from the main computer system, so you can use different versions of packages across different projects.
 
-Make sure to install everything you need in your virtual environment from the requirements file.
+It's often recommended to create a special directory to store all of your virtual environments together, but some prefer keeping their virtual environment in the top level of their project's directory. If you choose the latter, make sure to keep the virtual environment folders out of version control.
+
+Run `sudo pip install virtualenv`
+
+to install virtualenv system-wide, and then run
+
+`virtualenv bookshare`
+
+to create your virtualenvironment. Activate it by running
+
+`source bookshare/bin/activate`
+
+in the virtualenvironment directory.
+
+Now, the packages you need to install for bookshare are in the top level of the project's directory structure. Run
+
+`pip install -r requirements.txt`
+
+to install all of the packages needed for the project.
 
 ### Creating the Database
 

@@ -16,7 +16,8 @@ Please visit the [SRCT Wiki](http://wiki.srct.gmu.edu/) for more information on 
 
 ## Setting everything up for development
 
-These instructions are for Debian and Ubuntu.
+These instructions are for Debian and Ubuntu. Server configuration information adopted from 
+Michel Rouly's [research-questions](https://github.com/jrouly/research-questions) documentation.
 
 ### Prerequisites
 
@@ -25,7 +26,7 @@ First, install python, Pip, and Git on your system. Python is the programming la
 Open a terminal and run the following commands.
 
 `sudo apt-get update`
-`sudo apt-get install python`
+`sudo apt-get install python python-dev`
 `sudo apt-get install python-pip`
 `sudo apt-get install git`
 
@@ -54,7 +55,7 @@ Next, add the repository's public signing key by running
 
 Next, install these packages from the standard repositories
 
-`$ sudo apt-get update && sudo apt-get install libldap2-dev python-dev libmysqlclient-dev python-mysqldb`elasticsearch libsasl2-dev`
+`$ sudo apt-get update && sudo apt-get install python-dev libldap2-dev mysql-server mysql-client libmysqlclient-dev python-mysqldb`elasticsearch libsasl2-dev`
 
 If prompted to install other required packages, install those as well.
 
@@ -70,7 +71,7 @@ to install virtualenv system-wide, and then run
 
 `virtualenv bookshare`
 
-to create your virtualenvironment. Activate it by running
+in your virtualenvironment directory to create your virtualenvironment. Activate it by running
 
 `source bookshare/bin/activate`
 
@@ -118,6 +119,8 @@ Finally, run `python manage.py migrate` and then `python manage.py migrate easy\
 
 A separate directory to manage user-uploaded files.
 
+Do we have to run collectfiles?
+
 # Starting up the test server
 
 Now that your environment is configured, you can test out the Django test server to make
@@ -125,13 +128,146 @@ sure everything works locally. Simply run the command ``$ python manage.py runse
 
 ### Servers
 
-You have two options to choose from to serve your project for deployment.
+You have three options from which to choose to serve your project for deployment. Apache + nginix, pure Apache, or pure nginx.
 
-*Apache*
+#### Apache + nginx (option 1)
+
+One of the main benefits of Apache proxy passing to an nginx application
+server is that you retain the flexibility of a front-facing Apache server
+along with the easy of configuration of an internal nginx application
+server.
+
+Globally install the Apache and/or the nginx webservers.
+
+``sudo apt-get install apache2`` ``sudo apt-get install nginx``
+
+##### Apache config
+
+    <VirtualHost *:80>
+        ServerName bookshare.yourdomain.com
+        ProxyRequests Off
+        <Proxy *>
+            Require all granted
+        </Proxy>
+
+        ProxyPass / http://bookshare.yourdomain.com:8000/
+        ProxyPassReverse / http://bookshare.yourdomain.com:8000/
+
+        <Location />
+            Require all granted
+        </Location>
+    </VirtualHost>
+
+Note that this configuration requires the module `proxy_http` to be
+installed and enabled.
+
+    $ sudo a2enmod proxy_http
+    $ sudo service apache2 restart
+
+##### nginx config
+
+    server {
+        listen 8000;
+        server_name bookshare.yourdomain.com;
+
+        location / {
+            proxy_pass     http://127.0.0.1:8001/;
+            proxy_redirect http://127.0.0.1:8001/ /;
+            server_name_in_redirect off;
+
+            proxy_set_header  Host       $host;
+            proxy_set_header  X-Real-IP  $remote_addr;
+            proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
+        }
+
+        location /static/ {
+            alias /path/to/install/bookshare/bookshare/static/;
+        }
+
+        location /media/ {
+            alias /path/to/install/bookshare/bookshare/static/media/;
+        }
+
+    }
+
+Note that if your Django application is being hosted in a subdirectory of
+the root server (eg. http://yourdomain.com/myapp/) then your config will
+need to look like this:
+
+    server {
+        ...
+        location /myapp/ {
+            proxy_pass     http://127.0.0.1:8001/myapp/;
+            proxy_redirect http://127.0.0.1:8001/myapp/ /myapp/;
+            ...
+        }
+    }
 
 
+#### Pure Apache (option 2)
 
-*Gunicorn*
+This option is slightly less simple to configure and requires Apache to be
+restarted whenever a change is made, since Apache does not handle
+`mod_wsgi` threading as well as nginx.
+
+##### Apache config
+
+    <VirtualHost *:80>
+        ServerName bookshare.yourdomain.com
+
+        Alias /static/ /path/to/install/bookshare/static/
+        Alias /media/  /path/to/install/bookshare/static/media/
+
+        <Directory /path/to/install/bookshare/static>
+            Options -Indexes
+            Order deny,allow
+            Allow from all
+        </Directory>
+
+        <Directory /path/to/install/bookshare/media>
+            Options -Indexes
+            Order deny,allow
+            Allow from all
+        </Directory>
+
+        WSGIScriptAlias / /path/to/install/bookshare/bookshare/wsgi.py
+        WSGIDaemonProcess bookshare.yourdomain.com python-path=/path/to/install/bookshare:/path/to/install/.virtualenv/bookshare/lib/python2.7/site-packages
+        WSGIProcessGroup bookshare.yourdomain.com
+
+        <Directory /path/to/install/bookshare/bookshare>
+            <Files wsgi.py>
+                Options -Indexes
+                Order deny,allow
+                Allow from all
+            </Files>
+        </Directory>
+    </VirtualHost>
+
+#### Pure nginx (option 3)
+
+This option is very simple to configure. Simply make use of the nginx
+configuration from option 1, but direct the server to listen on port 80 for
+standard http connections instead of 8000.
+
+### Starting the application server (nginx only)
+
+If you use nginx to proxy pass to an application server on port 8001, you
+will need to start that application server.
+
+The project requirements include the `gunicorn` module, so let's use this.
+
+    $ gunicorn bookshare.wsgi -b 127.0.0.1:8001
+
+To send the web server to the background (ie. run it as a daemon) use
+
+    $ gunicorn bookshare.wsgi -b 127.0.0.1:8001 -D
+
+Make sure to execute this command in the same folder containing `manage.py`.
+
+This step is not required for configurations using **only** Apache, since
+those configurations use Apache to serve the entire Python application.
+Note, however, that you will need to restart Apache entirely every time a
+modification is made to the application / system.
 
 ### Docker and Deployment
 
@@ -139,4 +275,4 @@ For server deployment, not for most local work
 
 ## To-do
 
-The list of to-do items is kept track of on the gitlab bookshare issues page. https://git.gmu.edu/srct/bookshare/issues
+The list of to-do items is kept track of on the gitlab bookshare issues page. https://git.gmu.edu/srct/bookshare/issues Ask the project manager if you have any questions!

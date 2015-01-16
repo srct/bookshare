@@ -88,9 +88,9 @@ You'll need to create a mysql database 'bookshare' with username 'bookshare' and
 
 make sure to run `$ pip migrate website && pip migrate bids && pip migrate easy_thumbnails`.
 
-### Keys
+### Secret Settings
 
-Django uses a key to
+Copy the secret.py.template to secret.py. Follow the comment instructions provided in each file.
 
 ### Elasticsearch Configuration
 
@@ -113,6 +113,11 @@ You have two options to choose from to locally serve your project.
 ### Docker and Deployment
 
 For server deployment, not for most local work
+
+# Starting up the test server
+
+Now that your environment is configured, you cant test out the Django test server to make
+sure everything works locally. Simply run the command ``$ python manage.py runserver``
 
 ## To-do
 

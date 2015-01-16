@@ -124,7 +124,6 @@ INSTALLED_APPS = (
     'website',
     'bids',
     'lookouts',
-    'south',
     'easy_thumbnails',
     'haystack',
     'piwik',

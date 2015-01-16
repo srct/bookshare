@@ -100,6 +100,11 @@ Copy the secret.py.template to secret.py. Follow the comment instructions provid
 
 A separate directory to manage user-uploaded files
 
+# Starting up the test server
+
+Now that your environment is configured, you cant test out the Django test server to make
+sure everything works locally. Simply run the command ``$ python manage.py runserver``
+
 ### Servers
 
 You have two options to choose from to locally serve your project.
@@ -114,20 +119,6 @@ You have two options to choose from to locally serve your project.
 
 For server deployment, not for most local work
 
-# Starting up the test server
-
-Now that your environment is configured, you cant test out the Django test server to make
-sure everything works locally. Simply run the command ``$ python manage.py runserver``
-
 ## To-do
 
-### Beta
-
-* Seller's rating
-* Report listings
-
-### 1.0
-
-* Admin/moderator interface
-* Professor's approval interface
-* Refactor listing ui
+The a list of to-do items is kept track of on the gitlab bookshare issues page. https://git.gmu.edu/srct/bookshare/issues

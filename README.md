@@ -84,13 +84,31 @@ to install all of the packages needed for the project.
 
 ### Creating the Database
 
-You'll need to create a mysql database 'bookshare' with username 'bookshare' and an appropriate password  to run it out of the box locally. (Otherwise, you'll need to configure it for the database of your choice in the `settings.py` file.)
+Bookshare is configured for using a mysql database, (though you can change this in settings.py and secret.py.)
+By default, the database is called 'bookshare' in the configurations, and the user, 'bookworm'.
 
-make sure to run `$ pip migrate website && pip migrate bids && pip migrate easy_thumbnails`.
+Load up the mysql shell by running
 
-### Secret Settings
+``mysql -u root -p``
 
-Copy the secret.py.template to secret.py. Follow the comment instructions provided in each file.
+Create the database by running
+
+``CREATE DATABASE database bookshare;``
+
+You can choose a different name for your database. Double check your database was created
+
+``SHOW DATABASES;``
+Though you can use an existing user to access this database, here's how to create a new user and give them the necessary permissions to your newly created database.
+
+``CREATE USER 'bookworm'@'localhost' IDENTIFIED BY 'password';``
+For local development, password strength is less important, but use a strong passphrase for deployment. You can choose a different username.
+
+``GRANT ALL PRIVILEGES ON 'bookshare.*' TO 'bookworm'@'localhost';`` ``FLUSH PRIVILEGES;``
+The .\* is to grant access all tables in the database, and 'flush privileges' reloads privileges to ensure that your user is ready to go.
+
+Now, to configure your newly created database with the project settings, copy the secret.py.template in settings/ to secret.py. Follow the comment instructions provided in each file to set your secret key and database info.
+
+Finally, run `python manage.py migrate` and then `python manage.py migrate easy\_thumbnails`to initally set up the tables.
 
 ### Elasticsearch Configuration
 
@@ -98,16 +116,16 @@ Copy the secret.py.template to secret.py. Follow the comment instructions provid
 
 ### Media
 
-A separate directory to manage user-uploaded files
+A separate directory to manage user-uploaded files.
 
 # Starting up the test server
 
-Now that your environment is configured, you cant test out the Django test server to make
+Now that your environment is configured, you can test out the Django test server to make
 sure everything works locally. Simply run the command ``$ python manage.py runserver``
 
 ### Servers
 
-You have two options to choose from to locally serve your project.
+You have two options to choose from to serve your project for deployment.
 
 *Apache*
 
@@ -121,4 +139,4 @@ For server deployment, not for most local work
 
 ## To-do
 
-The a list of to-do items is kept track of on the gitlab bookshare issues page. https://git.gmu.edu/srct/bookshare/issues
+The list of to-do items is kept track of on the gitlab bookshare issues page. https://git.gmu.edu/srct/bookshare/issues

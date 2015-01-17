@@ -69,18 +69,6 @@ def ratingsAverage(seller):
 
 ############# VIEWS #######################
 
-def error_404(request):
-    # merely forms
-    return render(request, '404.html', {
-    },
-    )
-
-def error_500(request):
-    # merely forms
-    return render(request, '500.html', {
-    },
-    )
-
 # home page
 @login_required
 def index(request):
@@ -338,24 +326,6 @@ def create_listing(request):
 
     return render(request, 'create_listing.html', {
         'form' : listing_form,
-    },
-    )
-
-def about(request):
-    # merely forms
-    return render(request, 'about.html', {
-    },
-    )
-
-def contact(request):
-    # merely forms
-    return render(request, 'contact.html', {
-    },
-    )
-
-def privacy(request):
-    # merely forms
-    return render(request, 'privacy.html', {
     },
     )
 

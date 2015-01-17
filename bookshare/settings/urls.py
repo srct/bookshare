@@ -1,7 +1,7 @@
-## DEVELOPMENT IMPORTS
 from django.conf import settings
 from django.conf.urls.static import static
-## DEVELOPMENT IMPORTS
+
+from django.views.generic import TemplateView
 
 from django.contrib import admin
 from django.contrib import auth
@@ -12,8 +12,8 @@ from haystack.views import SearchView
 # Uncomment the next two lines to enable the admin:
 admin.autodiscover()
 
-handle404 = "error_404"
-handle500 = "error_500"
+handle404 = TemplateView.as_view(template_name="404.html")
+handle500 = TemplateView.as_view(template_name="500.html")
 
 urlpatterns = patterns('website.views',
     #### USER PAGES ####
@@ -34,11 +34,11 @@ urlpatterns = patterns('website.views',
 
     #### STATIC PAGES ####
     # about page
-    url(r'^about/?$', 'about', name = 'about'),
+    url(r'^about/?$', TemplateView.as_view(template_name='about.html'), name='about'),
     # contact staff
-    url(r'^contact/?$', 'contact', name = 'contact'),
+    url(r'^contact/?$', TemplateView.as_view(template_name='contact.html'), name='contact'),
     # privacy policy
-    url(r'^privacy/?$', 'privacy', name = 'privacy'),
+    url(r'^privacy/?$', TemplateView.as_view(template_name='privacy.html'), name='privacy'),
     # privacy opt-out (for piwik)
     url(r'^privacy/opt-out/?$', 'privacy_opt_out', name='privacy_opt_out'),
 
@@ -55,9 +55,7 @@ urlpatterns = patterns('website.views',
     ),
 
     #### ADMIN PAGES ####
-    # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
 
 )

@@ -55,13 +55,13 @@ Next, add the repository's public signing key by running
 
 Next, install these packages from the standard repositories
 
-`$ sudo apt-get update && sudo apt-get install python-dev libldap2-dev mysql-server mysql-client libmysqlclient-dev python-mysqldb`elasticsearch libsasl2-dev`
+`$ sudo apt-get install libldap2-dev mysql-server mysql-client libmysqlclient-dev python-mysqldb`elasticsearch libsasl2-dev`
 
-If prompted to install other required packages, install those as well.
+If prompted to install additional required packages, install those as well.
 
 ### The Virtual Environment
 
-Virtual environments are used to keep separate a projects packages from the main computer system, so you can use different versions of packages across different projects.
+Virtual environments are used to keep separate a projects packages from the main computer system, so you can use different versions of packages across different projects and ease deployment server setup.
 
 It's often recommended to create a special directory to store all of your virtual environments together, but some prefer keeping their virtual environment in the top level of their project's directory. If you choose the latter, make sure to keep the virtual environment folders out of version control.
 
@@ -94,7 +94,7 @@ Load up the mysql shell by running
 
 Create the database by running
 
-``CREATE DATABASE database bookshare;``
+``CREATE DATABASE bookshare;``
 
 You can choose a different name for your database. Double check your database was created
 
@@ -104,22 +104,22 @@ Though you can use an existing user to access this database, here's how to creat
 ``CREATE USER 'bookworm'@'localhost' IDENTIFIED BY 'password';``
 For local development, password strength is less important, but use a strong passphrase for deployment. You can choose a different username.
 
-``GRANT ALL PRIVILEGES ON 'bookshare.*' TO 'bookworm'@'localhost';`` ``FLUSH PRIVILEGES;``
+``GRANT ALL ON bookshare.* TO 'bookworm'@'localhost';`` ``FLUSH PRIVILEGES;``
 The .\* is to grant access all tables in the database, and 'flush privileges' reloads privileges to ensure that your user is ready to go.
 
 Now, to configure your newly created database with the project settings, copy the secret.py.template in settings/ to secret.py. Follow the comment instructions provided in each file to set your secret key and database info.
 
-Finally, run `python manage.py migrate` and then `python manage.py migrate easy\_thumbnails`to initally set up the tables.
+Finally, run `python manage.py migrate` to initally set up the tables.
 
 ### Elasticsearch Configuration
 
-> Using the standard SearchIndex, your search index content is only updated whenever you run either ./manage.py update_index or start afresh with ./manage.py rebuild_index.
+Note: Using the standard SearchIndex, your search index content is only updated whenever you run either `python manage.py update_index` or start afresh with `python manage.py rebuild_index`.
 
-### Media
+### Static and Media
+
+Run `python manage.py collectstatic` to ready your static files, like your css and javascript.
 
 A separate directory to manage user-uploaded files.
-
-Do we have to run collectfiles?
 
 # Starting up the test server
 
@@ -139,7 +139,7 @@ server.
 
 Globally install the Apache and/or the nginx webservers.
 
-``sudo apt-get install apache2`` ``sudo apt-get install nginx``
+``sudo apt-get install apache2`` || ``sudo apt-get install nginx``
 
 ##### Apache config
 

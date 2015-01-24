@@ -2,7 +2,7 @@ from django.db import models
 from model_utils.models import TimeStampedModel
 from django.core.validators import MinValueValidator, RegexValidator
 from django.conf import settings
-# Create your models here.
+
 class Listing(TimeStampedModel):
     NEW = 'New'
     LIKE_NEW = 'Like New'
@@ -24,7 +24,7 @@ class Listing(TimeStampedModel):
 
     title = models.CharField(max_length = 200)
     author = models.CharField(max_length = 200)
-    ISBN = models.CharField(
+    isbn = models.CharField(
         max_length = 20,
         validators = [RegexValidator('[0-9xX-]{10,20}', message='Enter a valid ISBN.')]
     )
@@ -48,7 +48,7 @@ class Listing(TimeStampedModel):
     # object call
     def __unicode__(self):
         if not self.active:
-            return '[Inactive] %s : %s' % (self.ISBN, self.title)
+            return '[Inactive] %s : %s' % (self.isbn, self.title)
         return '%s : %s' % (self.ISBN, self.title)
 
     def get_absolute_url(self):
@@ -57,7 +57,7 @@ class Listing(TimeStampedModel):
 
     class Meta:
         #unique_together = (("ISBN", "seller"),)
-        ordering = ['ISBN', 'title']
+        ordering = ['isbn', 'title']
 
 
 class Bid(TimeStampedModel):
@@ -73,4 +73,4 @@ class Bid(TimeStampedModel):
                                    self.listing)
 
     class Meta:
-        ordering = ['-date_created']
+        ordering = ['-created']

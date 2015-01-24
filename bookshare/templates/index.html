@@ -15,111 +15,25 @@ GMU Bookshare &bull; Homepage
   </div>
 </div>
 
+<legend></legend>
+
 <div class="row">
-
-  <div class="col-sm-6">
-    <a href="{% url 'create_listing' %}" class="btn btn-primary btn-lg btn-block">
-      I have a book
-    </a>
+  <div class="col-md-3 text-center">
+    <h4><i class="fa fa-key fa-lg"></i></h4>
+    <h4>Log in with your Mason credentials</h4>
   </div>
-
-  <div class="col-sm-6">
-    <a href="{% url 'haystack_search' %}" class="btn btn-primary btn-lg btn-block">
-      I need a book
-    </a>
+  <div class="col-md-3 text-center">
+    <h4><i class="fa fa-money fa-lg"></i></h4>
+    <h4>Sell used textbooks to Mason students</h4>
   </div>
-
+  <div class="col-md-3 text-center">
+    <h4><i class="fa fa-book fa-lg"></i></h4>
+    <h4>Search for textbooks by course, price, and more</h4>
+  </div>
+  <div class="col-md-3 text-center">
+    <h4><i class="fa exclamation-circle fa-lg"></i></h4>
+    <h4>Get updates when textbooks you want are posted</h4>
+  </div>
 </div>
-
-<hr/>
-
-{% if listings %}
-
-  <div class="row">
-
-    {% comment %}
-      Essentially the logic here is to create 3 columns where
-      there are n rows in each.
-
-      The first conditional will add an initial column tag if the loop is
-      beginning a new column. The second conditional adds a closing column
-      tag when the loop ends a column.
-    {% endcomment %}
-
-    {% for listing in listings %}
-
-      {% if forloop.counter|add:-1|divisibleby:rows %}
-      <div class="col-md-4">
-      {% endif %}
-
-        {% include 'listing_preview_panel.html' %}
-
-      {% if forloop.counter|add:rows|divisibleby:rows %}
-      </div>
-      {% endif %}
-
-    {% endfor %}
-
-  </div>
-
-  <div class="row">
-    <div class="col-lg-4 col-lg-offset-4">
-
-      <ul class="pager">
-
-        {% if listings.has_previous %}
-          <li class="previous">
-            <a href="?page={{ listings.previous_page_number }}">
-              &larr; Newer
-            </a>
-          </li>
-        {% else %}
-          <li class="previous disabled">
-            <a>
-              &larr; Newer
-            </a>
-          </li>
-        {% endif %}
-
-        {% if listings.has_next %}
-          <li class="next">
-            <a href="?page={{ listings.next_page_number }}">
-              Older &rarr;
-            </a>
-          </li>
-        {% else %}
-          <li class="next disabled">
-            <a>
-              Older &rarr;
-            </a>
-          </li>
-        {% endif %}
-
-      </ul>
-
-    </div>
-  </div>
-
-{% else %}
-
-  <div class="row">
-    <div class="col-lg-12 text-center">
-      <div class="panel panel-warning">
-        <div class="panel-body">
-          <h3>No lookout results found.</h3>
-          <p>
-            Lookouts are books you have an eye out for. You can
-            <a data-toggle="modal" data-target="#CreateLookout" href="#">
-              set some</a>, and we'll automatically show them here when a
-            selling goes up.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-{% endif %}
-
-{% include 'create_lookout_modal.html' %}
 
 {% endblock %}

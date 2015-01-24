@@ -3,7 +3,8 @@ from django.views.generic import TemplateView
 
 from django.contrib import admin
 
-from website.forms import StyledSearchForm
+# FIX SEARCH #
+from trades.forms import StyledSearchForm
 from haystack.views import SearchView
 
 # Uncomment the next two lines to enable the admin:
@@ -15,7 +16,7 @@ handle500 = TemplateView.as_view(template_name="500.html")
 urlpatterns = patterns('',
     #### USER PAGES ####
     # home page
-    url(r'^$', 'website.views.index', name = 'homepage'),
+    url(r'^$', TemplateView.as_view(template_name='index.html'), name = 'homepage'),
     # user profile page
     url(r'^u/(?P<username>\w+)/?$', 'website.views.profile', name = 'profile'),
     # create lookout

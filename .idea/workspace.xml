@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="420057e8-da1f-4a15-83b8-2763d979a6ef" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bookshare/website/admin.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bookshare/website/cas_callbacks.py" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/bookshare/bids/__init__.py" afterPath="$PROJECT_DIR$/bookshare/trades/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/bookshare/bids/admin.py" afterPath="$PROJECT_DIR$/bookshare/trades/admin.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/bookshare/bids/forms.py" afterPath="$PROJECT_DIR$/bookshare/trades/forms.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/bookshare/bids/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/bookshare/trades/migrations/0001_initial.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/bookshare/bids/migrations/__init__.py" afterPath="$PROJECT_DIR$/bookshare/trades/migrations/__init__.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/bookshare/bids/models.py" afterPath="$PROJECT_DIR$/bookshare/trades/models.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/bookshare/bids/tests.py" afterPath="$PROJECT_DIR$/bookshare/trades/tests.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/bookshare/bids/views.py" afterPath="$PROJECT_DIR$/bookshare/trades/views.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/bookshare/website/search_indexes.py" afterPath="$PROJECT_DIR$/bookshare/trades/search_indexes.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bookshare/lookouts/admin.py" afterPath="$PROJECT_DIR$/bookshare/lookouts/admin.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bookshare/lookouts/models.py" afterPath="$PROJECT_DIR$/bookshare/lookouts/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bookshare/website/models.py" afterPath="$PROJECT_DIR$/bookshare/website/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bookshare/settings/settings.py" afterPath="$PROJECT_DIR$/bookshare/settings/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bookshare/website/views.py" afterPath="$PROJECT_DIR$/bookshare/website/views.py" />
-    </list>
+    <list default="true" id="420057e8-da1f-4a15-83b8-2763d979a6ef" name="Default" comment="" />
     <ignored path="bookshare.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -595,7 +578,7 @@
         <state vertical-scroll-proportion="0.14231499" vertical-offset="0" max-vertical-offset="527">
           <caret line="5" column="65" selection-start-line="5" selection-start-column="65" selection-end-line="5" selection-end-column="65" />
           <folding>
-            <element signature="e#0#32#0" expanded="true" />
+            <element signature="e#0#32#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -605,7 +588,7 @@
         <state vertical-scroll-proportion="0.085388996" vertical-offset="0" max-vertical-offset="527">
           <caret line="3" column="47" selection-start-line="3" selection-start-column="47" selection-end-line="3" selection-end-column="47" />
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#0#28#0" expanded="false" />
           </folding>
         </state>
       </provider>

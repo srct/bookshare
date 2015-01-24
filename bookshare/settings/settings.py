@@ -49,7 +49,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'cas.middleware.CASMiddleware',
     'django.middleware.doc.XViewMiddleware',
-
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -117,6 +116,8 @@ AUTHENTICATION_BACKENDS = (
 CAS_SERVER_URL = 'https://login.gmu.edu'
 CAS_LOGOUT_COMPLETELY = True
 CAS_PROVIDE_URL_TO_LOGOUT = True
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
 
 CAS_RESPONSE_CALLBACKS = (
     'website.cas_callbacks.create_user',

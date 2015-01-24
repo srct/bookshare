@@ -32,8 +32,6 @@ urlpatterns = patterns('',
     #### STATIC PAGES ####
     # about page
     url(r'^about/?$', TemplateView.as_view(template_name='about.html'), name='about'),
-    # contact staff
-    url(r'^contact/?$', TemplateView.as_view(template_name='contact.html'), name='contact'),
     # privacy policy
     url(r'^privacy/?$', TemplateView.as_view(template_name='privacy.html'), name='privacy'),
     # privacy opt-out (for piwik)

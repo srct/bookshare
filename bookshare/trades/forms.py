@@ -1,6 +1,6 @@
 from django.db import models
 from django import forms
-from bids.models import Bid
+from trades.models import Bid
 
 
 class BidForm( forms.ModelForm ):

@@ -1,6 +1,6 @@
 from haystack import indexes
 from django.utils import timezone
-from website.models import Listing
+from .models import Listing
 
 class ListingIndex(indexes.SearchIndex, indexes.Indexable):
 

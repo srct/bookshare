@@ -17,7 +17,7 @@ class Migration(SchemaMigration):
             ('price', self.gf('django.db.models.fields.IntegerField')()),
             ('text', self.gf('django.db.models.fields.CharField')(max_length=1000, blank=True)),
         ))
-        db.send_create_signal(u'bids', ['Bid'])
+        db.send_create_signal(u'trades', ['Bid'])
 
 
     def backwards(self, orm):
@@ -55,7 +55,7 @@ class Migration(SchemaMigration):
             'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
-        u'bids.bid': {
+        u'trades.bid': {
             'Meta': {'ordering': "['date_created']", 'object_name': 'Bid'},
             'bidder': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['website.Seller']"}),
             'date_created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 12, 16, 0, 0)'}),
@@ -98,4 +98,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['bids']
+    complete_apps = ['trades']

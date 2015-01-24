@@ -1,7 +1,7 @@
 from website.models import Listing,Seller
 from website.forms import ListingForm, FinalPriceForm, CloseForm
-from bids.models import Bid
-from bids.forms import BidForm
+from trades.models import Bid
+from trades.forms import BidForm
 from lookouts.models import Lookout
 from lookouts.forms import LookoutForm, DeleteLookoutForm
 
@@ -266,7 +266,7 @@ def view_listing(request, book_id):
     # if the listing is over a week old, it's old
     old_threshold = timezone.now() - timedelta(weeks=3)
 
-    # get all bids associated with this listing
+    # get all trades associated with this listing
     bids = Bid.objects.filter( listing = listing )
     bid_count = len(bids)
 
@@ -294,7 +294,7 @@ def view_listing(request, book_id):
         'media' : settings.MEDIA_URL,
         'old' : listing.date_created < old_threshold,
         'bid_count' : bid_count,
-        'bids' : bids,
+        'trades' : bids,
         'bid_form' : bid_form,
     },
     )

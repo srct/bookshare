@@ -1,13 +1,11 @@
 from django.db import models
-from django.utils import timezone
-from website.models import Seller, Listing
+from trades.models import Listing
+from django.conf import settings
+from model_utils.models import TimeStampedModel
 
-# Create your models here.
-class Lookout( models.Model ):
 
-    owner = models.ForeignKey(Seller)
-    date_created = models.DateTimeField(default=timezone.now())
-
+class Lookout(TimeStampedModel):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     ISBN = models.CharField(max_length = 20)
     # place other possible fields here, ISBN only for right now.
 

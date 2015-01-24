@@ -15,6 +15,8 @@ from datetime import datetime,timedelta
 from django.contrib.auth.decorators import login_required
 from django.forms.models import modelformset_factory
 
+from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+
 import math
 import pyisbn
 import requests
@@ -220,38 +222,12 @@ def create_lookout(request, username):
     },
     )
 
-
-@login_required
-def all_listings(request):
-    # The list of pks is then used to create a queryset, ordered by newest
-    # listing first.
-    listings = Listing.objects.all().order_by('-date_created')
-
-    # Listings will be shown in 3 columns and 2 rows, for a total of 6
-    # entries per page.
-    paginator = Paginator(listings, 6) # Show 6 listings per page
-
-    page = request.GET.get('page')
-    try:
-        listings = paginator.page(page)
-    except PageNotAnInteger:
-        # if page is NaN, deliver the first page
-        listings = paginator.page(1)
-    except EmptyPage:
-        # if the page is empty, deliver the last page
-        listings = paginator.page(paginator.num_pages)
-
-    # the rows variable is >= 1, and is determined by the number of
-    # entries on this page. this is intended to cause the listing
-    # previews to fill in rows first, rather than columns.
-    rows = int(math.ceil( len(listings) / 3.0 )) or 1
-
-    return render(request, 'all_listings.html', {
-        'listings' : listings,
-        'rows' : rows,
-    },
-    )
-
+class ListListings(LoginRequiredMixin, ListView):
+    model = Listing
+    context_object_name = 'listings'
+    queryset = Listing.objects.all().order_by('-date_created')
+    paginate_by = 25
+    login_url = '/'
 
 # Listing page
 @login_required
@@ -299,35 +275,12 @@ def view_listing(request, book_id):
     },
     )
 
-# Allow user to create a listing
-@login_required
-def create_listing(request):
-
-    if request.method == 'POST':
-        listing_form = ListingForm(request.POST, request.FILES, request=request)
-        if listing_form.is_valid():
-            listing = listing_form.save(commit=False)
-
-            # Trim unnecessary whitespace chars from the sides.
-            listing.title = listing.title.strip()
-            listing.author = listing.author.strip()
-            listing.edition = listing.edition.strip()
-
-            # Trim the word "by" if it starts the author field.
-            if len(listing.author) >= 2 and listing.author[:2].lower() == "by":
-                listing.author = listing.author[2:]
-
-            listing.seller = request.user.seller
-            listing.save()
-
-            return redirect( 'view_listing', listing.pk )
-    else:
-        listing_form = ListingForm(request=request)
-
-    return render(request, 'create_listing.html', {
-        'form' : listing_form,
-    },
-    )
+class CreateListing(LoginRequiredMixin, CreateView):
+    model = Listing,
+    # actually create said form
+    form_class = CreateListingForm
+    success_url = '/'
+    login_url = '/'
 
 def privacy_opt_out(request):
     # merely forms

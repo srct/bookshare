@@ -3,13 +3,12 @@ MySQL-python==1.2.5
 Pillow==2.7.0
 Whoosh==2.6.0
 argparse==1.2.1
-django-auth-ldap==1.1.7
+git+https://github.com/the-ben-waters/django-cas.git
 django-haystack==2.3.1
 django-piwik==0.1
 easy-thumbnails==2.2
 gunicorn==19.1.1
 pyisbn==1.0.0
-python-ldap==2.4.13
 requests==2.5.1
 six==1.9.0
 wsgiref==0.1.2

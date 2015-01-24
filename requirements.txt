@@ -5,6 +5,7 @@ Whoosh==2.6.0
 argparse==1.2.1
 git+https://github.com/the-ben-waters/django-cas.git
 django-haystack==2.3.1
+django-model-utils==2.2
 django-piwik==0.1
 easy-thumbnails==2.2
 gunicorn==19.1.1

@@ -14,6 +14,11 @@ handle404 = TemplateView.as_view(template_name="404.html")
 handle500 = TemplateView.as_view(template_name="500.html")
 
 urlpatterns = patterns('',
+
+    # app-level urls
+    url(r'^share/', include('trades.urls')),
+    # student urls?
+
     #### USER PAGES ####
     # home page
     url(r'^$', TemplateView.as_view(template_name='index.html'), name = 'homepage'),
@@ -23,10 +28,6 @@ urlpatterns = patterns('',
     url(r'^u/(?P<username>\w+)/create-lookout/?$', 'website.views.create_lookout', name = 'create_lookout'),
 
     #### LISTING PAGES ####
-    # global new listings page
-    url(r'^listings/?$', 'website.views.all_listings', name = 'all_listings'),
-    # create new listing
-    url(r'^listings/create/?$', 'website.views.create_listing', name = 'create_listing'),
     # book listing page
     url(r'^listings/(?P<book_id>\d+)$', 'website.views.view_listing', name = 'view_listing'),
 

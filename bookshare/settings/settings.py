@@ -5,6 +5,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'trades/templates'),
+    os.path.join(BASE_DIR, 'core/templates'),
+    os.path.join(BASE_DIR, 'lookouts/templates'),
 )
 
 STATICFILES_DIRS = (

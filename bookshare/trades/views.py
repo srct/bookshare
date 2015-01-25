@@ -16,6 +16,8 @@ from datetime import datetime,timedelta
 from django.contrib.auth.decorators import login_required
 from django.forms.models import modelformset_factory
 
+from braces.views import LoginRequiredMixin
+
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
 import math
@@ -279,7 +281,8 @@ def view_listing(request, book_id):
 class CreateListing(LoginRequiredMixin, CreateView):
     model = Listing,
     # actually create said form
-    form_class = CreateListingForm
+#    form_class = CreateListingForm
+    form_class = ListingForm
     success_url = '/'
     login_url = '/'
 

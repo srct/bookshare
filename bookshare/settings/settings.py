@@ -97,6 +97,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 STATIC_URL = '/static/'
 
 THUMBNAIL_ALIASES = {'': {

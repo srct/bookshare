@@ -5,13 +5,13 @@ from lookouts.models import Lookout
 class LookoutForm( ModelForm ):
     class Meta:
         model = Lookout
-        fields = ['ISBN']
+        fields = ['isbn']
         exclude = ['owner', 'date_created']
         labels = {
-            'ISBN': 'ISBN',
+            'isbn': 'ISBN',
         }
         widgets = {
-            'ISBN': TextInput(attrs={
+            'isbn': TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Book ISBN',
                 'pattern': '[0-9xX-]{10,20}',

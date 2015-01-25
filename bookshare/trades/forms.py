@@ -33,7 +33,7 @@ class BidForm( forms.ModelForm ):
 
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, Textarea, TextInput, NumberInput, Select, FileInput
-from website.models import Seller, Listing
+from trades.models import Listing#, Seller # where did we put seller?
 from haystack.forms import SearchForm
 
 
@@ -77,12 +77,12 @@ class ListingForm( ModelForm ):
 
     class Meta:
         model = Listing
-        fields = ('ISBN', 'title', 'author', 'year', 'edition',
+        fields = ('isbn', 'title', 'author', 'year', 'edition',
         'book_condition', 'price', 'description', 'photo')
         exclude = ('seller', 'date_created', 'date_sold', 'sold',
         'finalPrice')
         labels = {
-            'ISBN': 'ISBN',
+            'isbn': 'ISBN',
             'title': 'Title',
             'author': 'Author',
             'year': 'Year',
@@ -93,7 +93,7 @@ class ListingForm( ModelForm ):
             'photo': 'Photo',
         }
         widgets = {
-            'ISBN': TextInput(attrs={
+            'isbn': TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Book ISBN',
                 'pattern': '[0-9xX-]{10,20}',
@@ -134,10 +134,10 @@ class ListingForm( ModelForm ):
         error_message = "You've already posted a listing with this ISBN. Close that listing first."
         cleaned_data = super(ListingForm, self).clean()
 
-        cleaned_isbn = cleaned_data.get('ISBN')
+        cleaned_isbn = cleaned_data.get('isbn')
         cleaned_seller = self.request.user.seller
 
-        existing_listings = Listing.objects.filter(ISBN=cleaned_isbn,
+        existing_listings = Listing.objects.filter(isbn=cleaned_isbn,
                                                     seller=cleaned_seller,
                                                     active=True)
 

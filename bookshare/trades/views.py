@@ -1,5 +1,6 @@
-from website.models import Listing,Seller
-from website.forms import ListingForm, FinalPriceForm, CloseForm
+from trades.models import Listing#, Seller
+# where is seller???
+from trades.forms import ListingForm, FinalPriceForm, CloseForm
 from trades.models import Bid
 from trades.forms import BidForm
 from lookouts.models import Lookout

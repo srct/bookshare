@@ -16,20 +16,20 @@ handle500 = TemplateView.as_view(template_name="500.html")
 urlpatterns = patterns('',
 
     # app-level urls
-    url(r'^share/', include('trades.urls')),
+    #url(r'^share/', include('trades.urls')),
     # student urls?
 
     #### USER PAGES ####
     # home page
     url(r'^$', TemplateView.as_view(template_name='index.html'), name = 'homepage'),
     # user profile page
-    url(r'^u/(?P<username>\w+)/?$', 'website.views.profile', name = 'profile'),
+    url(r'^u/(?P<username>\w+)/?$', 'trades.views.profile', name = 'profile'),
     # create lookout
-    url(r'^u/(?P<username>\w+)/create-lookout/?$', 'website.views.create_lookout', name = 'create_lookout'),
+    url(r'^u/(?P<username>\w+)/create-lookout/?$', 'trades.views.create_lookout', name = 'create_lookout'),
 
     #### LISTING PAGES ####
     # book listing page
-    url(r'^listings/(?P<book_id>\d+)$', 'website.views.view_listing', name = 'view_listing'),
+    url(r'^listings/(?P<book_id>\d+)$', 'trades.views.view_listing', name = 'view_listing'),
 
     #### STATIC PAGES ####
     # about page
@@ -37,7 +37,7 @@ urlpatterns = patterns('',
     # privacy policy
     url(r'^privacy/?$', TemplateView.as_view(template_name='privacy.html'), name='privacy'),
     # privacy opt-out (for piwik)
-    url(r'^privacy/opt-out/?$', 'website.views.privacy_opt_out', name='privacy_opt_out'),
+    url(r'^privacy/opt-out/?$', 'trades.views.privacy_opt_out', name='privacy_opt_out'),
 
     #### SEARCH PAGES ####
     # points to a SearchView Instance

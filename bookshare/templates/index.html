@@ -1,16 +1,19 @@
 {% extends 'layouts/base.html' %}
 
 {% block title %}
-GMU Bookshare &bull; Homepage
+SRCT Bookshare &bull; Homepage
 {% endblock %}
 
 {% block content %}
 
-<div class="page-header" id="banner">
+<div class="container">
   <div class="row">
-    <div class="col-lg-12 text-center">
-      <h1><strong>GMU</strong>&#8203;BOOKSHARE</h1>
-      <p class="lead">A place for GMU students to buy and sell textbooks.</p>
+    <div class="col-md-12 license">
+      <div class="jumbotron jumboindex">
+        <h1 class="text-center"><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
+        <h3 class="text-center">A place for Mason students to buy and sell textbooks.</h3>
+      </div>
+      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" title="'Mason Statue Desktop' by Daniel Bond is licensed under a Creative Commons Attribution 4.0 International License."/></a>
     </div>
   </div>
 </div>
@@ -18,22 +21,36 @@ GMU Bookshare &bull; Homepage
 <legend></legend>
 
 <div class="row">
-  <div class="col-md-3 text-center">
+  <div class="col-sm-3 text-center">
     <h4><i class="fa fa-key fa-lg"></i></h4>
     <h4>Log in with your Mason credentials</h4>
   </div>
-  <div class="col-md-3 text-center">
+  <div class="col-sm-3 text-center">
     <h4><i class="fa fa-money fa-lg"></i></h4>
     <h4>Sell your used textbooks to Mason students</h4>
   </div>
-  <div class="col-md-3 text-center">
+  <div class="col-sm-3 text-center">
     <h4><i class="fa fa-book fa-lg"></i></h4>
     <h4>Search for textbooks by course, price, and more</h4>
   </div>
-  <div class="col-md-3 text-center">
+  <div class="col-sm-3 text-center">
     <h4><i class="fa fa-exclamation-circle fa-lg"></i></h4>
     <h4>Get updates when textbooks you want are posted</h4>
   </div>
+</div>
+
+<legend></legend>
+
+<div class="row">
+
+  <div class="col-sm-5 col-sm-offset-1">
+    <a href="#" class="btn btn-primary btn-lg btn-block">I <em>have</em> a book</a>
+  </div>
+
+  <div class="col-sm-5">
+    <a href="#" class="btn btn-primary btn-lg btn-block">I <em>need</em> a book</a>
+  </div>
+
 </div>
 
 {% endblock %}

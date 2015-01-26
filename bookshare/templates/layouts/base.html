@@ -3,37 +3,57 @@
         "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
-{% load staticfiles %}
-<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="/static/css/bootswatch.min.css" rel="stylesheet" media="screen">
-<link href="/static/css/extensions.css" rel="stylesheet" media="screen">
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<script type="text/javascript" src="/static/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/static/js/isbn.js"></script>
+  <meta charset="utf-8">
+  <meta name="description" content="A place for Mason students to buy and sell textbooks.">
+  {% load staticfiles %}
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="/static/css/bootswatch.min.css" rel="stylesheet" media="screen">
+  <link href="/static/css/extensions.css" rel="stylesheet" media="screen">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <script>
+    /*    
+    @licstart  The following is the entire license notice for the 
+    JavaScript code in this page.
 
-<title>{% block title %}{% endblock %}</title>
+    Copyright (C) 2014 Mason SRCT
 
+    The JavaScript code in this page is free software: you can
+    redistribute it and/or modify it under the terms of the GNU
+    General Public License (GNU GPL) as published by the Free Software
+    Foundation, either version 3 of the License, or (at your option)
+    any later version.  The code is distributed WITHOUT ANY WARRANTY;
+    without even the implied warranty of MERCHANTABILITY or FITNESS
+    FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+    As additional permission under GNU GPL version 3 section 7, you
+    may distribute non-source (e.g., minimized or compacted) forms of
+    that code without the copy of the GNU GPL normally required by
+    section 4, provided you include this license notice and a URL
+    through which recipients can access the Corresponding Source.   
+
+    @licend  The above is the entire license notice
+    for the JavaScript code in this page.
+    */
+  </script>
+  <link rel="icon" href="/static/img/favicon.ico">
+  <title>{% block title %} {% endblock %}</title>
 </head>
-  <body>
-
-    <div id="wrap">
-      {% include 'layouts/navbar.html' %}
-
+<body>
+  <div id="wrap">
+    {% include 'layouts/navbar.html' %}
       <div class="container">
-
         {% block content %}
-
         {% endblock %}
-
       </div>
     </div>
-
     <div id="footer">
       {% include 'layouts/footer.html' %}
     </div>
-
+    {% block javascript %}
+    <script type="text/javascript" src="/static/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/isbn.js"></script>
+    {% endblock %}
     {% tracking_code %}
-
   </body>
 </html>

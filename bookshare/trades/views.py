@@ -106,9 +106,3 @@ class CreateListing(LoginRequiredMixin, CreateView):
     form_class = ListingForm
     success_url = '/'
     login_url = '/'
-
-def privacy_opt_out(request):
-    # merely forms
-    return render(request, 'privacy_opt_out.html', {
-    },
-    )

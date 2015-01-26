@@ -1,24 +1,13 @@
-from trades.models import Listing#, Seller
-# where is seller???
-from trades.forms import ListingForm, FinalPriceForm, CloseForm
-from trades.models import Bid
-from trades.forms import BidForm
+from trades.models import Listing, Bid
+from trades.forms import ListingForm, FinalPriceForm, CloseForm, BidForm
+
 from lookouts.models import Lookout
 from lookouts.forms import LookoutForm, DeleteLookoutForm
 
-from django.http import Http404
-from django.conf import settings
-from django.shortcuts import render, render_to_response, get_object_or_404, redirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.exceptions import PermissionDenied
-from django.utils import timezone
-from datetime import datetime,timedelta
-from django.contrib.auth.decorators import login_required
-from django.forms.models import modelformset_factory
-
-from braces.views import LoginRequiredMixin
+# where is seller???
 
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+from braces.views import LoginRequiredMixin
 
 import math
 import pyisbn
@@ -66,7 +55,6 @@ class ListListings(LoginRequiredMixin, ListView):
     login_url = '/'
 
 # Listing page
-@login_required
 def view_listing(request, book_id):
 
     # Grab the listing itself

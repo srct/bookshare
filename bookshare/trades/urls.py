@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 
-from account.views import ListListings
+from trades.views import ListListings, CreateListing
 from trades.models import Listing
 
 urlpatterns = patterns('',

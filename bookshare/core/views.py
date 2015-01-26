@@ -16,6 +16,12 @@ def ratingsAverage(seller):
 
 ### VIEWS ###
 
+def privacy_opt_out(request):
+    # merely forms
+    return render(request, 'privacy_opt_out.html', {
+   },
+   )
+
 # USER home page -- rewrite as user homepage
 @login_required
 def index(request):

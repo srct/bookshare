@@ -4,7 +4,7 @@ from trades.forms import ListingForm, FinalPriceForm, CloseForm, BidForm
 from lookouts.models import Lookout
 from lookouts.forms import LookoutForm, DeleteLookoutForm
 
-# where is seller???
+from core.models import Seller
 
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from braces.views import LoginRequiredMixin

@@ -3,6 +3,28 @@ from django.conf import settings
 from model_utils.models import TimeStampedModel
 from django.core.validators import RegexValidator
 
+class Seller( models.Model ):
+
+    user = models.OneToOneField(User)
+    #    name = models.CharField(max_length = 200, primary_key=True)
+    #    username = models.CharField(max_length = 200)
+    #    email = models.CharField(max_length = 200)
+    rating = models.IntegerField(null=True,default=0)
+
+    # object call
+    def __unicode__(self):
+        return '%s' % self.user
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('profile', args=[self.user.username])
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Seller.objects.create(user=instance)
+
+post_save.connect(create_user_profile, sender=User)
+
 # Create your models here.
 class Course(TimeStampedModel):
 	name = models.CharField(max_length=255)

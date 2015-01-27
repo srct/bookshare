@@ -18,25 +18,17 @@ urlpatterns = patterns('',
     # app-level urls
     url(r'^share/', include('trades.urls')),
     url(r'^student/', include('core.urls')),
-    # student urls?
+    url(r'^lookouts/', include('lookouts.urls')),
 
-    #### USER PAGES ####
-    # home page
+    ### static pages ###
     url(r'^$', TemplateView.as_view(template_name='index.html'), name = 'homepage'),
-    # create lookout
-    url(r'^u/(?P<username>\w+)/create-lookout/?$', 'lookouts.views.create_lookout', name = 'create_lookout'),
+    url(r'^about/?$', TemplateView.as_view(template_name='about.html'), name='about'),
+    url(r'^privacy/?$', TemplateView.as_view(template_name='privacy.html'), name='privacy'),
+    url(r'^privacy/opt-out/?$', 'core.views.privacy_opt_out', name='privacy_opt_out'),
 
     #### LISTING PAGES ####
     # book listing page
     url(r'^listings/(?P<book_id>\d+)$', 'trades.views.view_listing', name = 'view_listing'),
-
-    #### STATIC PAGES ####
-    # about page
-    url(r'^about/?$', TemplateView.as_view(template_name='about.html'), name='about'),
-    # privacy policy
-    url(r'^privacy/?$', TemplateView.as_view(template_name='privacy.html'), name='privacy'),
-    # privacy opt-out (for piwik)
-    url(r'^privacy/opt-out/?$', 'core.views.privacy_opt_out', name='privacy_opt_out'),
 
     #### SEARCH PAGES ####
     # points to a SearchView Instance

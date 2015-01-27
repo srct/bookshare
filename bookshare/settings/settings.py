@@ -40,11 +40,14 @@ INSTALLED_APPS = (
     'trades',
     'core',
     'lookouts',
+    'crispy_forms',
     'easy_thumbnails',
     'haystack',
     'piwik',
     'django.contrib.admindocs',
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',

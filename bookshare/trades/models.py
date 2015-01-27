@@ -35,7 +35,7 @@ class Listing(TimeStampedModel):
     edition = models.CharField(blank=True, default=0, max_length = 30)
     # course
     date_sold = models.DateTimeField(null=True,blank=True)
-    book_condition = models.CharField(choices=BOOK_CONDITION_CHOICES,
+    condition = models.CharField(choices=BOOK_CONDITION_CHOICES,
                                       max_length=20,
                                       default=GOOD)
     description = models.TextField(blank=True)

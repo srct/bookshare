@@ -16,7 +16,7 @@ handle500 = TemplateView.as_view(template_name="500.html")
 urlpatterns = patterns('',
 
     # app-level urls
-    #url(r'^share/', include('trades.urls')),
+    url(r'^share/', include('trades.urls')),
     # student urls?
 
     #### USER PAGES ####

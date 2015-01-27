@@ -1,11 +1,13 @@
 {% extends 'layouts/base.html' %}
-{% load website_extras %}
+{% comment %} {% load website_extras %} {% endcomment %}
 
 {% block title %}
-SRCT Bookshare &bull; Seller Profile
+SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
 {% endblock %}
 
 {% block content %}
+
+{% load gravatar %}
 
 <script>
 function insert_target( source, target ){
@@ -15,29 +17,35 @@ function insert_target( source, target ){
 </script>
 
 <div class="page-header" id="banner">
+  <legend>
   <div class="row">
-    <div class="col-lg-12">
-      <h1>{{ seller.user.first_name }} {{ seller.user.last_name }}
-      {% if seller.user = request.user %}
-      (me)
+    <div class="col-md-1">
+      <img class="img-circle img-responsive" src="{% gravatar_url student.user.email 75 %}">
+    </div>
+    <div class="col-lg-7 col-md-6">
+      <h2><strong>{{ student.user.first_name }} {{ student.user.last_name }}</strong></h2>
+    </div>
+    <div class="col-lg-2 col-md-3">
+      {% if student.rating %}
+        <h3><a href="#students-ratings-history">
+        <i class="fa fa-star"></i>
+        <i class="fa fa-star"></i>
+        <i class="fa fa-star"></i>
+        <i class="fa fa-star-o"></i>
+        <i class="fa fa-star-o"></i>
+        </h3></a>
+      {% else %}
+        <em>{{ student.user.first_name }} has no ratings yet.</em>
       {% endif %}
-      <span class="pull-right">
-        <a href="mailto:{{ seller.user.email }}">{ contact }</a>
-      </span></h1>
-      <p class="lead">
-        {% if seller.rating %}
-          <span class="glyphicon glyphicon-star"></span>
-          <span class="glyphicon glyphicon-star"></span>
-          <span class="glyphicon glyphicon-star"></span>
-          <span class="glyphicon glyphicon-star-empty"></span>
-          <span class="glyphicon glyphicon-star-empty"></span>
-        {% else %}
-          No ratings yet.
-        {% endif %}
-      </p>
+    </div>
+    <div class="col-md-2">
+      <h3><a href="mailto:{{ student.user.email }}"><i class="fa fa-envelope"></i> {{ student.user.username }}</a></h3>
     </div>
   </div>
+  </legend>
 </div>
+
+{% comment %}
 
 <div class="row">
 
@@ -282,5 +290,7 @@ aria-labelledby="DeleteLookoutLabel" aria-hidden="true">
 </div><!-- /.modal -->
 
 {% include 'create_lookout_modal.html' %}
+
+{% endcomment %}
 
 {% endblock %}

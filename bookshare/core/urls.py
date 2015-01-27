@@ -7,6 +7,6 @@ urlpatterns = patterns('',
         DetailStudent.as_view(
         model=Student,
         context_object_name='student',
-        template_name='detailStudent'),
+        template_name='profile.html'),
     name='profile'),
 )

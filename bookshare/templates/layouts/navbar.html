@@ -21,8 +21,10 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
-        <li><a href="{% url 'profile' request.user.username %}">My Account</a></li>
         <li><a href="#"><i class="fa fa-search fa-lg"></i></a></li>
+        {% load gravatar %}
+        <li><a href="{% url 'profile' request.user.username %}">
+          <img class="img-circle img-responsive center center-block" src="{% gravatar_url student.user.email 21 %}"></a></li>
         <li><a href="/logout">Log Out</a></li>
         {% else %}
         <li><a href="/login">Log In</a></li>

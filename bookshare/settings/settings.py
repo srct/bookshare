@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'trades',
     'core',
     'lookouts',
+    'django_gravatar',
     'crispy_forms',
     'easy_thumbnails',
     'haystack',

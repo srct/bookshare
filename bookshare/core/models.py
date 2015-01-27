@@ -1,5 +1,6 @@
 from django.db import models
-from django.conf import settings
+#from django.conf import settings
+from django.contrib.auth.models import User
 from model_utils.models import TimeStampedModel
 from django.core.validators import RegexValidator
 
@@ -23,9 +24,8 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Seller.objects.create(user=instance)
 
-post_save.connect(create_user_profile, sender=User)
+#post_save.connect(create_user_profile, sender=User)
 
-# Create your models here.
 class Course(TimeStampedModel):
 	name = models.CharField(max_length=255)
 	department = models.CharField(max_length=255)

@@ -1,9 +1,14 @@
 from django.shortcuts import render
 
+from django.views.generic import DetailView
+from braces.views import LoginRequiredMixin
+
+from core.models import Student
+
 # stuff copied out of the website views
 
 # seller's rating
-def ratingsAverage(seller):
+"""def ratingsAverage(seller):
     sellerRating = Seller.objects.filter(user__username=seller)
     ratingNumber = 0
     ratingTotal = 0
@@ -12,7 +17,7 @@ def ratingsAverage(seller):
         ratingNumber += 1
         ratingTotal += rating
     ratingAverage = ratingTotal/ratingNumber
-    return ratingNumber
+    return ratingNumber"""
 
 ### VIEWS ###
 
@@ -78,80 +83,12 @@ def index(request):
     )
 
 # User profile page
-#@login_required
-def profile(request, username):
+class DetailStudent(LoginRequiredMixin, DetailView):
+    model = Student
+    login_url = '/'
 
-    # verify that the user exists
-    seller = get_object_or_404(Seller, user__username=username)
-    listings = Listing.objects.filter(seller__user__username=username)
-    lookouts = Lookout.objects.filter(owner__user__username=username)
-    FinalPrice_form = FinalPriceForm(prefix="finalPrice")
-    close_form = CloseForm(prefix="close")
-    DeleteLookout_form = DeleteLookoutForm()
-    lookout_form = LookoutForm()
-
-    if request.method == 'POST':
-        # Parse the ClosedForm input fields
-        if 'closed' in request.POST:
-            close_form = CloseForm( request.POST, prefix="close" )
-            if close_form.is_valid():
-                book_id = close_form.cleaned_data.get('book_id')
-                listing = Listing.objects.get(pk=book_id)
-                if listing.seller == request.user.seller:
-                    listing.active = False
-                    listing.save()
-                    return redirect('profile', username)
-                else:
-                    raise PermissionDenied("You do not own this listing.")
-        # Parse the FinalPriceForm input fields
-        elif 'sold' in request.POST:
-            FinalPrice_form = FinalPriceForm( request.POST, prefix="finalPrice" )
-            if FinalPrice_form.is_valid():
-                book_id = FinalPrice_form.cleaned_data.get('book_id')
-                listing = Listing.objects.get(pk=book_id)
-                try:
-                    final_price = int(FinalPrice_form.cleaned_data.get('final_price'))
-                except ValueError, TypeError:
-                    final_price = 0
-                if listing.seller == request.user.seller:
-                    listing.finalPrice = final_price
-                    listing.sold = True
-                    listing.active = False
-                    listing.save()
-                    return redirect('profile', username)
-                else:
-                    raise PermissionDenied("You do not own this listing.")
-        # Parse the DeleteLookoutForm input fields
-        elif 'lookout' in request.POST:
-            DeleteLookout_form = DeleteLookoutForm( request.POST )
-            if DeleteLookout_form.is_valid():
-                lookout_id = DeleteLookout_form.cleaned_data.get('lookout_id')
-                lookout = Lookout.objects.get(pk=lookout_id)
-                if lookout.owner == request.user.seller:
-                    lookout.delete()
-                    return redirect('profile', username)
-                else:
-                    raise PermissionDenied("You do not own this lookout.")
-        elif 'lookout-create' in request.POST:
-            lookout_form = LookoutForm( request.POST )
-            if lookout_form.is_valid():
-                lookout = lookout_form.save(commit=False)
-                lookout.ISBN = lookout.ISBN.strip()
-                lookout.owner = request.user.seller
-                lookout.save()
-                return redirect( 'profile', username )
-
-    return render(request, 'profile.html', {
-        'seller' : seller,
-        'listings': listings,
-        'lookouts': lookouts,
-        'total_sold' : totalSold( username ),
-        'FinalPrice_form' : FinalPrice_form,
-        'close_form' : close_form,
-        'DeleteLookout_form' : DeleteLookout_form,
-        'CreateLookout_form': lookout_form,
-    },
-    )
+# user settings page
+# manage all listings -- close your listings, delete your listings, see your bids, remove your bids, close your bids, etc
 
 #@login_required
 def search(request):

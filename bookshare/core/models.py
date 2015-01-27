@@ -1,30 +1,18 @@
 from django.db import models
-#from django.conf import settings
 from django.contrib.auth.models import User
+from autoslug import AutoSlugField
 from model_utils.models import TimeStampedModel
 from django.core.validators import RegexValidator
 
-class Seller( models.Model ):
-
+class Student(TimeStampedModel):
     user = models.OneToOneField(User)
-    #    name = models.CharField(max_length = 200, primary_key=True)
-    #    username = models.CharField(max_length = 200)
-    #    email = models.CharField(max_length = 200)
+    # django user includes username, password, first name, and last name
     rating = models.IntegerField(null=True,default=0)
 
-    # object call
+    slug = AutoSlugField(populate_from='user', unique=True)
+
     def __unicode__(self):
-        return '%s' % self.user
-
-    def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
-        return reverse('profile', args=[self.user.username])
-
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Seller.objects.create(user=instance)
-
-#post_save.connect(create_user_profile, sender=User)
+        return '%s' % self.user.username
 
 class Course(TimeStampedModel):
 	name = models.CharField(max_length=255)

@@ -9,6 +9,6 @@ class BidAdmin(admin.ModelAdmin):
 
 @admin.register(Listing)
 class ListingAdmin(admin.ModelAdmin):
-	list_display = ('id', 'created', 'modified', 'title', 'author', 'isbn', 'year', 'edition', 'date_sold', 'book_condition', \
+	list_display = ('id', 'created', 'modified', 'title', 'author', 'isbn', 'year', 'edition', 'date_sold', 'condition', \
 	                'price', 'sold', 'active')
-	list_filter = ('created', 'modified', 'seller', 'book_condition', 'price', 'active')
+	list_filter = ('created', 'modified', 'seller', 'condition', 'price', 'active')

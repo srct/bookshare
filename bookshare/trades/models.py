@@ -1,5 +1,8 @@
 from django.db import models
 from model_utils.models import TimeStampedModel
+
+from core.models import Course
+
 from django.core.validators import MinValueValidator, RegexValidator
 from django.conf import settings
 
@@ -30,8 +33,9 @@ class Listing(TimeStampedModel):
     )
     year = models.IntegerField(null=True,blank=True)
     edition = models.CharField(blank=True, default=0, max_length = 30)
+    # course
     date_sold = models.DateTimeField(null=True,blank=True)
-    condition = models.CharField(choices=BOOK_CONDITION_CHOICES,
+    book_condition = models.CharField(choices=BOOK_CONDITION_CHOICES,
                                       max_length=20,
                                       default=GOOD)
     description = models.TextField(blank=True)

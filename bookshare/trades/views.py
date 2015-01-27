@@ -50,8 +50,6 @@ def relevantComments(seller):
 class ListListings(LoginRequiredMixin, ListView):
     model = Listing
     context_object_name = 'listings'
-    queryset = Listing.objects.all().order_by('-created')
-    paginate_by = 25
     login_url = '/'
 
 # Listing page
@@ -101,8 +99,6 @@ def view_listing(request, book_id):
 
 class CreateListing(LoginRequiredMixin, CreateView):
     model = Listing,
-    # actually create said form
-#    form_class = CreateListingForm
     form_class = ListingForm
     success_url = '/'
     login_url = '/'

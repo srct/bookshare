@@ -1,5 +1,6 @@
 from django.db import models
 from model_utils.models import TimeStampedModel
+from autoslug import AutoSlugField
 
 from core.models import Course
 
@@ -49,15 +50,13 @@ class Listing(TimeStampedModel):
     active = models.BooleanField(default=True)
     finalPrice = models.IntegerField(blank=True,default=0)
 
+    #slug = AutoSlugField(populate_from="isbn + user.username", unique=True)
+
     # object call
     def __unicode__(self):
         if not self.active:
             return '[Inactive] %s : %s' % (self.isbn, self.title)
         return '%s : %s' % (self.ISBN, self.title)
-
-    def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
-        return reverse('view_listing', args=[str(self.id)])
 
     class Meta:
         #unique_together = (("ISBN", "seller"),)

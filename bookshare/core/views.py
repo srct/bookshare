@@ -23,7 +23,7 @@ def privacy_opt_out(request):
    )
 
 # USER home page -- rewrite as user homepage
-@login_required
+#@login_required
 def index(request):
 
     lookout_form = LookoutForm()
@@ -78,7 +78,7 @@ def index(request):
     )
 
 # User profile page
-@login_required
+#@login_required
 def profile(request, username):
 
     # verify that the user exists
@@ -153,7 +153,7 @@ def profile(request, username):
     },
     )
 
-@login_required
+#@login_required
 def search(request):
     # merely forms
     return render(request, 'search.html', {

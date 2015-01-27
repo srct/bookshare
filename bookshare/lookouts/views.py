@@ -7,7 +7,7 @@ from django.shortcuts import render
 
 ### VIEWS ###
 
-@login_required
+#@login_required
 def create_lookout(request, username):
 
     lookout_form = LookoutForm()

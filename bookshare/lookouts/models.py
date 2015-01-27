@@ -1,13 +1,19 @@
 from django.db import models
 from trades.models import Listing
+from core.models import Course
 from django.conf import settings
 from model_utils.models import TimeStampedModel
+from autoslug import AutoSlugField
 
 class Lookout(TimeStampedModel):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     isbn = models.CharField(max_length = 20)
-    # place other possible fields here, ISBN only for right now.
+    #course = models.ForeignKey('Course')
+    # place other possible fields here, ISBN and Course only for right now.
 
+    slug = AutoSlugField(populate_from='isbn', unique=True)
+
+    # this should change
     def __unicode__(self):
         return '<Lookout: %s>' % self.owner.user.username
 

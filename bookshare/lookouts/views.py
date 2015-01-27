@@ -1,29 +1,23 @@
-from django.shortcuts import render
+from lookouts.models import Lookout
+from lookouts.forms import LookoutForm
 
-# stuff copied out of the website views
+from django.views.generic import CreateView, UpdateView, DeleteView
+from braces.views import LoginRequiredMixin
+
 
 # saved searches
     # need to implement haystack stuff first
 
 ### VIEWS ###
+class CreateLookout(LoginRequiredMixin, CreateView):
+    # can only be viewed by the user who created the lookout!...
+    model = Lookout
+    form_class = LookoutForm
+    success_url = '/'
+    login_url = '/'
 
-#@login_required
-def create_lookout(request, username):
+# remember, see all the lookouts on the homepage
 
-    lookout_form = LookoutForm()
+#class UpdateLookout(LoginRequiredMixin, UpdateView):
 
-    if request.method == 'POST':
-        lookout_form = LookoutForm( request.POST )
-        if lookout_form.is_valid():
-            lookout = lookout_form.save(commit=False)
-            lookout.ISBN = lookout.ISBN.strip()
-            lookout.owner = request.user.seller
-            lookout.save()
-            return redirect( 'profile', username )
-
-    return render(request, 'create_lookout.html', {
-        'lookout_form': lookout_form,
-    },
-    )
-
-
+#class DeleteLookout(LoginRequiredMixin, DeleteView):

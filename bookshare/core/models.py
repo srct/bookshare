@@ -10,6 +10,7 @@ class Student(TimeStampedModel):
     rating = models.IntegerField(null=True,default=0)
 
     slug = AutoSlugField(populate_from='user', unique=True)
+    # populate from user.username, no?
 
     def __unicode__(self):
         return '%s' % self.user.username

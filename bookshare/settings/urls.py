@@ -17,13 +17,12 @@ urlpatterns = patterns('',
 
     # app-level urls
     url(r'^share/', include('trades.urls')),
+    url(r'^student/', include('core.urls')),
     # student urls?
 
     #### USER PAGES ####
     # home page
     url(r'^$', TemplateView.as_view(template_name='index.html'), name = 'homepage'),
-    # user profile page
-    url(r'^u/(?P<username>\w+)/?$', 'core.views.profile', name = 'profile'),
     # create lookout
     url(r'^u/(?P<username>\w+)/create-lookout/?$', 'lookouts.views.create_lookout', name = 'create_lookout'),
 

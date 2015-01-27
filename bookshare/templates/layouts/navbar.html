@@ -12,15 +12,17 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="{% url 'about' %}" target="_blank">About</a></li>
       {% if user.is_authenticated %}
-        <li><a href="#">Create Listing</a></li>
+        <li><a href="{% url 'createListing' %}">Create Listing</a></li>
+        <li><a href="{% url 'all_listings' %}">Latest Listings</a></li>
+      {% else %}
+        <li><a href="{% url 'about' %}">About</a></li>
       {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
-        <li><a href="{% url 'haystack_search' %}">Search</a></li>
         <li><a href="{% url 'profile' request.user.username %}">My Account</a></li>
+        <li><a href="#"><i class="fa fa-search fa-lg"></i></a></li>
         <li><a href="/logout">Log Out</a></li>
         {% else %}
         <li><a href="/login">Log In</a></li>

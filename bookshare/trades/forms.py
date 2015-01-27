@@ -1,6 +1,10 @@
-from django.db import models
 from django import forms
-from trades.models import Bid
+
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder, HTML, Field
+from crispy_forms.bootstrap import AppendedPrependedText
+
+from trades.models import Listing, Bid
 
 class BidForm( forms.ModelForm ):
 
@@ -57,77 +61,51 @@ class CloseForm( forms.Form ):
 
 
 class ListingForm( ModelForm ):
+
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop("request")
+
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_class='form-horizontal'
+        self.helper.layout = Layout(
+             Fieldset("Your Textbook",
+                 Field('isbn', title="ISBN"),
+                 HTML("""<hr/ >"""),
+                 'title',
+                 'author',
+                 'edition',
+                 'year',
+                 HTML("""<hr/ >"""),
+                 #'course',
+                 'condition',
+                 AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
+                 'photo',
+                 Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester'),
+                 HTML("""<hr/ >"""),
+             ),
+        )
+
+        self.helper.add_input(Submit('submit', 'Submit'))
+
         super(ListingForm, self).__init__(*args, **kwargs)
+        self.fields['isbn'].label = "ISBN"
+        self.fields['description'].label = "Description/Comments"
 
     class Meta:
         model = Listing
-        fields = ('isbn', 'title', 'author', 'year', 'edition',
-        'book_condition', 'price', 'description', 'photo')
-        exclude = ('seller', 'date_created', 'date_sold', 'sold',
-        'finalPrice')
-        labels = {
-            'isbn': 'ISBN',
-            'title': 'Title',
-            'author': 'Author',
-            'year': 'Year',
-            'edition': 'Edition',
-            'book_condition': 'Condition',
-            'price': 'Price',
-            'description': 'Description',
-            'photo': 'Photo',
-        }
-        widgets = {
-            'isbn': TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Book ISBN',
-                'pattern': '[0-9xX-]{10,20}',
-            }),
-            'title': TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Book Title',
-            }),
-            'author': TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Book Author',
-            }),
-            'year': NumberInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Year Published',
-            }),
-            'edition': TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Book Edition',
-            }),
-            'book_condition': Select(attrs={
-                'class': 'form-control',
-            }),
-            'price': NumberInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Asking Price',
-            }),
-            'description': Textarea(attrs={
-                'rows': 3,
-                'class': 'form-control',
-            }),
-            'photo': FileInput(attrs={
-                'placeholder': 'Asking Price',
-            }),
-        }
 
-    def clean(self):
-        error_message = "You've already posted a listing with this ISBN. Close that listing first."
-        cleaned_data = super(ListingForm, self).clean()
+#    def clean(self):
+#        error_message = "You've already posted a listing with this ISBN. Close that listing first."
+#        cleaned_data = super(ListingForm, self).clean()
 
-        cleaned_isbn = cleaned_data.get('isbn')
-        cleaned_seller = self.request.user.seller
+#        cleaned_isbn = cleaned_data.get('isbn')
+#        cleaned_seller = self.request.user.seller
 
-        existing_listings = Listing.objects.filter(isbn=cleaned_isbn,
-                                                    seller=cleaned_seller,
-                                                    active=True)
+#        existing_listings = Listing.objects.filter(isbn=cleaned_isbn,
+#                                                    seller=cleaned_seller,
+#                                                    active=True)
 
-        if len( existing_listings ) > 0:
-            raise ValidationError(error_message)
+#        if len( existing_listings ) > 0:
+#            raise ValidationError(error_message)
 
-        return cleaned_data
+#        return cleaned_data

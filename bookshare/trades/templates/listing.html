@@ -65,7 +65,7 @@ SRCT Bookshare &bull; {{listing.title}}
           ${{ listing.price }}
         {% endif %}
       </h1>
-      <h4><small>Listed</small> {{ listing.created }}</h4>
+      <h4><small>Listed</small> {{ listing.created|date:"M d y P" }}</h4>
       Sold by<a href="#"> {{ listing.seller.username }}</a> | 
       <span class="label label-danger"><strong><a href="#"><i class="fa fa-flag"></i> Report</a></strong></span>
       {% if request.user = listing.seller.user %}
@@ -89,7 +89,7 @@ SRCT Bookshare &bull; {{listing.title}}
     <h4><small>Condition</small> {{ listing.condition }}</h4>
   </div>
 
-  <div class="col-md-7 col-sm-12 col-xs-12">
+  <div class="col-md-6 col-sm-12 col-xs-12">
     <h4><small>Description/Comments</small>
     {% if listing.description %}
       {{ listing.description }}
@@ -97,8 +97,12 @@ SRCT Bookshare &bull; {{listing.title}}
       None provided.</h4>
     {% endif %}
   </div>
+  <div class="col-md-1 col-sm-12 col-xs-12">
+    <h4><strong>ENGH 302</strong></h4>
+  </div>
 </div>
 
+<div class="row">
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="panel panel-default" style="margin-top:10px;">
       <div class="panel-heading">
@@ -123,21 +127,22 @@ SRCT Bookshare &bull; {{listing.title}}
                 {{ bid.bidder.user.first_name }}
                 {{ bid.bidder.user.last_name }}
               </a>
-              <br />
-              {{ bid.date_created }}
             </div>
 
-            <div class="col-lg-7">
-              <h5>
+            <div class="col-lg-2">
+              <h4><small>{{ bid.created|date:"M d y P" }}</small></h4>
+            </div>
+
+            <div class="col-lg-6">
+              <h4>
               {% if bid.text %}
                 {{ bid.text }}
               {% else %}
-                No comment posted.
               {% endif %}
-              </h5>
+              </h4>
             </div>
 
-            <div class="col-lg-2 text-center">
+            <div class="col-lg-1">
               <h4><strong>${{ bid.price }}</strong></h4>
             </div>
 
@@ -245,6 +250,7 @@ SRCT Bookshare &bull; {{listing.title}}
       </div>
     </div>
   </div>
+</div>
 
 </div>
 

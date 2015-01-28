@@ -1,0 +1,257 @@
+{% extends 'layouts/base.html' %}
+{% load thumbnail %}
+
+{% block title %}
+SRCT Bookshare &bull; {{listing.title}}
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header" id="banner">
+{% if listing.sold %}
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="alert alert-danger text-center">
+        <strong>This listing has been sold.</strong>
+      </div>
+    </div>
+  </div>
+{% elif not listing.active %}
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="alert alert-danger text-center">
+        <strong>This listing has been closed.</strong>
+      </div>
+    </div>
+  </div>
+{% elif old %}
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">&times;</button>
+        Heads up, this listing is <strong>over a month old</strong> and may no longer be valid!
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+  <div class="row">
+    <div class="col-md-8 col-sm-6 col-xs-12">
+      <h1>
+        <em>{{ listing.title }}</em>
+      </h1>
+
+      <h4>
+        <small>by</small> {{ listing.author }}
+        {% if listing.year %}
+          ({{ listing.year }})
+        {% endif %}
+      </h4>
+
+      <h4>
+        {% if listing.edition %}
+          {{ listing.edition }}<small>th edition</small> | 
+        {% endif %}
+        <small>ISBN</small> {{ listing.isbn }}
+      </h4>
+    </div>
+
+    <div class="col-md-4 col-sm-6 col-xs-12 text-right">
+      <h1>
+        {% if listing.sold %}
+          ${{ listing.finalPrice }}
+        {% else %}
+          ${{ listing.price }}
+        {% endif %}
+      </h1>
+      <h4><small>Listed</small> {{ listing.created|date:"M d y P" }}</h4>
+      Sold by<a href="#"> {{ listing.seller.username }}</a> | 
+      <span class="label label-danger"><strong><a href="#"><i class="fa fa-flag"></i> Report</a></strong></span>
+      {% if request.user = listing.seller.user %}
+      <br /><a href="{% url 'profile' request.user.username %}">Manage Listing</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class ="row">
+  <div class="col-md-3 col-sm-12 col-xs-12">
+    <div class="text-center">
+      <a href="{{ media }}{{ listing.photo }}" class="thumbnail">
+        <img src="{{ listing.photo|thumbnail_url:'listing_photo' }}"
+        alt="User submitted textbook photo" class="img-thumbnail" />
+      </a>
+    </div>
+  </div>
+
+  <div class="col-md-2 col-sm-12 col-xs-12">
+    <h4><small>Condition</small> {{ listing.condition }}</h4>
+  </div>
+
+  <div class="col-md-6 col-sm-12 col-xs-12">
+    <h4><small>Description/Comments</small>
+    {% if listing.description %}
+      {{ listing.description }}
+    {% else %}
+      None provided.</h4>
+    {% endif %}
+  </div>
+  <div class="col-md-1 col-sm-12 col-xs-12">
+    <h4><strong>ENGH 302</strong></h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="panel panel-default" style="margin-top:10px;">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#bids">
+            Hide/Show Bids ({{ bid_count }})
+          </a>
+        </h4>
+      </div>
+      <div class="panel-body">
+
+        {% if bids %}
+        <div id="bids" class="panel-collapse collapse in">
+        {% endif %}
+
+        {% for bid in bids %}
+        <!-- BID DISPLAY -->
+          <div class="row">
+
+            <div class="col-lg-3">
+              <a href="{{ bid.bidder.get_absolute_url }}">
+                {{ bid.bidder.user.first_name }}
+                {{ bid.bidder.user.last_name }}
+              </a>
+            </div>
+
+            <div class="col-lg-2">
+              <h4><small>{{ bid.created|date:"M d y P" }}</small></h4>
+            </div>
+
+            <div class="col-lg-6">
+              <h4>
+              {% if bid.text %}
+                {{ bid.text }}
+              {% else %}
+              {% endif %}
+              </h4>
+            </div>
+
+            <div class="col-lg-1">
+              <h4><strong>${{ bid.price }}</strong></h4>
+            </div>
+
+          </div>
+
+          <hr/>
+
+        <!-- BID DISPLAY -->
+        {% endfor %}
+
+        {% if bids %}
+        </div>
+        {% endif %}
+
+        <!-- BID FORM -->
+        <div class="row">
+          <div class="col-lg-12">
+
+            {% if listing.active and not listing.sold %}
+              <form class="form-horizontal" action="" method="post" role="form">
+                {% csrf_token %}
+                <fieldset>
+                  <legend>Your Bid</legend>
+
+                  <div class="form-group has-error">
+                    <div class="col-lg-10 col-lg-offset-2">
+
+                      {% for error in bid_form.non_field_errors %}
+                        <span class="help-block">{{ error }}</span>
+                      {% endfor %}
+
+                      {% if listing.seller.user == request.user %}
+                        <span class="help-block">You can't bid on your own
+                        listing!</span>
+                      {% endif %}
+
+                    </div>
+                  </div>
+
+                  <div class="form-group{%if bid_form.price.errors%} has-error{%endif%}">
+                    <label for="{{bid_form.price.id_for_label}}"
+                    class="col-lg-2 control-label">
+                      {{bid_form.price.label}}
+                    </label>
+
+                    <div class="col-lg-10">
+                      <div class="input-group">
+                        <span class="input-group-addon"> $ </span>
+                        {% if listing.seller.user == request.user %}
+                          <input type="text" class="form-control"
+                          placeholder="Price" disabled>
+                        {% else %}
+                          {{bid_form.price}}
+                        {% endif %}
+                      </div>
+                      {%for error in bid_form.price.errors%}
+                        <span class="help-block">{{ error }}</span>
+                      {%endfor%}
+                    </div>
+                  </div>
+
+                  <div class="form-group{%if bid_form.text.errors%} has-error{%endif%}">
+                    <label for="{{bid_form.text.id_for_label}}"
+                    class="col-lg-2 control-label">
+                      {{bid_form.text.label}}
+                    </label>
+
+                    <div class="col-lg-10">
+                      {% if listing.seller.user == request.user %}
+                        <textarea class="form-control" rows="3"
+                        disabled></textarea>
+                      {% else %}
+                        {{bid_form.text}}
+                      {% endif %}
+                      {%for error in bid_form.text.errors%}
+                        <span class="help-block">{{ error }}</span>
+                      {%endfor%}
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-lg-10 col-lg-offset-2">
+                      {% if listing.seller.user == request.user %}
+                        <button type="submit" class="btn btn-primary"
+                        value="Submit" disabled="">Submit a Bid</button>
+                      {% else %}
+                        <button type="submit" class="btn btn-primary"
+                        value="Submit">Submit a Bid</button>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                </fieldset>
+              </form>
+            {% else %}
+
+              <h5 class="text-center">You cannot bid on an incative listing.</h5>
+
+            {% endif %}
+
+          </div>
+        </div>
+        <!-- BID FORM -->
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+{% endblock %}

@@ -7,21 +7,24 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{% url 'homepage' %}"><strong>GMU</strong>BOOKSHARE</a>
+      <a class="navbar-brand" href="{% url 'homepage' %}"><strong>SRCT</strong>BOOKSHARE</a>
     </div>
-
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="{% url 'about' %}">About</a></li>
       {% if user.is_authenticated %}
-        <li><a href="{% url 'create_listing' %}">Create Listing</a></li>
+        <li><a href="{% url 'createListing' %}">Create Listing</a></li>
+        <li><a href="{% url 'all_listings' %}">Latest Listings</a></li>
+      {% else %}
+        <li><a href="{% url 'about' %}">About</a></li>
       {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
-        <li><a href="{% url 'haystack_search' %}">Search</a></li>
-        <li><a href="{% url 'profile' request.user.username %}">My Account</a></li>
+        <li><a href="#"><i class="fa fa-search fa-lg"></i></a></li>
+        {% load gravatar %}
+        <li><a href="{% url 'profile' request.user.username %}">
+          <img class="img-circle img-responsive center center-block" src="{% gravatar_url student.user.email 21 %}"></a></li>
         <li><a href="/logout">Log Out</a></li>
         {% else %}
         <li><a href="/login">Log In</a></li>

@@ -109,7 +109,7 @@ The .\* is to grant access all tables in the database, and 'flush privileges' re
 
 Now, to configure your newly created database with the project settings, copy the secret.py.template in settings/ to secret.py. Follow the comment instructions provided in each file to set your secret key and database info.
 
-Finally, run `python manage.py migrate` to initally set up the tables.
+Run `python manage.py migrate` to initally set up the tables, and then run `python manage.py createsuperuser` to create an admin account, using the same username and email as you'll access through CAS.
 
 ### Elasticsearch Configuration
 

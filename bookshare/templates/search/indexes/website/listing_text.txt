@@ -1,6 +1,0 @@
-{{ object.title }}
-{{ object.author }}
-{{ object.ISBN }}
-{{ object.year }}
-{{ object.edition }}
-{{ object.description }}

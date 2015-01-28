@@ -1,0 +1,18 @@
+<div class="panel panel-info">
+  <div class="panel-body">
+    <h3>
+      <span class="pull-right"><strong>${{ listing.price }}</strong></span>
+      {% if listing.sold or not listing.active %}
+        [Closed]
+      {% endif %}
+      <a href="{{ listing.get_absolute_url }}">
+        <em>{{ listing.title }}</em>
+      </a>
+    </h3>
+    <h4>
+      <p><small>Author(s)</small>: {{listing.author }}</p>
+      <p><small>ISBN</small>: {{ listing.isbn }}</p>
+      <p><small>Condition</small>: {{ listing.condition }}</p>
+    </h4>
+  </div>
+</div>

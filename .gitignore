@@ -1,8 +1,10 @@
 *.pyc
-*.swp
+*.sw*
 /.virtualenv
 media
 bookshare/static/admin
 bookshare/settings/secret.py
 bookshare/settings/whoosh_index/
+.idea/*
+.idea
 *~

@@ -1,4 +1,7 @@
 from django.contrib import admin
-from lookouts.models import Lookout
+from .models import Lookout
 
-admin.site.register(Lookout)
+@admin.register(Lookout)
+class LookoutAdmin(admin.ModelAdmin):
+	list_display = ('id', 'created', 'modified', 'owner', 'isbn')
+	list_filter = ('created', 'modified', 'owner')

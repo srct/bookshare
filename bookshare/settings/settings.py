@@ -5,6 +5,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'trades/templates'),
+    os.path.join(BASE_DIR, 'core/templates'),
+    os.path.join(BASE_DIR, 'lookouts/templates'),
 )
 
 STATICFILES_DIRS = (
@@ -34,14 +37,18 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'website',
-    'bids',
+    'trades',
+    'core',
     'lookouts',
+    'django_gravatar',
+    'crispy_forms',
     'easy_thumbnails',
     'haystack',
     'piwik',
     'django.contrib.admindocs',
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -94,6 +101,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 STATIC_URL = '/static/'
 
 THUMBNAIL_ALIASES = {'': {
@@ -116,11 +125,11 @@ AUTHENTICATION_BACKENDS = (
 CAS_SERVER_URL = 'https://login.gmu.edu'
 CAS_LOGOUT_COMPLETELY = True
 CAS_PROVIDE_URL_TO_LOGOUT = True
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
+#LOGIN_URL = '/login/'
+#LOGOUT_URL = '/logout/'
 
 CAS_RESPONSE_CALLBACKS = (
-    'website.cas_callbacks.create_user',
+    'core.cas_callbacks.create_user',
 )
 
 HAYSTACK_CONNECTIONS = {

@@ -20,4 +20,7 @@ class CreateLookout(LoginRequiredMixin, CreateView):
 
 #class UpdateLookout(LoginRequiredMixin, UpdateView):
 
-#class DeleteLookout(LoginRequiredMixin, DeleteView):
+class DeleteLookout(LoginRequiredMixin, DeleteView):
+    model=Lookout
+    success_url = '/'
+    # user?...

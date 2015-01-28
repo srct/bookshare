@@ -50,6 +50,27 @@ class ListListings(LoginRequiredMixin, ListView):
     context_object_name = 'listings'
     login_url = '/'
 
+class DetailListing(LoginRequiredMixin, DetailView):
+    model = Listing
+    context_object_name = 'listing'
+
+    # see this for the bidding form
+    # https://docs.djangoproject.com/en/1.7/topics/class-based-views/mixins/#an-alternative-better-solution
+
+    # further need to incorporate much of the logic below somewhere
+    # - bid count
+    # - bid's age, then if 'old'
+    # - whether it's the person who posted the bid or someone else
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailListing, self.get_context_data(**kwargs)
+        context['bids'] = Bid.objects.filter(listing__name=''+self.get_object(),name).order_by('-created')
+
+        return context 
+
+    login_url = '/'
+
+"""
 # Listing page
 def view_listing(request, book_id):
 
@@ -94,6 +115,7 @@ def view_listing(request, book_id):
         'bid_form' : bid_form,
     },
     )
+"""
 
 class CreateListing(LoginRequiredMixin, CreateView):
     model = Listing

@@ -19,4 +19,13 @@ urlpatterns = patterns('',
             model=Listing,
             template_name='createListing.html'),
         name='createListing'),
+
+    url(r'^new/$',
+        DetailListing.as_view(
+            model=Listing,
+            # slug_field='slug__exact',
+            context_object_name='building',
+            template_name='listing.html'),
+        name='listing'),
+
 )

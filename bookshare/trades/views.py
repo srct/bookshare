@@ -62,10 +62,11 @@ class DetailListing(LoginRequiredMixin, DetailView):
     # - bid's age, then if 'old'
     # - whether it's the person who posted the bid or someone else
 
-    #def get_context_data(self, **kwargs):
-        #context = super(DetailListing, self.get_context_data(**kwargs)
-        #context['bids'] = Bid.objects.filter(listing__name=''+self.get_object(),name).order_by('-created')
-        #return context 
+    def get_context_data(self, **kwargs):
+        context = super(DetailListing, self).get_context_data(**kwargs)
+        # bids, filter by listing name of the current listing, order by date created
+        context['bids'] = Bid.objects.filter(listing=self.get_object()).order_by('-created')
+        return context 
 
     login_url = '/'
 

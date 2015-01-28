@@ -38,21 +38,6 @@ Navigate to the directory you in which you want to download the project, and run
 
 ### Package Installation
 
-First, add elasticsearch to your repositories. Edit your repository sources
-
-`sudo nano /etc/apt/sources.list`
-
-by adding
-
-`## elasticsearch`
-`deb http://packages.elasticsearch.org/elasticsearch/1.3/debian stable main`
-
-at the end of the file.
-
-Next, add the repository's public signing key by running
-
-`sudo wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -`
-
 Next, install these packages from the standard repositories
 
 `$ sudo apt-get install libldap2-dev mysql-server mysql-client libmysqlclient-dev python-mysqldb`elasticsearch libsasl2-dev`
@@ -111,7 +96,7 @@ Now, to configure your newly created database with the project settings, copy th
 
 Run `python manage.py migrate` to initally set up the tables, and then run `python manage.py createsuperuser` to create an admin account, using the same username and email as you'll access through CAS.
 
-### Elasticsearch Configuration
+### Haystack Configuration
 
 Note: Using the standard SearchIndex, your search index content is only updated whenever you run either `python manage.py update_index` or start afresh with `python manage.py rebuild_index`.
 

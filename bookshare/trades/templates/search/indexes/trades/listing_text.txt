@@ -1,6 +1,7 @@
 {{ object.title }}
 {{ object.author }}
-{{ object.ISBN }}
+{{ object.isbn }}
 {{ object.year }}
 {{ object.edition }}
 {{ object.description }}
+{{ object.created }}

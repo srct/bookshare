@@ -16,6 +16,9 @@ urlpatterns = patterns('',
     url(r'^student/', include('core.urls')),
     url(r'^lookouts/', include('lookouts.urls')),
 
+    # search
+    url(r'^search/', include('haystack.urls'), name='search'),
+
     ### static pages ###
     url(r'^$', TemplateView.as_view(template_name='index.html'), name = 'homepage'),
     url(r'^about/?$', TemplateView.as_view(template_name='about.html'), name='about'),

@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'django_gravatar',
     'crispy_forms',
     'easy_thumbnails',
-    #'haystack',
+    'haystack',
     'piwik',
     'django.contrib.admindocs',
 )

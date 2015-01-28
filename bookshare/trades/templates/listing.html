@@ -43,7 +43,7 @@ SRCT Bookshare &bull; {{listing.title}}
       </h1>
 
       <h4>
-        by {{ listing.author }}
+        <small>by</small> {{ listing.author }}
         {% if listing.year %}
           ({{ listing.year }})
         {% endif %}
@@ -51,9 +51,9 @@ SRCT Bookshare &bull; {{listing.title}}
 
       <h4>
         {% if listing.edition %}
-          {{ listing.edition }} | 
+          {{ listing.edition }}<small>th edition</small> | 
         {% endif %}
-        <em>{{ listing.ISBN }}</em>
+        <small>ISBN</small> {{ listing.isbn }}
       </h4>
     </div>
 
@@ -65,9 +65,9 @@ SRCT Bookshare &bull; {{listing.title}}
           ${{ listing.price }}
         {% endif %}
       </h1>
-      <h4>Listed {{ listing.date_created }}</h4>
-      <a href="{{ listing.seller.get_absolute_url }}">Contact Seller</a> | 
-      <a href="#">Report Listing</a>
+      <h4><small>Listed</small> {{ listing.created }}</h4>
+      Sold by<a href="#"> {{ listing.seller.username }}</a> | 
+      <span class="label label-danger"><strong><a href="#"><i class="fa fa-flag"></i> Report</a></strong></span>
       {% if request.user = listing.seller.user %}
       <br /><a href="{% url 'profile' request.user.username %}">Manage Listing</a>
       {% endif %}
@@ -76,7 +76,6 @@ SRCT Bookshare &bull; {{listing.title}}
 </div>
 
 <div class ="row">
-
   <div class="col-md-3 col-sm-12 col-xs-12">
     <div class="text-center">
       <a href="{{ media }}{{ listing.photo }}" class="thumbnail">
@@ -86,21 +85,19 @@ SRCT Bookshare &bull; {{listing.title}}
     </div>
   </div>
 
-  <div class="col-md-6 col-sm-12 col-xs-12">
-    <div class="col-md-9 col-sm-12 col-xs-12">
-      <h4>Condition</h4>
-      <p>{{ listing.book_condition }}</p>
-    </div>
-
-    <div class="col-md-9 col-sm-12 col-xs-12">
-      <h4>Description</h4>
-      {% if listing.description %}
-        <p>{{ listing.description }}</p>
-      {% else %}
-        <p>None provided.</p>
-      {% endif %}
-    </div>
+  <div class="col-md-2 col-sm-12 col-xs-12">
+    <h4><small>Condition</small> {{ listing.condition }}</h4>
   </div>
+
+  <div class="col-md-7 col-sm-12 col-xs-12">
+    <h4><small>Description/Comments</small>
+    {% if listing.description %}
+      {{ listing.description }}
+    {% else %}
+      None provided.</h4>
+    {% endif %}
+  </div>
+</div>
 
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="panel panel-default" style="margin-top:10px;">

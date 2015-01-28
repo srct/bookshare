@@ -1,5 +1,5 @@
+import datetime
 from haystack import indexes
-from django.utils import timezone
 from .models import Listing
 
 class ListingIndex(indexes.SearchIndex, indexes.Indexable):
@@ -13,7 +13,8 @@ class ListingIndex(indexes.SearchIndex, indexes.Indexable):
     # search filtering
     title = indexes.CharField( model_attr = 'title' )
     author = indexes.CharField( model_attr = 'author' )
-    ISBN = indexes.CharField( model_attr = 'ISBN' )
+    ISBN = indexes.CharField( model_attr = 'isbn' )
+    #course = indexes.CharField( model_attr = 'course' )
 
     def get_model(self):
         return Listing

@@ -50,13 +50,14 @@ class Listing(TimeStampedModel):
     active = models.BooleanField(default=True)
     finalPrice = models.IntegerField(blank=True,default=0)
 
-    #slug = AutoSlugField(populate_from="isbn + user.username", unique=True)
+    # this isn't even what I want, but the stripped down simplistic version doesn't even work
+    slug = AutoSlugField(populate_from='isbn', unique=True)
 
     # object call
     def __unicode__(self):
         if not self.active:
             return '[Inactive] %s : %s' % (self.isbn, self.title)
-        return '%s : %s' % (self.ISBN, self.title)
+        return '%s : %s' % (self.isbn, self.title)
 
     class Meta:
         #unique_together = (("ISBN", "seller"),)

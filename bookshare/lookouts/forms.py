@@ -1,22 +1,30 @@
 from django import forms
-from django.forms import ModelForm, TextInput
+
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder, HTML, Field
+#from crispy_forms.bootstrap import PrependedText
+
 from lookouts.models import Lookout
 
-class LookoutForm( ModelForm ):
+class LookoutForm( forms.ModelForm ):
+
+def __init__(self, *args, **kwargs):
+
+    self.helper = FormHelper()
+    self.helper.form_method = 'post'
+    self.helper.form_class = 'form-horizontal'
+    self.helper.layout = Layout(
+        Fieldset("Your Layout",
+        'isbn',
+        ),
+    )
+
+    self.helper.add_input(Submit('submit', 'Submit'))
+
+    super(LookoutForm, self).__init__(*args, **kwargs)
+
     class Meta:
         model = Lookout
-        fields = ['isbn']
-        exclude = ['owner', 'date_created']
-        labels = {
-            'isbn': 'ISBN',
-        }
-        widgets = {
-            'isbn': TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Book ISBN',
-                'pattern': '[0-9xX-]{10,20}',
-            }),
-        }
 
 class DeleteLookoutForm( forms.Form ):
     lookout_id = forms.IntegerField(

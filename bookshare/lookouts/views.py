@@ -4,10 +4,6 @@ from lookouts.forms import LookoutForm
 from django.views.generic import CreateView, UpdateView, DeleteView
 from braces.views import LoginRequiredMixin
 
-
-# saved searches
-    # need to implement haystack stuff first
-
 ### VIEWS ###
 class CreateLookout(LoginRequiredMixin, CreateView):
     # can only be viewed by the user who created the lookout!...

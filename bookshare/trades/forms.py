@@ -60,7 +60,7 @@ class CloseForm( forms.Form ):
     )
 
 
-class ListingForm( ModelForm ):
+class ListingForm( forms.ModelForm ):
 
     def __init__(self, *args, **kwargs):
 

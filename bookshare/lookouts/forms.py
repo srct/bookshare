@@ -8,20 +8,20 @@ from lookouts.models import Lookout
 
 class LookoutForm( forms.ModelForm ):
 
-def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
-    self.helper = FormHelper()
-    self.helper.form_method = 'post'
-    self.helper.form_class = 'form-horizontal'
-    self.helper.layout = Layout(
-        Fieldset("Your Layout",
-        'isbn',
-        ),
-    )
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.layout = Layout(
+            Fieldset("Your Layout",
+                'isbn',
+            ),
+        )
 
-    self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', 'Submit'))
 
-    super(LookoutForm, self).__init__(*args, **kwargs)
+        super(LookoutForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Lookout

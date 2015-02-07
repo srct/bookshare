@@ -13,6 +13,8 @@ class Lookout(TimeStampedModel):
 
     slug = AutoSlugField(populate_from='isbn', unique=True)
 
+    # needs get_absolute_url
+
     # this should change
     def __unicode__(self):
         return '<Lookout: %s>' % self.owner.user.username

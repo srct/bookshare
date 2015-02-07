@@ -53,6 +53,11 @@ class Listing(TimeStampedModel):
     # this isn't even what I want, but the stripped down simplistic version doesn't even work
     slug = AutoSlugField(populate_from='isbn', unique=True)
 
+    # retrieve url for object
+#    def get_absolute_url(self):
+#        from django.core.urlresolvers import reverse
+#        return reverse('trades.views.DetailListing', args=[str(self.id)])  
+
     # object call
     def __unicode__(self):
         if not self.active:

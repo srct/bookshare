@@ -12,6 +12,8 @@ class Student(TimeStampedModel):
     slug = AutoSlugField(populate_from='user', unique=True)
     # populate from user.username, no?
 
+    # needs a get_absolute_url ?
+
     def __unicode__(self):
         return '%s' % self.user.username
 

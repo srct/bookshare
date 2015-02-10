@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     url(r'^all/$',
         ListListings.as_view(
             model=Listing,
-            paginate_by = 25,
+            paginate_by = 15,
             queryset=Listing.objects.all().order_by('-created'),
             context_object_name='listings',
             template_name='listListings.html'),

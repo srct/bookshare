@@ -35,10 +35,6 @@ class BidForm( forms.ModelForm ):
             }),
         }
 
-from django.core.exceptions import ValidationError
-from django.forms import ModelForm, Textarea, TextInput, NumberInput, Select, FileInput
-from trades.models import Listing#, Seller # where did we put seller?
-
 class FinalPriceForm( forms.Form ):
     book_id = forms.IntegerField(
         required = True,

@@ -7,7 +7,9 @@ from django.core.validators import RegexValidator
 class Student(TimeStampedModel):
     user = models.OneToOneField(User)
     # django user includes username, password, first name, and last name
-    rating = models.IntegerField(null=True,default=0)
+
+# implement ratings later
+#    rating = models.IntegerField(null=True,default=0)
 
     slug = AutoSlugField(populate_from='user', unique=True)
     # populate from user.username, no?

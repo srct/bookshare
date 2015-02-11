@@ -13,15 +13,15 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav">
       {% if user.is_authenticated %}
-        <li><a href="{% url 'createListing' %}">Create Listing</a></li>
-        <li><a href="{% url 'all_listings' %}">Latest Listings</a></li>
+        <li><a href="{% url 'create_listing' %}">Create Listing</a></li>
+        <li><a href="{% url 'list_listings' %}">Latest Listings</a></li>
       {% else %}
         <li><a href="{% url 'about' %}">About</a></li>
       {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}
-        <li><a href="#"><i class="fa fa-search fa-lg"></i></a></li>
+        <li><a href="/search"><i class="fa fa-search fa-lg"></i></a></li>
         {% load gravatar %}
         <li><a href="{% url 'profile' request.user.username %}">
           <img class="img-circle img-responsive center center-block" src="{% gravatar_url student.user.email 21 %}"></a></li>

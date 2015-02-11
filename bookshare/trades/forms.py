@@ -1,10 +1,57 @@
 from django import forms
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder, HTML, Field
-from crispy_forms.bootstrap import AppendedPrependedText
+from crispy_forms.layout import Submit, Layout, Fieldset, HTML, Field
+from crispy_forms.bootstrap import AppendedPrependedText, FormActions
 
 from trades.models import Listing, Bid
+
+class ListingForm( forms.ModelForm ):
+
+    helper = FormHelper()
+    helper.form_method = 'POST'
+    helper.form_class='form-horizontal'
+    helper.label_class='col-sm-2'
+    helper.field_class='col-sm-6'
+
+    helper.layout = Layout(
+        Fieldset("Your Textbook",
+            Field('isbn', title="ISBN"),
+            HTML("""<hr/ >"""),
+            Field('title'),
+            'author',
+            'edition',
+            'year',
+            HTML("""<hr/ >"""),
+            #'course',
+            'condition',
+            AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
+            'photo',
+            Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester'),
+            HTML("""<hr/ >"""),
+            FormActions(Submit('submit', 'Submit', css_class='btn-primary'))
+        ),
+    )
+
+    class Meta:
+        model = Listing
+        exclude = ('data_sold', 'sold', 'active', 'finalPrice')
+
+#    def clean(self):
+#        error_message = "You've already posted a listing with this ISBN. Close that listing first."
+#        cleaned_data = super(ListingForm, self).clean()
+
+#        cleaned_isbn = cleaned_data.get('isbn')
+#        cleaned_seller = self.request.user.seller
+
+#        existing_listings = Listing.objects.filter(isbn=cleaned_isbn,
+#                                                    seller=cleaned_seller,
+#                                                    active=True)
+
+#        if len( existing_listings ) > 0:
+#            raise ValidationError(error_message)
+
+#        return cleaned_data
 
 class BidForm( forms.ModelForm ):
 
@@ -35,10 +82,6 @@ class BidForm( forms.ModelForm ):
             }),
         }
 
-from django.core.exceptions import ValidationError
-from django.forms import ModelForm, Textarea, TextInput, NumberInput, Select, FileInput
-from trades.models import Listing#, Seller # where did we put seller?
-
 class FinalPriceForm( forms.Form ):
     book_id = forms.IntegerField(
         required = True,
@@ -60,52 +103,3 @@ class CloseForm( forms.Form ):
     )
 
 
-class ListingForm( forms.ModelForm ):
-
-    def __init__(self, *args, **kwargs):
-
-        self.helper = FormHelper()
-        self.helper.form_method = 'post'
-        self.helper.form_class='form-horizontal'
-        self.helper.layout = Layout(
-             Fieldset("Your Textbook",
-                 Field('isbn', title="ISBN"),
-                 HTML("""<hr/ >"""),
-                 'title',
-                 'author',
-                 'edition',
-                 'year',
-                 HTML("""<hr/ >"""),
-                 #'course',
-                 'condition',
-                 AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
-                 'photo',
-                 Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester'),
-                 HTML("""<hr/ >"""),
-             ),
-        )
-
-        self.helper.add_input(Submit('submit', 'Submit'))
-
-        super(ListingForm, self).__init__(*args, **kwargs)
-        self.fields['isbn'].label = "ISBN"
-        self.fields['description'].label = "Description/Comments"
-
-    class Meta:
-        model = Listing
-
-#    def clean(self):
-#        error_message = "You've already posted a listing with this ISBN. Close that listing first."
-#        cleaned_data = super(ListingForm, self).clean()
-
-#        cleaned_isbn = cleaned_data.get('isbn')
-#        cleaned_seller = self.request.user.seller
-
-#        existing_listings = Listing.objects.filter(isbn=cleaned_isbn,
-#                                                    seller=cleaned_seller,
-#                                                    active=True)
-
-#        if len( existing_listings ) > 0:
-#            raise ValidationError(error_message)
-
-#        return cleaned_data

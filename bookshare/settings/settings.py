@@ -31,21 +31,24 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 INSTALLED_APPS = (
     'django.contrib.admin',
+    'django.contrib.admindocs',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    # apps
     'trades',
     'core',
     'lookouts',
+    # packages
+    'randomslugfield',
     'django_gravatar',
     'crispy_forms',
     'easy_thumbnails',
     'haystack',
     'piwik',
-    'django.contrib.admindocs',
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'

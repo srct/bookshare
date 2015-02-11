@@ -8,24 +8,24 @@ urlpatterns = patterns('',
     url(r'^all/$',
         ListListings.as_view(
             model=Listing,
-            paginate_by = 25,
+            paginate_by = 15,
             queryset=Listing.objects.all().order_by('-created'),
             context_object_name='listings',
-            template_name='listListings.html'),
-        name='all_listings'),
+            template_name='list_listings.html'),
+        name='list_listings'),
 
     url(r'^new/$',
         CreateListing.as_view(
             model=Listing,
-            template_name='createListing.html'),
-        name='createListing'),
+            template_name='create_listing.html'),
+        name='create_listing'),
 
-    url(r'^(?P<slug>[\w-]+)/$',
+    url(r'^listing/(?P<slug>[\w-]+)/$',
         DetailListing.as_view(
             model=Listing,
             # slug_field='slug__exact',
             context_object_name='listing',
-            template_name='listing.html'),
-        name='listing'),
+            template_name='detail_listing.html'),
+        name='detail_listing'),
 
 )

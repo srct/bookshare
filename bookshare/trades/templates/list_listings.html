@@ -1,39 +1,27 @@
 {% extends 'layouts/base.html' %}
 
 {% block title %}
-SRCT Bookshare &bull; Homepage
+SRCT Bookshare &bull; Latest Listings
 {% endblock %}
 
 {% block content %}
 
 <div class="page-header" id="banner">
   <div class="row">
-    <div class="col-lg-12 text-center">
-      <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
-      <p class="lead">A place for Mason students to buy and sell textbooks.</p>
+    <div class="col-lg-12">
+      <h1 class="text-center"><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
+      <p class="lead text-center"><strong>Latest Listings</strong></p>
     </div>
   </div>
 </div>
 
-<div class="row">
-
-  <div class="col-sm-6">
-    <a href="{% url 'create_listing' %}" class="btn btn-primary btn-lg btn-block">
-      I have a book
-    </a>
-  </div>
-
-  <div class="col-sm-6">
-    <a href="{% url 'haystack_search' %}" class="btn btn-primary btn-lg btn-block">
-      I need a book
-    </a>
-  </div>
-
-</div>
-
-<hr/>
-
 {% if listings %}
+
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1 text-center">
+    <p>Want to <strong><a href="/search">search</a></strong> for something specific?</p>
+    </div>
+  </div>
 
   <div class="row">
 
@@ -103,15 +91,12 @@ SRCT Bookshare &bull; Homepage
 {% else %}
 
   <div class="row">
-    <div class="col-lg-12 text-center">
+    <div class="col-md-10 col-md-offset-1 text-center">
       <div class="panel panel-warning">
         <div class="panel-body">
-          <h3>No lookout results found.</h3>
+          <h3>There aren't any books in the database!</h3>
           <p>
-            Lookouts are books you have an eye out for. You can
-            <a data-toggle="modal" data-target="#CreateLookout" href="#">
-              set some</a>, and we'll automatically show them here when a
-            selling goes up.
+            Looks like you'll be the first to <a href="#">create one</a>!
           </p>
         </div>
       </div>
@@ -119,7 +104,5 @@ SRCT Bookshare &bull; Homepage
   </div>
 
 {% endif %}
-
-{% include 'create_lookout_modal.html' %}
 
 {% endblock %}

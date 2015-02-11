@@ -40,7 +40,7 @@ Navigate to the directory you in which you want to download the project, and run
 
 Next, install these packages from the standard repositories
 
-`$ sudo apt-get install libldap2-dev mysql-server mysql-client libmysqlclient-dev python-mysqldb`elasticsearch libsasl2-dev`
+`$ sudo apt-get install libldap2-dev mysql-server mysql-client libmysqlclient-dev python-mysqldb libsasl2-dev`
 
 If prompted to install additional required packages, install those as well.
 

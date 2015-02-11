@@ -17,7 +17,52 @@ SRCT Bookshare &bull; Homepage
     </div>
   </div>
 </div>
+{% if user.is_authenticated %}
+<legend class="text-center">Lookouts</legend>
+  {% if lookouts %}
+    <div class="row">
 
+    {% comment %}
+      Essentially the logic here is to create 3 columns where
+      there are n rows in each.
+
+      The first conditional will add an initial column tag if the loop is
+      beginning a new column. The second conditional adds a closing column
+      tag when the loop ends a column.
+    {% endcomment %}
+
+    {% for listing in my_lookouts %}
+
+      {% if forloop.counter|add:-1|divisibleby:rows %}
+      <div class="col-md-4">
+      {% endif %}
+
+        {% include 'listing_preview_panel.html' %}
+
+      {% if forloop.counter|add:rows|divisibleby:rows %}
+      </div>
+      {% endif %}
+
+    {% endfor %}
+    </div>
+
+  {% else %}
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-warning">
+          <div class="panel-body text-center">
+            <h3>No lookout results found.</h3>
+            <p>
+            Lookouts are automatic searches for books you have an eye out for. You can create some <a href="#">here</a>, and we'll automatically show you when a listing you want goes up.
+            <!-- <a data-toggle="modal" data-target="#CreateLookout" href="#"> -->
+            {% include 'create_lookout_modal.html' %}        
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% else %}
 <legend></legend>
 
 <div class="row">
@@ -38,17 +83,17 @@ SRCT Bookshare &bull; Homepage
     <h4>Get updates when textbooks you want are posted</h4>
   </div>
 </div>
-
+{% endif %}
 <legend></legend>
 
 <div class="row">
 
   <div class="col-sm-5 col-sm-offset-1">
-    <a href="{% url 'createListing' %}" class="btn btn-primary btn-lg btn-block">I <em>have</em> a book</a>
+    <a href="{% url 'create_listing' %}" class="btn btn-primary btn-lg btn-block">I <em>have</em> a book</a>
   </div>
 
   <div class="col-sm-5">
-    <a href="{% url 'all_listings' %}" class="btn btn-primary btn-lg btn-block">I <em>need</em> a book</a>
+    <a href="{% url 'list_listings' %}" class="btn btn-primary btn-lg btn-block">I <em>need</em> a book</a>
   </div>
 
 </div>

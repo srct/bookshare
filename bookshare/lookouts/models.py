@@ -4,6 +4,7 @@ from core.models import Course
 from django.conf import settings
 from model_utils.models import TimeStampedModel
 from autoslug import AutoSlugField
+from randomslugfield import RandomSlugField
 
 class Lookout(TimeStampedModel):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -11,7 +12,8 @@ class Lookout(TimeStampedModel):
     #course = models.ForeignKey('Course')
     # place other possible fields here, ISBN and Course only for right now.
 
-    slug = AutoSlugField(populate_from='isbn', unique=True)
+    isbnslug = AutoSlugField(populate_from='isbn')
+    randomslug = RandomSlugField(length=6, exclude_upper=True)
 
     # needs get_absolute_url
 

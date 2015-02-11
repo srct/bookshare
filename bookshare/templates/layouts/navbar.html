@@ -13,8 +13,8 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav">
       {% if user.is_authenticated %}
-        <li><a href="{% url 'createListing' %}">Create Listing</a></li>
-        <li><a href="{% url 'all_listings' %}">Latest Listings</a></li>
+        <li><a href="{% url 'create_listing' %}">Create Listing</a></li>
+        <li><a href="{% url 'list_listings' %}">Latest Listings</a></li>
       {% else %}
         <li><a href="{% url 'about' %}">About</a></li>
       {% endif %}

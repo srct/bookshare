@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from autoslug import AutoSlugField
 from model_utils.models import TimeStampedModel
 from django.core.validators import RegexValidator
+from django.core.urlresolvers import reverse
 
 class Student(TimeStampedModel):
     user = models.OneToOneField(User)
@@ -12,9 +13,9 @@ class Student(TimeStampedModel):
 #    rating = models.IntegerField(null=True,default=0)
 
     slug = AutoSlugField(populate_from='user', unique=True)
-    # populate from user.username, no?
 
-    # needs a get_absolute_url ?
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'slug':self.slug})
 
     def __unicode__(self):
         return '%s' % self.user.username

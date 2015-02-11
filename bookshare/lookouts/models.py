@@ -19,7 +19,7 @@ class Lookout(TimeStampedModel):
 
     # this should change
     def __unicode__(self):
-        return '<Lookout: %s>' % self.owner.user.username
+        return '%s %s' % (self.owner.username, self.isbn)
 
     def get_listings(self):
         isbn_listings = models.Q( isbn=self.isbn, active=True )

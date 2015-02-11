@@ -5,14 +5,14 @@ from lookouts.models import Lookout
 
 urlpatterns = patterns('',
 
-    url(r'^(username)/(?P<slug>[\w-]+)/$',
+    url(r'^(?P<randomslug>[\w-]+)/(?P<isbnslug>[\w-]+)/$',
         CreateLookout.as_view(
         model=Lookout,
         context_object_name='lookout',
         template_name='create_lookout.html'),
     name='create_lookout'),
 
-    url(r'(username)/(?P<slug>[\w-]+)/delete/$',
+    url(r'^(?P<randomslug>[\w-]+)/(?P<isbnslug>[\w-]+)/delete/$',
         DeleteLookout.as_view(
         model=Lookout,
         context_object_name='lookout',

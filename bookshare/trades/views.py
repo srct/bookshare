@@ -70,16 +70,14 @@ class DetailListing(LoginRequiredMixin, DetailView):
 
     login_url = '/'
 
+class CreateListing(LoginRequiredMixin, CreateView):
+    model = Listing
+    form_class = ListingForm
+    # ISBN query!
+    #success_url = '/'
+    login_url = '/'
+
 """
-# Listing page
-def view_listing(request, book_id):
-
-    # Grab the listing itself
-    listing = get_object_or_404(Listing,pk=book_id)
-
-    # grab the bidder
-    bidder = request.user.seller
-
     # if the listing is over a week old, it's old
     old_threshold = timezone.now() - timedelta(weeks=3)
 
@@ -87,24 +85,6 @@ def view_listing(request, book_id):
     bids = Bid.objects.filter( listing = listing )
     bid_count = len(bids)
 
-    bid_form = BidForm()
-    if request.method == 'POST' and listing.active and not listing.sold:
-        if listing.active and not listing.sold:
-            bid_form = BidForm( request.POST.copy() )
-
-            # Override whatever the user may have input into the bidder and
-            # listing fields (hopefully they will not have set these values
-            # anyway).
-            bid_form.data['bidder'] = bidder.pk
-            bid_form.data['listing'] = listing.pk
-
-            if bid_form.is_valid():
-                bid = bid_form.save(commit=False)
-                bid.bidder = bidder
-                bid.listing = listing
-                bid.full_clean()
-                bid.save()
-                return redirect( 'view_listing', listing.pk )
 
     return render(request, 'listing.html', {
         'listing' : listing,
@@ -116,10 +96,3 @@ def view_listing(request, book_id):
     },
     )
 """
-
-class CreateListing(LoginRequiredMixin, CreateView):
-    model = Listing
-    form_class = ListingForm
-    # ISBN query!
-    success_url = '/'
-    login_url = '/'

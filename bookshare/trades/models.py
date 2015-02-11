@@ -1,10 +1,12 @@
 from django.db import models
 from model_utils.models import TimeStampedModel
-from autoslug import AutoSlugField
+#from autoslug import AutoSlugField
+from randomslugfield import RandomSlugField
 
 from core.models import Course
 
 from django.core.validators import MinValueValidator, RegexValidator
+from django.core.urlresolvers import reverse
 from django.conf import settings
 
 class Listing(TimeStampedModel):
@@ -30,7 +32,7 @@ class Listing(TimeStampedModel):
     author = models.CharField(max_length = 200)
     isbn = models.CharField(
         max_length = 20,
-        validators = [RegexValidator('[0-9xX-]{10,20}', message='Enter a valid ISBN.')]
+        #validators = [RegexValidator('[0-9xX-]{10,20}', message='Enter a valid ISBN.')]
     )
     year = models.IntegerField(null=True,blank=True)
     edition = models.CharField(blank=True, default=0, max_length = 30)
@@ -40,18 +42,21 @@ class Listing(TimeStampedModel):
                                       max_length=20,
                                       default=GOOD)
     description = models.TextField(blank=True)
-    price = models.IntegerField( validators = [MinValueValidator(0)] )
+    #price = models.IntegerField( validators = [MinValueValidator(0)] )
+    price = models.IntegerField()
     photo = models.ImageField(
         max_length = 1000,
         upload_to = 'listing_photos',
-        default = 'listing_photos/default_listing_photo.png' )
+        default = 'static/img/default_listing_photo.jpg' )
 
     sold = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
     finalPrice = models.IntegerField(blank=True,default=0)
 
-    # this isn't even what I want, but the stripped down simplistic version doesn't even work
-    slug = AutoSlugField(populate_from='isbn', unique=True)
+    slug = RandomSlugField(length=6, exclude_upper=True)
+
+    def get_absolute_url(self):
+        return reverse('detail_listing', kwargs={'slug':self.slug})
 
     # retrieve url for object
 #    def get_absolute_url(self):

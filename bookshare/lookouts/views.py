@@ -20,7 +20,7 @@ class DetailLookout(LoginRequiredMixin, DetailView):
 
 # remember, see all the lookouts on the homepage
 
-#class UpdateLookout(LoginRequiredMixin, UpdateView):
+# updating is not neccessary since it's just literally an isbn and a course
 
 class DeleteLookout(LoginRequiredMixin, DeleteView):
     model=Lookout

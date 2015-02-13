@@ -30,19 +30,21 @@ SRCT Bookshare &bull; Homepage
       beginning a new column. The second conditional adds a closing column
       tag when the loop ends a column.
     {% endcomment %}
+    {% for lookout in lookouts %}
+      <legend>{{ lookout.isbn }}</legend>
+      {% for listing in lookouts %}
 
-    {% for listing in my_lookouts %}
+        {% if forloop.counter|add:-1|divisibleby:rows %}
+        <div class="col-md-4">
+        {% endif %}
 
-      {% if forloop.counter|add:-1|divisibleby:rows %}
-      <div class="col-md-4">
-      {% endif %}
+          {% include 'listing_preview_panel.html' %}
 
-        {% include 'listing_preview_panel.html' %}
+        {% if forloop.counter|add:rows|divisibleby:rows %}
+        </div>
+        {% endif %}
 
-      {% if forloop.counter|add:rows|divisibleby:rows %}
-      </div>
-      {% endif %}
-
+      {% endfor %}
     {% endfor %}
     </div>
 

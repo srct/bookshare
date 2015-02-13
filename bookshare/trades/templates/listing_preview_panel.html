@@ -3,7 +3,7 @@
     <h3>
       <span class="pull-right"><strong>${{ listing.price }}</strong></span>
       {% if listing.sold or not listing.active %}
-        [Closed]
+        <strong>[Closed]</strong>
       {% endif %}
       <a href="{{ listing.get_absolute_url }}">
         <em>{{ listing.title }}</em>

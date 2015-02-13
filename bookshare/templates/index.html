@@ -18,7 +18,7 @@ SRCT Bookshare &bull; Homepage
   </div>
 </div>
 {% if user.is_authenticated %}
-<legend class="text-center">Lookouts</legend>
+<legend class="text-center"><strong>Lookouts</strong></legend>
   {% if lookouts %}
     <div class="row">
 
@@ -31,8 +31,8 @@ SRCT Bookshare &bull; Homepage
       tag when the loop ends a column.
     {% endcomment %}
     {% for lookout in lookouts %}
-      <legend>{{ lookout.isbn }}</legend>
-      {% for listing in lookouts %}
+      <legend><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn }}</a></legend>
+      {% for listing in lookout.get_listings %}
 
         {% if forloop.counter|add:-1|divisibleby:rows %}
         <div class="col-md-4">
@@ -53,12 +53,16 @@ SRCT Bookshare &bull; Homepage
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-warning">
           <div class="panel-body text-center">
-            <h3>No lookout results found.</h3>
-            <p>
-            Lookouts are automatic searches for books you have an eye out for.
-            You can create some <a href="{% url 'create_lookout' %}">here</a>,
-            and we'll automatically show you when a listing you want goes up.
-            </p>
+            <div class="row">
+              <div class="col-md-10 col-md-offset-1">
+                <h3>No lookout results.</h3>
+                  <p>
+                  Lookouts are automatic searches for books you have an eye out for.
+                  You can <a href="{% url 'create_lookout' %}">create some</a>, and
+                  we'll automatically let you know  when a listing you want goes up.
+                  </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

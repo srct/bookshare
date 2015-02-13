@@ -6,8 +6,17 @@ SRCT Bookshare &bull; Lookouts
 
 {% block content %}
 
+<div class="page-header" id="banner">
+  <div class="row">
+    <div class="col-sm-12 text-center">
+      <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
+      <p class="lead"><strong>Your lookout for ISBN {{ lookout.isbn }}.</strong></p>
+    </div>
+  </div>
+</div>
+
 <div class="row">
-  {% for listing in lookouts %}
+  {% for listing in lookout.get_listings %}
 
     {% if forloop.counter|add:-1|divisibleby:rows %}
     <div class="col-md-4">

@@ -7,5 +7,6 @@ class HomepageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomepageView, self).get_context_data(**kwargs)
-        context['my_lookouts'] = Lookout.objects.all()
+        if self.request.user.is_authenticated():
+          context['lookouts'] = Lookout.objects.filter(owner=self.request.user)
         return context

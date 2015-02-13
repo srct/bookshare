@@ -55,13 +55,9 @@ class Listing(TimeStampedModel):
 
     slug = RandomSlugField(length=6, exclude_upper=True)
 
+    # retrieve url for object
     def get_absolute_url(self):
         return reverse('detail_listing', kwargs={'slug':self.slug})
-
-    # retrieve url for object
-#    def get_absolute_url(self):
-#        from django.core.urlresolvers import reverse
-#        return reverse('trades.views.DetailListing', args=[str(self.id)])  
 
     # object call
     def __unicode__(self):

@@ -28,4 +28,4 @@ class Course(TimeStampedModel):
 	number = models.CharField(max_length=3)
 
 	def __unicode__(self):
-		return "%s:%s  %s", self.department, self.number, self.name
+		return "%s %s" % (self.departmentAbbreviation, self.number)

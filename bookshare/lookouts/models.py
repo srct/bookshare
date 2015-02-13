@@ -19,9 +19,9 @@ class Lookout(TimeStampedModel):
     def get_absolute_url(self):
         return reverse('detail_lookout', kwargs={'slug':self.slug})
 
-    # this should change
     def __unicode__(self):
         return '%s %s' % (self.owner.username, self.isbn)
 
     class Meta:
         ordering = ['isbn']
+        unique_together = ['owner', 'isbn']

@@ -17,7 +17,6 @@ class LookoutForm( forms.ModelForm ):
     helper.layout = Layout(
         Fieldset("Your Lookout",
             Field('isbn', title="ISBN"),
-            'owner',
             HTML("""<hr/ >"""),
             FormActions(Submit('submit', 'Submit', css_class='btn-primary'))
         ),

@@ -1,0 +1,25 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+SRCT Bookshare &bull; Lookouts
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  {% for listing in lookouts %}
+
+    {% if forloop.counter|add:-1|divisibleby:rows %}
+    <div class="col-md-4">
+    {% endif %}
+
+      {% include 'listing_preview_panel.html' %}
+
+    {% if forloop.counter|add:rows|divisibleby:rows %}
+    </div>
+    {% endif %}
+
+  {% endfor %}
+</div>
+
+{% endblock %}

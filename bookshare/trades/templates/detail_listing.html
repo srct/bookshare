@@ -7,6 +7,8 @@ SRCT Bookshare &bull; {{listing.title}}
 
 {% block content %}
 
+{% load humanize %}
+
 <div class="page-header" id="banner">
 {% if listing.sold %}
   <div class="row">
@@ -51,7 +53,7 @@ SRCT Bookshare &bull; {{listing.title}}
 
       <h4>
         {% if listing.edition %}
-          {{ listing.edition }}<small>th edition</small> | 
+          {{ listing.edition|ordinal }}<small> edition</small> | 
         {% endif %}
         <small>ISBN</small> {{ listing.isbn }}
       </h4>

@@ -3,13 +3,16 @@ from model_utils.models import TimeStampedModel
 #from autoslug import AutoSlugField
 from randomslugfield import RandomSlugField
 
-from core.models import Course
+from core.models import Student, Course
 
-from django.core.validators import MinValueValidator, RegexValidator
+from django.core.validators import MaxValueValidator, RegexValidator
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
+from datetime import date
+
 class Listing(TimeStampedModel):
+
     NEW = 'New'
     LIKE_NEW = 'Like New'
     VERY_GOOD = 'Very Good'
@@ -26,38 +29,48 @@ class Listing(TimeStampedModel):
         (UNACCEPTABLE, 'Unacceptable'),
     )
 
-    seller = models.ForeignKey(settings.AUTH_USER_MODEL)
+    seller = models.ForeignKey(Student)
 
     title = models.CharField(max_length = 200)
     author = models.CharField(max_length = 200)
     isbn = models.CharField(
         max_length = 20,
-        #validators = [RegexValidator('[0-9xX-]{10,20}', message='Enter a valid ISBN.')]
-    )
-    year = models.IntegerField(null=True,blank=True)
-    edition = models.CharField(blank=True, default=0, max_length = 30)
-    # course
-    date_sold = models.DateTimeField(null=True,blank=True)
-    condition = models.CharField(choices=BOOK_CONDITION_CHOICES,
-                                      max_length=20,
-                                      default=GOOD)
-    description = models.TextField(blank=True)
-    #price = models.IntegerField( validators = [MinValueValidator(0)] )
-    price = models.IntegerField()
+        validators = [RegexValidator('[0-9xX-]{10,20}', message = 'Please enter a valid ISBN.')])
+    year = models.IntegerField(
+        null = True,
+        blank = True,
+        # some professors may assign books still to be officially published
+        validators = [MaxValueValidator(date.today().year+1)])
+    edition = models.PositiveIntegerField(
+        blank = True,
+        default = 1,
+        validators = [MaxValueValidator(1000)])
+    # would have to load in every conceivable course first
+    #course = models.ForeignKey(Course)
+    date_sold = models.DateTimeField(null = True, blank = True)
+    condition = models.CharField(choices = BOOK_CONDITION_CHOICES,
+        max_length = 20,
+        default = GOOD)
+    description = models.TextField(blank = True, max_length = 2000)
+    price = models.PositiveIntegerField(
+        default = 0,
+        validators = [MaxValueValidator(1000)])
     photo = models.ImageField(
         max_length = 1000,
         upload_to = 'listing_photos',
         default = 'static/img/default_listing_photo.jpg' )
+    sold = models.BooleanField(default = False)
+    active = models.BooleanField(default = True)
+    finalPrice = models.PositiveIntegerField(
+        blank = True,
+        default = 0,
+        validators = [MaxValueValidator(1000)])
 
-    sold = models.BooleanField(default=False)
-    active = models.BooleanField(default=True)
-    finalPrice = models.IntegerField(blank=True,default=0)
-
-    slug = RandomSlugField(length=6, exclude_upper=True)
+    slug = RandomSlugField(length = 6)
 
     # retrieve url for object
     def get_absolute_url(self):
-        return reverse('detail_listing', kwargs={'slug':self.slug})
+        return reverse('detail_listing', kwargs = {'slug':self.slug})
 
     # object call
     def __unicode__(self):
@@ -72,10 +85,13 @@ class Listing(TimeStampedModel):
 
 class Bid(TimeStampedModel):
 
-    bidder = models.ForeignKey(settings.AUTH_USER_MODEL)
+    bidder = models.ForeignKey(Student)
     listing = models.ForeignKey(Listing)
-    price = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
-    text = models.CharField( blank=True, max_length = 1000 )
+    price = models.PositiveIntegerField(
+        validators = [MaxValueValidator(1000)],
+        null = True,
+        blank = True)
+    text = models.CharField(blank = True, max_length = 2000)
 
     def __unicode__(self):
         return '%s on %s\'s %s' % (self.bidder,

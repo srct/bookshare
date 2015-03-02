@@ -8,3 +8,4 @@ bookshare/settings/whoosh_index/
 .idea/*
 .idea
 *~
+*migrations*

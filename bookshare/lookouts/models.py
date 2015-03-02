@@ -24,7 +24,7 @@ class Lookout(TimeStampedModel):
         return reverse('detail_lookout', kwargs = {'slug':self.slug})
 
     def __unicode__(self):
-        return '%s %s' % (self.owner.username, self.isbn)
+        return '%s %s' % (self.owner.user.username, self.isbn)
 
     class Meta:
         ordering = ['isbn']

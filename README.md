@@ -26,13 +26,14 @@ First, install python, Pip, and Git on your system. Python is the programming la
 Open a terminal and run the following commands.
 
 `sudo apt-get update`
-`sudo apt-get install python python-dev`
-`sudo apt-get install python-pip`
-`sudo apt-get install git`
+
+`sudo apt-get install python python-dev`python-pip git`
 
 Next, we're going to download a copy of the bookshare codebase from git.gmu.edu, the SRCT code repository.
 
-Navigate to the directory you in which you want to download the project, and run
+Configure your ssh keys by following the directions at git.gmu.edu/help/ssh/README.
+
+Now on your computer, navigate to the directory you in which you want to download the project, and run
 
 `git clone git@git.gmu.edu:srct/bookshare.git`
 
@@ -44,11 +45,15 @@ Next, install these packages from the standard repositories
 
 If prompted to install additional required packages, install those as well.
 
+When prompted to set your mysql password, it's advisable to set it as the same as your normal superuser password.
+
 ### The Virtual Environment
 
 Virtual environments are used to keep separate a projects packages from the main computer system, so you can use different versions of packages across different projects and ease deployment server setup.
 
 It's often recommended to create a special directory to store all of your virtual environments together, but some prefer keeping their virtual environment in the top level of their project's directory. If you choose the latter, make sure to keep the virtual environment folders out of version control.
+
+(For example, `mkdir ~/venv`, `cd ~/venv`)
 
 Run `sudo pip install virtualenv`
 
@@ -77,6 +82,8 @@ Load up the mysql shell by running
 
 ``mysql -u root -p``
 
+and putting in your mysql password.
+
 Create the database by running
 
 ``CREATE DATABASE bookshare;``
@@ -84,29 +91,25 @@ Create the database by running
 You can choose a different name for your database. Double check your database was created
 
 ``SHOW DATABASES;``
+
 Though you can use an existing user to access this database, here's how to create a new user and give them the necessary permissions to your newly created database.
 
 ``CREATE USER 'bookworm'@'localhost' IDENTIFIED BY 'password';``
 For local development, password strength is less important, but use a strong passphrase for deployment. You can choose a different username.
 
 ``GRANT ALL ON bookshare.* TO 'bookworm'@'localhost';`` ``FLUSH PRIVILEGES;``
+
 The .\* is to grant access all tables in the database, and 'flush privileges' reloads privileges to ensure that your user is ready to go.
 
 Exit the mysql shell by typing `exit`.
 
 Now, to configure your newly created database with the project settings, copy the secret.py.template in settings/ to secret.py. Follow the comment instructions provided in each file to set your secret key and database info.
 
-Run `python manage.py migrate` to initally set up the tables, and then run `python manage.py createsuperuser` to create an admin account, using the same username and email as you'll access through CAS.
+Run `python manage.py makemigrations` and `python manage.py migrate` to configure something called 'migrations', which allow you to make changes to the tables in your database without screwing up existing information. Then run `python manage.py createsuperuser` to create an admin account, using the same username and email as you'll access through CAS. Finally, run `python manage.py syncdb` to set up all the tables in your empty database.
 
 ### Haystack Configuration
 
-Note: Using the standard SearchIndex, your search index content is only updated whenever you run either `python manage.py update_index` or start afresh with `python manage.py rebuild_index`.
-
-### Static and Media
-
-Run `python manage.py collectstatic` to ready your static files, like your css and javascript.
-
-A separate directory to manage user-uploaded files.
+When your database is empty, this won't do much good, but once you've created a few objects, run 'python manage.py update_index' to set up your database objects for search.
 
 # Starting up the test server
 

@@ -68,11 +68,8 @@ SRCT Bookshare &bull; {{listing.title}}
         {% endif %}
       </h1>
       <h4><small>Listed</small> {{ listing.created|date:"M d y P" }}</h4>
-      Sold by<a href="{% url 'profile' listing.seller.user.username %}"> {{ listing.seller.username }}</a> | 
+      Sold by<a href="{% url 'profile' listing.seller.user.username %}"> {{ listing.seller.user.username }}</a> | 
       <span class="label label-danger"><strong><a href="#"><i class="fa fa-flag"></i> Report</a></strong></span>
-      {% if request.user == listing.seller.user %}
-      <br /><a href="#">Manage Listing</a>
-      {% endif %}
     </div>
   </div>
 </div>
@@ -103,6 +100,14 @@ SRCT Bookshare &bull; {{listing.title}}
     <h4><strong>ENGH 302</strong></h4>
   </div>
 </div>
+
+{% if request.user == listing.seller.user %}
+<div class="row">
+  <div class="col-md-12">
+    <h3><span class="label label-default"><a href="{% url 'update_listing' listing.slug %}">Manage</a></span></h3>
+  </div>
+</div>
+{% endif %}
 
 <div class="row">
   <div class="col-md-12 col-sm-12 col-xs-12">

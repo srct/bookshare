@@ -51,29 +51,29 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
     <div class="table-responsive">
       <table class="table table-bordered table-hover">
         <thead>
-          <th class="col-md-1 text-center">ISBN</th>
-          <th class="col-md-9 text-center">Title</th>
-          <th class="col-md-1 text-center">Price</th>
-          <th class="col-md-1 text-center">
+          <th class="col-md-1 text-center"><h4>ISBN</h4></th>
+          <th class="col-md-9 text-center"><h4>Title</h4></th>
+          <th class="col-md-1 text-center"><h4>Price</h4></th>
+          <th class="col-md-1 text-center"><h4>
             {% if student.user == request.user %}
             Action
             {% else %}
             Status
-            {% endif %}</th>
+            {% endif %}</h4></th>
         </thead>
         {% for listing in listings %}
         <tbody>
           <tr>
-            <td class="text-center">{{ listing.isbn }}</td>
-            <td class="text-center"><a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a></td>
-            <td class="text-center">
+            <td class="text-center"><h5>{{ listing.isbn }}</h5></td>
+            <td class="text-center"><h5><a href="{{ listing.get_absolute_url }}">{{ listing.title }}</h5></a></td>
+            <td class="text-center"><h5>
               {% if listing.sold %}
                 ${{ listing.finalPrice }}
               {% else %}
                 ${{ listing.price }}
               {% endif %}
-            </td>
-            <td class="text-center">
+            </h5></td>
+            <td class="text-center"><h5>
               {% if listing.sold %}
                 <span class="label label-danger">Sold</span>
               {% elif not listing.active %}
@@ -81,22 +81,22 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
               {% else %}
                 {% if student.user == request.user %}
                   {% if listing.active %}
-                    <a href="#">Close</a>
+                    <a href="{% url 'close_listing' listing.slug %}">Mark Sold</a>
                   {% else %}
-                    <a href="#">Reopen</a>
+                    <a href="{% url 'update_listing' listing.slug %}">Reopen</a>
                   {% endif %}
                 {% else %}
-                <span class="label label-success">Active</span>
+                  <span class="label label-success">Active</span>
                 {% endif %}
               {% endif %}
-            </td>
+            </h5></td>
           </tr>
         </tbody>
         {% endfor %}
       </table>
       {% if student.user == request.user %}
-        <strong>Total Sales:</strong> 8 |
-        <strong>Total Proceeds:</strong> $1335
+        <strong>Total Sales:</strong> {{ sales }} |
+        <strong>Total Proceeds:</strong> ${{ proceeds }}
       {% endif %}
     </div>
     {% else %}
@@ -120,22 +120,28 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
     <legend><h3>Lookouts <small>(<a href="{% url 'create_lookout' %}">Create</a>)</small></h3></legend>
   </div>
 </div>
+{% endif %}
 
+{% if lookouts %}
 <div class="row">
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover">
-      <thead>
-        <th class="col-md-1 text-center">ISBN</th>
-        <th class="col-md-10">Title</th>
-        <th class="col-md-1">Action</th>
-      </thead>
-      {% for lookout in lookouts %}
-      <tr>
-        <td class="text-center">{{ lookout.isbn }}</td>
-        <td class="text-center">A Title</td>
-        <td class="text-center"><a href="#">Delete</a></td>
-      {% endfor %}
-    </table>
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <th class="col-md-1 text-center"><h4>ISBN</h4></th>
+          <th class="col-md-1 text-center"><h4>Title</h4></th>
+          <th class="col-md-1 text-center"><h4>Action</h4></th>
+        </thead>
+        <tbody>
+        {% for lookout in lookouts %}
+        <tr>
+          <td class="text-center"><h5>{{ lookout.isbn }}</h5></td>
+          <td class="text-center"><h5>ISBN templatetag filter still unverified</h5></td>
+          <td class="text-center"><h5><a href="{% url 'delete_lookout' lookout.slug %}">Delete</a></h5></td>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 {% endif %}

@@ -38,4 +38,4 @@ class DeleteLookout(LoginRequiredMixin, DeleteView):
         if not(requesting_student == lookout_student):
             raise Http404
 
-    return context
+        return context

@@ -23,15 +23,6 @@ def ISBNMetadata(standardISBN):
     except:
         return None
 
-# gamification
-def totalSold(seller):
-    soldList = Listing.objects.filter(seller__user__username=seller)
-    totalSold = 0
-    for book in soldList:
-        if book.sold and book.finalPrice:
-            totalSold += book.finalPrice
-    return totalSold
-
 # validation of new listing forms
     # <3 test cases
 
@@ -76,26 +67,6 @@ class CreateListing(LoginRequiredMixin, CreateView):
     # ISBN query!
     #success_url = '/'
     login_url = '/'
-
-"""
-    # if the listing is over a week old, it's old
-    old_threshold = timezone.now() - timedelta(weeks=3)
-
-    # get all trades associated with this listing
-    bids = Bid.objects.filter( listing = listing )
-    bid_count = len(bids)
-
-
-    return render(request, 'listing.html', {
-        'listing' : listing,
-        'media' : settings.MEDIA_URL,
-        'old' : listing.date_created < old_threshold,
-        'bid_count' : bid_count,
-        'trades' : bids,
-        'bid_form' : bid_form,
-    },
-    )
-"""
 
 class UpdateListing(LoginRequiredMixin, UpdateView):
     model = Listing

@@ -4,6 +4,9 @@ from trades.forms import ListingForm, FinalPriceForm, CloseForm, BidForm
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from braces.views import LoginRequiredMixin
 
+from django.contrib.auth.models import User
+from django.http import Http404
+
 import math
 import pyisbn
 import requests
@@ -93,3 +96,49 @@ class CreateListing(LoginRequiredMixin, CreateView):
     },
     )
 """
+
+class UpdateListing(LoginRequiredMixin, UpdateView):
+    model = Listing
+    #form_class = UpdateListingForm
+
+    fields = ['active', 'title', 'author', 'isbn', 'year', 'edition', 'condition',
+        'description', 'price', 'photo',]
+    template_suffix_name = '_update'
+
+    login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateListing, self).get_context_data(**kwargs)
+
+        requesting_student = User.objects.get(username=self.request.user.username)
+        selling_student = self.get_object().seller.user
+
+        print requesting_student
+        print selling_student
+
+#        if selling_student is not requesting_student:
+#            raise Http404
+
+        return context 
+
+class CloseListing(LoginRequiredMixin, UpdateView):
+    model = Listing
+    fields = ['sold', 'date_sold', 'finalPrice',]
+    template_suffix_name = '_close'
+
+    login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super(CloseListing, self).get_context_data(**kwargs)
+
+        requesting_student = User.objects.get(username=self.request.user.username)
+        selling_student = self.get_object().seller.user
+
+        print requesting_student
+        print selling_student
+
+#        if selling_student is not requesting_student:
+#            raise Http404
+
+        return context 
+

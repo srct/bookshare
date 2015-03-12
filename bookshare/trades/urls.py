@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 
-from trades.views import ListListings, CreateListing, DetailListing
+from trades.views import ListListings, CreateListing, DetailListing, UpdateListing, CloseListing
 from trades.models import Listing
 
 urlpatterns = patterns('',
@@ -28,4 +28,15 @@ urlpatterns = patterns('',
             template_name='detail_listing.html'),
         name='detail_listing'),
 
+    url(r'^listing/(?P<slug>[\w-]+)/update/$',
+        UpdateListing.as_view(
+            model=Listing,
+            template_name = 'listing_update.html'),
+        name='update_listing'),
+
+    url(r'^listing/(?P<slug>[\w-]+)/close/$',
+        CloseListing.as_view(
+            model=Listing,
+            template_name = 'listing_close.html'),
+        name='close_listing'),
 )

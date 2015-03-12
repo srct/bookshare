@@ -1,3 +1,4 @@
+DateTime==4.0.1
 Django==1.7.3
 MySQL-python==1.2.5
 Pillow==2.7.0
@@ -7,7 +8,7 @@ django-autoslug==1.7.2
 django-braces==1.4.0
 git+https://github.com/the-ben-waters/django-cas.git
 django-crispy-forms==1.4.0
-django-gravatar2
+django-gravatar2==1.1.4
 django-haystack==2.3.1
 django-model-utils==2.2
 django-piwik==0.1
@@ -17,6 +18,9 @@ docutils==0.12
 easy-thumbnails==2.2
 gunicorn==19.1.1
 pyisbn==1.0.0
+python-dateutil==2.4.1
+pytz==2014.10
 requests==2.5.1
 six==1.9.0
 wsgiref==0.1.2
+zope.interface==4.1.2

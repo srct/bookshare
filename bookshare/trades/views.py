@@ -113,11 +113,8 @@ class UpdateListing(LoginRequiredMixin, UpdateView):
         requesting_student = User.objects.get(username=self.request.user.username)
         selling_student = self.get_object().seller.user
 
-        print requesting_student
-        print selling_student
-
-#        if selling_student is not requesting_student:
-#            raise Http404
+        if not(selling_student == requesting_student):
+            raise Http404
 
         return context 
 
@@ -134,11 +131,8 @@ class CloseListing(LoginRequiredMixin, UpdateView):
         requesting_student = User.objects.get(username=self.request.user.username)
         selling_student = self.get_object().seller.user
 
-        print requesting_student
-        print selling_student
-
-#        if selling_student is not requesting_student:
-#            raise Http404
+        if not(selling_student == requesting_student):
+            raise Http404
 
         return context 
 

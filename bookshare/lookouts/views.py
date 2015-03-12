@@ -4,6 +4,9 @@ from lookouts.forms import LookoutForm
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from braces.views import LoginRequiredMixin
 
+from django.contrib.auth.models import User
+from django.http import Http404
+
 ### VIEWS ###
 class CreateLookout(LoginRequiredMixin, CreateView):
     # can only be viewed by the user who created the lookout!...
@@ -25,4 +28,14 @@ class DetailLookout(LoginRequiredMixin, DetailView):
 class DeleteLookout(LoginRequiredMixin, DeleteView):
     model=Lookout
     success_url = '/'
-    # user?...
+
+    def get_context_data(self, **kwargs):
+        context=(DeleteLookout, self).get_context_data(**kwargs)
+
+        requesting_student = User.objects.get(username=self.request.user.username)
+        lookout_student = self.get_object().owner.user
+
+        if not(requesting_student == lookout_student):
+            raise Http404
+
+    return context

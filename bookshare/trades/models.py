@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from datetime import date
+from dateutil.relativedelta import relativedelta
 
 class Listing(TimeStampedModel):
 
@@ -47,7 +48,7 @@ class Listing(TimeStampedModel):
         validators = [MaxValueValidator(1000)])
     # would have to load in every conceivable course first
     #course = models.ForeignKey(Course)
-    date_sold = models.DateTimeField(null = True, blank = True)
+    date_sold = models.DateField(null = True, blank = True)
     condition = models.CharField(choices = BOOK_CONDITION_CHOICES,
         max_length = 20,
         default = GOOD)
@@ -67,6 +68,18 @@ class Listing(TimeStampedModel):
         validators = [MaxValueValidator(1000)])
 
     slug = RandomSlugField(length = 6)
+
+    def is_active(self):
+        today = date.today()
+        created_plus_month = self.created.date() + relativedelta(months = 1)
+        modified_plus_month = self.modified.date() + relativedelta(months = 1)
+
+        if (today > created_plus_month) or (today > modified_plus_month):
+            self.active = False
+            return self.active
+        else:
+            self.active = True
+            return self.active
 
     # retrieve url for object
     def get_absolute_url(self):

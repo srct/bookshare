@@ -76,6 +76,9 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
             <td class="text-center"><h5>
               {% if listing.sold %}
                 <span class="label label-danger">Sold</span>
+                {% if student.user == request.user %}
+                  <small>(<a href="{% url 'close_listing' listing.slug %}">Reopen</a>)</small>
+                {% endif %}
               {% elif not listing.active %}
                 <span class="label label-default">Closed</span>
               {% else %}

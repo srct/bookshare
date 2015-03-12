@@ -132,14 +132,14 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
       <table class="table table-bordered table-hover">
         <thead>
           <th class="col-md-1 text-center"><h4>ISBN</h4></th>
-          <th class="col-md-1 text-center"><h4>Title</h4></th>
+          <!-- <th class="col-md-1 text-center"><h4>Title</h4></th> -->
           <th class="col-md-1 text-center"><h4>Action</h4></th>
         </thead>
         <tbody>
         {% for lookout in lookouts %}
         <tr>
           <td class="text-center"><h5><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn }}</a></h5></td>
-          <td class="text-center"><h5>ISBN templatetag filter still unverified</h5></td>
+          <!-- <td class="text-center"><h5>ISBN templatetag filter still unverified</h5></td> -->
           <td class="text-center"><h5><a href="{% url 'delete_lookout' lookout.slug %}">Delete</a></h5></td>
         {% endfor %}
         </tbody>

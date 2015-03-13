@@ -12,6 +12,8 @@ from django.conf import settings
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
+from profanity import validate_clean
+
 class Listing(TimeStampedModel):
 
     NEW = 'New'
@@ -32,8 +34,12 @@ class Listing(TimeStampedModel):
 
     seller = models.ForeignKey(Student)
 
-    title = models.CharField(max_length = 200)
-    author = models.CharField(max_length = 200)
+    title = models.CharField(
+        max_length = 200,
+        validators = [validate_clean])
+    author = models.CharField(
+        max_length = 200,
+        validators = [validate_clean])
     isbn = models.CharField(
         max_length = 20,
         validators = [RegexValidator('[0-9xX-]{10,20}', message = 'Please enter a valid ISBN.')])
@@ -52,7 +58,10 @@ class Listing(TimeStampedModel):
     condition = models.CharField(choices = BOOK_CONDITION_CHOICES,
         max_length = 20,
         default = GOOD)
-    description = models.TextField(blank = True, max_length = 2000)
+    description = models.TextField(
+        blank = True,
+        max_length = 2000,
+        validators = [validate_clean])
     price = models.PositiveIntegerField(
         default = 0,
         validators = [MaxValueValidator(1000)])
@@ -104,7 +113,10 @@ class Bid(TimeStampedModel):
         validators = [MaxValueValidator(1000)],
         null = True,
         blank = True)
-    text = models.CharField(blank = True, max_length = 2000)
+    text = models.CharField(
+        blank = True,
+        max_length = 2000,
+        validators = [validate_clean])
 
     def __unicode__(self):
         return '%s on %s\'s %s' % (self.bidder,

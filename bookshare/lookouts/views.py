@@ -30,7 +30,7 @@ class DeleteLookout(LoginRequiredMixin, DeleteView):
     success_url = '/'
 
     def get_context_data(self, **kwargs):
-        context=(DeleteLookout, self).get_context_data(**kwargs)
+        context = super(DeleteLookout, self).get_context_data(**kwargs)
 
         requesting_student = User.objects.get(username=self.request.user.username)
         lookout_student = self.get_object().owner.user

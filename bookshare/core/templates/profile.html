@@ -9,6 +9,8 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
 
 {% load gravatar %}
 
+{% load trades_extras %}
+
 <div class="page-header" id="banner">
   <legend>
   <div class="row">
@@ -19,6 +21,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
       <h2><strong>{{ student.user.first_name }} {{ student.user.last_name }}</strong></h2>
     </div>
     <div class="col-lg-2 col-md-3">
+      {% comment %}
       {% if student.rating %}
         <h3><a href="#students-ratings-history">
         <i class="fa fa-star"></i>
@@ -28,8 +31,9 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
         <i class="fa fa-star-o"></i>
         </h3></a>
       {% else %}
-        <!-- <em>{{ student.user.first_name }} has no ratings yet.</em> -->
+        <em>{{ student.user.first_name }} has no ratings yet.</em>
       {% endif %}
+      {% endcomment %}
     </div>
     <div class="col-md-2">
       <h3><a href="mailto:{{ student.user.email }}"><i class="fa fa-envelope"></i> {{ student.user.username }}</a></h3>
@@ -51,8 +55,8 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
     <div class="table-responsive">
       <table class="table table-bordered table-hover">
         <thead>
-          <th class="col-md-1 text-center"><h4>ISBN</h4></th>
-          <th class="col-md-9 text-center"><h4>Title</h4></th>
+          <th class="col-md-2 text-center"><h4>ISBN</h4></th>
+          <th class="col-md-8 text-center"><h4>Title</h4></th>
           <th class="col-md-1 text-center"><h4>Price</h4></th>
           <th class="col-md-1 text-center"><h4>
             {% if student.user == request.user %}
@@ -131,15 +135,15 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
     <div class="table-responsive">
       <table class="table table-bordered table-hover">
         <thead>
-          <th class="col-md-1 text-center"><h4>ISBN</h4></th>
-          <!-- <th class="col-md-1 text-center"><h4>Title</h4></th> -->
-          <th class="col-md-1 text-center"><h4>Action</h4></th>
+          <th class="col-md-2 text-center"><h4>ISBN</h4></th>
+          <th class="col-md-8 text-center"><h4>Title</h4></th>
+          <th class="col-md-2 text-center"><h4>Action</h4></th>
         </thead>
         <tbody>
         {% for lookout in lookouts %}
         <tr>
-          <td class="text-center"><h5><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn }}</a></h5></td>
-          <!-- <td class="text-center"><h5>ISBN templatetag filter still unverified</h5></td> -->
+          <td class="text-center"><h5>{{ lookout.isbn }}</h5></td>
+          <td class="text-center"><h5><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name }}<a/></h5></td>
           <td class="text-center"><h5><a href="{% url 'delete_lookout' lookout.slug %}">Delete</a></h5></td>
         {% endfor %}
         </tbody>

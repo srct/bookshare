@@ -13,6 +13,7 @@ import requests
 
 # pulls worldcat metadata from ISBNs
 def ISBNMetadata(standardISBN):
+    # passing in numbers starting with 0 throws "SyntaxError: invalid token"
     url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + str(standardISBN) + "?method=getMetadata&format=json&fl=title,year,author,ed"
     metadata = requests.get(url)
     # format into a dictionary

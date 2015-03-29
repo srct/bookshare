@@ -18,6 +18,9 @@ SRCT Bookshare &bull; Homepage
   </div>
 </div>
 {% if user.is_authenticated %}
+
+{% load trades_extras %}
+
 <legend class="text-center"><strong>Lookouts</strong></legend>
   {% if lookouts %}
     <div class="row">
@@ -31,7 +34,7 @@ SRCT Bookshare &bull; Homepage
       tag when the loop ends a column.
     {% endcomment %}
     {% for lookout in lookouts %}
-      <legend><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn }}</a></legend>
+      <legend><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name }}</a></legend>
       {% for listing in lookout.get_listings %}
 
         {% if forloop.counter|add:-1|divisibleby:rows %}

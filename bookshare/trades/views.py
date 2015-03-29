@@ -6,6 +6,7 @@ from braces.views import LoginRequiredMixin
 
 from django.contrib.auth.models import User
 from django.http import Http404
+from django.forms.widgets import HiddenInput
 
 import math
 import pyisbn
@@ -66,8 +67,20 @@ class CreateListing(LoginRequiredMixin, CreateView):
     model = Listing
     form_class = ListingForm
     # ISBN query!
-    #success_url = '/'
     login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateListing, self).get_context_data(**kwargs)
+
+        me = User.objects.get(username=self.request.user.username)
+
+        form = ListingForm(initial={'seller' : me})
+
+        form.fields['seller'].widget = HiddenInput()
+
+        context['my_form'] = form
+
+        return context
 
 class UpdateListing(LoginRequiredMixin, UpdateView):
     model = Listing

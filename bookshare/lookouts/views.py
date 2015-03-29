@@ -6,15 +6,27 @@ from braces.views import LoginRequiredMixin
 
 from django.contrib.auth.models import User
 from django.http import Http404
+from django.forms.widgets import HiddenInput
 
 ### VIEWS ###
 class CreateLookout(LoginRequiredMixin, CreateView):
     # can only be viewed by the user who created the lookout!...
     model = Lookout
     form_class = LookoutForm
-#    success_url = '/'
-# should redirect to get_absolute_url
     login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateLookout, self).get_context_data(**kwargs)
+
+        me = User.objects.get(username=self.request.user.username)
+
+        form = LookoutForm(initial={'owner' : me})
+
+        form.fields['owner'].widget = HiddenInput()
+
+        context['my_form'] = form
+
+        return context
 
 class DetailLookout(LoginRequiredMixin, DetailView):
     model = Lookout

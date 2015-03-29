@@ -16,6 +16,7 @@ class ListingForm( forms.ModelForm ):
 
     helper.layout = Layout(
         Fieldset("Your Textbook",
+            'seller',
             Field('isbn', title="ISBN"),
             HTML("""<hr/ >"""),
             Field('title'),

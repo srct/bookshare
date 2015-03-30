@@ -45,32 +45,24 @@ class ListingForm( forms.ModelForm ):
 
 class BidForm( forms.ModelForm ):
 
-    def clean(self):
-        cleaned_data = super(BidForm, self).clean()
-        bidder = cleaned_data.get('bidder')
-        listing = cleaned_data.get('listing')
-        if bidder == listing.seller:
-            raise forms.ValidationError(u"You can't bid on your own listing!")
-        return cleaned_data
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.form_class='form-horizontal'
+
+        self.helper.layout = Layout(
+            Fieldset("",
+                'bidder',
+                'listing',
+                 AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
+                'text',
+                 FormActions(Submit('submit', 'Submit', css_class='btn-primary'))
+            ),
+        )
+        super(BidForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Bid
-        fields = ('price', 'text', 'bidder', 'listing',)
-        exclude = ('date_created',)
-        labels = {
-            'price': 'Offer',
-            'text': 'Comments (Optional)',
-        }
-        widgets = {
-            'price': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Price',
-            }),
-            'text': forms.Textarea(attrs={
-                'class': 'form-control',
-                'rows': 3,
-            }),
-        }
 
 class FinalPriceForm( forms.Form ):
     book_id = forms.IntegerField(

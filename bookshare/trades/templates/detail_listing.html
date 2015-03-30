@@ -7,6 +7,8 @@ SRCT Bookshare &bull; {{ listing.title }}
 
 {% block content %}
 
+{% load crispy_forms_tags %}
+
 {% load humanize %}
 
 <div class="page-header" id="banner">
@@ -164,95 +166,17 @@ SRCT Bookshare &bull; {{ listing.title }}
         </div>
         {% endif %}
 
-        <!-- BID FORM -->
         <div class="row">
           <div class="col-lg-12">
 
             {% if listing.active and not listing.sold %}
-              <form class="form-horizontal" action="" method="post" role="form">
-                {% csrf_token %}
-                <fieldset>
-                  <legend>Your Bid</legend>
-
-                  <div class="form-group has-error">
-                    <div class="col-lg-10 col-lg-offset-2">
-
-                      {% for error in bid_form.non_field_errors %}
-                        <span class="help-block">{{ error }}</span>
-                      {% endfor %}
-
-                      {% if listing.seller.user == request.user %}
-                        <span class="help-block">You can't bid on your own
-                        listing!</span>
-                      {% endif %}
-
-                    </div>
-                  </div>
-
-                  <div class="form-group{%if bid_form.price.errors%} has-error{%endif%}">
-                    <label for="{{bid_form.price.id_for_label}}"
-                    class="col-lg-2 control-label">
-                      {{bid_form.price.label}}
-                    </label>
-
-                    <div class="col-lg-10">
-                      <div class="input-group">
-                        <span class="input-group-addon"> $ </span>
-                        {% if listing.seller.user == request.user %}
-                          <input type="text" class="form-control"
-                          placeholder="Price" disabled>
-                        {% else %}
-                          {{bid_form.price}}
-                        {% endif %}
-                      </div>
-                      {%for error in bid_form.price.errors%}
-                        <span class="help-block">{{ error }}</span>
-                      {%endfor%}
-                    </div>
-                  </div>
-
-                  <div class="form-group{%if bid_form.text.errors%} has-error{%endif%}">
-                    <label for="{{bid_form.text.id_for_label}}"
-                    class="col-lg-2 control-label">
-                      {{bid_form.text.label}}
-                    </label>
-
-                    <div class="col-lg-10">
-                      {% if listing.seller.user == request.user %}
-                        <textarea class="form-control" rows="3"
-                        disabled></textarea>
-                      {% else %}
-                        {{bid_form.text}}
-                      {% endif %}
-                      {%for error in bid_form.text.errors%}
-                        <span class="help-block">{{ error }}</span>
-                      {%endfor%}
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <div class="col-lg-10 col-lg-offset-2">
-                      {% if listing.seller.user == request.user %}
-                        <button type="submit" class="btn btn-primary"
-                        value="Submit" disabled="">Submit a Bid</button>
-                      {% else %}
-                        <button type="submit" class="btn btn-primary"
-                        value="Submit">Submit a Bid</button>
-                      {% endif %}
-                    </div>
-                  </div>
-
-                </fieldset>
-              </form>
+              {% crispy my_form %}
             {% else %}
-
-              <h5 class="text-center">You cannot bid on an incative listing.</h5>
-
+              <h5 class="text-center">You cannot bid on an inactive listing.</h5>
             {% endif %}
 
           </div>
         </div>
-        <!-- BID FORM -->
 
       </div>
     </div>

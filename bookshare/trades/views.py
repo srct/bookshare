@@ -56,25 +56,23 @@ class DetailListing(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DetailListing, self).get_context_data(**kwargs)
+        me = User.objects.get(username=self.request.user.username)
+
+        # make the form available to the template on get
+        form = BidForm(initial={'bidder' : me})
+        form.fields['bidder'].widget = HiddenInput()
+
+        context['my_form'] = form
+
         # bids, filter by listing name of the current listing, order by date created
         context['bids'] = Bid.objects.filter(listing=self.get_object()).order_by('-created')
         return context 
 
 class CreateBid(CreateView):
     model = Bid
+    template_name = 'detail_listing'
     form_class = BidForm
     login_url = '/'
-
-    def get_context_data(self, **kwargs):
-        context = super(CreateBid, self).get_context_data(**kwargs)
-
-        me = User.objects.get(username=self.request.user.username)
-
-        form = BidForm(initial={'bidder' : me})
-        form.fields['bidder'].widget = HiddenInput()
-
-        context['my_form'] = form
-        return context
 
 # ...to make this single view
 class ListingPage(LoginRequiredMixin, View):

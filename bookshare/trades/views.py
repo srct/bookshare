@@ -1,7 +1,7 @@
 from trades.models import Listing, Bid
 from trades.forms import ListingForm, FinalPriceForm, CloseForm, BidForm
 
-from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import View, DetailView, ListView, CreateView, UpdateView, DeleteView
 from braces.views import LoginRequiredMixin
 
 from django.contrib.auth.models import User
@@ -43,12 +43,11 @@ class ListListings(LoginRequiredMixin, ListView):
     context_object_name = 'listings'
     login_url = '/'
 
-class DetailListing(LoginRequiredMixin, DetailView):
+# These next two views are tied together...
+class DetailListing(DetailView):
     model = Listing
     context_object_name = 'listing'
-
-    # see this for the bidding form
-    # https://docs.djangoproject.com/en/1.7/topics/class-based-views/mixins/#an-alternative-better-solution
+    login_url = '/'
 
     # further need to incorporate much of the logic below somewhere
     # - bid count
@@ -61,8 +60,37 @@ class DetailListing(LoginRequiredMixin, DetailView):
         context['bids'] = Bid.objects.filter(listing=self.get_object()).order_by('-created')
         return context 
 
+class CreateBid(CreateView):
+    model = Bid
+    form_class = BidForm
     login_url = '/'
 
+    def get_context_data(self, **kwargs):
+        context = super(CreateBid, self).get_context_data(**kwargs)
+
+        me = User.objects.get(username=self.request.user.username)
+
+        form = BidForm(initial={'bidder' : me})
+        form.fields['bidder'].widget = HiddenInput()
+
+        context['my_form'] = form
+        return context
+
+# ...to make this single view
+class ListingPage(LoginRequiredMixin, View):
+
+    # see this page for an explanation
+    # https://docs.djangoproject.com/en/1.7/topics/class-based-views/mixins/#an-alternative-better-solution
+
+    def get(self, request, *args, **kwargs):
+        view = DetailListing.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = CreateBid.as_view()
+        return view(request, *args, **kwargs)
+
+# and we return to our regularly schedule programming
 class CreateListing(LoginRequiredMixin, CreateView):
     model = Listing
     form_class = ListingForm
@@ -75,7 +103,6 @@ class CreateListing(LoginRequiredMixin, CreateView):
         me = User.objects.get(username=self.request.user.username)
 
         form = ListingForm(initial={'seller' : me})
-
         form.fields['seller'].widget = HiddenInput()
 
         context['my_form'] = form

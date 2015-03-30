@@ -12,13 +12,12 @@ SRCT Bookshare &bull; Creare Lookout
   <div class="row">
     <div class="col-lg-12 text-center">
       <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
-      <p class="lead"><strong>Create Lookout</strong></p>
+      <p class="lead text-center"><strong>Create Lookout</strong></p>
     </div>
   </div>
 </div>
 
 <div class="row">
-
   <div class="col-lg-8 col-lg-offset-2">
     <span class="help-block">
       <strong>Lookouts</strong> help you find the textbooks you
@@ -26,13 +25,15 @@ SRCT Bookshare &bull; Creare Lookout
       for, and any new listings with that ISBN will show up on
       your homepage, automatically!
     </span>
-    <div class="well">
-      <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h1 class="panel-title text-center"><strong><i class="fa fa-plus-circle"></i> Add Your Lookout</strong></h1>
+      </div>
+      <div class="panel-body">
         {% crispy my_form %}
       </div>
     </div>
   </div>
-
 </div>
 
 {% endblock %}

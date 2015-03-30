@@ -67,9 +67,9 @@ SRCT Bookshare &bull; {{ listing.title }}
           ${{ listing.price }}
         {% endif %}
       </h1>
-      <h4><small>Listed</small> {{ listing.created|date:"M d y P" }}</h4>
-      Sold by<a href="{% url 'profile' listing.seller.user.username %}"> {{ listing.seller.user.username }}</a> | 
-      <span class="label label-danger"><strong><a href="#"><i class="fa fa-flag"></i> Report</a></strong></span>
+      <h4><small>Listed</small> {{ listing.created|date:"M d, 'y P" }}</h4>
+      <h4><small>Sold by</small><a href="{% url 'profile' listing.seller.user.username %}"> {{ listing.seller.user.username }}</a> | 
+      <span class="label label-danger"><strong><a href="#"><i class="fa fa-flag"></i> Report</a></strong></span></h4>
     </div>
   </div>
 </div>
@@ -97,7 +97,7 @@ SRCT Bookshare &bull; {{ listing.title }}
     {% endif %}
   </div>
   <div class="col-md-1 col-sm-12 col-xs-12">
-    <h4><strong>ENGH 302</strong></h4>
+    {% comment %}<h4><strong>ENGH 302</strong></h4> {% endcomment %}
   </div>
 </div>
 

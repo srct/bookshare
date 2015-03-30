@@ -8,20 +8,25 @@ from lookouts.models import Lookout
 
 class LookoutForm( forms.ModelForm ):
 
-    helper = FormHelper()
-    helper.form_method = 'POST'
-    helper.form_class = 'form-horizontal'
-    helper.label_class='col-sm-2'
-    helper.field_class='col-sm-6'
+    def __init__(self, *args, **kwargs):
+
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class='col-sm-2'
+        self.helper.field_class='col-sm-6'
     
-    helper.layout = Layout(
-        Fieldset("Your Lookout",
-            'owner',
-            Field('isbn', title="ISBN"),
-            HTML("""<hr/ >"""),
-            FormActions(Submit('submit', 'Submit', css_class='btn-primary'))
-        ),
-    )
+        self.helper.layout = Layout(
+            Fieldset("",
+                'owner',
+                'isbn',
+                HTML("""<hr/ >"""),
+                FormActions(Submit('submit', 'Submit', css_class='btn-primary'))
+            ),
+        )
+
+        super(LookoutForm, self).__init__(*args, **kwargs)
+        self.fields['isbn'].label = "ISBN"
 
     class Meta:
         model = Lookout

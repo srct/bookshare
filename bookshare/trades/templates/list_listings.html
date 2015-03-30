@@ -19,52 +19,34 @@ SRCT Bookshare &bull; Latest Listings
 
   <div class="row">
     <div class="col-md-10 col-md-offset-1 text-center">
-    <p>Want to <strong><a href="/search">search</a></strong> for something specific?</p>
+      <h4><p><em>Want to <strong><a href="/search">search</a></strong> for something specific?</em></p></h4>
     </div>
   </div>
 
+  <legend></legend>
+
   <div class="row">
-
-    {% comment %}
-      Essentially the logic here is to create 3 columns where
-      there are n rows in each.
-
-      The first conditional will add an initial column tag if the loop is
-      beginning a new column. The second conditional adds a closing column
-      tag when the loop ends a column.
-    {% endcomment %}
-
     {% for listing in listings %}
-
-      {% if forloop.counter|add:-1|divisibleby:rows %}
-      <div class="col-md-4">
-      {% endif %}
-
+      <div class="col-md-6">
         {% include 'listing_preview_panel.html' %}
-
-      {% if forloop.counter|add:rows|divisibleby:rows %}
       </div>
-      {% endif %}
-
     {% endfor %}
-
   </div>
 
   <div class="row">
     <div class="col-lg-4 col-lg-offset-4">
-
       <ul class="pager">
 
         {% if listings.has_previous %}
           <li class="previous">
             <a href="?page={{ listings.previous_page_number }}">
-              &larr; Newer
+              <h4>&larr; Newer</h4>
             </a>
           </li>
         {% else %}
           <li class="previous disabled">
             <a>
-              &larr; Newer
+              <h4>&larr; Newer</h4>
             </a>
           </li>
         {% endif %}
@@ -72,13 +54,13 @@ SRCT Bookshare &bull; Latest Listings
         {% if listings.has_next %}
           <li class="next">
             <a href="?page={{ listings.next_page_number }}">
-              Older &rarr;
+              <h4>Older &rarr;</h4>
             </a>
           </li>
         {% else %}
           <li class="next disabled">
             <a>
-              Older &rarr;
+              <h4>Older &rarr;</h4>
             </a>
           </li>
         {% endif %}
@@ -96,7 +78,7 @@ SRCT Bookshare &bull; Latest Listings
         <div class="panel-body">
           <h3>There aren't any books in the database!</h3>
           <p>
-            Looks like you'll be the first to <a href="#">create one</a>!
+            Looks like you'll be the first to <a href="{% url 'create_listing' %}">create one</a>!
           </p>
         </div>
       </div>

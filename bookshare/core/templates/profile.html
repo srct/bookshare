@@ -46,24 +46,24 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
 <div class="row">
   <div class="col-md-12">
     {% if student.user == request.user %}
-    <legend><h3>Listings <small>(<a href="{% url 'create_listing' %}">Create</a>)</small></h3></legend>
+    <legend><h3><i class="fa fa-book"></i> Listings <small>(<a href="{% url 'create_listing' %}">Create</a>)</small></h3></legend>
     {% else %}
     <h3>Listings</h3>
     {% endif %}
 
     {% if listings %}
     <div class="table-responsive">
-      <table class="table table-bordered table-hover">
+      <table class="table table-bordered table-hover text-center">
         <thead>
-          <th class="col-md-2 text-center"><h4>ISBN</h4></th>
-          <th class="col-md-8 text-center"><h4>Title</h4></th>
-          <th class="col-md-1 text-center"><h4>Price</h4></th>
-          <th class="col-md-1 text-center"><h4>
+          <td class="col-md-2"><h4><strong>ISBN</strong></h4></td>
+          <td class="col-md-8"><h4><strong>Title</strong></h4></td>
+          <td class="col-md-1"><h4><strong>Price</strong></h4></td>
+          <td class="col-md-1"><h4><strong>
             {% if student.user == request.user %}
             Action
             {% else %}
             Status
-            {% endif %}</h4></th>
+            {% endif %}</strong></h4></td>
         </thead>
         {% for listing in listings %}
         <tbody>
@@ -124,7 +124,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
 {% if student.user == request.user %}
 <div class="row">
   <div class="col-md-12">
-    <legend><h3>Lookouts <small>(<a href="{% url 'create_lookout' %}">Create</a>)</small></h3></legend>
+    <legend><h3><i class="fa fa-eye"></i> Lookouts <small>(<a href="{% url 'create_lookout' %}">Create</a>)</small></h3></legend>
   </div>
 </div>
 {% endif %}
@@ -133,11 +133,11 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
 <div class="row">
   <div class="col-md-12">
     <div class="table-responsive">
-      <table class="table table-bordered table-hover">
+      <table class="table table-bordered table-hover text-center">
         <thead>
-          <th class="col-md-2 text-center"><h4>ISBN</h4></th>
-          <th class="col-md-8 text-center"><h4>Title</h4></th>
-          <th class="col-md-2 text-center"><h4>Action</h4></th>
+          <td class="col-md-2"><h4><strong>ISBN</strong></h4></td>
+          <td class="col-md-8"><h4><strong>Title</strong></h4></td>
+          <td class="col-md-2"><h4><strong>Action</strong></h4></td>
         </thead>
         <tbody>
         {% for lookout in lookouts %}

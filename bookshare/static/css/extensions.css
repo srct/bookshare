@@ -50,3 +50,7 @@ text-align: center;
   bottom: 8px;
   right: 15px;
 }
+
+.navbar-brand img {
+  margin-top: -5px;
+}

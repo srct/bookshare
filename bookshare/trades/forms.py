@@ -8,51 +8,40 @@ from trades.models import Listing, Bid
 
 class ListingForm( forms.ModelForm ):
 
-    helper = FormHelper()
-    helper.form_method = 'POST'
-    helper.form_class='form-horizontal'
-    helper.label_class='col-sm-2'
-    helper.field_class='col-sm-6'
+    def __init__(self, *args, **kwargs):
 
-    helper.layout = Layout(
-        Fieldset("Your Textbook",
-            'seller',
-            Field('isbn', title="ISBN"),
-            HTML("""<hr/ >"""),
-            Field('title'),
-            'author',
-            'edition',
-            'year',
-            HTML("""<hr/ >"""),
-            #'course',
-            'condition',
-            AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
-            'photo',
-            Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester'),
-            HTML("""<hr/ >"""),
-            FormActions(Submit('submit', 'Submit', css_class='btn-primary'))
-        ),
-    )
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.form_class='form-horizontal'
+        self.helper.label_class='col-sm-2'
+        self.helper.field_class='col-sm-6'
+
+        self.helper.layout = Layout(
+            Fieldset("",
+                'seller',
+                'isbn',
+                HTML("""<hr/ >"""),
+                Field('title'),
+                'author',
+                'edition',
+                'year',
+                 HTML("""<hr/ >"""),
+                 #'course',
+                'condition',
+                 AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
+                 'photo',
+                 Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester'),
+                 HTML("""<hr/ >"""),
+                 FormActions(Submit('submit', 'Submit', css_class='btn-primary'))
+            ),
+        )
+
+        super(ListingForm, self).__init__(*args, **kwargs)
+        self.fields['isbn'].label = "ISBN"
 
     class Meta:
         model = Listing
         exclude = ('data_sold', 'sold', 'active', 'finalPrice')
-
-#    def clean(self):
-#        error_message = "You've already posted a listing with this ISBN. Close that listing first."
-#        cleaned_data = super(ListingForm, self).clean()
-
-#        cleaned_isbn = cleaned_data.get('isbn')
-#        cleaned_seller = self.request.user.seller
-
-#        existing_listings = Listing.objects.filter(isbn=cleaned_isbn,
-#                                                    seller=cleaned_seller,
-#                                                    active=True)
-
-#        if len( existing_listings ) > 0:
-#            raise ValidationError(error_message)
-
-#        return cleaned_data
 
 class BidForm( forms.ModelForm ):
 

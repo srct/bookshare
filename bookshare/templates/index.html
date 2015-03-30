@@ -21,33 +21,18 @@ SRCT Bookshare &bull; Homepage
 
 {% load trades_extras %}
 
-<legend class="text-center"><strong>Lookouts</strong></legend>
+<legend class="text-center"><i class="fa fa-eye"></i> <strong>Your Lookouts</strong> <small>(<a href="{% url 'create_lookout' %}">Create</a>)</small></legend>
   {% if lookouts %}
-    <div class="row">
 
-    {% comment %}
-      Essentially the logic here is to create 3 columns where
-      there are n rows in each.
-
-      The first conditional will add an initial column tag if the loop is
-      beginning a new column. The second conditional adds a closing column
-      tag when the loop ends a column.
-    {% endcomment %}
     {% for lookout in lookouts %}
-      <legend><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name }}</a></legend>
-      {% for listing in lookout.get_listings %}
-
-        {% if forloop.counter|add:-1|divisibleby:rows %}
-        <div class="col-md-4">
-        {% endif %}
-
-          {% include 'listing_preview_panel.html' %}
-
-        {% if forloop.counter|add:rows|divisibleby:rows %}
-        </div>
-        {% endif %}
-
-      {% endfor %}
+      <legend><i class="fa fa-book"></i> <a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name }}</a></legend>
+      <div class="row">
+        {% for listing in lookout.get_listings %}
+          <div class="col-md-6">
+            {% include 'listing_preview_panel.html' %}
+          </div>
+        {% endfor %}
+      </div>
     {% endfor %}
     </div>
 

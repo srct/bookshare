@@ -15,53 +15,48 @@ SRCT Bookshare &bull; Search Listings
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-8 col-md-offset-2">
-    <form class="form-horizontal" role="form" method="get">
-      <div class="form-group"> 
-        <div class="input-group">
-          <span class="input-group-addon">
-            <i class="fa fa-search fa-lg"></i>
-          </span>
-          {{ form.q }}
-        </div>
-      </div>
-    </form>
+<form class="form-horizontal" method="get" action=".">
+  <div class="form-group">
+    <label for "id_q" class="col-md-1 col-md-offset-4 control-label"><strong>Search</strong></label>
+    <div class="col-md-2">
+      {{ form.q }}
+    </div>
+    <button type="submut" class="btn btn-default"><i class="fa fa-search fa-fw fa-lg"></i></button>
   </div>
-</div>
+</form>
 
 {% if query %}
 
 <div class="row">
-  <div class="col-md-8 col-md-offset-2">
+  <div class="col-md-10 col-md-offset-1">
 
     {% if page.object_list %}
-      <table class="table table-hover">
+      <table class="table table-hover text-center">
         <thead>
-          <th class="col-md-1 text-center"><h3><small>ISBN</small></h3></th>
-          <th class="col-md-7 text-center"><h3><small>Title</small></h3></th>
-          <th class="col-md-3 text-center"><h3><small>Author</small></h3></th>
-          <th class="col-md-1 text-center"><h3><small>Price</small></h3></th>
+          <td class="col-md-1"><h4><strong>ISBN</strong></h4></td>
+          <td class="col-md-7"><h4><strong>Title</strong></h4></td>
+          <td class="col-md-3"><h4><strong>Author</strong></h4></td>
+          <td class="col-md-1"><h4><strong>Price</strong></h4></td>
         </thead>
     {% endif %}
 
     {% for result in page.object_list %}
       <tr>
         <td class="text-center">
-          <h4>{{ result.object.isbn }}</h4>
+          <h5>{{ result.object.isbn }}</h5>
         </td>
         <td class="text-center">
-          <a href="{{ result.object.get_absolute_url }}"><h4><strong>{{ result.object.title }}</strong></h4></a>
+          <a href="{{ result.object.get_absolute_url }}"><h5><strong>{{ result.object.title }}</strong></h5></a>
         </td>
         <td class="text-center">
-          <h4>{{ result.object.author }}</h4>
+          <h5>{{ result.object.author }}</h5>
         </td>
         <td class="text-center">
-          <h4>${{ result.object.price }}</h4>
+          <h5>${{ result.object.price }}</h5>
         </td>
       </tr>
     {% empty %}
-      <h3 class="text-center">No results found.</h3>
+      <h4 class="text-center">No results found.</h4>
     {% endfor %}
 
     {% if page.object_list %}
@@ -79,13 +74,13 @@ SRCT Bookshare &bull; Search Listings
       {% if page.has_previous %}
         <li class="previous">
           <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">
-            &larr; Previous
+            <h4>&larr; Previous</h4>
           </a>
         </li>
       {% else %}
         <li class="previous disabled">
           <a>
-            &larr; Previous
+            <h4>&larr; Previous</h4>
           </a>
         </li>
       {% endif %}
@@ -93,13 +88,13 @@ SRCT Bookshare &bull; Search Listings
       {% if page.has_next %}
         <li class="next">
           <a href="?q={{ query }}&amp;page={{ page.next_page_number }}">
-            Next &rarr;
+            <h4>Next &rarr;</h4>
           </a>
         </li>
       {% else %}
         <li class="next disabled">
           <a>
-            Next &rarr;
+            <h4>Next &rarr;</h4>
           </a>
         </li>
       {% endif %}

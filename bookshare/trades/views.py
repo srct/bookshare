@@ -7,6 +7,7 @@ from braces.views import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import Http404
 from django.forms.widgets import HiddenInput
+from django.core.urlresolvers import reverse
 
 import math
 import pyisbn
@@ -47,10 +48,10 @@ class ListListings(LoginRequiredMixin, ListView):
 class DetailListing(DetailView):
     model = Listing
     context_object_name = 'listing'
+    template_name = 'detail_listing.html'
     login_url = '/'
 
     # further need to incorporate much of the logic below somewhere
-    # - bid count
     # - bid's age, then if 'old'
     # - whether it's the person who posted the bid or someone else
 
@@ -59,20 +60,26 @@ class DetailListing(DetailView):
         me = User.objects.get(username=self.request.user.username)
 
         # make the form available to the template on get
-        form = BidForm(initial={'bidder' : me})
+        # set the bidder and the listing
+        form = BidForm(initial={'bidder' : me, 'listing' : self.get_object()})
         form.fields['bidder'].widget = HiddenInput()
+        form.fields['listing'].widget = HiddenInput()
 
         context['my_form'] = form
 
         # bids, filter by listing name of the current listing, order by date created
         context['bids'] = Bid.objects.filter(listing=self.get_object()).order_by('-created')
+        context['bid_count'] = len(Bid.objects.filter(listing=self.get_object))
         return context 
 
 class CreateBid(CreateView):
     model = Bid
-    template_name = 'detail_listing'
     form_class = BidForm
+    template_name = 'detail_listing.html'
     login_url = '/'
+
+    def get_success_url(self):
+        return reverse('detail_listing', kwargs={'slug':self.object.listing.slug})
 
 # ...to make this single view
 class ListingPage(LoginRequiredMixin, View):

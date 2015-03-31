@@ -54,12 +54,17 @@ class BidForm( forms.ModelForm ):
             Fieldset("",
                 'bidder',
                 'listing',
+                HTML("<div class='col-md-4'>"),
                  AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
+                HTML("</div><div class='col-md-4'>"),
                 'text',
-                 FormActions(Submit('submit', 'Submit', css_class='btn-primary'))
+                HTML("</div><div class='col-md-4'>"),
+                 FormActions(Submit('submit', 'Submit', css_class='btn-primary')),
+                HTML("</div>"),
             ),
         )
         super(BidForm, self).__init__(*args, **kwargs)
+        self.fields['text'].label = "Comments"
 
     class Meta:
         model = Bid

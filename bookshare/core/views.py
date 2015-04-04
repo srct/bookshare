@@ -3,7 +3,7 @@ from braces.views import LoginRequiredMixin
 
 from core.models import Student
 from lookouts.models import Lookout
-from trades.models import Listing
+from trades.models import Listing, Bid
 
 # seller's rating
 """def ratingsAverage(seller):
@@ -42,7 +42,10 @@ class DetailStudent(LoginRequiredMixin, DetailView):
             proceeds = 0
             for listing in listings:
                 if listing.sold:
-                    proceeds = proceeds + listing.finalPrice
+                    try:
+                        proceeds = proceeds + listing.final_price()
+                    except:
+                        pass
             return proceeds
 
         student_listings = Listing.objects.filter(seller=self.get_object().pk)
@@ -56,6 +59,8 @@ class DetailStudent(LoginRequiredMixin, DetailView):
 
         context['proceeds'] = total_proceeds(student_listings)
         context['sales'] = total_sales(student_listings)
+
+        context['bids'] = Bid.objects.filter(bidder=self.get_object().user)
 
         return context
 

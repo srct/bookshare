@@ -46,9 +46,9 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
 <div class="row">
   <div class="col-md-12">
     {% if student.user == request.user %}
-    <legend><h3><i class="fa fa-book"></i> Listings <small>(<a href="{% url 'create_listing' %}">Create</a>)</small></h3></legend>
+    <legend><h3><i class="fa fa-book fa-fw"></i> Your Listings <small>(<a href="{% url 'create_listing' %}">Create</a>)</small></h3></legend>
     {% else %}
-    <h3>Listings</h3>
+    <legend><h3><i class="fa fa-book fa-fw"></i> Listings</h3></legend>
     {% endif %}
 
     {% if listings %}
@@ -58,42 +58,41 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
           <td class="col-md-2"><h4><strong>ISBN</strong></h4></td>
           <td class="col-md-8"><h4><strong>Title</strong></h4></td>
           <td class="col-md-1"><h4><strong>Price</strong></h4></td>
-          <td class="col-md-1"><h4><strong>
-            {% if student.user == request.user %}
-            Action
-            {% else %}
-            Status
-            {% endif %}</strong></h4></td>
+          <td class="col-md-1"><h4><strong>Status</strong></h4></td>
         </thead>
         {% for listing in listings %}
         <tbody>
+          {% if listing.sold %}
+          <tr class="success">
+          {% else %}
           <tr>
+          {% endif %}
             <td class="text-center"><h5>{{ listing.isbn }}</h5></td>
             <td class="text-center"><h5><a href="{{ listing.get_absolute_url }}">{{ listing.title }}</h5></a></td>
             <td class="text-center"><h5>
               {% if listing.sold %}
-                ${{ listing.finalPrice }}
+                ${{ listing.final_price }}
               {% else %}
                 ${{ listing.price }}
               {% endif %}
             </h5></td>
             <td class="text-center"><h5>
               {% if listing.sold %}
-                <span class="label label-danger">Sold</span>
+                <span class="label label-primary"><strong>Sold</strong></span>
                 {% if student.user == request.user %}
-                  <small>(<a href="{% url 'close_listing' listing.slug %}">Reopen</a>)</small>
+                  <small>(<a href="{% url 'unsell_listing' listing.slug %}">Cancel Sale</a>)</small>
+                {% endif %}
+              {% elif listing.cancelled %}
+                <span class="label label-default"><strong>Cancelled</strong></span>
+                {% if student.user == request.user %}
+                  <small>(<a href="{% url 'reopen_listing' listing.slug %}">Reopen</a>)</small>
                 {% endif %}
               {% elif not listing.active %}
-                <span class="label label-default">Closed</span>
+                <span class="label label-warning"><strong>Inactive</strong></span>
               {% else %}
+                <span class="label label-info"><strong>Active</strong></span>
                 {% if student.user == request.user %}
-                  {% if listing.active %}
-                    <a href="{% url 'close_listing' listing.slug %}">Mark Sold</a>
-                  {% else %}
-                    <a href="{% url 'update_listing' listing.slug %}">Reopen</a>
-                  {% endif %}
-                {% else %}
-                  <span class="label label-success">Active</span>
+                  <small>(<a href="{% url 'cancel_listing' listing.slug %}">Cancel</a>)</small>
                 {% endif %}
               {% endif %}
             </h5></td>
@@ -102,8 +101,10 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
         {% endfor %}
       </table>
       {% if student.user == request.user %}
+        <h4>
         <strong>Total Sales:</strong> {{ sales }} |
         <strong>Total Proceeds:</strong> ${{ proceeds }}
+        </h4>
       {% endif %}
     </div>
     {% else %}
@@ -114,20 +115,56 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
       {% endif %}
       have any listings posted yet.
       {% if student.user == request.user %}
-      Consider listings your textbooks on SRCT Bookshare.
+      Consider putting your textbooks on SRCT Bookshare.
       {% endif %}
     {% endif %}
   </div>
 </div>
 
-
 {% if student.user == request.user %}
+<legend><h3><i class="fa fa-gift fa-fw"></i> Your Bids</h3></legend>
 <div class="row">
   <div class="col-md-12">
-    <legend><h3><i class="fa fa-eye"></i> Lookouts <small>(<a href="{% url 'create_lookout' %}">Create</a>)</small></h3></legend>
+    {% if bids %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover text-center">
+        <thead>
+          <td class="col-md-2"><h4><strong>ISBN</strong></h4></td>
+          <td class="col-md-8"><h4><strong>Title</strong></h4></td>
+          <td class="col-md-2"><h4><strong>Price</strong></h4></td>
+        </thead>
+        <tbody>
+        {% for bid in bids %}
+        {% if bid == bid.listing.winning_bid %}
+        <tr class="success">
+        {% else %}
+        <tr>
+        {% endif %}
+          <td class="text-center"><h5>{{ bid.listing.isbn }}</h5></td>
+          <td class="text-center"><h5><a href="{{ bid.listing.get_absolute_url }}">{{ bid.listing.isbn|isbn_name }}<a/></h5></td>
+          <td class="text-center"><h5>${{ bid.price }}</h5></td>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    {% if student.user == request.user %}
+    You don't
+    {% else %}
+    {{ student.user.first_name }} doesn't
+    {% endif %}
+    have any have any bids yet.
+    {% if student.user == request.user %}
+    <a href="{% url 'list_listings' %}">Check out</a> the latest listings
+    on SRCT Bookshare and see if there are any textbooks you need!
+    {% endif %}
+  {% endif %}
   </div>
 </div>
 {% endif %}
+
+{% if student.user == request.user %}
+ <legend><h3><i class="fa fa-eye fa-fw"></i> Lookouts <small>(<a href="{% url 'create_lookout' %}">Create</a>)</small></h3></legend>
 
 {% if lookouts %}
 <div class="row">
@@ -144,13 +181,15 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
         <tr>
           <td class="text-center"><h5>{{ lookout.isbn }}</h5></td>
           <td class="text-center"><h5><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name }}<a/></h5></td>
-          <td class="text-center"><h5><a href="{% url 'delete_lookout' lookout.slug %}">Delete</a></h5></td>
+          <td class="text-center"><h5><a href="{% url 'delete_lookout' lookout.slug %}"><span class="label label-danger">Delete</span></a></h5></td>
         {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
 </div>
+{% endif %}
+
 {% endif %}
 
 {% endblock %}

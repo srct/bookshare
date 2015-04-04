@@ -12,7 +12,15 @@ SRCT Bookshare &bull; {{ listing.title }}
 {% load humanize %}
 
 <div class="page-header" id="banner">
-{% if listing.sold %}
+{% if listing.cancelled %}
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="alert alert-danger text-center">
+        <strong>This listing has been cancelled.</strong>
+      </div>
+    </div>
+  </div>
+{% elif listing.sold %}
   <div class="row">
     <div class="col-lg-12">
       <div class="alert alert-danger text-center">
@@ -23,61 +31,63 @@ SRCT Bookshare &bull; {{ listing.title }}
 {% elif not listing.active %}
   <div class="row">
     <div class="col-lg-12">
-      <div class="alert alert-danger text-center">
-        <strong>This listing has been closed.</strong>
-      </div>
-    </div>
-  </div>
-{% elif old %}
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="alert alert-warning alert-dismissable">
+      <div class="alert alert-warning text-center alert-dismissable">
         <button type="button" class="close" data-dismiss="alert"
         aria-hidden="true">&times;</button>
-        Heads up, this listing is <strong>over a month old</strong> and may no longer be valid!
+        Heads up, this listing is <strong>over a month old</strong> and we haven't seen its seller around recently either. It may no longer be valid!
       </div>
     </div>
   </div>
 {% endif %}
+</div>
 
-  <div class="row">
-    <div class="col-md-8 col-sm-6 col-xs-12">
-      <h1>
-        <em>{{ listing.title }}</em>
-      </h1>
+<div class="row">
+  <div class="col-md-8">
+    <h1>
+      <em><strong>{{ listing.title }}</strong></em>
+    </h1>
+  </div>
+  <div class="col-md-4 text-right">
+    <h1>
+      {% if listing.sold %}
+        <small>Sale Price</small> <strong>${{ listing.final_price }}</strong>
+      {% else %}
+        <small>Asking Price</small> <strong>${{ listing.price }}</strong>
+      {% endif %}
+    </h1>
+  </div>
+</div>
 
-      <h4>
-        <small>by</small> {{ listing.author }}
-        {% if listing.year %}
-          ({{ listing.year }})
-        {% endif %}
-      </h4>
+<div class="row">
+  <div class="col-md-6">
+    <h4>
+      <small>by</small> {{ listing.author }}
+      {% if listing.year %}
+        ({{ listing.year }})
+      {% endif %}
+    </h4>
+  </div>
+  <div class="col-md-6 text-right">
+    <h4><small>Listed</small> {{ listing.created|date:"M d, 'y P" }} <small>({{ listing.created|naturaltime }})</small></h4>
+  </div>
+</div>
 
-      <h4>
-        {% if listing.edition %}
-          {{ listing.edition|ordinal }}<small> edition</small> | 
-        {% endif %}
-        <small>ISBN</small> {{ listing.isbn }}
-      </h4>
-    </div>
-
-    <div class="col-md-4 col-sm-6 col-xs-12 text-right">
-      <h1>
-        {% if listing.sold %}
-          ${{ listing.finalPrice }}
-        {% else %}
-          ${{ listing.price }}
-        {% endif %}
-      </h1>
-      <h4><small>Listed</small> {{ listing.created|date:"M d, 'y P" }}</h4>
-      <h4><small>Sold by</small><a href="{% url 'profile' listing.seller.user.username %}"> {{ listing.seller.user.username }}</a> | 
-      <span class="label label-danger"><strong><a href="#"><i class="fa fa-flag"></i> Report</a></strong></span></h4>
-    </div>
+<div class="row">
+  <div class="col-md-6">
+    <h4>
+      {% if listing.edition %}
+        {{ listing.edition|ordinal }}<small> edition</small> | 
+      {% endif %}
+      <small>ISBN</small> {{ listing.isbn }}
+    </h4>
+  </div>
+  <div class="col-md-6 text-right">
+    <h4><small>Sold by</small><a href="{% url 'profile' listing.seller.user.username %}"> {{ listing.seller.user.first_name }} {{ listing.seller.user.last_name }}</a>
   </div>
 </div>
 
 <div class ="row">
-  <div class="col-md-3 col-sm-12 col-xs-12">
+  <div class="col-md-3">
     <div class="text-center">
       <a href="{{ media }}{{ listing.photo }}" class="thumbnail">
         <img src="{{ listing.photo|thumbnail_url:'listing_photo' }}"
@@ -86,11 +96,11 @@ SRCT Bookshare &bull; {{ listing.title }}
     </div>
   </div>
 
-  <div class="col-md-2 col-sm-12 col-xs-12">
+  <div class="col-md-2">
     <h4><small>Condition</small> {{ listing.condition }}</h4>
   </div>
 
-  <div class="col-md-6 col-sm-12 col-xs-12">
+  <div class="col-md-6">
     <h4><small>Description/Comments</small>
     {% if listing.description %}
       {{ listing.description }}
@@ -98,23 +108,46 @@ SRCT Bookshare &bull; {{ listing.title }}
       None provided.</h4>
     {% endif %}
   </div>
-  <div class="col-md-1 col-sm-12 col-xs-12">
+  <div class="col-md-1">
+    <h5><a href="#"><span class="label label-danger"><i class="fa fa-flag fa-fw fa-lg"></i> Flag</span></h4></a></h5>
     {% comment %}<h4><strong>ENGH 302</strong></h4> {% endcomment %}
   </div>
 </div>
 
-{% if request.user == listing.seller.user and not listing.sold %}
-<div class="row">
-  <div class="col-md-12">
-    <h3><span class="label label-default"><a href="{% url 'update_listing' listing.slug %}">Manage</a></span>
-   <span class="label label-default"><a href="{% url 'close_listing' listing.slug %}">Mark Sold</a></span></h3>
-   </div>
-</div>
-{% endif %}
-
-{% if request.user == listing.seller.user %}
-{% else %}
 <div class="row text-center">
+{% if request.user == listing.seller.user %}
+  <div class="col-md-6 col-md-offset-3">
+    <h3>
+      {% if not listing.sold and not listing.cancelled %}
+      <span class="label label-default">
+        <a href="{% url 'sell_listing' listing.slug %}">Mark Sold</a>
+      </a></span>
+      {% elif not listing.cancelled %}
+      <span class="label label-default">
+        <a href="{% url 'unsell_listing' listing.slug %}">Cancel Sale</a>
+     </span>
+      {% endif %}
+      &nbsp;
+      {% if not listing.sold and not listing.cancelled %}
+      <span class="label label-default">
+        <a href="{% url 'edit_listing' listing.slug %}">Edit Listing</a>
+      </span>
+      {% endif %}
+      &nbsp;
+      {% if not listing.cancelled and not listing.sold %}
+      <span class="label label-default">
+        <a href="{% url 'cancel_listing' listing.slug %}">Cancel Listing</a>
+      </span>
+      {% elif not listing.sold %}
+      <span class="label label-default">
+        <a href="{% url 'reopen_listing' listing.slug %}">Reopen Listing</a>
+      </span>
+      {% endif %}
+    </h3>
+  </div>
+</div>
+
+{% else %}
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="panel panel-default" style="margin-top:10px;">
       <div class="panel-heading">
@@ -127,7 +160,7 @@ SRCT Bookshare &bull; {{ listing.title }}
         {% crispy my_form %}
       {% else %}
       <div class="col-lg-12">
-          <h5 class="text-center">You cannot bid on an inactive listing.</h5>
+        <h5 class="text-center">You cannot bid on an inactive listing.</h5>
       </div>
       {% endif %}
       </div>
@@ -140,7 +173,7 @@ SRCT Bookshare &bull; {{ listing.title }}
   <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="panel panel-default" style="margin-top:10px;">
       <div class="panel-heading">
-        <h4 class="panel-title">
+        <h4 class="panel-title text-center">
           <a data-toggle="collapse" href="#bids">
             Hide/Show Bids ({{ bid_count }})
           </a>
@@ -156,7 +189,7 @@ SRCT Bookshare &bull; {{ listing.title }}
         <!-- BID DISPLAY -->
           <div class="row">
 
-            <div class="col-lg-3">
+            <div class="col-lg-3 text-center">
               <h4><a href="{{ bid.bidder.get_absolute_url }}">
                 {{ bid.bidder.user.first_name }}
                 {{ bid.bidder.user.last_name }}
@@ -164,19 +197,23 @@ SRCT Bookshare &bull; {{ listing.title }}
             </div>
 
             <div class="col-lg-2">
-              <h4><small>{{ bid.created|date:"M d y P" }}</small></h4>
+              <h4><small>{{ bid.created|naturaltime }}</small></h4>
             </div>
 
             <div class="col-lg-6">
-              <h4>
+              <h4><small>
               {% if bid.text %}
                 {{ bid.text }}
               {% else %}
               {% endif %}
-              </h4>
+              </small></h4>
             </div>
 
+          {% if bid == listing.winning_bid %}
+            <div class="col-lg-1 text-success">
+          {% else %}
             <div class="col-lg-1">
+          {% endif %}
               <h4><strong>${{ bid.price }}</strong></h4>
             </div>
 

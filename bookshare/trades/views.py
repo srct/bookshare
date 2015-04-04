@@ -60,7 +60,7 @@ class DetailListing(DetailView):
         # make the form available to the template on get
         # set the bidder and the listing
         form = BidForm(initial={'bidder' : me, 'listing' : self.get_object()})
-        form.fields['bidder'].widget = HiddenInput()
+        #form.fields['bidder'].widget = HiddenInput()
         form.fields['listing'].widget = HiddenInput()
 
         context['my_form'] = form
@@ -115,10 +115,10 @@ class CreateListing(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(CreateListing, self).get_context_data(**kwargs)
 
-        me = User.objects.get(username=self.request.user.username)
+        me = Student.objects.get(username=self.request.user.username)
 
         form = ListingForm(initial={'seller' : me})
-        form.fields['seller'].widget = HiddenInput()
+        #form.fields['seller'].widget = HiddenInput()
 
         context['my_form'] = form
 

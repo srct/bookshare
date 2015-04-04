@@ -25,14 +25,14 @@ class ListingForm( forms.ModelForm ):
                 Field('author', placeholder='Richard W. Thorington, Jr., and Katie Ferrell'),
                 'edition',
                 Field('year', placeholder='2006'),
-                 HTML("""<hr/ >"""),
-                 #'course',
+                HTML("""<hr/ >"""),
+                #'course',
                 'condition',
-                 AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
-                 'photo',
-                 Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester.'),
-                 HTML("""<hr/ >"""),
-                 FormActions(Submit('submit', 'Create', css_class='btn-primary'))
+                AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
+                'photo',
+                Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester.'),
+                HTML("""<hr/ >"""),
+                FormActions(Submit('submit', 'Create', css_class='btn-primary'))
             ),
         )
 
@@ -41,7 +41,7 @@ class ListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        exclude = ('data_sold', 'sold', 'active', 'finalPrice')
+        exclude = ('sold', 'cancelled', 'email_message', 'winning_bid', 'date_closed')
 
 class BidForm( forms.ModelForm ):
 

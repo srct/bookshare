@@ -2,6 +2,7 @@
 {{ object.author }}
 {{ object.isbn }}
 {{ object.year }}
+{{ object.condition }}
 {{ object.edition }}
 {{ object.description }}
 {{ object.created }}

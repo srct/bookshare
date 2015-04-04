@@ -1,0 +1,25 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+SRCT Bookshare &bull; {{ listing.title }} &bull; Cancel
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header" id="banner">
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
+      <p class="lead text-center"><strong>Cancel Listing</strong></p>
+    </div>
+  </div>
+</div>
+
+{% load crispy_forms_tags %}
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2 text-center">
+    {% crispy my_form %}
+  </div>
+</div>
+{% endblock %}

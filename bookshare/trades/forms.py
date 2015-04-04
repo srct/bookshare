@@ -19,20 +19,20 @@ class ListingForm( forms.ModelForm ):
         self.helper.layout = Layout(
             Fieldset("",
                 'seller',
-                'isbn',
+                Field('isbn', placeholder='0801884039'),
                 HTML("""<hr/ >"""),
-                Field('title'),
-                'author',
+                Field('title', placeholder='Squirrels: The Animal Answer Guide'),
+                Field('author', placeholder='Richard W. Thorington, Jr., and Katie Ferrell'),
                 'edition',
-                'year',
+                Field('year', placeholder='2006'),
                  HTML("""<hr/ >"""),
                  #'course',
                 'condition',
                  AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
                  'photo',
-                 Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester'),
+                 Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester.'),
                  HTML("""<hr/ >"""),
-                 FormActions(Submit('submit', 'Submit', css_class='btn-primary'))
+                 FormActions(Submit('submit', 'Create', css_class='btn-primary'))
             ),
         )
 
@@ -69,24 +69,95 @@ class BidForm( forms.ModelForm ):
     class Meta:
         model = Bid
 
-class FinalPriceForm( forms.Form ):
-    book_id = forms.IntegerField(
-        required = True,
-        widget=forms.HiddenInput(),
-    )
-    final_price = forms.CharField(
-        required = False,
-        label = 'Final Selling Price',
-        widget=forms.NumberInput(attrs={
-            'class': 'form-control',
-        }),
-    )
+#class EditListingForm( forms.ModelForm ):
 
+class SellListingForm( forms.ModelForm ):
 
-class CloseForm( forms.Form ):
-    book_id = forms.IntegerField(
-        required = True,
-        widget=forms.HiddenInput(),
-    )
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.form_class='form-horizontal'
 
+        self.helper.layout = Layout(
+            Fieldset("",
+                'sold',
+                'winning_bid',
+                'date_closed',
+                HTML("""<hr/ >"""),
+                HTML("""<strong>Your Email to Your Bidder</strong>"""),
+                HTML("""<div class="well"><em><p>Hey there!</p><p>Seller {{ listing.seller.user.first_name }} {{ listing.seller.user.last_name }} has picked your bid for {{ listing.title }} on SRCT Bookshare. They're the cc'ed email address-- {{ listing.seller.user.email }}.</p><p>Watch your email to arrange all the final touches to get your book.</p></em>"""),
+                'email_message',
+                HTML("""<em><p>Thanks for using SRCT Bookshare!</p><p>Mason SRCT</p></em></div>"""),
+                HTML("""<hr/ >"""),
+                # cancel button
+                FormActions(Submit('submit', 'Email and Sell', css_class='btn-primary'))
+            ),
+        )
+        super(SellListingForm, self).__init__(*args, **kwargs)
+        self.fields['email_message'].label = "Custom message (optional)"
 
+    class Meta:
+        model = Listing
+        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'description', 'price', 'photo', 'cancelled', )
+
+class UnSellListingForm( forms.ModelForm ):
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.form_class='form-horizontal'
+
+        self.helper.layout = Layout(
+            Fieldset("",
+                'sold',
+                'winning_bid',
+                'date_closed',
+                # cancel button
+                FormActions(Submit('submit', 'Back on the Market', css_class='btn-primary'))
+            ),
+        )
+        super(UnSellListingForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Listing
+        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'description', 'price', 'photo', 'cancelled', 'email_message')
+
+class CancelListingForm( forms.ModelForm ):
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.form_class='form-horizontal'
+
+        self.helper.layout = Layout(
+            Fieldset("",
+                'cancelled',
+                'date_closed',
+                # cancel button
+                 FormActions(Submit('submit', 'Cancel Your Listing', css_class='btn-primary'))
+            ),
+        )
+        super(CancelListingForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Listing
+        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'description', 'price', 'photo', 'sold', 'email_message', 'winning_bid',)
+
+class ReopenListingForm( forms.ModelForm ):
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.form_class='form-horizontal'
+
+        self.helper.layout = Layout(
+            Fieldset("",
+                'cancelled',
+                # cancel button
+                 FormActions(Submit('submit', 'Reopen Your Listing', css_class='btn-primary'))
+            ),
+        )
+        super(ReopenListingForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Listing
+        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'description', 'price', 'photo', 'sold', 'email_message', 'winning_bid', 'date_closed')

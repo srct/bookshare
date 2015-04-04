@@ -156,11 +156,18 @@ SRCT Bookshare &bull; {{ listing.title }}
         </h4>
       </div>
       <div class="panel-body">
-      {% if listing.active and not listing.sold %}
+      {% if not listing.cancelled or not listing.sold %}
         {% crispy my_form %}
       {% else %}
       <div class="col-lg-12">
-        <h5 class="text-center">You cannot bid on an inactive listing.</h5>
+        <h5 class="text-center">This listing has been
+          {% if listing.cancelled %}
+          cancelled
+          {% elif %}
+          sold
+          {% endif %}
+          and is no longer accepting bids.
+        </h5>
       </div>
       {% endif %}
       </div>

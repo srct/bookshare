@@ -1,18 +1,29 @@
 <div class="panel panel-info">
   <div class="panel-body">
+    <div class="col-md-10">
     <h3>
-      <span class="pull-right"><strong>${{ listing.price }}</strong></span>
-      {% if listing.sold or not listing.active %}
-        <strong>[Closed]</strong>
+      {% if not listing.active %}
+        <small><span class="label label-warning"><strong>Inactive</strong></span></small>
+      {% elif listing.sold %}
+        <small><span class="label label-primary"><strong>Sold</strong></span>
       {% endif %}
       <a href="{{ listing.get_absolute_url }}">
         <em>{{ listing.title }}</em>
       </a>
     </h3>
     <h4>
-      <p><small>Author(s)</small>: {{listing.author }}</p>
-      <p><small>ISBN</small>: {{ listing.isbn }}</p>
-      <p><small>Condition</small>: {{ listing.condition }}</p>
+      <p><small>Seller:</small>
+        <a href="{{ listing.seller.get_absolute_url }}">
+          {{ listing.seller.user.first_name }} {{ listing.seller.user.last_name }}
+        </a>
+      </p>
+      <p><small>Author(s):</small> {{ listing.author }}</p>
+      <p><small>ISBN:</small> {{ listing.isbn }}</p>
+      <p><small>Condition:</small> {{ listing.condition }}</p>
     </h4>
+    </div>
+    <div class="col-md-2 text-center">
+      <h3><strong>${{ listing.price }}</strong></h3>
+    </div>
   </div>
 </div>

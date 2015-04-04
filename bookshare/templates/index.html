@@ -28,9 +28,11 @@ SRCT Bookshare &bull; Homepage
       <legend><i class="fa fa-book"></i> <a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name }}</a></legend>
       <div class="row">
         {% for listing in lookout.get_listings %}
+          {% if not listing.cancelled or listing.sold %}
           <div class="col-md-6">
             {% include 'listing_preview_panel.html' %}
           </div>
+          {% endif %}
         {% endfor %}
       </div>
     {% endfor %}

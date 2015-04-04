@@ -16,7 +16,8 @@ class Lookout(TimeStampedModel):
     #course = models.ForeignKey(Course)
     slug = RandomSlugField(length = 6)
     def get_listings(self):
-        isbn_listings = models.Q( isbn = self.isbn, active = True )
+        # may be reason to resurrect active as an actual field, possibly can call function?
+        isbn_listings = models.Q( isbn = self.isbn, sold = False, cancelled = False )
         return Listing.objects.filter( isbn_listings )
 
     # needs get_absolute_url

@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 
-from trades.views import ListListings, CreateListing, ListingPage, UpdateListing, CloseListing
-from trades.models import Listing
+from trades.views import ListListings, CreateListing, ListingPage, EditListing, SellListing, UnSellListing, CancelListing, ReopenListing
+from trades.models import Listing, Bid
 
 urlpatterns = patterns('',
 
@@ -9,7 +9,7 @@ urlpatterns = patterns('',
         ListListings.as_view(
             model=Listing,
             paginate_by = 15,
-            queryset=Listing.objects.all().order_by('-created'),
+            queryset=Listing.objects.exclude(cancelled=True).order_by('-created'),
             context_object_name='listings',
             template_name='list_listings.html'),
         name='list_listings'),
@@ -24,15 +24,33 @@ urlpatterns = patterns('',
         ListingPage.as_view(),
         name='detail_listing'),
 
-    url(r'^listing/(?P<slug>[\w-]+)/update/$',
-        UpdateListing.as_view(
+    url(r'^listing/(?P<slug>[\w-]+)/edit/$',
+        EditListing.as_view(
             model=Listing,
-            template_name = 'listing_update.html'),
-        name='update_listing'),
+            template_name = 'listing_edit.html'),
+        name='edit_listing'),
 
-    url(r'^listing/(?P<slug>[\w-]+)/close/$',
-        CloseListing.as_view(
+    url(r'^listing/(?P<slug>[\w-]+)/sell/$',
+        SellListing.as_view(
             model=Listing,
-            template_name = 'listing_close.html'),
-        name='close_listing'),
+            template_name = 'listing_sell.html'),
+        name='sell_listing'),
+
+    url(r'^listing/(?P<slug>[\w-]+)/unsell/$',
+        UnSellListing.as_view(
+            model=Listing,
+            template_name = 'listing_unsell.html'),
+        name='unsell_listing'),
+
+    url(r'^listing/(?P<slug>[\w-]+)/cancel/$',
+        CancelListing.as_view(
+            model=Listing,
+            template_name = 'listing_cancel.html'),
+        name='cancel_listing'),
+
+    url(r'^listing/(?P<slug>[\w-]+)/reopen/$',
+        ReopenListing.as_view(
+            model=Listing,
+            template_name = 'listing_reopen.html'),
+        name='reopen_listing'),
 )

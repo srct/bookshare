@@ -1,7 +1,8 @@
 from trades.models import Listing, Bid
-from trades.forms import ListingForm, FinalPriceForm, CloseForm, BidForm
+from trades.forms import ListingForm, BidForm, SellListingForm, UnSellListingForm, CancelListingForm, ReopenListingForm
 
 from django.views.generic import View, DetailView, ListView, CreateView, UpdateView, DeleteView
+
 from braces.views import LoginRequiredMixin
 
 from django.contrib.auth.models import User
@@ -12,6 +13,7 @@ from django.core.urlresolvers import reverse
 import math
 import pyisbn
 import requests
+from datetime import date
 
 # pulls worldcat metadata from ISBNs
 def ISBNMetadata(standardISBN):
@@ -51,10 +53,6 @@ class DetailListing(DetailView):
     template_name = 'detail_listing.html'
     login_url = '/'
 
-    # further need to incorporate much of the logic below somewhere
-    # - bid's age, then if 'old'
-    # - whether it's the person who posted the bid or someone else
-
     def get_context_data(self, **kwargs):
         context = super(DetailListing, self).get_context_data(**kwargs)
         me = User.objects.get(username=self.request.user.username)
@@ -68,7 +66,7 @@ class DetailListing(DetailView):
         context['my_form'] = form
 
         # bids, filter by listing name of the current listing, order by date created
-        context['bids'] = Bid.objects.filter(listing=self.get_object()).order_by('-created')
+        context['bids'] = Bid.objects.filter(listing=self.get_object()).order_by('-price')
         context['bid_count'] = len(Bid.objects.filter(listing=self.get_object))
         return context 
 
@@ -96,6 +94,18 @@ class ListingPage(LoginRequiredMixin, View):
         return view(request, *args, **kwargs)
 
 # and we return to our regularly schedule programming
+class DeleteBid(LoginRequiredMixin, DeleteView):
+    model = Bid
+    success_url = '/'
+
+    # can be deleted by either creator or person for lister
+
+class EditBid(LoginRequiredMixin, UpdateView):
+    model = Bid
+    success_url = '/'
+
+    # can only be edited by the bidder
+
 class CreateListing(LoginRequiredMixin, CreateView):
     model = Listing
     form_class = ListingForm
@@ -114,18 +124,18 @@ class CreateListing(LoginRequiredMixin, CreateView):
 
         return context
 
-class UpdateListing(LoginRequiredMixin, UpdateView):
+class EditListing(LoginRequiredMixin, UpdateView):
     model = Listing
-    #form_class = UpdateListingForm
+    #form_class = EditListingForm
 
-    fields = ['active', 'title', 'author', 'isbn', 'year', 'edition', 'condition',
+    fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition',
         'description', 'price', 'photo',]
-    template_suffix_name = '_update'
+    template_suffix_name = '_edit'
 
     login_url = '/'
 
     def get_context_data(self, **kwargs):
-        context = super(UpdateListing, self).get_context_data(**kwargs)
+        context = super(EditListing, self).get_context_data(**kwargs)
 
         requesting_student = User.objects.get(username=self.request.user.username)
         selling_student = self.get_object().seller.user
@@ -135,15 +145,16 @@ class UpdateListing(LoginRequiredMixin, UpdateView):
 
         return context 
 
-class CloseListing(LoginRequiredMixin, UpdateView):
+class SellListing(LoginRequiredMixin, UpdateView):
     model = Listing
-    fields = ['sold', 'date_sold', 'finalPrice',]
-    template_suffix_name = '_close'
+    fields = ['sold', 'email_message', 'winning_bid', 'date_closed']
+    template_suffix_name = '_sell'
+    form_class = SellListingForm
 
     login_url = '/'
 
     def get_context_data(self, **kwargs):
-        context = super(CloseListing, self).get_context_data(**kwargs)
+        context = super(SellListing, self).get_context_data(**kwargs)
 
         requesting_student = User.objects.get(username=self.request.user.username)
         selling_student = self.get_object().seller.user
@@ -151,5 +162,94 @@ class CloseListing(LoginRequiredMixin, UpdateView):
         if not(selling_student == requesting_student):
             raise Http404
 
+        today = date.today()
+        # set default to highest price
+
+        form = SellListingForm(initial={'sold' : True, 'date_closed' : today})
+        form.fields['winning_bid'].queryset = Bid.objects.filter(listing=self.get_object())
+        form.fields['winning_bid'].required = True
+        form.fields['sold'].widget = HiddenInput()
+        form.fields['date_closed'].widget = HiddenInput()
+
+        context['my_form'] = form
+
         return context 
 
+class UnSellListing(LoginRequiredMixin, UpdateView):
+    model = Listing
+    fields = ['sold', 'winning_bid', 'date_closed']
+    template_suffix_name = '_unsell'
+    form_class = UnSellListingForm
+
+    login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super(UnSellListing, self).get_context_data(**kwargs)
+
+        requesting_student = User.objects.get(username=self.request.user.username)
+        selling_student = self.get_object().seller.user
+
+        if not(selling_student == requesting_student):
+            raise Http404
+
+        today = date.today()
+
+        form = UnSellListingForm(initial={'sold' : False, 'date_closed' : '', 'winning_bid' : ''})
+        form.fields['sold'].widget = HiddenInput()
+        form.fields['date_closed'].widget = HiddenInput()
+        form.fields['winning_bid'].widget = HiddenInput()
+
+        context['my_form'] = form
+
+        return context 
+
+class CancelListing(LoginRequiredMixin, UpdateView):
+    model = Listing
+    fields = ['cancelled', 'date_closed',]
+    template_suffix_name = '_cancel'
+    form_class = CancelListingForm
+
+    login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super(CancelListing, self).get_context_data(**kwargs)
+
+        requesting_student = User.objects.get(username=self.request.user.username)
+        selling_student = self.get_object().seller.user
+
+        if not(selling_student == requesting_student):
+            raise Http404
+
+        today = date.today()
+
+        form = CancelListingForm(initial={'cancelled' : True, 'date_closed' : ''})
+        form.fields['cancelled'].widget = HiddenInput()
+        form.fields['date_closed'].widget = HiddenInput()
+
+        context['my_form'] = form
+
+        return context 
+
+class ReopenListing(LoginRequiredMixin, UpdateView):
+    model = Listing
+    fields = ['cancelled']
+    template_suffix_name = '_reopen'
+    form_class = ReopenListingForm
+
+    login_url = '/'
+
+    def get_context_data(self, **kwargs):
+        context = super(ReopenListing, self).get_context_data(**kwargs)
+
+        requesting_student = User.objects.get(username=self.request.user.username)
+        selling_student = self.get_object().seller.user
+
+        if not(selling_student == requesting_student):
+            raise Http404
+
+        form = ReopenListingForm(initial={'cancelled' : False})
+        form.fields['cancelled'].widget = HiddenInput()
+
+        context['my_form'] = form
+
+        return context 

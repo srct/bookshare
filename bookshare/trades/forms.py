@@ -4,7 +4,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, HTML, Field
 from crispy_forms.bootstrap import AppendedPrependedText, FormActions
 
-from trades.models import Listing, Bid
+from trades.models import Listing, Bid, Flag
 
 class ListingForm( forms.ModelForm ):
 
@@ -68,6 +68,27 @@ class BidForm( forms.ModelForm ):
 
     class Meta:
         model = Bid
+
+class FlagForm( forms.ModelForm ):
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.form_class='form-horizontal'
+
+        self.helper.layout = Layout(
+            Fieldset("",
+            'flagger',
+            'listing',
+            'reason',
+             HTML("""<hr/ >"""),
+             FormActions(Submit('submit', 'Create', css_class='btn-primary'))
+            ),
+        )
+        super(FlagForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Flag
 
 #class EditListingForm( forms.ModelForm ):
 

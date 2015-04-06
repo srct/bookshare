@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 
-from trades.views import ListListings, CreateListing, ListingPage, EditListing, SellListing, UnSellListing, CancelListing, ReopenListing
+from trades.views import ListListings, CreateListing, ListingPage, CreateFlag, DeleteFlag, EditListing, SellListing, UnSellListing, CancelListing, ReopenListing
 from trades.models import Listing, Bid
 
 urlpatterns = patterns('',
@@ -23,6 +23,14 @@ urlpatterns = patterns('',
     url(r'^listing/(?P<slug>[\w-]+)/$',
         ListingPage.as_view(),
         name='detail_listing'),
+
+    url(r'^listing/(?P<slug>[\w-]+)/flag/$',
+        CreateFlag.as_view(),
+        name='create_flag'),
+
+    url(r'^listing/(?P<listing_slug>[\w-]+)/flag/(?P<slug>[\w-]+)/remove/$',
+        DeleteFlag.as_view(),
+        name='delete_flag'),
 
     url(r'^listing/(?P<slug>[\w-]+)/edit/$',
         EditListing.as_view(

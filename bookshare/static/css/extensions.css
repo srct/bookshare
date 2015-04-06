@@ -54,3 +54,7 @@ text-align: center;
 .navbar-brand img {
   margin-top: -5px;
 }
+
+body .modal-dialog {
+  width: 70%;
+}

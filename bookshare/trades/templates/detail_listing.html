@@ -11,6 +11,31 @@ SRCT Bookshare &bull; {{ listing.title }}
 
 {% load humanize %}
 
+<!-- you can't actually dismiss this for some reason -->
+{% if flag_count > 4 %}
+<div class="modal show" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h3 class="modal-title"><strong class="text-danger"><i class="fa fa-exclamation-triangle fa-fw"></i> Warning:</strong> This listing has been flagged!</h3>
+      </div>
+      <div class="modal-body text-center">
+        {% for flag in flags %}
+        <h4><strong>{{ flag.reason }}</strong> {{ flag.created|date:"M d, 'y P" }} <small>({{ flag.created|naturaltime }})</small></h4>
+        {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <div class="text-center"><!-- not sure why this doesn't work in the above div... -->
+        <!-- also, why is the dismissing not working... >__> -->
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Proceed</button>
+        <a href="javascript:history.back()"><button type="button" class="btn btn-default">Get Me Out of Here</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
 <div class="page-header" id="banner">
 {% if listing.cancelled %}
   <div class="row">
@@ -163,7 +188,7 @@ SRCT Bookshare &bull; {{ listing.title }}
         <h5 class="text-center">This listing has been
           {% if listing.cancelled %}
           cancelled
-          {% elif %}
+          {% elif listing.sold %}
           sold
           {% endif %}
           and is no longer accepting bids.

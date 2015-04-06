@@ -1,4 +1,4 @@
-from trades.models import Listing, Bid
+from trades.models import Listing, Bid, Flag
 from trades.forms import ListingForm, BidForm, SellListingForm, UnSellListingForm, CancelListingForm, ReopenListingForm
 
 from django.views.generic import View, DetailView, ListView, CreateView, UpdateView, DeleteView
@@ -53,6 +53,8 @@ class DetailListing(DetailView):
     template_name = 'detail_listing.html'
     login_url = '/'
 
+    # you can only flag a listing once...
+
     def get_context_data(self, **kwargs):
         context = super(DetailListing, self).get_context_data(**kwargs)
         me = User.objects.get(username=self.request.user.username)
@@ -67,7 +69,10 @@ class DetailListing(DetailView):
 
         # bids, filter by listing name of the current listing, order by date created
         context['bids'] = Bid.objects.filter(listing=self.get_object()).order_by('-price')
-        context['bid_count'] = len(Bid.objects.filter(listing=self.get_object))
+        context['bid_count'] = Bid.objects.filter(listing=self.get_object).count()
+        # flags
+        context['flags'] = Flag.objects.filter(listing=self.get_object()).order_by('-created')
+        context['flag_count'] = Flag.objects.filter(listing=self.get_object()).count()
         return context 
 
 class CreateBid(CreateView):
@@ -115,7 +120,7 @@ class CreateListing(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(CreateListing, self).get_context_data(**kwargs)
 
-        me = Student.objects.get(username=self.request.user.username)
+        me = User.objects.get(username=self.request.user.username)
 
         form = ListingForm(initial={'seller' : me})
         #form.fields['seller'].widget = HiddenInput()

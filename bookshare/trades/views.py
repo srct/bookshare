@@ -1,5 +1,6 @@
 from trades.models import Listing, Bid, Flag
-from trades.forms import ListingForm, BidForm, SellListingForm, UnSellListingForm, CancelListingForm, ReopenListingForm
+from trades.forms import ListingForm, BidForm, FlagForm, SellListingForm, UnSellListingForm, CancelListingForm, ReopenListingForm
+from core.models import Student
 
 from django.views.generic import View, DetailView, ListView, CreateView, UpdateView, DeleteView
 
@@ -28,19 +29,27 @@ def ISBNMetadata(standardISBN):
     except:
         return None
 
+# flagging
+# you can only flag a listing once...
+def can_flag(flagger, listing):
+    user_flag_num = Flag.objects.filter(flagger=flagger, listing=listing).count()
+    # we're assuming that this isn't going to go over 1
+    if user_flag_num:
+        return False
+    else:
+        return True
+
+# get the listing's slug to pass to the create flag page
+def flag_slug(flagger, listing):
+    if not can_flag(flagger, listing):
+        return Flag.objects.get(flagger=flagger, listing=listing).slug
+    else:
+        return None
+
 # validation of new listing forms
     # <3 test cases
 
-# relevant comments
-def relevantComments(seller):
-    sellerListings = Listing.objects.filter(seller__user__username=seller).order_by("-created")
-    # all listings that seller has commented on (preferably ordered in reverse)
-    # put those lists together
-    # return that list
-    return False
-
 ### VIEWS ###
-
 class ListListings(LoginRequiredMixin, ListView):
     model = Listing
     context_object_name = 'listings'
@@ -53,11 +62,9 @@ class DetailListing(DetailView):
     template_name = 'detail_listing.html'
     login_url = '/'
 
-    # you can only flag a listing once...
-
     def get_context_data(self, **kwargs):
         context = super(DetailListing, self).get_context_data(**kwargs)
-        me = User.objects.get(username=self.request.user.username)
+        me = Student.objects.get(user=self.request.user)
 
         # make the form available to the template on get
         # set the bidder and the listing
@@ -73,6 +80,8 @@ class DetailListing(DetailView):
         # flags
         context['flags'] = Flag.objects.filter(listing=self.get_object()).order_by('-created')
         context['flag_count'] = Flag.objects.filter(listing=self.get_object()).count()
+        context['can_flag'] = can_flag(me, self.get_object())
+        context['flag_slug'] = flag_slug(me, self.get_object())
         return context 
 
 class CreateBid(CreateView):
@@ -99,6 +108,60 @@ class ListingPage(LoginRequiredMixin, View):
         return view(request, *args, **kwargs)
 
 # and we return to our regularly schedule programming
+
+class CreateFlag(LoginRequiredMixin, CreateView):
+    model = Flag
+    template_name = 'create_flag.html'
+
+    login_url = '/'
+
+    def get_success_url(self):
+        return reverse('detail_listing', kwargs={'slug':self.object.listing.slug})
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateFlag, self).get_context_data(**kwargs)
+        me = Student.objects.get(user=self.request.user)
+
+        current_url = self.request.get_full_path()
+        listing_slug = current_url.split('/')[3]
+        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
+        selected_listing = Listing.objects.get(slug=listing_slug)
+
+        form = FlagForm(initial={'flagger' : me, 'listing' : selected_listing})
+
+        context['my_form'] = form
+
+        selling_student = selected_listing.seller
+
+        # you can't flag your own listing
+        if (selling_student == me):
+            raise Http404
+
+        # can only create a flag if you haven't previously created one
+        if not can_flag(me, selected_listing):
+           raise Http404
+
+        context['listing'] = selected_listing
+        return context
+
+class DeleteFlag(LoginRequiredMixin, DeleteView):
+    model = Flag
+    template_name = 'delete_flag.html'
+
+    def get_success_url(self):
+        return reverse('detail_listing', kwargs={'slug':self.object.listing.slug})
+
+    def get_context_data(self, **kwargs):
+        context = super(DeleteFlag, self).get_context_data(**kwargs)
+        me = Student.objects.get(user=self.request.user)
+
+        flag_student = self.get_object().flagger.user
+
+#if not(requesting_student == flag_student):
+#            raise Http404
+
+        return context
+
 class DeleteBid(LoginRequiredMixin, DeleteView):
     model = Bid
     success_url = '/'
@@ -120,7 +183,7 @@ class CreateListing(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(CreateListing, self).get_context_data(**kwargs)
 
-        me = User.objects.get(username=self.request.user.username)
+        me = Student.objects.get(user=self.request.user)
 
         form = ListingForm(initial={'seller' : me})
         #form.fields['seller'].widget = HiddenInput()
@@ -142,10 +205,10 @@ class EditListing(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(EditListing, self).get_context_data(**kwargs)
 
-        requesting_student = User.objects.get(username=self.request.user.username)
-        selling_student = self.get_object().seller.user
+        me = Student.objects.get(user=self.request.user)
+        selling_student = self.get_object().seller
 
-        if not(selling_student == requesting_student):
+        if not(selling_student == me):
             raise Http404
 
         return context 
@@ -161,14 +224,13 @@ class SellListing(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(SellListing, self).get_context_data(**kwargs)
 
-        requesting_student = User.objects.get(username=self.request.user.username)
-        selling_student = self.get_object().seller.user
+        me = Student.objects.get(user=self.request.user)
+        selling_student = self.get_object().seller
 
-        if not(selling_student == requesting_student):
+        if not(selling_student == me):
             raise Http404
 
         today = date.today()
-        # set default to highest price
 
         form = SellListingForm(initial={'sold' : True, 'date_closed' : today})
         form.fields['winning_bid'].queryset = Bid.objects.filter(listing=self.get_object())
@@ -191,10 +253,10 @@ class UnSellListing(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(UnSellListing, self).get_context_data(**kwargs)
 
-        requesting_student = User.objects.get(username=self.request.user.username)
-        selling_student = self.get_object().seller.user
+        me = Student.objects.get(user=self.request.user)
+        selling_student = self.get_object().seller
 
-        if not(selling_student == requesting_student):
+        if not(selling_student == me):
             raise Http404
 
         today = date.today()
@@ -219,10 +281,10 @@ class CancelListing(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(CancelListing, self).get_context_data(**kwargs)
 
-        requesting_student = User.objects.get(username=self.request.user.username)
-        selling_student = self.get_object().seller.user
+        me = Student.objects.get(user=self.request.user)
+        selling_student = self.get_object().seller
 
-        if not(selling_student == requesting_student):
+        if not(selling_student == me):
             raise Http404
 
         today = date.today()
@@ -246,10 +308,10 @@ class ReopenListing(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(ReopenListing, self).get_context_data(**kwargs)
 
-        requesting_student = User.objects.get(username=self.request.user.username)
-        selling_student = self.get_object().seller.user
+        me = Student.objects.get(user=self.request.user)
+        selling_student = self.get_object().seller
 
-        if not(selling_student == requesting_student):
+        if not(selling_student == me):
             raise Http404
 
         form = ReopenListingForm(initial={'cancelled' : False})

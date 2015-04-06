@@ -132,3 +132,30 @@ class Bid(TimeStampedModel):
 
     class Meta:
         ordering = ['-created']
+
+class Flag(TimeStampedModel):
+
+    WRONG_PRODUCT_TYPE = 'Not a Textbook'
+    # may eventually change as additional product categories are added
+    OBSCENE = 'Obscene'
+    SPAM = 'Spam'
+    ILLEGAL = 'Illegal'
+
+    # if you change these, make sure to change the block function in the view
+    FLAGGING_REASON_CHOICES = (
+        (WRONG_PRODUCT_TYPE, 'Not a Textbook'),
+        (OBSCENE, 'Obscene'),
+        (SPAM, 'Spam'),
+        (ILLEGAL, 'Illegal'),
+    )
+
+    flagger = models.ForeignKey(Student)
+    listing = models.ForeignKey(Listing)
+
+    reason = models.CharField(choices = FLAGGING_REASON_CHOICES,
+        max_length = 30,)
+ 
+    def __unicode__(self):
+        return "%s's %s for %s" % (self.flagger.user.username, self.listing.title, self.reason)
+    class Meta:
+        ordering = ['listing', 'created']

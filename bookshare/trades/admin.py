@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Bid, Listing
+from .models import Bid, Listing, Flag
 
 # Register your models here.
 @admin.register(Bid)
@@ -12,3 +12,5 @@ class ListingAdmin(admin.ModelAdmin):
 	list_display = ('id', 'created', 'modified', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'description',\
 	                'price', 'sold', 'cancelled', 'winning_bid', 'date_closed')
 	list_filter = ('created', 'modified', 'seller', 'condition', 'price', 'cancelled')
+
+admin.site.register(Flag)

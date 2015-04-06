@@ -207,7 +207,7 @@ SRCT Bookshare &bull; {{ listing.title }}
         </h4>
       </div>
       <div class="panel-body">
-      {% if not listing.cancelled or not listing.sold %}
+      {% if not listing.cancelled and not listing.sold %}
         {% crispy my_form %}
       {% else %}
       <div class="col-lg-12">

@@ -20,17 +20,11 @@ SRCT Bookshare &bull; Lookouts
 
 <div class="row">
   {% for listing in lookout.get_listings %}
-
-    {% if forloop.counter|add:-1|divisibleby:rows %}
-    <div class="col-md-4">
-    {% endif %}
-
+    {% if not listing.cancelled or listing.sold %}
+    <div class="col-md-6">
       {% include 'listing_preview_panel.html' %}
-
-    {% if forloop.counter|add:rows|divisibleby:rows %}
     </div>
     {% endif %}
-
   {% endfor %}
 </div>
 

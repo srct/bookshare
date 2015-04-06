@@ -5,6 +5,7 @@ from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 from braces.views import LoginRequiredMixin
 
 from django.contrib.auth.models import User
+from core.models import Student
 from django.http import Http404
 from django.forms.widgets import HiddenInput
 
@@ -18,7 +19,7 @@ class CreateLookout(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(CreateLookout, self).get_context_data(**kwargs)
 
-        me = User.objects.get(username=self.request.user.username)
+        me = Student.objects.get(user=self.request.user)
 
         form = LookoutForm(initial={'owner' : me})
 
@@ -44,10 +45,10 @@ class DeleteLookout(LoginRequiredMixin, DeleteView):
     def get_context_data(self, **kwargs):
         context = super(DeleteLookout, self).get_context_data(**kwargs)
 
-        requesting_student = User.objects.get(username=self.request.user.username)
-        lookout_student = self.get_object().owner.user
+        me = Student.objects.get(user=self.request.user)
+        lookout_student = self.get_object().owner
 
-        if not(requesting_student == lookout_student):
+        if not(lookout_student == me):
             raise Http404
 
         return context

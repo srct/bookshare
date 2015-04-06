@@ -196,7 +196,7 @@ class EditListing(LoginRequiredMixin, UpdateView):
     model = Listing
     #form_class = EditListingForm
 
-    fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition',
+    fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition', 'access_code',
         'description', 'price', 'photo',]
     template_suffix_name = '_edit'
 

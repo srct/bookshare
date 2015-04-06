@@ -28,6 +28,7 @@ class ListingForm( forms.ModelForm ):
                 HTML("""<hr/ >"""),
                 #'course',
                 'condition',
+                'access_code',
                 AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
                 'photo',
                 Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester.'),
@@ -119,7 +120,7 @@ class SellListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'description', 'price', 'photo', 'cancelled', )
+        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'access_code', 'description', 'price', 'photo', 'cancelled', )
 
 class UnSellListingForm( forms.ModelForm ):
 
@@ -141,7 +142,7 @@ class UnSellListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'description', 'price', 'photo', 'cancelled', 'email_message')
+        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'accss_code', 'description', 'price', 'photo', 'cancelled', 'email_message')
 
 class CancelListingForm( forms.ModelForm ):
 
@@ -162,7 +163,7 @@ class CancelListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'description', 'price', 'photo', 'sold', 'email_message', 'winning_bid',)
+        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'access_code', 'description', 'price', 'photo', 'sold', 'email_message', 'winning_bid',)
 
 class ReopenListingForm( forms.ModelForm ):
     def __init__(self, *args, **kwargs):
@@ -181,4 +182,4 @@ class ReopenListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'description', 'price', 'photo', 'sold', 'email_message', 'winning_bid', 'date_closed')
+        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'access_code', 'description', 'price', 'photo', 'sold', 'email_message', 'winning_bid', 'date_closed')

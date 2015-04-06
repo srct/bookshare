@@ -30,6 +30,16 @@ class Listing(TimeStampedModel):
         (UNACCEPTABLE, 'Unacceptable'),
     )
 
+    NOT_APPLICABLE = 'Not Applicable'
+    AC_INCLUDED = 'Access Code Included'
+    AC_NOT_INCLUDED = 'Access Code NOT Included'
+
+    ACCESS_CODE_CHOICES = (
+        (NOT_APPLICABLE, 'Not Applicable'),
+        (AC_INCLUDED, 'Access Code Included'),
+        (AC_NOT_INCLUDED, 'Access Code NOT Included'),
+    )
+
     seller = models.ForeignKey(Student)
 
     title = models.CharField(
@@ -53,6 +63,9 @@ class Listing(TimeStampedModel):
     condition = models.CharField(choices = BOOK_CONDITION_CHOICES,
         max_length = 20,
         default = GOOD)
+    access_code = models.CharField(choices = ACCESS_CODE_CHOICES,
+        max_length = 30,
+        default = NOT_APPLICABLE)
     description = models.TextField(
         blank = True,
         max_length = 2000)

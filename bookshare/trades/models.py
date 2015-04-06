@@ -141,7 +141,6 @@ class Flag(TimeStampedModel):
     SPAM = 'Spam'
     ILLEGAL = 'Illegal'
 
-    # if you change these, make sure to change the block function in the view
     FLAGGING_REASON_CHOICES = (
         (WRONG_PRODUCT_TYPE, 'Not a Textbook'),
         (OBSCENE, 'Obscene'),
@@ -155,6 +154,8 @@ class Flag(TimeStampedModel):
     reason = models.CharField(choices = FLAGGING_REASON_CHOICES,
         max_length = 30,)
  
+    slug = RandomSlugField(length = 6)
+
     def __unicode__(self):
         return "%s's %s for %s" % (self.flagger.user.username, self.listing.title, self.reason)
     class Meta:

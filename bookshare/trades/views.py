@@ -53,6 +53,7 @@ def flag_slug(flagger, listing):
 class ListListings(LoginRequiredMixin, ListView):
     model = Listing
     context_object_name = 'listings'
+    paginate_by = 15
     login_url = '/'
 
 # These next two views are tied together...

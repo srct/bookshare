@@ -11,29 +11,25 @@ class ListingForm( forms.ModelForm ):
     def __init__(self, *args, **kwargs):
 
         self.helper = FormHelper()
-        self.helper.form_method = 'POST'
-        self.helper.form_class='form-horizontal'
-        self.helper.label_class='col-sm-2'
-        self.helper.field_class='col-sm-6'
+
+        # bootstrap3 formatting
+        self.helper.label_class='col-md-3 be-bold'
+        self.helper.field_class='col-md-9 bottom-padding'
 
         self.helper.layout = Layout(
             Fieldset("",
                 'seller',
                 Field('isbn', placeholder='0801884039'),
-                HTML("""<hr/ >"""),
                 Field('title', placeholder='Squirrels: The Animal Answer Guide'),
                 Field('author', placeholder='Richard W. Thorington, Jr., and Katie Ferrell'),
                 'edition',
                 Field('year', placeholder='2006'),
-                HTML("""<hr/ >"""),
                 #'course',
                 'condition',
                 'access_code',
                 AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
                 'photo',
-                Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester.'),
-                HTML("""<hr/ >"""),
-
+                Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester. /// This is for Professor Smith\'s section ONLY. /// I can give you the workbook as well.'),
                 FormActions(
                 Submit('submit', 'Create', css_class='btn-primary'),
                 Button('cancel', 'Never Mind', css_class='btn-default', onclick="history.back()")),
@@ -43,6 +39,7 @@ class ListingForm( forms.ModelForm ):
 
         super(ListingForm, self).__init__(*args, **kwargs)
         self.fields['isbn'].label = "ISBN"
+        self.fields['description'].label = "Other Notes"
 
     class Meta:
         model = Listing
@@ -51,9 +48,12 @@ class ListingForm( forms.ModelForm ):
 class BidForm( forms.ModelForm ):
 
     def __init__(self, *args, **kwargs):
+
         self.helper = FormHelper()
-        self.helper.form_method = 'POST'
-        self.helper.form_class='form-horizontal'
+
+        # bootstrap3 formatting
+        self.helper.label_class='be-bold col-md-2'
+        self.helper.field_class='col-md-10'
 
         self.helper.layout = Layout(
             Fieldset("",
@@ -61,9 +61,9 @@ class BidForm( forms.ModelForm ):
                 'listing',
                 HTML("<div class='col-md-4'>"),
                  AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
-                HTML("</div><div class='col-md-4'>"),
+                HTML("</div><div class='col-md-6'>"),
                 'text',
-                HTML("</div><div class='col-md-4'>"),
+                HTML("</div><div class='col-md-2'>"),
                 FormActions(Submit('submit', 'Submit', css_class='btn-primary')),
                 HTML("</div>"),
             ),
@@ -77,9 +77,11 @@ class BidForm( forms.ModelForm ):
 class FlagForm( forms.ModelForm ):
 
     def __init__(self, *args, **kwargs):
+
         self.helper = FormHelper()
-        self.helper.form_method = 'POST'
-        self.helper.form_class='form-horizontal'
+
+        # bootstrap3 formatting
+        self.helper.label_class='be-bold'
 
         self.helper.layout = Layout(
             Fieldset("",
@@ -102,9 +104,9 @@ class FlagForm( forms.ModelForm ):
 class SellListingForm( forms.ModelForm ):
 
     def __init__(self, *args, **kwargs):
+
         self.helper = FormHelper()
-        self.helper.form_method = 'POST'
-        self.helper.form_class='form-horizontal'
+        self.helper.label_class='be-bold'
 
         self.helper.layout = Layout(
             Fieldset("",
@@ -123,7 +125,7 @@ class SellListingForm( forms.ModelForm ):
             ),
         )
         super(SellListingForm, self).__init__(*args, **kwargs)
-        self.fields['email_message'].label = "Custom message (optional)"
+        self.fields['email_message'].label = "Custom Message"
 
     class Meta:
         model = Listing
@@ -133,8 +135,6 @@ class UnSellListingForm( forms.ModelForm ):
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
-        self.helper.form_method = 'POST'
-        self.helper.form_class='form-horizontal'
 
         self.helper.layout = Layout(
             Fieldset("",
@@ -156,8 +156,6 @@ class CancelListingForm( forms.ModelForm ):
 
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
-        self.helper.form_method = 'POST'
-        self.helper.form_class='form-horizontal'
 
         self.helper.layout = Layout(
             Fieldset("",
@@ -177,8 +175,6 @@ class CancelListingForm( forms.ModelForm ):
 class ReopenListingForm( forms.ModelForm ):
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
-        self.helper.form_method = 'POST'
-        self.helper.form_class='form-horizontal'
 
         self.helper.layout = Layout(
             Fieldset("",

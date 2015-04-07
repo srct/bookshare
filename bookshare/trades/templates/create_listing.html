@@ -24,7 +24,11 @@ SRCT Bookshare &bull; Create Listing
         <h1 class="panel-title text-center"><strong><i class="fa fa-plus-circle"></i> Add Your Textbook</strong></h1>
       </div>
       <div class="panel-body">
-        {% crispy my_form %}
+        <div class="row">
+          <div class="col-md-10 col-md-offset-1">
+            {% crispy my_form  %}
+          </div>
+        </div>
       </div>
     </div>
   </div>

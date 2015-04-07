@@ -58,3 +58,15 @@ text-align: center;
 body .modal-dialog {
   width: 70%;
 }
+
+.bottom-padding {
+  padding-bottom: 8px;
+}
+
+.be-bold {
+  font-weight: bold;
+}
+
+.form-actions {
+  text-align: center;
+}

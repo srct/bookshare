@@ -55,12 +55,12 @@ class DetailStudent(LoginRequiredMixin, DetailView):
         #context['listings'] = Listing.objects.filter(seller='2')
         context['listings'] = student_listings
         context['me'] = self.get_object().pk
-        context['lookouts'] = Lookout.objects.filter(owner=self.get_object().user)
+        context['lookouts'] = Lookout.objects.filter(owner=self.get_object())
 
         context['proceeds'] = total_proceeds(student_listings)
         context['sales'] = total_sales(student_listings)
 
-        context['bids'] = Bid.objects.filter(bidder=self.get_object().user)
+        context['bids'] = Bid.objects.filter(bidder=self.get_object())
 
         return context
 

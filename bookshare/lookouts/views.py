@@ -23,7 +23,7 @@ class CreateLookout(LoginRequiredMixin, CreateView):
 
         form = LookoutForm(initial={'owner' : me})
 
-        #form.fields['owner'].widget = HiddenInput()
+        form.fields['owner'].widget = HiddenInput()
 
         context['my_form'] = form
 

@@ -69,7 +69,7 @@ class DetailListing(DetailView):
         # make the form available to the template on get
         # set the bidder and the listing
         form = BidForm(initial={'bidder' : me, 'listing' : self.get_object()})
-        #form.fields['bidder'].widget = HiddenInput()
+        form.fields['bidder'].widget = HiddenInput()
         form.fields['listing'].widget = HiddenInput()
 
         context['my_form'] = form
@@ -129,6 +129,9 @@ class CreateFlag(LoginRequiredMixin, CreateView):
 
         form = FlagForm(initial={'flagger' : me, 'listing' : selected_listing})
 
+        form.fields['flagger'].widget = HiddenInput()
+        form.fields['listing'].widget = HiddenInput()
+
         context['my_form'] = form
 
         selling_student = selected_listing.seller
@@ -186,7 +189,7 @@ class CreateListing(LoginRequiredMixin, CreateView):
         me = Student.objects.get(user=self.request.user)
 
         form = ListingForm(initial={'seller' : me})
-        #form.fields['seller'].widget = HiddenInput()
+        form.fields['seller'].widget = HiddenInput()
 
         context['my_form'] = form
 

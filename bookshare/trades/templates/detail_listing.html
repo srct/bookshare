@@ -258,7 +258,7 @@ SRCT Bookshare &bull; {{ listing.title }}
               <h4><small>{{ bid.created|naturaltime }}</small></h4>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-5">
               <h4><small>
               {% if bid.text %}
                 {{ bid.text }}
@@ -267,12 +267,12 @@ SRCT Bookshare &bull; {{ listing.title }}
               </small></h4>
             </div>
 
-          {% if bid == listing.winning_bid %}
-            <div class="col-lg-1 text-success">
-          {% else %}
-            <div class="col-lg-1">
-          {% endif %}
+            <div class="col-lg-2 text-center">
+            {% if bid == listing.winning_bid %}
+              <h4><small><span class="label label-success">Winning Bid</span></small> <strong>${{ bid.price }}</strong></h4>
+            {% else %}
               <h4><strong>${{ bid.price }}</strong></h4>
+            {% endif %}
             </div>
 
           </div>

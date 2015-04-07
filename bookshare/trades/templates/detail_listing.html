@@ -84,7 +84,7 @@ SRCT Bookshare &bull; {{ listing.title }}
 </div>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-8">
     <h4>
       <small>by</small> {{ listing.author }}
       {% if listing.year %}
@@ -92,13 +92,13 @@ SRCT Bookshare &bull; {{ listing.title }}
       {% endif %}
     </h4>
   </div>
-  <div class="col-md-6 text-right">
+  <div class="col-md-4 text-right">
     <h4><small>Listed</small> {{ listing.created|date:"M d, 'y P" }} <small>({{ listing.created|naturaltime }})</small></h4>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-md-2">
+  <div class="col-md-3">
       <h4><small>ISBN</small> {{ listing.isbn }}</h4>
   </div>
 
@@ -116,7 +116,7 @@ SRCT Bookshare &bull; {{ listing.title }}
       {% endcomment %}
   </div>
 
-  <div class="col-md-6 text-right">
+  <div class="col-md-7 text-right">
     <h4><small>Sold by</small><a href="{% url 'profile' listing.seller.user.username %}"> {{ listing.seller.user.first_name }} {{ listing.seller.user.last_name }}</a>
     {% if request.user == listing.seller.user %}
     (Me)
@@ -125,7 +125,7 @@ SRCT Bookshare &bull; {{ listing.title }}
 </div>
 
 <div class="row">
-  <div class="col-md-2">
+  <div class="col-md-3">
     <h4><small>Condition</small> {{ listing.condition }}</h4>
   </div>
 
@@ -133,7 +133,7 @@ SRCT Bookshare &bull; {{ listing.title }}
     <h4><small>Access Code</small> {{ listing.access_code }}</h4>
   </div>
 
-  <div class="col-md-2 col-md-offset-4 text-right">
+  <div class="col-md-2 col-md-offset-3 text-right">
   {% if request.user == listing.seller.user %}
   {% else %}
     {% if can_flag %}
@@ -146,7 +146,7 @@ SRCT Bookshare &bull; {{ listing.title }}
 </div>
 
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-3">
     <div class="text-center">
       <a href="{{ media }}{{ listing.photo }}" class="thumbnail">
         <img src="{{ listing.photo|thumbnail_url:'listing_photo' }}"
@@ -155,7 +155,7 @@ SRCT Bookshare &bull; {{ listing.title }}
     </div>
   </div>
 
-  <div class="col-md-8">
+  <div class="col-md-9">
     <h4><small>Description/Comments</small>
     {% if listing.description %}
       {{ listing.description }}

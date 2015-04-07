@@ -12,7 +12,7 @@ SRCT Bookshare &bull; Lookouts
   <div class="row">
     <div class="col-sm-12 text-center">
       <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
-      <p class="lead"><strong>Your lookout for <em>{{ lookout.isbn|isbn_name }}</em>.</strong></p>
+      <p class="lead"><strong>Your lookout for <em>{{ lookout.isbn|isbn_name|title }}</em>.</strong></p>
       <a href="{% url 'delete_lookout' lookout.slug %}"><button type="button" class="btn btn-danger btn-xs">Delete this Lookout</button></a>
     </div>
   </div>

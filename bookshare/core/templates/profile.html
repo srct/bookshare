@@ -140,7 +140,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
         <tr>
         {% endif %}
           <td class="text-center"><h5>{{ bid.listing.isbn }}</h5></td>
-          <td class="text-center"><h5><a href="{{ bid.listing.get_absolute_url }}">{{ bid.listing.isbn|isbn_name }}<a/></h5></td>
+          <td class="text-center"><h5><a href="{{ bid.listing.get_absolute_url }}">{{ bid.listing.isbn|isbn_name|title }}<a/></h5></td>
           <td class="text-center"><h5>${{ bid.price }}</h5></td>
         {% endfor %}
         </tbody>
@@ -178,7 +178,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
         {% for lookout in lookouts %}
         <tr>
           <td class="text-center"><h5>{{ lookout.isbn }}</h5></td>
-          <td class="text-center"><h5><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name }}<a/></h5></td>
+          <td class="text-center"><h5><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name|title }}<a/></h5></td>
           <td class="text-center"><h5><a href="{% url 'delete_lookout' lookout.slug %}"><span class="label label-danger">Delete</span></a></h5></td>
         {% endfor %}
         </tbody>

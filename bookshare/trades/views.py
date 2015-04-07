@@ -234,6 +234,10 @@ class SellListing(LoginRequiredMixin, UpdateView):
         if not(selling_student == me):
             raise Http404
 
+        flag_count = Flag.objects.filter(listing=self.get_object()).count()
+        if flag_count < 1:
+            raise Http404
+
         today = date.today()
 
         form = SellListingForm(initial={'sold' : True, 'date_closed' : today})

@@ -1,7 +1,7 @@
 from django import forms
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset, HTML, Field
+from crispy_forms.layout import Button, Submit, Layout, Fieldset, HTML, Field
 from crispy_forms.bootstrap import AppendedPrependedText, FormActions
 
 from trades.models import Listing, Bid, Flag
@@ -33,7 +33,7 @@ class ListingForm( forms.ModelForm ):
                 'photo',
                 Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester.'),
                 HTML("""<hr/ >"""),
-                FormActions(Submit('submit', 'Create', css_class='btn-primary'))
+                FormActions(Submit('submit', 'Create', css_class='btn-primary')),
             ),
         )
 
@@ -60,7 +60,7 @@ class BidForm( forms.ModelForm ):
                 HTML("</div><div class='col-md-4'>"),
                 'text',
                 HTML("</div><div class='col-md-4'>"),
-                 FormActions(Submit('submit', 'Submit', css_class='btn-primary')),
+                FormActions(Submit('submit', 'Submit', css_class='btn-primary')),
                 HTML("</div>"),
             ),
         )
@@ -83,7 +83,9 @@ class FlagForm( forms.ModelForm ):
             'listing',
             'reason',
              HTML("""<hr/ >"""),
-             FormActions(Submit('submit', 'Create', css_class='btn-primary'))
+             FormActions(
+                 Submit('submit', 'Create', css_class='btn-primary'),
+                 Button('cancel', 'Never Mind', css_class='btn-default', onclick="history.back()")),
             ),
         )
         super(FlagForm, self).__init__(*args, **kwargs)
@@ -111,8 +113,9 @@ class SellListingForm( forms.ModelForm ):
                 'email_message',
                 HTML("""<em><p>Thanks for using SRCT Bookshare!</p><p>Mason SRCT</p></em></div>"""),
                 HTML("""<hr/ >"""),
-                # cancel button
-                FormActions(Submit('submit', 'Email and Sell', css_class='btn-primary'))
+                FormActions(
+                Submit('submit', 'Email and Sell', css_class='btn-primary'),
+                Button('cancel', 'Never Mind', css_class='btn-default', onclick="history.back()")),
             ),
         )
         super(SellListingForm, self).__init__(*args, **kwargs)
@@ -134,8 +137,9 @@ class UnSellListingForm( forms.ModelForm ):
                 'sold',
                 'winning_bid',
                 'date_closed',
-                # cancel button
-                FormActions(Submit('submit', 'Back on the Market', css_class='btn-primary'))
+                 FormActions(
+                 Submit('submit', 'Back on the Market', css_class='btn-primary'),
+                 Button('cancel', 'Never Mind', css_class='btn-default', onclick="history.back()")),
             ),
         )
         super(UnSellListingForm, self).__init__(*args, **kwargs)
@@ -155,8 +159,9 @@ class CancelListingForm( forms.ModelForm ):
             Fieldset("",
                 'cancelled',
                 'date_closed',
-                # cancel button
-                 FormActions(Submit('submit', 'Cancel Your Listing', css_class='btn-primary'))
+                 FormActions(
+                 Submit('submit', 'Cancel Your Listing', css_class='btn-primary'),
+                 Button('cancel', 'Never Mind', css_class='btn-default', onclick="history.back()")),
             ),
         )
         super(CancelListingForm, self).__init__(*args, **kwargs)
@@ -174,8 +179,9 @@ class ReopenListingForm( forms.ModelForm ):
         self.helper.layout = Layout(
             Fieldset("",
                 'cancelled',
-                # cancel button
-                 FormActions(Submit('submit', 'Reopen Your Listing', css_class='btn-primary'))
+                 FormActions(
+                 Submit('submit', 'Reopen Your Listing', css_class='btn-primary'),
+                 Button('cancel', 'Never Mind', css_class='btn-default', onclick="history.back()")),
             ),
         )
         super(ReopenListingForm, self).__init__(*args, **kwargs)

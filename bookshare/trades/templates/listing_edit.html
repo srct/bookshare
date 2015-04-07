@@ -22,6 +22,7 @@ SRCT Bookshare &bull; {{ listing.title }} &bull; Edit
         <form action="" method="post">{% csrf_token %}
           {{ form.as_p }}
           <input type="submit" value="Update" class="btn btn-primary" />
+          <input type="cancel" value="Never Mind" class="btn btn-default" onclick="history.back()"/>
         </form>
       </div>
     </div>

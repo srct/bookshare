@@ -14,6 +14,7 @@ SRCT Bookshare &bull; Delete Lookout
   <form action="" method="post">{% csrf_token %}
     <h3>Are you sure you want to delete your lookout for <em>{{ lookout.isbn|isbn_name }}</em>?</h3>
     <input type="submit" value="Confirm" class="btn btn-danger btn-sm" />
+    <input type="cancel" value="Never Mind" class="btn btn-default btn-sm" onclick="history.back()"/>
   </form>
 </div>
 

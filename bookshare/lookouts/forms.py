@@ -1,7 +1,7 @@
 from django import forms
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Fieldset, HTML, Field
+from crispy_forms.layout import Button, Submit, Layout, Fieldset, HTML, Field
 from crispy_forms.bootstrap import FormActions
 
 from lookouts.models import Lookout
@@ -21,7 +21,9 @@ class LookoutForm( forms.ModelForm ):
                 'owner',
                 Field('isbn', placeholder='0801884039'),
                 HTML("""<hr/ >"""),
-                FormActions(Submit('submit', 'Submit', css_class='btn-primary'))
+                FormActions(
+                Submit('submit', 'Submit', css_class='btn-primary'),
+                Button('cancel', 'Never Mind', css_class="btn-default", onclick="history.back()")),
             ),
         )
 

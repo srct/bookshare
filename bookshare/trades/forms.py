@@ -33,7 +33,11 @@ class ListingForm( forms.ModelForm ):
                 'photo',
                 Field('description', placeholder='I would be willing to exchange this textbook for one that I need next semester.'),
                 HTML("""<hr/ >"""),
-                FormActions(Submit('submit', 'Create', css_class='btn-primary')),
+
+                FormActions(
+                Submit('submit', 'Create', css_class='btn-primary'),
+                Button('cancel', 'Never Mind', css_class='btn-default', onclick="history.back()")),
+
             ),
         )
 

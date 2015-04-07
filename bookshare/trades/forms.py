@@ -142,7 +142,7 @@ class UnSellListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'accss_code', 'description', 'price', 'photo', 'cancelled', 'email_message')
+        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'access_code', 'description', 'price', 'photo', 'cancelled', 'email_message')
 
 class CancelListingForm( forms.ModelForm ):
 

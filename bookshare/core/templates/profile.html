@@ -121,8 +121,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
   </div>
 </div>
 
-{% if student.user == request.user %}
-<legend><h3><i class="fa fa-gift fa-fw"></i> Your Bids</h3></legend>
+<legend><h3><i class="fa fa-gift fa-fw"></i>  Bids</h3></legend>
 <div class="row">
   <div class="col-md-12">
     {% if bids %}
@@ -151,7 +150,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
     {% if student.user == request.user %}
     You don't
     {% else %}
-    {{ student.user.first_name }} doesn't
+    {{ student.user.get_full_name }} doesn't
     {% endif %}
     have any have any bids yet.
     {% if student.user == request.user %}
@@ -161,14 +160,13 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
   {% endif %}
   </div>
 </div>
-{% endif %}
 
 {% if student.user == request.user %}
  <legend><h3><i class="fa fa-eye fa-fw"></i> Lookouts <small>(<a href="{% url 'create_lookout' %}">Create</a>)</small></h3></legend>
 
-{% if lookouts %}
 <div class="row">
   <div class="col-md-12">
+  {% if lookouts %}
     <div class="table-responsive">
       <table class="table table-bordered table-hover text-center">
         <thead>
@@ -186,10 +184,13 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
         </tbody>
       </table>
     </div>
+  {% else %}
+  You don't have any lookouts yet. Lookouts are automatic searches for books you
+  have an eye out for. You can <a href="{% url 'create_lookout' %}">create some</a>,
+  and we'll immediately let you know when a listing you want goes up.
+  {% endif %}
   </div>
 </div>
-{% endif %}
-
 {% endif %}
 
 {% endblock %}

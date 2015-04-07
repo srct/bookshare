@@ -52,7 +52,7 @@ INSTALLED_APPS = (
     'piwik',
 )
 
-CRISPY_TEMPLATE_PACK = 'bootstrap'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',

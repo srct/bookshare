@@ -5,7 +5,7 @@
       {% if not listing.active %}
         <small><span class="label label-warning"><strong>Inactive</strong></span></small>
       {% elif listing.sold %}
-        <small><span class="label label-primary"><strong>Sold</strong></span>
+        <small><span class="label label-primary"><strong>Sold</strong></span></small>
       {% endif %}
       <a href="{{ listing.get_absolute_url }}">
         <em>{{ listing.title }}</em>

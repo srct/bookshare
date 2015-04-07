@@ -141,7 +141,13 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
         {% endif %}
           <td class="text-center"><h5>{{ bid.listing.isbn }}</h5></td>
           <td class="text-center"><h5><a href="{{ bid.listing.get_absolute_url }}">{{ bid.listing.isbn|isbn_name|title }}<a/></h5></td>
-          <td class="text-center"><h5>${{ bid.price }}</h5></td>
+          <td class="text-center"><h5>
+          {% if bid == bid.listing.winning_bid %}
+            <small><span class="label label-success"><strong>Winning Bid</strong></span></small>
+          {% else %}
+          {% endif %}
+          ${{ bid.price }}
+          </h5></td>
         {% endfor %}
         </tbody>
       </table>

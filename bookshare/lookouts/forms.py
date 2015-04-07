@@ -11,10 +11,8 @@ class LookoutForm( forms.ModelForm ):
     def __init__(self, *args, **kwargs):
 
         self.helper = FormHelper()
-        self.helper.form_method = 'POST'
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class='col-sm-2'
-        self.helper.field_class='col-sm-6'
+        self.helper.label_class='col-md-2 col-md-offset-1 text-center be-bold'
+        self.helper.field_class='col-sm-8'
     
         self.helper.layout = Layout(
             Fieldset("",

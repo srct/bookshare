@@ -169,14 +169,16 @@ SRCT Bookshare &bull; {{ listing.title }}
 {% if request.user == listing.seller.user %}
   <div class="col-md-6 col-md-offset-3">
     <h3>
-      {% if not listing.sold and not listing.cancelled %}
-      <span class="label label-default">
-        <a href="{% url 'sell_listing' listing.slug %}">Mark Sold</a>
-      </a></span>
-      {% elif not listing.cancelled %}
-      <span class="label label-default">
-        <a href="{% url 'unsell_listing' listing.slug %}">Cancel Sale</a>
-     </span>
+      {% if bid_count > 0 %}
+        {% if not listing.sold and not listing.cancelled %}
+        <span class="label label-default">
+          <a href="{% url 'sell_listing' listing.slug %}">Mark Sold</a>
+        </a></span>
+        {% elif not listing.cancelled %}
+        <span class="label label-default">
+          <a href="{% url 'unsell_listing' listing.slug %}">Cancel Sale</a>
+       </span>
+        {% endif %}
       {% endif %}
       &nbsp;
       {% if not listing.sold and not listing.cancelled %}

@@ -4,6 +4,8 @@ from core.models import Student
 
 from django.views.generic import TemplateView
 
+from django.db.models import Sum
+
 from collections import Counter
 
 class HomepageView(TemplateView):
@@ -43,4 +45,5 @@ class ChartsView(TemplateView):
         context['total_listings'] = all_listings.count()
         context['total_bids'] = Bid.objects.count()
         context['total_students'] = Student.objects.count()
+        context['total_proceeds'] = Listing.objects.aggregate(sum_price=Sum('winning_bid__price'))['sum_price']
         return context

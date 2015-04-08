@@ -23,4 +23,4 @@ class ListingIndex(indexes.SearchIndex, indexes.Indexable):
 
     def index_queryset(self, using=None):
         """When the entire index for model is updated."""
-	return self.get_model().objects.filter(sold=False, cancelled=False)
+	return self.get_model().objects.filter(sold=False).filter(cancelled=False)

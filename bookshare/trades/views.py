@@ -7,7 +7,7 @@ from django.views.generic import View, DetailView, ListView, CreateView, UpdateV
 from braces.views import LoginRequiredMixin
 
 from django.contrib.auth.models import User
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from django.forms.widgets import HiddenInput
 from django.core.urlresolvers import reverse
 
@@ -139,11 +139,12 @@ class CreateFlag(LoginRequiredMixin, CreateView):
 
         # you can't flag your own listing
         if (selling_student == me):
-            raise Http404
+            return HttpResponseForbidden()
 
         # can only create a flag if you haven't previously created one
         if not can_flag(me, selected_listing):
-           raise Http404
+            # because the page shouldn't exist in this scenario
+            raise Http404
 
         context['listing'] = selected_listing
         return context
@@ -159,10 +160,11 @@ class DeleteFlag(LoginRequiredMixin, DeleteView):
         context = super(DeleteFlag, self).get_context_data(**kwargs)
         me = Student.objects.get(user=self.request.user)
 
-        flag_student = self.get_object().flagger.user
+        flag_student = self.get_object().flagger
 
-#if not(requesting_student == flag_student):
-#            raise Http404
+        # if you didn't create the flag, you can't delete the flag
+        if not(me == flag_student):
+            return HttpResponseForbidden()
 
         return context
 
@@ -213,7 +215,7 @@ class EditListing(LoginRequiredMixin, UpdateView):
         selling_student = self.get_object().seller
 
         if not(selling_student == me):
-            raise Http404
+            return HttpResponseForbidden()
 
         return context 
 
@@ -232,10 +234,11 @@ class SellListing(LoginRequiredMixin, UpdateView):
         selling_student = self.get_object().seller
 
         if not(selling_student == me):
-            raise Http404
+            return HttpResponseForbidden()
 
         bid_count = Bid.objects.filter(listing=self.get_object).count()
         if bid_count < 1:
+            # because the page shouldn't exist in this scenario
             raise Http404
 
         today = date.today()
@@ -266,7 +269,7 @@ class UnSellListing(LoginRequiredMixin, UpdateView):
         selling_student = self.get_object().seller
 
         if not(selling_student == me):
-            raise Http404
+            return HttpResponseForbidden()
 
         today = date.today()
 
@@ -294,7 +297,7 @@ class CancelListing(LoginRequiredMixin, UpdateView):
         selling_student = self.get_object().seller
 
         if not(selling_student == me):
-            raise Http404
+            return HttpResponseForbidden()
 
         today = date.today()
 
@@ -321,7 +324,7 @@ class ReopenListing(LoginRequiredMixin, UpdateView):
         selling_student = self.get_object().seller
 
         if not(selling_student == me):
-            raise Http404
+            return HttpResponseForbidden()
 
         form = ReopenListingForm(initial={'cancelled' : False})
         form.fields['cancelled'].widget = HiddenInput()

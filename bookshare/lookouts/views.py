@@ -6,7 +6,7 @@ from braces.views import LoginRequiredMixin
 
 from django.contrib.auth.models import User
 from core.models import Student
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from django.forms.widgets import HiddenInput
 
 ### VIEWS ###
@@ -34,7 +34,17 @@ class DetailLookout(LoginRequiredMixin, DetailView):
     context_object_name = 'lookout'
     login_url = '/'
 
-# remember, see all the lookouts on the homepage
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailLookout, self).get_context_data(**kwargs)
+
+        me = Student.objects.get(user=self.request.user)
+        lookout_student = self.get_object().owner
+
+        if not(lookout_student == me):
+            return HttpResponseForbidden()
+
+        return context
 
 # updating is not neccessary since it's just literally an isbn and a course
 
@@ -49,6 +59,6 @@ class DeleteLookout(LoginRequiredMixin, DeleteView):
         lookout_student = self.get_object().owner
 
         if not(lookout_student == me):
-            raise Http404
+            return HttpResponseForbidden()
 
         return context

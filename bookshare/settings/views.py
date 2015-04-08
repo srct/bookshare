@@ -4,6 +4,8 @@ from core.models import Student
 
 from django.views.generic import TemplateView
 
+from braces.views import LoginRequiredMixin
+
 from django.db.models import Sum
 
 from collections import Counter
@@ -17,7 +19,7 @@ class HomepageView(TemplateView):
           context['lookouts'] = Lookout.objects.filter(owner=self.request.user.student)
         return context
 
-class ChartsView(TemplateView):
+class ChartsView(LoginRequiredMixin, TemplateView):
     template_name = 'charts.html'
 
     def get_context_data(self, **kwargs):

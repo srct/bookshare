@@ -1,0 +1,84 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+SRCT Bookshare &bull; Charts
+{% endblock %}
+
+{% block content %}
+
+{% load humanize %}
+
+{% load trades_extras %}
+
+<div class="page-header" id="banner">
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h1><strong>SRCT</strong>BOOKSHARE</h1>
+      <p class="lead"><strong>Listing Charts</strong></p>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 text-center">
+  <p><h2>Featuring <strong>{{ total_bids|intcomma }} bids</strong> on <strong>{{ total_listings|intcomma }} listings</strong> from <strong>{{ total_students|intcomma }} students</strong> (so far).</h2></p>
+  </div>
+</div>
+
+<legend></legend>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading text-center">
+        <h3><strong>Most Popular</strong></h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-hover text-center">
+          <thead>
+            <tr>
+              <td class="col-md-8"><h4><strong>Title</strong></h4></td>
+              <td class="col-md-4"><h4><strong>Listings</strong></h4></td>
+            </tr>
+          </thead>
+          <tbody>
+          {% for isbn, occurrence in most_popular %}
+            <tr>
+              <td><h5><a href="/search/?q={{ isbn }}">{{ isbn|isbn_name|title }}</a></h5></td>
+              <td><h5>{{ occurrence }}</h5></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading text-center">
+        <h3><strong>Highest-Grossing</strong></h3>
+      </div>
+      <div class="panel-body">
+        <table class="table table-hover text-center">
+          <thead>
+            <tr>
+              <td class="col-md-8"><h4><strong>Title</strong></h4></td>
+              <td class="col-md-4"><h4><strong>Proceeds</strong></h4></td>
+            </tr>
+          </thead>
+          <tbody>
+          {% for isbn, total_sum in highest_grossing %}
+            <tr>
+              <td><h5><a href="/search/?q={{ isbn }}">{{ isbn|isbn_name|title }}</a></h5></td>
+              <td><h5>${{ total_sum }}</h5></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

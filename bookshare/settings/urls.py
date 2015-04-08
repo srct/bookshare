@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 
-from .views import HomepageView
+from .views import HomepageView, ChartsView
 from django.views.generic import TemplateView
 
 from django.contrib import admin
@@ -22,7 +22,8 @@ urlpatterns = patterns('',
     url(r'^search/', include('haystack.urls'), name='search'),
 
     ### static pages ###
-    url(r'^$', HomepageView.as_view(template_name='index.html'), name = 'homepage'),
+    url(r'^$', HomepageView.as_view(), name = 'homepage'),
+    url(r'^charts/?$', ChartsView.as_view(), name = 'charts'),
     url(r'^about/?$', TemplateView.as_view(template_name='about.html'), name='about'),
     url(r'^privacy/?$', TemplateView.as_view(template_name='privacy.html'), name='privacy'),
     url(r'^privacy/opt-out/?$', 'core.views.privacy_opt_out', name='privacy_opt_out'),

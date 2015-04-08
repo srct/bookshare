@@ -116,7 +116,7 @@ class SellListingForm( forms.ModelForm ):
                 HTML("""<hr/ >"""),
                 HTML("""<strong>Your Email to Your Bidder</strong>"""),
                 HTML("""<div class="well"><em><p>Hey there!</p><p>Seller {{ listing.seller.user.first_name }} {{ listing.seller.user.last_name }} has picked your bid for {{ listing.title }} on SRCT Bookshare. They're the cc'ed email address-- {{ listing.seller.user.email }}.</p><p>Watch your email to arrange all the final touches to get your book.</p></em>"""),
-                'email_message',
+                Field('email_message', placeholder='Do you want to meet tomorrow by the JC Info Desk at 4?'),
                 HTML("""<em><p>Thanks for using SRCT Bookshare!</p><p>Mason SRCT</p></em></div>"""),
                 HTML("""<hr/ >"""),
                 FormActions(

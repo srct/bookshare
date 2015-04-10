@@ -21,9 +21,11 @@ urlpatterns = patterns('',
     # search
     url(r'^search/', include('haystack.urls'), name='search'),
 
-    ### static pages ###
+    # site-wide pages
     url(r'^$', HomepageView.as_view(), name = 'homepage'),
     url(r'^charts/?$', ChartsView.as_view(), name = 'charts'),
+
+    ### static pages ###
     url(r'^about/?$', TemplateView.as_view(template_name='about.html'), name='about'),
     url(r'^privacy/?$', TemplateView.as_view(template_name='privacy.html'), name='privacy'),
     url(r'^privacy/opt-out/?$', 'core.views.privacy_opt_out', name='privacy_opt_out'),

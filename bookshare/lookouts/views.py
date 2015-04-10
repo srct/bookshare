@@ -14,6 +14,8 @@ class CreateLookout(LoginRequiredMixin, CreateView):
     # can only be viewed by the user who created the lookout!...
     model = Lookout
     form_class = LookoutForm
+    context_object_name = 'lookout'
+    template_name = 'create_lookout.html'
     login_url = '/'
 
     def get_context_data(self, **kwargs):
@@ -32,6 +34,7 @@ class CreateLookout(LoginRequiredMixin, CreateView):
 class DetailLookout(LoginRequiredMixin, DetailView):
     model = Lookout
     context_object_name = 'lookout'
+    template_name = 'detail_lookout.html'
     login_url = '/'
 
 
@@ -49,7 +52,9 @@ class DetailLookout(LoginRequiredMixin, DetailView):
 # updating is not neccessary since it's just literally an isbn and a course
 
 class DeleteLookout(LoginRequiredMixin, DeleteView):
-    model=Lookout
+    model = Lookout
+    context_object_name = 'lookout'
+    template_name = 'delete_lookout.html'
     success_url = '/'
 
     def get_context_data(self, **kwargs):

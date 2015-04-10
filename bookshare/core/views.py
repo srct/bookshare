@@ -28,6 +28,8 @@ def privacy_opt_out(request):
 # User profile page
 class DetailStudent(LoginRequiredMixin, DetailView):
     model = Student
+    template_name = 'profile.html'
+    context_object_name = 'student'
 
     def get_context_data(self, **kwargs):
 

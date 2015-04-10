@@ -4,9 +4,5 @@ from core.models import Student
 
 urlpatterns = patterns('',
     url(r'^(?P<slug>[\w-]+)/$',
-        DetailStudent.as_view(
-        model=Student,
-        context_object_name='student',
-        template_name='profile.html'),
-    name='profile'),
+        DetailStudent.as_view(), name='profile'),
 )

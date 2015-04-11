@@ -316,7 +316,7 @@ class CancelListing(LoginRequiredMixin, UpdateView):
 
         today = date.today()
 
-        form = CancelListingForm(initial={'cancelled' : True, 'date_closed' : ''})
+        form = CancelListingForm(initial={'cancelled' : True, 'date_closed' : today})
         form.fields['cancelled'].widget = HiddenInput()
         form.fields['date_closed'].widget = HiddenInput()
 
@@ -343,8 +343,9 @@ class ReopenListing(LoginRequiredMixin, UpdateView):
         if not(selling_student == me):
             return HttpResponseForbidden()
 
-        form = ReopenListingForm(initial={'cancelled' : False})
+        form = ReopenListingForm(initial={'cancelled' : False, 'date_closed' : ''})
         form.fields['cancelled'].widget = HiddenInput()
+        form.fields['date_closed'].widget = HiddenInput()
 
         context['my_form'] = form
 

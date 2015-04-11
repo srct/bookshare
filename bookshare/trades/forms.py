@@ -43,7 +43,7 @@ class ListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        exclude = ('sold', 'cancelled', 'email_message', 'winning_bid', 'date_closed')
+        include = ('seller', 'isbn', 'title', 'author', 'edition', 'year', 'condition', 'access_code', 'price', 'photo', 'description',)
 
 class BidForm( forms.ModelForm ):
 
@@ -73,6 +73,7 @@ class BidForm( forms.ModelForm ):
 
     class Meta:
         model = Bid
+        include = ('bidder', 'listing', 'price', 'text',)
 
 class FlagForm( forms.ModelForm ):
 
@@ -98,6 +99,7 @@ class FlagForm( forms.ModelForm ):
 
     class Meta:
         model = Flag
+        include = ('flagger', 'listing', 'reason',)
 
 #class EditListingForm( forms.ModelForm ):
 
@@ -129,7 +131,7 @@ class SellListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'access_code', 'description', 'price', 'photo', 'cancelled', )
+        include = ('sold', 'winning_bid', 'date_closed', 'email_message',)
 
 class UnSellListingForm( forms.ModelForm ):
 
@@ -150,7 +152,7 @@ class UnSellListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'access_code', 'description', 'price', 'photo', 'cancelled', 'email_message')
+        include = ('sold', 'winning_bid', 'date_closed',)
 
 class CancelListingForm( forms.ModelForm ):
 
@@ -170,7 +172,7 @@ class CancelListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'access_code', 'description', 'price', 'photo', 'sold', 'email_message', 'winning_bid',)
+        include = ('cancelled', 'date_closed',)
 
 class ReopenListingForm( forms.ModelForm ):
     def __init__(self, *args, **kwargs):
@@ -179,6 +181,7 @@ class ReopenListingForm( forms.ModelForm ):
         self.helper.layout = Layout(
             Fieldset("",
                 'cancelled',
+                'date_closed',
                  FormActions(
                  Submit('submit', 'Reopen Your Listing', css_class='btn-primary'),
                  Button('cancel', 'Never Mind', css_class='btn-default', onclick="history.back()")),
@@ -188,4 +191,4 @@ class ReopenListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        exclude = ('seller', 'title', 'author', 'isbn', 'year', 'edition', 'condition', 'access_code', 'description', 'price', 'photo', 'sold', 'email_message', 'winning_bid', 'date_closed')
+        include = ('cancelled', 'date_closed',)

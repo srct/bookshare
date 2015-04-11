@@ -30,4 +30,5 @@ class LookoutForm( forms.ModelForm ):
 
     class Meta:
         model = Lookout
+        include = ('owner', 'isbn',)
 

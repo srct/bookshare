@@ -67,6 +67,3 @@ class DetailStudent(LoginRequiredMixin, DetailView):
         return context
 
     login_url = '/'
-
-# manage all listings -- close your listings, delete your listings, see your bids, remove your bids, close your bids, etc -- on both sides of the transactions, and the ratings
-# other students see all of your previous transactions but without the editing options ofc

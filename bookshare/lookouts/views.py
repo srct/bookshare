@@ -7,26 +7,25 @@ from braces.views import LoginRequiredMixin
 from django.contrib.auth.models import User
 from core.models import Student
 from django.http import Http404, HttpResponseForbidden
-from django.forms.widgets import HiddenInput
 
 ### VIEWS ###
 class CreateLookout(LoginRequiredMixin, CreateView):
-    # can only be viewed by the user who created the lookout!...
     model = Lookout
-    form_class = LookoutForm
+    fields = ['isbn',]
     context_object_name = 'lookout'
     template_name = 'create_lookout.html'
     login_url = '/'
 
+    def form_valid(self, form):
+        me = Student.objects.get(user=self.request.user)
+
+        form.instance.owner = me
+        return super(CreateLookout, self).form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super(CreateLookout, self).get_context_data(**kwargs)
 
-        me = Student.objects.get(user=self.request.user)
-
-        form = LookoutForm(initial={'owner' : me})
-
-        form.fields['owner'].widget = HiddenInput()
-
+        form = LookoutForm()
         context['my_form'] = form
 
         return context
@@ -36,7 +35,6 @@ class DetailLookout(LoginRequiredMixin, DetailView):
     context_object_name = 'lookout'
     template_name = 'detail_lookout.html'
     login_url = '/'
-
 
     def get_context_data(self, **kwargs):
         context = super(DetailLookout, self).get_context_data(**kwargs)

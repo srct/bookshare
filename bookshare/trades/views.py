@@ -60,22 +60,24 @@ class ListListings(LoginRequiredMixin, ListView):
 
 class CreateListing(LoginRequiredMixin, CreateView):
     model = Listing
-    form_class = ListingForm
+    fields = ['isbn', 'title', 'author', 'edition', 'year', 'condition',
+        'access_code', 'price', 'photo', 'description']
     template_name = 'create_listing.html'
     context_object_name = 'listing'
     # ISBN query!
     login_url = '/'
 
+    def form_valid(self, form):
+        me = Student.objects.get(user=self.request.user)
+
+        form.instance.seller = me
+        return super(CreateListing, self).form_valid(form)
+
     def get_context_data(self, **kwargs):
         context = super(CreateListing, self).get_context_data(**kwargs)
 
-        me = Student.objects.get(user=self.request.user)
-
-        form = ListingForm(initial={'seller' : me})
-        form.fields['seller'].widget = HiddenInput()
-
+        form = ListingForm()
         context['my_form'] = form
-
         return context
 
 # These next two views are tied together...
@@ -91,10 +93,8 @@ class DetailListing(DetailView):
 
         # make the form available to the template on get
         # set the bidder and the listing
-        form = BidForm(initial={'bidder' : me, 'listing' : self.get_object()})
-        form.fields['bidder'].widget = HiddenInput()
+        form = BidForm(initial={'listing': self.get_object()})
         form.fields['listing'].widget = HiddenInput()
-
         context['my_form'] = form
 
         # bids, filter by listing name of the current listing, order by date created
@@ -109,10 +109,16 @@ class DetailListing(DetailView):
 
 class CreateBid(CreateView):
     model = Bid
-    form_class = BidForm
+    fields = ['listing', 'price', 'text',]
     context_object_name = 'bid'
     template_name = 'detail_listing.html'
     login_url = '/'
+
+    def form_valid(self, form):
+        me = Student.objects.get(user=self.request.user)
+
+        form.instance.bidder = me
+        return super(CreateBid, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('detail_listing', kwargs={'slug':self.object.listing.slug})
@@ -135,10 +141,23 @@ class ListingPage(LoginRequiredMixin, View):
 
 class CreateFlag(LoginRequiredMixin, CreateView):
     model = Flag
+    fields = ['reason',]
     template_name = 'create_flag.html'
     context_object_name = 'flag'
 
     login_url = '/'
+
+    def form_valid(self, form):
+        me = Student.objects.get(user=self.request.user)
+
+        current_url = self.request.get_full_path()
+        listing_slug = current_url.split('/')[3]
+        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
+        selected_listing = Listing.objects.get(slug=listing_slug)
+
+        form.instance.flagger = me
+        form.instance.listing = selected_listing
+        return super(CreateFlag, self).form_valid(form)
 
     def get_success_url(self):
         return reverse('detail_listing', kwargs={'slug':self.object.listing.slug})
@@ -147,17 +166,11 @@ class CreateFlag(LoginRequiredMixin, CreateView):
         context = super(CreateFlag, self).get_context_data(**kwargs)
         me = Student.objects.get(user=self.request.user)
 
+        # duplicated code!!!
         current_url = self.request.get_full_path()
         listing_slug = current_url.split('/')[3]
         # [u'', u'share', u'listing', u'C1s3oD', u'flag']
         selected_listing = Listing.objects.get(slug=listing_slug)
-
-        form = FlagForm(initial={'flagger' : me, 'listing' : selected_listing})
-
-        form.fields['flagger'].widget = HiddenInput()
-        form.fields['listing'].widget = HiddenInput()
-
-        context['my_form'] = form
 
         selling_student = selected_listing.seller
 
@@ -171,6 +184,9 @@ class CreateFlag(LoginRequiredMixin, CreateView):
             raise Http404
 
         context['listing'] = selected_listing
+
+        form = FlagForm()
+        context['my_form'] = form
         return context
 
 class DeleteFlag(LoginRequiredMixin, DeleteView):
@@ -230,13 +246,19 @@ class EditListing(LoginRequiredMixin, UpdateView):
 
 class SellListing(LoginRequiredMixin, UpdateView):
     model = Listing
-    fields = ['sold', 'email_message', 'winning_bid', 'date_closed']
+    fields = ['email_message', 'winning_bid',]
     template_suffix_name = '_sell'
     context_object_name = 'listing'
     template_name = 'listing_sell.html'
-    form_class = SellListingForm
 
     login_url = '/'
+
+    def form_valid(self, form):
+        today = date.today()
+
+        form.instance.sold = True
+        form.instance.date_closed = today
+        return super(SellListing, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(SellListing, self).get_context_data(**kwargs)
@@ -252,14 +274,8 @@ class SellListing(LoginRequiredMixin, UpdateView):
             # because the page shouldn't exist in this scenario
             raise Http404
 
-        today = date.today()
-
-        form = SellListingForm(initial={'sold' : True, 'date_closed' : today})
+        form = SellListingForm()
         form.fields['winning_bid'].queryset = Bid.objects.filter(listing=self.get_object())
-        # why does the asterisk appear, but submitting still works without it?
-        form.fields['winning_bid'].required = True
-        form.fields['sold'].widget = HiddenInput()
-        form.fields['date_closed'].widget = HiddenInput()
 
         context['my_form'] = form
 
@@ -267,13 +283,18 @@ class SellListing(LoginRequiredMixin, UpdateView):
 
 class UnSellListing(LoginRequiredMixin, UpdateView):
     model = Listing
-    fields = ['sold', 'winning_bid', 'date_closed']
+    fields = []
     template_suffix_name = '_unsell'
     context_object_name = 'listing'
     template_name = 'listing_unsell.html'
-    form_class = UnSellListingForm
 
     login_url = '/'
+
+    def form_valid(self, form):
+        form.instance.sold = False
+        form.instance.date_closed = None
+        form.instance.winning_bid = None
+        return super(UnSellListing, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(UnSellListing, self).get_context_data(**kwargs)
@@ -284,26 +305,26 @@ class UnSellListing(LoginRequiredMixin, UpdateView):
         if not(selling_student == me):
             return HttpResponseForbidden()
 
-        today = date.today()
-
-        form = UnSellListingForm(initial={'sold' : False, 'date_closed' : '', 'winning_bid' : ''})
-        form.fields['sold'].widget = HiddenInput()
-        form.fields['date_closed'].widget = HiddenInput()
-        form.fields['winning_bid'].widget = HiddenInput()
-
+        form = UnSellListingForm()
         context['my_form'] = form
 
         return context 
 
 class CancelListing(LoginRequiredMixin, UpdateView):
     model = Listing
-    fields = ['cancelled', 'date_closed',]
+    fields = []
     template_suffix_name = '_cancel'
     context_object_name = 'listing'
     template_name = 'listing_cancel.html'
-    form_class = CancelListingForm
 
     login_url = '/'
+
+    def form_valid(self, form):
+        today = date.today()
+
+        form.instance.cancelled = True
+        form.instance.date_closed = today
+        return super(CancelListing, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(CancelListing, self).get_context_data(**kwargs)
@@ -316,23 +337,24 @@ class CancelListing(LoginRequiredMixin, UpdateView):
 
         today = date.today()
 
-        form = CancelListingForm(initial={'cancelled' : True, 'date_closed' : today})
-        form.fields['cancelled'].widget = HiddenInput()
-        form.fields['date_closed'].widget = HiddenInput()
-
+        form = CancelListingForm()
         context['my_form'] = form
 
         return context 
 
 class ReopenListing(LoginRequiredMixin, UpdateView):
     model = Listing
-    fields = ['cancelled']
+    fields = []
     template_suffix_name = '_reopen'
     context_object_name = 'listing'
     template_name = 'listing_reopen.html'
-    form_class = ReopenListingForm
 
     login_url = '/'
+
+    def form_valid(self, form):
+        form.instance.cancelled = False
+        form.instance.date_closed = None
+        return super(ReopenListing, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super(ReopenListing, self).get_context_data(**kwargs)
@@ -343,10 +365,7 @@ class ReopenListing(LoginRequiredMixin, UpdateView):
         if not(selling_student == me):
             return HttpResponseForbidden()
 
-        form = ReopenListingForm(initial={'cancelled' : False, 'date_closed' : ''})
-        form.fields['cancelled'].widget = HiddenInput()
-        form.fields['date_closed'].widget = HiddenInput()
-
+        form = ReopenListingForm()
         context['my_form'] = form
 
         return context 

@@ -18,7 +18,6 @@ class ListingForm( forms.ModelForm ):
 
         self.helper.layout = Layout(
             Fieldset("",
-                'seller',
                 Field('isbn', placeholder='0801884039'),
                 Field('title', placeholder='Squirrels: The Animal Answer Guide'),
                 Field('author', placeholder='Richard W. Thorington, Jr., and Katie Ferrell'),
@@ -43,7 +42,6 @@ class ListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        include = ('seller', 'isbn', 'title', 'author', 'edition', 'year', 'condition', 'access_code', 'price', 'photo', 'description',)
 
 class BidForm( forms.ModelForm ):
 
@@ -57,7 +55,6 @@ class BidForm( forms.ModelForm ):
 
         self.helper.layout = Layout(
             Fieldset("",
-                'bidder',
                 'listing',
                 HTML("<div class='col-md-4'>"),
                  AppendedPrependedText('price','$', '.00', placeholder="whole numbers"),
@@ -73,7 +70,6 @@ class BidForm( forms.ModelForm ):
 
     class Meta:
         model = Bid
-        include = ('bidder', 'listing', 'price', 'text',)
 
 class FlagForm( forms.ModelForm ):
 
@@ -83,11 +79,8 @@ class FlagForm( forms.ModelForm ):
 
         # bootstrap3 formatting
         self.helper.label_class='be-bold'
-
         self.helper.layout = Layout(
             Fieldset("",
-            'flagger',
-            'listing',
             'reason',
              HTML("""<hr/ >"""),
              FormActions(
@@ -99,7 +92,6 @@ class FlagForm( forms.ModelForm ):
 
     class Meta:
         model = Flag
-        include = ('flagger', 'listing', 'reason',)
 
 #class EditListingForm( forms.ModelForm ):
 
@@ -108,13 +100,11 @@ class SellListingForm( forms.ModelForm ):
     def __init__(self, *args, **kwargs):
 
         self.helper = FormHelper()
-        self.helper.label_class='be-bold'
 
+        self.helper.label_class='be-bold'
         self.helper.layout = Layout(
             Fieldset("",
-                'sold',
                 'winning_bid',
-                'date_closed',
                 HTML("""<hr/ >"""),
                 HTML("""<strong>Your Email to Your Bidder</strong>"""),
                 HTML("""<div class="well"><em><p>Hey there!</p><p>Seller {{ listing.seller.user.first_name }} {{ listing.seller.user.last_name }} has picked your bid for {{ listing.title }} on SRCT Bookshare. They're the cc'ed email address-- {{ listing.seller.user.email }}.</p><p>Watch your email to arrange all the final touches to get your book.</p></em>"""),
@@ -128,11 +118,12 @@ class SellListingForm( forms.ModelForm ):
         )
         super(SellListingForm, self).__init__(*args, **kwargs)
         self.fields['email_message'].label = "Custom Message"
+        self.fields['winning_bid'].required = True
 
     class Meta:
         model = Listing
-        include = ('sold', 'winning_bid', 'date_closed', 'email_message',)
 
+# not necessary
 class UnSellListingForm( forms.ModelForm ):
 
     def __init__(self, *args, **kwargs):
@@ -140,9 +131,6 @@ class UnSellListingForm( forms.ModelForm ):
 
         self.helper.layout = Layout(
             Fieldset("",
-                'sold',
-                'winning_bid',
-                'date_closed',
                  FormActions(
                  Submit('submit', 'Back on the Market', css_class='btn-primary'),
                  Button('cancel', 'Never Mind', css_class='btn-default', onclick="history.back()")),
@@ -152,8 +140,8 @@ class UnSellListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        include = ('sold', 'winning_bid', 'date_closed',)
 
+# not neccessary
 class CancelListingForm( forms.ModelForm ):
 
     def __init__(self, *args, **kwargs):
@@ -161,8 +149,6 @@ class CancelListingForm( forms.ModelForm ):
 
         self.helper.layout = Layout(
             Fieldset("",
-                'cancelled',
-                'date_closed',
                  FormActions(
                  Submit('submit', 'Cancel Your Listing', css_class='btn-primary'),
                  Button('cancel', 'Never Mind', css_class='btn-default', onclick="history.back()")),
@@ -172,16 +158,14 @@ class CancelListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        include = ('cancelled', 'date_closed',)
 
+# not neccesary
 class ReopenListingForm( forms.ModelForm ):
     def __init__(self, *args, **kwargs):
         self.helper = FormHelper()
 
         self.helper.layout = Layout(
             Fieldset("",
-                'cancelled',
-                'date_closed',
                  FormActions(
                  Submit('submit', 'Reopen Your Listing', css_class='btn-primary'),
                  Button('cancel', 'Never Mind', css_class='btn-default', onclick="history.back()")),
@@ -191,4 +175,3 @@ class ReopenListingForm( forms.ModelForm ):
 
     class Meta:
         model = Listing
-        include = ('cancelled', 'date_closed',)

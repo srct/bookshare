@@ -1,0 +1,22 @@
+Hey there, {{ bidder_first_name }}!
+
+Great news!
+
+Seller {{ seller_name }} has picked your bid for {{ listing_title }} on SRCT
+Bookshare. They're the cc'ed email address-- {{ seller_email }}. Watch your
+email to arrange all the final touches to get your book.
+
+{{ email_message }}
+
+Thanks for using SRCT Bookshare! :-)
+
+(Heads up: no one watches this email address. If you need to get in touch with
+us, for any reason, see srct.gmu.edu/contact.)
+
+---
+
+SRCT is a registered student organization at George Mason University. We have
+written and provide this project for the benefit of our school's community, but
+offer no claims to the accuracy of the information posted on our site by other
+students. The source code for this project is available and freely licensed at
+git.gmu.edu/srct/bookshare.

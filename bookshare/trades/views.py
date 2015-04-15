@@ -11,6 +11,10 @@ from django.http import Http404, HttpResponseForbidden
 from django.forms.widgets import HiddenInput
 from django.core.urlresolvers import reverse
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
+
 import math
 import pyisbn
 import requests
@@ -254,10 +258,34 @@ class SellListing(LoginRequiredMixin, UpdateView):
     login_url = '/'
 
     def form_valid(self, form):
+        # filling out fields
         today = date.today()
+        self.obj = self.get_object()
 
         form.instance.sold = True
         form.instance.date_closed = today
+
+        # sending email
+        text_email = get_template('email/sold.txt')
+        html_email = get_template('email/sold.html')
+
+        email_context = Context(
+            { 'bidder_first_name' : self.obj.winning_bid.bidder.user.first_name },
+            { 'seller_name' : self.obj.seller.user.get_full_name() },
+            { 'listing_title' : self.obj.title },
+            { 'seller_email' : self.obj.seller.user.email },
+            { 'email_message' : self.obj.email_message },
+        )
+
+        subject, from_email, to = ('Your bid has been selected on bookshare',
+                                   'no-reply@bookshare.srct.io',
+                                   self.winning_bid.bidder.user.email)
+        text_content = text_email.render(email_context)
+        html_context = html_email.render(email_context)
+        msg = EmailMultiAlternatives(subject, text_email, from_email, [to])
+        msg.attach_alternative(html_email, "text/html")
+        msg.send()
+
         return super(SellListing, self).form_valid(form)
 
     def get_context_data(self, **kwargs):

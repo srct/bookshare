@@ -16,7 +16,6 @@ class LookoutForm( forms.ModelForm ):
     
         self.helper.layout = Layout(
             Fieldset("",
-                'owner',
                 Field('isbn', placeholder='0801884039'),
                 HTML("""<hr/ >"""),
                 FormActions(
@@ -30,5 +29,4 @@ class LookoutForm( forms.ModelForm ):
 
     class Meta:
         model = Lookout
-        include = ('owner', 'isbn',)
 

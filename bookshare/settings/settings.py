@@ -151,3 +151,10 @@ HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 # Piwik configurations
 PIWIK_SITE_ID = secret.PIWIK_SITE_ID
 PIWIK_URL = secret.PIWIK_URL
+
+# Email configurations
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_HOST = secret.EMAIL_HOST
+EMAIL_PORT = '465'
+EMAIL_HOST_USER = secret.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = secret.EMAIL_HOST_PASSWORD

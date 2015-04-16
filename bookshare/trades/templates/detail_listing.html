@@ -1,5 +1,4 @@
 {% extends 'layouts/base.html' %}
-{% load thumbnail %}
 
 {% block title %}
 SRCT Bookshare &bull; {{ listing.title }}
@@ -67,12 +66,12 @@ SRCT Bookshare &bull; {{ listing.title }}
 </div>
 
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-xs-8">
     <h1>
       <em><strong>{{ listing.title }}</strong></em>
     </h1>
   </div>
-  <div class="col-md-4 text-right">
+  <div class="col-xs-4 text-right">
     <h1>
       {% if listing.sold %}
         <small>Sale Price</small> <strong>${{ listing.final_price }}</strong>
@@ -84,7 +83,7 @@ SRCT Bookshare &bull; {{ listing.title }}
 </div>
 
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-xs-6">
     <h4>
       <small>by</small> {{ listing.author }}
       {% if listing.year %}
@@ -92,17 +91,17 @@ SRCT Bookshare &bull; {{ listing.title }}
       {% endif %}
     </h4>
   </div>
-  <div class="col-md-4 text-right">
+  <div class="col-xs-6 text-right">
     <h4><small>Listed</small> {{ listing.created|date:"M d, 'y P" }} <small>({{ listing.created|naturaltime }})</small></h4>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-3 col-sm-4 col-xs-4">
       <h4><small>ISBN</small> {{ listing.isbn }}</h4>
   </div>
 
-  <div class="col-md-2">
+  <div class="col-md-2 col-sm-4 col-xs-4">
     <h4>
       {% if listing.edition %}
         {{ listing.edition|ordinal }}<small> edition</small>
@@ -116,7 +115,7 @@ SRCT Bookshare &bull; {{ listing.title }}
       {% endcomment %}
   </div>
 
-  <div class="col-md-7 text-right">
+  <div class="col-md-7 col-sm-4 col-xs-4 text-right">
     <h4><small>Sold by</small><a href="{% url 'profile' listing.seller.user.username %}"> {{ listing.seller.user.first_name }} {{ listing.seller.user.last_name }}</a>
     {% if request.user == listing.seller.user %}
     (Me)
@@ -125,15 +124,15 @@ SRCT Bookshare &bull; {{ listing.title }}
 </div>
 
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-3 col-sm-4 col-xs-4">
     <h4><small>Condition</small> {{ listing.condition }}</h4>
   </div>
 
-  <div class="col-md-4">
+  <div class="col-md-4 col-sm-4 col-xs-4">
     <h4><small>Access Code</small> {{ listing.access_code }}</h4>
   </div>
 
-  <div class="col-md-2 col-md-offset-3 text-right">
+  <div class="col-md-2 col-md-offset-3 col-sm-4 col-xs-4 text-right">
   {% if request.user == listing.seller.user %}
   {% else %}
     {% if can_flag %}
@@ -146,16 +145,16 @@ SRCT Bookshare &bull; {{ listing.title }}
 </div>
 
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-3 col-sm-6 col-xs-12">
     <div class="text-center">
-      <a href="{{ media }}{{ listing.photo }}" class="thumbnail">
-        <img src="{{ listing.photo|thumbnail_url:'listing_photo' }}"
+      <a href="/media/{{ listing.photo }}">
+        <img src="/media/{{ listing.photo }}"
         alt="User submitted textbook photo" class="img-thumbnail" />
       </a>
     </div>
   </div>
 
-  <div class="col-md-9">
+  <div class="col-md-9 col-sm-6 col-xs-12">
     <h4><small>Description/Comments</small>
     {% if listing.description %}
       {{ listing.description }}

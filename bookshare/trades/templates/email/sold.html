@@ -1,28 +1,41 @@
-<p>Hey there, <strong>{{ bidder_first_name }}</strong>!</p>
+<html>
+<head>
+  <title>Your bid has been selected on Bookshare!</title>
+  <style type="text/css">
+    body { font-family: "Verdana", sans-serif; }
+    a { color: #006633; }
+    a:active { color: #FFCC33; }
+    a:visited { color: #004C25; }
+  </style>
+</head>
+<body>
+  <p>Hey there, <strong>{{ bidder_first_name }}</strong>!</p>
 
-<p>Great news!</p>
+  <p>Great news!</p>
 
-<p>Seller <strong>{{ seller_name }}</strong> has picked your bid for
-<strong><em>{{ listing_title }}</em></strong> on
-<a href="http://bookshare.srct.gmu.edu/">SRCT Bookshare</a>.
-They're the cc'ed email address-- <strong>{{ seller_email }}</strong>. Watch
-your email to arrange all the final touches to get your book.</p>
+  <p>Seller <strong>{{ seller_name }}</strong> has picked your bid for
+  <strong><em>{{ listing_title }}</em></strong> on
+  <a href="http://bookshare.srct.gmu.edu/">SRCT Bookshare</a>.
+  They're the cc'ed email address-- <strong>{{ seller_email }}</strong>. Watch
+  your email to arrange all the final touches to get your book.</p>
 
-<p>{{ email_message }}</p>
+  <p>{{ email_message }}</p>
 
-<p>Thanks for using SRCT Bookshare! :-)</p>
+  <p>Thanks for using SRCT Bookshare! :-)</p>
 
-<em>(Heads up: no one watches this email address. If you need to get in touch
-with us, for any reason, see srct.gmu.edu/contact.)</em>
+  <em>(Heads up: no one watches this email address. If you need to get in touch
+  with us, for any reason, see srct.gmu.edu/contact.)</em>
 
----
+  ---
 
-<small><a href="http://srct.gmu.edu/">SRCT</a> is a
-<a href="https://si.gmu.edu/registered-student-organizations/">
-registered student organization</a> at
-<a href="http://www.gmu.edu/">George Mason University</a>. We have written and
-provide this project for the benefit of our school's community, but offer no
-claims to the accuracy of the information posted on our site by other students.
-The source code for this project is available and
-<a href="https://www.gnu.org/licenses/gpl-3.0.html/">freely licensed</a> at 
-<a href="http://git.gmu.edu/srct/bookshare/">git.gmu.edu/srct/bookshare</a>.</small>
+  <small><a href="http://srct.gmu.edu/">SRCT</a> is a
+  <a href="https://si.gmu.edu/registered-student-organizations/">
+  registered student organization</a> at
+  <a href="http://www.gmu.edu/">George Mason University</a>. We have written and
+  provide this project for the benefit of our school's community, but offer no
+  claims to the accuracy of the information posted on our site by other students.
+  The source code for this project is available and
+  <a href="https://www.gnu.org/licenses/gpl-3.0.html/">freely licensed</a> at 
+  <a href="http://git.gmu.edu/srct/bookshare/">git.gmu.edu/srct/bookshare</a>.</small>
+</body>
+</html>

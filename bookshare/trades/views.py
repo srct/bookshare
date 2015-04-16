@@ -273,20 +273,22 @@ class SellListing(LoginRequiredMixin, UpdateView):
         html_email = get_template('email/sold.html')
 
         email_context = Context(
-            { 'bidder_first_name' : form.instance.winning_bid.bidder.user.first_name },
-            { 'seller_name' : self.obj.seller.user.get_full_name() },
-            { 'listing_title' : self.obj.title },
-            { 'seller_email' : self.obj.seller.user.email },
-            { 'email_message' : self.obj.email_message },
+            { 'bidder_first_name' : form.instance.winning_bid.bidder.user.first_name,
+              'seller_name' : self.obj.seller.user.get_full_name(),
+              'bid_num' : form.instance.winning_bid.price,
+              'listing_title' : self.obj.title,
+              'seller_email' : self.obj.seller.user.email,
+              'email_message' : form.instance.email_message, }
         )
 
         subject, from_email, to = ('Your bid has been selected on Bookshare!',
                                    'no-reply@bookshare.srct.io',
                                    form.instance.winning_bid.bidder.user.email)
+                                   #your-test-email@example.com')
         text_content = text_email.render(email_context)
-        html_context = html_email.render(email_context)
-        msg = EmailMultiAlternatives(subject, text_email, from_email, [to])
-        msg.attach_alternative(html_email, "text/html")
+        html_content = html_email.render(email_context)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg.attach_alternative(html_content, "text/html")
         msg.send()
 
         return super(SellListing, self).form_valid(form)

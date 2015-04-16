@@ -281,13 +281,14 @@ class SellListing(LoginRequiredMixin, UpdateView):
               'email_message' : form.instance.email_message, }
         )
 
-        subject, from_email, to = ('Your bid has been selected on Bookshare!',
+        subject, from_email, to, cc = ('Your bid has been selected on Bookshare!',
                                    'no-reply@bookshare.srct.io',
-                                   form.instance.winning_bid.bidder.user.email)
+                                   form.instance.winning_bid.bidder.user.email,
+                                   self.obj.seller.user.email)
                                    #your-test-email@example.com')
         text_content = text_email.render(email_context)
         html_content = html_email.render(email_context)
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to], [cc])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 

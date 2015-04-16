@@ -47,7 +47,6 @@ INSTALLED_APPS = (
     'randomslugfield',
     'django_gravatar',
     'crispy_forms',
-    'easy_thumbnails',
     'haystack',
     'piwik',
 )
@@ -109,17 +108,8 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 STATIC_URL = '/static/'
 
-THUMBNAIL_ALIASES = {'': {
-    'listing_photo': {
-        'size': (333, 250),
-        'crop': True,
-    },
-},}
-
 MEDIA_URL = '/media/'
-MEDIA_ROOT = (os.path.join(BASE_DIR, 'media/'))
-MEDIAFILES_DIRS = (
-)
+MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',

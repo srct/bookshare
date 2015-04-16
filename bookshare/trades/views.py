@@ -268,6 +268,7 @@ class SellListing(LoginRequiredMixin, UpdateView):
         form.instance.date_closed = today
 
         # sending email
+        # I'm still second guessing as to whether this should be in this method
         text_email = get_template('email/sold.txt')
         html_email = get_template('email/sold.html')
 

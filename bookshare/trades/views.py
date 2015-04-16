@@ -11,6 +11,10 @@ from django.http import Http404, HttpResponseForbidden
 from django.forms.widgets import HiddenInput
 from django.core.urlresolvers import reverse
 
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+from django.template import Context
+
 import math
 import pyisbn
 import requests
@@ -254,10 +258,40 @@ class SellListing(LoginRequiredMixin, UpdateView):
     login_url = '/'
 
     def form_valid(self, form):
+        # filling out fields
         today = date.today()
+        self.obj = self.get_object()
+        print self.obj
+        print form.instance.winning_bid
 
         form.instance.sold = True
         form.instance.date_closed = today
+
+        # sending email
+        # I'm still second guessing as to whether this should be in this method
+        text_email = get_template('email/sold.txt')
+        html_email = get_template('email/sold.html')
+
+        email_context = Context(
+            { 'bidder_first_name' : form.instance.winning_bid.bidder.user.first_name,
+              'seller_name' : self.obj.seller.user.get_full_name(),
+              'bid_num' : form.instance.winning_bid.price,
+              'listing_title' : self.obj.title,
+              'seller_email' : self.obj.seller.user.email,
+              'email_message' : form.instance.email_message, }
+        )
+
+        subject, from_email, to, cc = ('Your bid has been selected on Bookshare!',
+                                   'no-reply@bookshare.srct.io',
+                                   form.instance.winning_bid.bidder.user.email,
+                                   self.obj.seller.user.email)
+                                   #your-test-email@example.com')
+        text_content = text_email.render(email_context)
+        html_content = html_email.render(email_context)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to], [cc])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
         return super(SellListing, self).form_valid(form)
 
     def get_context_data(self, **kwargs):

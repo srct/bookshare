@@ -134,6 +134,7 @@ class Bid(TimeStampedModel):
     bidder = models.ForeignKey(Student)
     listing = models.ForeignKey(Listing)
     price = models.PositiveIntegerField(
+        default = 0,
         validators = [MaxValueValidator(1000)],)
     text = models.CharField(
         blank = True,

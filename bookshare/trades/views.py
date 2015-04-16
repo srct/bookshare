@@ -261,6 +261,8 @@ class SellListing(LoginRequiredMixin, UpdateView):
         # filling out fields
         today = date.today()
         self.obj = self.get_object()
+        print self.obj
+        print form.instance.winning_bid
 
         form.instance.sold = True
         form.instance.date_closed = today
@@ -270,7 +272,7 @@ class SellListing(LoginRequiredMixin, UpdateView):
         html_email = get_template('email/sold.html')
 
         email_context = Context(
-            { 'bidder_first_name' : self.obj.winning_bid.bidder.user.first_name },
+            { 'bidder_first_name' : form.instance.winning_bid.bidder.user.first_name },
             { 'seller_name' : self.obj.seller.user.get_full_name() },
             { 'listing_title' : self.obj.title },
             { 'seller_email' : self.obj.seller.user.email },
@@ -279,7 +281,7 @@ class SellListing(LoginRequiredMixin, UpdateView):
 
         subject, from_email, to = ('Your bid has been selected on bookshare',
                                    'no-reply@bookshare.srct.io',
-                                   self.winning_bid.bidder.user.email)
+                                   form.instance.winning_bid.bidder.user.email)
         text_content = text_email.render(email_context)
         html_context = html_email.render(email_context)
         msg = EmailMultiAlternatives(subject, text_email, from_email, [to])

@@ -280,7 +280,7 @@ class SellListing(LoginRequiredMixin, UpdateView):
             { 'email_message' : self.obj.email_message },
         )
 
-        subject, from_email, to = ('Your bid has been selected on bookshare',
+        subject, from_email, to = ('Your bid has been selected on Bookshare!',
                                    'no-reply@bookshare.srct.io',
                                    form.instance.winning_bid.bidder.user.email)
         text_content = text_email.render(email_context)

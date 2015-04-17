@@ -4,6 +4,9 @@
 SRCT Bookshare &bull; {{ listing.title }}
 {% endblock %}
 
+{% block javascript %}
+{% endblock javascript %}
+
 {% block content %}
 
 {% load crispy_forms_tags %}
@@ -11,8 +14,15 @@ SRCT Bookshare &bull; {{ listing.title }}
 {% load humanize %}
 
 <!-- you can't actually dismiss this for some reason -->
-{% if flag_count > 4 %}
-<div class="modal show" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+{% if flag_count > 0 %}
+
+<script type="text/javascript">
+    ;$(window).onload(function(){
+        $('#myModal').modal('show');
+    });
+</script>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header text-center">

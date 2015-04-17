@@ -41,5 +41,5 @@ urlpatterns = patterns('',
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
-    # location of user-uploaded media files from settings.py
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # location of user-uploaded media files from settings.py (for local)
+) #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

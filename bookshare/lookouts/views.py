@@ -13,7 +13,7 @@ class CreateLookout(LoginRequiredMixin, CreateView):
     fields = ['isbn', ]
     context_object_name = 'lookout'
     template_name = 'create_lookout.html'
-    login_url = '/'
+    login_url = 'login'
 
     def form_valid(self, form):
         me = Student.objects.get(user=self.request.user)
@@ -34,7 +34,7 @@ class DetailLookout(LoginRequiredMixin, DetailView):
     model = Lookout
     context_object_name = 'lookout'
     template_name = 'detail_lookout.html'
-    login_url = '/'
+    login_url = 'login'
 
     def get_context_data(self, **kwargs):
         context = super(DetailLookout, self).get_context_data(**kwargs)
@@ -55,6 +55,7 @@ class DeleteLookout(LoginRequiredMixin, DeleteView):
     context_object_name = 'lookout'
     template_name = 'delete_lookout.html'
     success_url = '/'
+    success_url = 'login'
 
     def get_context_data(self, **kwargs):
         context = super(DeleteLookout, self).get_context_data(**kwargs)

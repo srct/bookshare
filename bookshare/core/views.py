@@ -10,6 +10,7 @@ class DetailStudent(LoginRequiredMixin, DetailView):
     model = Student
     template_name = 'profile.html'
     context_object_name = 'student'
+    login_url = 'login'
 
     def get_context_data(self, **kwargs):
 
@@ -45,5 +46,3 @@ class DetailStudent(LoginRequiredMixin, DetailView):
         context['bids'] = Bid.objects.filter(bidder=self.get_object())
 
         return context
-
-    login_url = '/'

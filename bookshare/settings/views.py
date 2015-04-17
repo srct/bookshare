@@ -23,6 +23,7 @@ class HomepageView(TemplateView):
 
 class ChartsView(LoginRequiredMixin, TemplateView):
     template_name = 'charts.html'
+    login_url = 'login'
 
     def get_context_data(self, **kwargs):
         context = super(ChartsView, self).get_context_data(**kwargs)

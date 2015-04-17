@@ -59,7 +59,7 @@ class ListListings(LoginRequiredMixin, ListView):
     paginate_by = 15
     queryset = Listing.objects.exclude(cancelled=True).order_by('-created')
     template_name = 'list_listings.html'
-    login_url = '/'
+    login_url = 'login'
 
 
 class CreateListing(LoginRequiredMixin, CreateView):
@@ -69,7 +69,7 @@ class CreateListing(LoginRequiredMixin, CreateView):
     template_name = 'create_listing.html'
     context_object_name = 'listing'
     # ISBN query!
-    login_url = '/'
+    login_url = 'login'
 
     def form_valid(self, form):
         me = Student.objects.get(user=self.request.user)
@@ -90,7 +90,6 @@ class DetailListing(DetailView):
     model = Listing
     context_object_name = 'listing'
     template_name = 'detail_listing.html'
-    login_url = '/'
 
     def get_context_data(self, **kwargs):
         context = super(DetailListing, self).get_context_data(**kwargs)
@@ -118,7 +117,6 @@ class CreateBid(CreateView):
     fields = ['listing', 'price', 'text', ]
     context_object_name = 'bid'
     template_name = 'detail_listing.html'
-    login_url = '/'
 
     def form_valid(self, form):
         me = Student.objects.get(user=self.request.user)
@@ -133,6 +131,7 @@ class CreateBid(CreateView):
 
 # ...to make this single view
 class ListingPage(LoginRequiredMixin, View):
+    login_url = 'login'
 
     # see this page for an explanation
     # https://docs.djangoproject.com/en/1.7/topics/class-based-views/mixins/#an-alternative-better-solution
@@ -152,8 +151,7 @@ class CreateFlag(LoginRequiredMixin, CreateView):
     fields = ['reason', ]
     template_name = 'create_flag.html'
     context_object_name = 'flag'
-
-    login_url = '/'
+    login_url = 'login'
 
     def form_valid(self, form):
         me = Student.objects.get(user=self.request.user)
@@ -203,6 +201,7 @@ class DeleteFlag(LoginRequiredMixin, DeleteView):
     model = Flag
     context_object_name = 'flag'
     template_name = 'delete_flag.html'
+    login_url = 'login'
 
     def get_success_url(self):
         return reverse('detail_listing',
@@ -240,12 +239,11 @@ class EditListing(LoginRequiredMixin, UpdateView):
     template_name = 'listing_edit.html'
     context_object_name = 'listing'
     #form_class = EditListingForm
+    login_url = 'login'
 
     fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition',
               'access_code', 'description', 'price', 'photo', ]
     template_suffix_name = '_edit'
-
-    login_url = '/'
 
     def get_context_data(self, **kwargs):
         context = super(EditListing, self).get_context_data(**kwargs)
@@ -265,8 +263,7 @@ class SellListing(LoginRequiredMixin, UpdateView):
     template_suffix_name = '_sell'
     context_object_name = 'listing'
     template_name = 'listing_sell.html'
-
-    login_url = '/'
+    login_url = 'login'
 
     def form_valid(self, form):
         # filling out fields
@@ -333,8 +330,7 @@ class UnSellListing(LoginRequiredMixin, UpdateView):
     template_suffix_name = '_unsell'
     context_object_name = 'listing'
     template_name = 'listing_unsell.html'
-
-    login_url = '/'
+    login_url = 'login'
 
     def form_valid(self, form):
         form.instance.sold = False
@@ -360,8 +356,7 @@ class CancelListing(LoginRequiredMixin, UpdateView):
     template_suffix_name = '_cancel'
     context_object_name = 'listing'
     template_name = 'listing_cancel.html'
-
-    login_url = '/'
+    login_url = 'login'
 
     def form_valid(self, form):
         today = date.today()
@@ -388,8 +383,7 @@ class ReopenListing(LoginRequiredMixin, UpdateView):
     template_suffix_name = '_reopen'
     context_object_name = 'listing'
     template_name = 'listing_reopen.html'
-
-    login_url = '/'
+    login_url = 'login'
 
     def form_valid(self, form):
         form.instance.cancelled = False

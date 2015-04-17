@@ -70,3 +70,7 @@ body .modal-dialog {
 .form-actions {
   text-align: center;
 }
+
+.modal-backdrop {
+  opacity:0.9 !important;
+}

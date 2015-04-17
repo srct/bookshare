@@ -8,10 +8,6 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'lookouts/templates'),
 )
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
-
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
@@ -105,6 +101,9 @@ USE_TZ = True
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))

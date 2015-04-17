@@ -1,17 +1,16 @@
 from lookouts.models import Lookout
 from lookouts.forms import LookoutForm
 
-from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, DetailView, DeleteView
 from braces.views import LoginRequiredMixin
 
-from django.contrib.auth.models import User
 from core.models import Student
-from django.http import Http404, HttpResponseForbidden
+from django.http import HttpResponseForbidden
 
-### VIEWS ###
+
 class CreateLookout(LoginRequiredMixin, CreateView):
     model = Lookout
-    fields = ['isbn',]
+    fields = ['isbn', ]
     context_object_name = 'lookout'
     template_name = 'create_lookout.html'
     login_url = '/'
@@ -29,6 +28,7 @@ class CreateLookout(LoginRequiredMixin, CreateView):
         context['my_form'] = form
 
         return context
+
 
 class DetailLookout(LoginRequiredMixin, DetailView):
     model = Lookout
@@ -48,6 +48,7 @@ class DetailLookout(LoginRequiredMixin, DetailView):
         return context
 
 # updating is not neccessary since it's just literally an isbn and a course
+
 
 class DeleteLookout(LoginRequiredMixin, DeleteView):
     model = Lookout

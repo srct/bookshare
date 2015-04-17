@@ -1,5 +1,3 @@
-# Django settings for bookshare project.
-
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -127,9 +125,9 @@ CAS_RESPONSE_CALLBACKS = (
 )
 
 HAYSTACK_CONNECTIONS = {
-    'default' : {
-        'ENGINE' : 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH' : os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
     },
 }
 

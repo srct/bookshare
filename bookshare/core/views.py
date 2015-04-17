@@ -5,27 +5,7 @@ from core.models import Student
 from lookouts.models import Lookout
 from trades.models import Listing, Bid
 
-# seller's rating
-"""def ratingsAverage(seller):
-    sellerRating = Seller.objects.filter(user__username=seller)
-    ratingNumber = 0
-    ratingTotal = 0
-    ratingAverage = 0
-    for rating in sellerRating:
-        ratingNumber += 1
-        ratingTotal += rating
-    ratingAverage = ratingTotal/ratingNumber
-    return ratingNumber"""
 
-### VIEWS ###
-
-def privacy_opt_out(request):
-    # merely forms
-    return render(request, 'privacy_opt_out.html', {
-   },
-   )
-
-# User profile page
 class DetailStudent(LoginRequiredMixin, DetailView):
     model = Student
     template_name = 'profile.html'

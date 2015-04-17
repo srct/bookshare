@@ -1,7 +1,6 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 
 from lookouts.views import DetailLookout, CreateLookout, DeleteLookout
-from lookouts.models import Lookout
 
 urlpatterns = patterns('',
 
@@ -13,5 +12,4 @@ urlpatterns = patterns('',
 
     url(r'^(?P<slug>[\w-]+)/delete/$',
         DeleteLookout.as_view(), name='delete_lookout'),
-        
 )

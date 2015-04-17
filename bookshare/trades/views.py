@@ -1,12 +1,12 @@
 from trades.models import Listing, Bid, Flag
-from trades.forms import ListingForm, BidForm, FlagForm, SellListingForm, UnSellListingForm, CancelListingForm, ReopenListingForm
+from trades.forms import ListingForm, BidForm, FlagForm, SellListingForm
 from core.models import Student
 
-from django.views.generic import View, DetailView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import View, DetailView, ListView, CreateView,\
+    UpdateView, DeleteView
 
 from braces.views import LoginRequiredMixin
 
-from django.contrib.auth.models import User
 from django.http import Http404, HttpResponseForbidden
 from django.forms.widgets import HiddenInput
 from django.core.urlresolvers import reverse
@@ -15,10 +15,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
 
-import math
-import pyisbn
 import requests
 from datetime import date
+
 
 # pulls worldcat metadata from ISBNs
 def ISBNMetadata(standardISBN):
@@ -33,15 +32,18 @@ def ISBNMetadata(standardISBN):
     except:
         return None
 
+
 # flagging
 # you can only flag a listing once...
 def can_flag(flagger, listing):
-    user_flag_num = Flag.objects.filter(flagger=flagger, listing=listing).count()
+    user_flag_num = Flag.objects.filter(flagger=flagger,
+                                        listing=listing).count()
     # we're assuming that this isn't going to go over 1
     if user_flag_num:
         return False
     else:
         return True
+
 
 # get the listing's slug to pass to the create flag page
 def flag_slug(flagger, listing):
@@ -50,22 +52,20 @@ def flag_slug(flagger, listing):
     else:
         return None
 
-# validation of new listing forms
-    # <3 test cases
 
-### VIEWS ###
 class ListListings(LoginRequiredMixin, ListView):
     model = Listing
     context_object_name = 'listings'
     paginate_by = 15
-    queryset=Listing.objects.exclude(cancelled=True).order_by('-created')
+    queryset = Listing.objects.exclude(cancelled=True).order_by('-created')
     template_name = 'list_listings.html'
     login_url = '/'
+
 
 class CreateListing(LoginRequiredMixin, CreateView):
     model = Listing
     fields = ['isbn', 'title', 'author', 'edition', 'year', 'condition',
-        'access_code', 'price', 'photo', 'description']
+              'access_code', 'price', 'photo', 'description']
     template_name = 'create_listing.html'
     context_object_name = 'listing'
     # ISBN query!
@@ -83,6 +83,7 @@ class CreateListing(LoginRequiredMixin, CreateView):
         form = ListingForm()
         context['my_form'] = form
         return context
+
 
 # These next two views are tied together...
 class DetailListing(DetailView):
@@ -109,11 +110,12 @@ class DetailListing(DetailView):
         context['flag_count'] = Flag.objects.filter(listing=self.get_object()).count()
         context['can_flag'] = can_flag(me, self.get_object())
         context['flag_slug'] = flag_slug(me, self.get_object())
-        return context 
+        return context
+
 
 class CreateBid(CreateView):
     model = Bid
-    fields = ['listing', 'price', 'text',]
+    fields = ['listing', 'price', 'text', ]
     context_object_name = 'bid'
     template_name = 'detail_listing.html'
     login_url = '/'
@@ -125,7 +127,9 @@ class CreateBid(CreateView):
         return super(CreateBid, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('detail_listing', kwargs={'slug':self.object.listing.slug})
+        return reverse('detail_listing',
+                       kwargs={'slug': self.object.listing.slug})
+
 
 # ...to make this single view
 class ListingPage(LoginRequiredMixin, View):
@@ -141,11 +145,11 @@ class ListingPage(LoginRequiredMixin, View):
         view = CreateBid.as_view()
         return view(request, *args, **kwargs)
 
-# and we return to our regularly schedule programming
 
+# and we return to our regularly schedule programming
 class CreateFlag(LoginRequiredMixin, CreateView):
     model = Flag
-    fields = ['reason',]
+    fields = ['reason', ]
     template_name = 'create_flag.html'
     context_object_name = 'flag'
 
@@ -164,7 +168,8 @@ class CreateFlag(LoginRequiredMixin, CreateView):
         return super(CreateFlag, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse('detail_listing', kwargs={'slug':self.object.listing.slug})
+        return reverse('detail_listing',
+                       kwargs={'slug': self.object.listing.slug})
 
     def get_context_data(self, **kwargs):
         context = super(CreateFlag, self).get_context_data(**kwargs)
@@ -193,13 +198,15 @@ class CreateFlag(LoginRequiredMixin, CreateView):
         context['my_form'] = form
         return context
 
+
 class DeleteFlag(LoginRequiredMixin, DeleteView):
     model = Flag
     context_object_name = 'flag'
     template_name = 'delete_flag.html'
 
     def get_success_url(self):
-        return reverse('detail_listing', kwargs={'slug':self.object.listing.slug})
+        return reverse('detail_listing',
+                       kwargs={'slug': self.object.listing.slug})
 
     def get_context_data(self, **kwargs):
         context = super(DeleteFlag, self).get_context_data(**kwargs)
@@ -213,11 +220,13 @@ class DeleteFlag(LoginRequiredMixin, DeleteView):
 
         return context
 
+
 class DeleteBid(LoginRequiredMixin, DeleteView):
     model = Bid
     success_url = '/'
 
     # can be deleted by either creator or person for lister
+
 
 class EditBid(LoginRequiredMixin, UpdateView):
     model = Bid
@@ -225,14 +234,15 @@ class EditBid(LoginRequiredMixin, UpdateView):
 
     # can only be edited by the bidder
 
+
 class EditListing(LoginRequiredMixin, UpdateView):
     model = Listing
     template_name = 'listing_edit.html'
     context_object_name = 'listing'
     #form_class = EditListingForm
 
-    fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition', 'access_code',
-        'description', 'price', 'photo',]
+    fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition',
+              'access_code', 'description', 'price', 'photo', ]
     template_suffix_name = '_edit'
 
     login_url = '/'
@@ -246,11 +256,12 @@ class EditListing(LoginRequiredMixin, UpdateView):
         if not(selling_student == me):
             return HttpResponseForbidden()
 
-        return context 
+        return context
+
 
 class SellListing(LoginRequiredMixin, UpdateView):
     model = Listing
-    fields = ['email_message', 'winning_bid',]
+    fields = ['email_message', 'winning_bid', ]
     template_suffix_name = '_sell'
     context_object_name = 'listing'
     template_name = 'listing_sell.html'
@@ -272,23 +283,23 @@ class SellListing(LoginRequiredMixin, UpdateView):
         text_email = get_template('email/sold.txt')
         html_email = get_template('email/sold.html')
 
-        email_context = Context(
-            { 'bidder_first_name' : form.instance.winning_bid.bidder.user.first_name,
-              'seller_name' : self.obj.seller.user.get_full_name(),
-              'bid_num' : form.instance.winning_bid.price,
-              'listing_title' : self.obj.title,
-              'seller_email' : self.obj.seller.user.email,
-              'email_message' : form.instance.email_message, }
-        )
+        email_context = Context({
+            'bidder_first_name': form.instance.winning_bid.bidder.user.first_name,
+            'seller_name': self.obj.seller.user.get_full_name(),
+            'bid_num': form.instance.winning_bid.price,
+            'listing_title': self.obj.title,
+            'seller_email': self.obj.seller.user.email,
+            'email_message': form.instance.email_message, })
 
         subject, from_email, to, cc = ('Your bid has been selected on Bookshare!',
-                                   'no-reply@bookshare.srct.io',
-                                   form.instance.winning_bid.bidder.user.email,
-                                   self.obj.seller.user.email)
-                                   #your-test-email@example.com')
+                                       'no-reply@bookshare.srct.io',
+                                       form.instance.winning_bid.bidder.user.email,
+                                       self.obj.seller.user.email)
+                                       #your-test-email@example.com')
         text_content = text_email.render(email_context)
         html_content = html_email.render(email_context)
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to], [cc])
+        msg = EmailMultiAlternatives(subject, text_content,
+                                     from_email, [to], [cc])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
@@ -313,7 +324,8 @@ class SellListing(LoginRequiredMixin, UpdateView):
 
         context['my_form'] = form
 
-        return context 
+        return context
+
 
 class UnSellListing(LoginRequiredMixin, UpdateView):
     model = Listing
@@ -339,10 +351,8 @@ class UnSellListing(LoginRequiredMixin, UpdateView):
         if not(selling_student == me):
             return HttpResponseForbidden()
 
-        form = UnSellListingForm()
-        context['my_form'] = form
+        return context
 
-        return context 
 
 class CancelListing(LoginRequiredMixin, UpdateView):
     model = Listing
@@ -369,12 +379,8 @@ class CancelListing(LoginRequiredMixin, UpdateView):
         if not(selling_student == me):
             return HttpResponseForbidden()
 
-        today = date.today()
+        return context
 
-        form = CancelListingForm()
-        context['my_form'] = form
-
-        return context 
 
 class ReopenListing(LoginRequiredMixin, UpdateView):
     model = Listing
@@ -399,7 +405,4 @@ class ReopenListing(LoginRequiredMixin, UpdateView):
         if not(selling_student == me):
             return HttpResponseForbidden()
 
-        form = ReopenListingForm()
-        context['my_form'] = form
-
-        return context 
+        return context

@@ -1,6 +1,5 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 from core.views import DetailStudent
-from core.models import Student
 
 urlpatterns = patterns('',
     url(r'^(?P<slug>[\w-]+)/$',

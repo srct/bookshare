@@ -1,10 +1,11 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 
-from trades.views import ListListings, CreateListing, ListingPage, CreateFlag, DeleteFlag, EditListing, SellListing, UnSellListing, CancelListing, ReopenListing
-from trades.models import Listing, Bid
+from trades.views import ListListings, CreateListing, ListingPage,\
+    CreateFlag, DeleteFlag, EditListing, SellListing,\
+    UnSellListing, CancelListing, ReopenListing
+
 
 urlpatterns = patterns('',
-
     url(r'^all/$',
         ListListings.as_view(), name='list_listings'),
 

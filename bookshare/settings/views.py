@@ -10,14 +10,16 @@ from django.db.models import Sum
 
 from collections import Counter
 
+
 class HomepageView(TemplateView):
     template_name = 'index.html'
 
     def get_context_data(self, **kwargs):
         context = super(HomepageView, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated():
-          context['lookouts'] = Lookout.objects.filter(owner=self.request.user.student)
+            context['lookouts'] = Lookout.objects.filter(owner=self.request.user.student)
         return context
+
 
 class ChartsView(LoginRequiredMixin, TemplateView):
     template_name = 'charts.html'
@@ -34,18 +36,21 @@ class ChartsView(LoginRequiredMixin, TemplateView):
         for isbn in set(all_isbns):
             # only want sold listings (not cancelled is assumed)
             listings = Listing.objects.exclude(sold=False).filter(isbn=isbn)
-            # make a list of all of that listing's final prices (assuming no Nones)
+            # make list of all of that listing's final prices (assume no Nones)
             listing_winning_bids = [listing.final_price() for listing in listings]
             # add all those together
             listing_gross = sum(listing_winning_bids)
             # make a tuple of the isbn and gross and add it to the list
-            grossing.append( (isbn, listing_gross) )
+            grossing.append((isbn, listing_gross))
+
+        total_proceeds = Listing.objects.aggregate(sum_price=Sum('winning_bid__price'))['sum_price']
 
         context['most_popular'] = Counter(all_isbns).most_common(20)
         # sort by the second element of the tuple, descending
-        context['highest_grossing'] = sorted(grossing, key=lambda li: li[1], reverse=True)[:20]
+        context['highest_grossing'] = sorted(grossing, key=lambda li: li[1],
+                                             reverse=True)[:20]
         context['total_listings'] = all_listings.count()
         context['total_bids'] = Bid.objects.count()
         context['total_students'] = Student.objects.count()
-        context['total_proceeds'] = Listing.objects.aggregate(sum_price=Sum('winning_bid__price'))['sum_price']
+        context['total_proceeds'] = total_proceeds
         return context

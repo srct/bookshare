@@ -5,6 +5,7 @@ from .models import Student
 
 import requests
 
+
 def pfinfo(u_name):
     pf_url = "http://peoplefinder.b1.akshaykarthik.com/"
     url = str(pf_url) + "basic/all/" + str(u_name)
@@ -18,8 +19,8 @@ def pfinfo(u_name):
         name = pf_json['results'][0]['name']
         return name.split(',')
 
-def create_user(tree):
 
+def create_user(tree):
     username = tree[0][0].text
     print username
     user, user_created = User.objects.get_or_create(username=username)

@@ -2,7 +2,7 @@
 
 {% block title %}
 SRCT Bookshare &bull; Create Listing
-{% endblock %}
+{% endblock title %}
 
 {% block content %}
 
@@ -34,4 +34,8 @@ SRCT Bookshare &bull; Create Listing
   </div>
 </div>
 
-{% endblock %}
+{% endblock content %}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'js/isbn.js' %}"></script>
+{% endblock javascript %}

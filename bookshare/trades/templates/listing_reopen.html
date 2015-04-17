@@ -15,11 +15,12 @@ SRCT Bookshare &bull; {{ listing.title }} &bull; Reopen
   </div>
 </div>
 
-{% load crispy_forms_tags %}
-
 <div class="row">
   <div class="col-md-8 col-md-offset-2 text-center">
-    {% crispy my_form %}
+    <form action="" method="post">{% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Reopen Your Listing" class="btn btn-primary" />
+      <input type="cancel" value="Never Mind" class="btn btn-default" onclick="history.back()" />
   </div>
 </div>
 {% endblock %}

@@ -1,14 +1,14 @@
+# standard library imports
+from collections import Counter
+# core django imports
+from django.views.generic import TemplateView
+from django.db.models import Sum
+# third party imports
+from braces.views import LoginRequiredMixin
+# imports from your apps
 from lookouts.models import Lookout
 from trades.models import Listing, Bid
 from core.models import Student
-
-from django.views.generic import TemplateView
-
-from braces.views import LoginRequiredMixin
-
-from django.db.models import Sum
-
-from collections import Counter
 
 
 class HomepageView(TemplateView):

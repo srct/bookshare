@@ -1,14 +1,13 @@
+# core django imports
 from django.conf.urls import patterns, include, url
-
-from .views import HomepageView, ChartsView
 from django.views.generic import TemplateView
-
 from django.conf.urls.static import static
 from django.conf import settings
-
 from django.contrib import admin
+# imports from your apps
+from .views import HomepageView, ChartsView
 
-# Uncomment the next two lines to enable the admin:
+
 admin.autodiscover()
 
 handle404 = TemplateView.as_view(template_name="404.html")

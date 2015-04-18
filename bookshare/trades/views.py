@@ -64,8 +64,8 @@ class ListListings(LoginRequiredMixin, ListView):
 
 class CreateListing(LoginRequiredMixin, CreateView):
     model = Listing
-    fields = ['isbn', 'title', 'author', 'edition', 'year', 'condition',
-              'access_code', 'price', 'photo', 'description']
+    fields = ['isbn', 'title', 'author', 'edition', 'year', 'course_abbr',
+              'condition', 'access_code', 'price', 'photo', 'description']
     template_name = 'create_listing.html'
     context_object_name = 'listing'
     # ISBN query!

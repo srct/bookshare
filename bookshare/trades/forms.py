@@ -25,7 +25,7 @@ class ListingForm(forms.ModelForm):
                            placeholder='Richard W. Thorington, Jr., and Katie Ferrell'),
                      'edition',
                      Field('year', placeholder='2006'),
-                     #'course',
+                     Field('course_abbr', placeholder='ENGH 302'),
                      'condition',
                      'access_code',
                      AppendedPrependedText('price', '$', '.00',
@@ -45,6 +45,7 @@ class ListingForm(forms.ModelForm):
 
         super(ListingForm, self).__init__(*args, **kwargs)
         self.fields['isbn'].label = "ISBN"
+        self.fields['course_abbr'].label = "Course"
         self.fields['description'].label = "Other Notes"
 
     class Meta:

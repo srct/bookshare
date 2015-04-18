@@ -16,7 +16,7 @@ class ListingIndex(indexes.SearchIndex, indexes.Indexable):
     ISBN = indexes.CharField(model_attr='isbn')
     condition = indexes.CharField(model_attr='condition')
     description = indexes.CharField(model_attr='description')
-    #course = indexes.CharField(model_attr='course')
+    course_abbr = indexes.CharField(model_attr='course_abbr')
 
     def get_model(self):
         return Listing

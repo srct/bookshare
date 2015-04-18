@@ -57,6 +57,9 @@ class Listing(TimeStampedModel):
                                  max_length=20, default=GOOD)
     access_code = models.CharField(choices=ACCESS_CODE_CHOICES,
                                    max_length=30, default=NOT_APPLICABLE)
+    course_abbr = models.CharField(max_length=10, blank=True,
+                                   validators=[RegexValidator('^([a-zA-Z]){2,4}( )?(\d){3}$',
+                                       message='Please enter a valid course.')])
     description = models.TextField(blank=True, max_length=2000)
     price = models.PositiveIntegerField(default=0,
                                         validators=[MaxValueValidator(1000)])

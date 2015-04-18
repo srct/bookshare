@@ -4,5 +4,6 @@
 {{ object.year }}
 {{ object.condition }}
 {{ object.edition }}
+{{ object.course_abbr }}
 {{ object.description }}
 {{ object.created }}

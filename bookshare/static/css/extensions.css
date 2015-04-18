@@ -74,3 +74,15 @@ body .modal-dialog {
 .modal-backdrop {
   opacity:0.9 !important;
 }
+
+@media (max-width: 991px) {
+  .small-text-right {
+    text-align: right;
+  }
+}
+
+@media (max-width: 991px) {
+  .small-text-center {
+    text-align: center;
+  }
+}

@@ -57,7 +57,7 @@ class DeleteLookout(LoginRequiredMixin, DeleteView):
     context_object_name = 'lookout'
     template_name = 'delete_lookout.html'
     success_url = '/'
-    success_url = 'login'
+    login_url = 'login'
 
     def get_context_data(self, **kwargs):
         context = super(DeleteLookout, self).get_context_data(**kwargs)

@@ -1,6 +1,7 @@
+# core django imports
 from django.conf.urls import patterns, url
-
-from lookouts.views import DetailLookout, CreateLookout, DeleteLookout
+# imports from your apps 
+from .views import DetailLookout, CreateLookout, DeleteLookout
 
 urlpatterns = patterns('',
 

@@ -1,11 +1,13 @@
-from lookouts.models import Lookout
-from lookouts.forms import LookoutForm
-
-from django.views.generic import CreateView, DetailView, DeleteView
-from braces.views import LoginRequiredMixin
-
+# core django imports
 from core.models import Student
 from django.http import HttpResponseForbidden
+from django.views.generic import CreateView, DetailView, DeleteView
+# third-party imports
+from braces.views import LoginRequiredMixin
+# imports from your apps
+from .forms import LookoutForm
+from .models import Lookout
+
 
 
 class CreateLookout(LoginRequiredMixin, CreateView):

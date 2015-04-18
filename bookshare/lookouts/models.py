@@ -1,10 +1,13 @@
+# core django imports
 from django.db import models
-from trades.models import Listing
-from core.models import Student
 from django.core.urlresolvers import reverse
 from django.core.validators import RegexValidator
+# third-party imports
 from model_utils.models import TimeStampedModel
 from randomslugfield import RandomSlugField
+# imports from your apps
+from trades.models import Listing
+from core.models import Student
 
 
 class Lookout(TimeStampedModel):

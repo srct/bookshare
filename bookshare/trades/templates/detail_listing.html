@@ -56,8 +56,18 @@ SRCT Bookshare &bull; {{ listing.title }}
 {% elif listing.sold %}
   <div class="row">
     <div class="col-lg-12">
+      {% if listing.winning_bid.bidder.user == request.user %}
+      <div class="alert alert-success text-center">
+        <strong>You purchased this listing {{ listing.date_closed|timesince }} ago.</strong>
+        {% if rating %}
+          <strong><a href="{% url 'edit_rating' listing.slug rating.slug %}">Edit</a> <a href="{% url 'ratings' listing.seller.slug %}">your rating</a> of this sale.</strong>
+        {% else %}
+          <strong>Rate your experience with {{ listing.seller.user.first_name }} <a href="{% url 'create_rating' listing.slug %}">here</a>.</strong>
+        {% endif %}
+      {% else %}
       <div class="alert alert-danger text-center">
         <strong>This listing has been sold.</strong>
+      {% endif %}
       </div>
     </div>
   </div>
@@ -143,9 +153,9 @@ SRCT Bookshare &bull; {{ listing.title }}
   {% if request.user == listing.seller.user %}
   {% else %}
     {% if can_flag %}
-    <h5><a href="{% url 'create_flag' listing.slug %}"><span class="label label-danger"><i class="fa fa-flag fa-fw fa-lg"></i> Flag</span></h4></a></h5>
+    <h5><a href="{% url 'create_flag' listing.slug %}"><span class="label label-danger"><i class="fa fa-flag fa-fw fa-lg"></i> Flag</span></a></h5>
     {% else %}
-    <h5><a href="{% url 'delete_flag' listing.slug flag_slug %}"><span class="label label-danger"><i class="fa fa-flag fa-fw fa-lg"></i>Remove Flag</span></h4></a></h5>
+    <h5><a href="{% url 'delete_flag' listing.slug flag_slug %}"><span class="label label-danger"><i class="fa fa-flag fa-fw fa-lg"></i>Remove Flag</span></a></h5>
     {% endif %}
   {% endif %}
   </div>

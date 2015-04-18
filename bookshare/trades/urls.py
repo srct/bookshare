@@ -2,7 +2,8 @@ from django.conf.urls import patterns, url
 
 from trades.views import ListListings, CreateListing, ListingPage,\
     CreateFlag, DeleteFlag, EditListing, SellListing,\
-    UnSellListing, CancelListing, ReopenListing
+    UnSellListing, CancelListing, ReopenListing, CreateRating,\
+    EditRating, DeleteRating
 
 
 urlpatterns = patterns('',
@@ -35,4 +36,14 @@ urlpatterns = patterns('',
 
     url(r'^listing/(?P<slug>[\w-]+)/reopen/$',
         ReopenListing.as_view(), name='reopen_listing'),
+
+    url(r'^listing/(?P<slug>[\w-]+)/rate/$',
+        CreateRating.as_view(), name='create_rating'),
+
+    url(r'^listing/(?P<listing_slug>[\w-]+)/rating/(?P<slug>[\w-]+)/edit/$',
+        EditRating.as_view(), name='edit_rating'),
+
+    url(r'^listing/(?P<listing_slug>[\w-]+)/rating/(?P<slug>[\w-]+)/remove/$',
+        DeleteRating.as_view(), name='delete_rating'),
+
 )

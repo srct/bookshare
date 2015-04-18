@@ -2,7 +2,7 @@
 *.sw*
 /.virtualenv
 media
-!media/listing_photos/default_listing_photo.jpg
+!default_listing_photo.jpg
 bookshare/static/admin
 bookshare/settings/secret.py
 bookshare/settings/whoosh_index/

@@ -1,5 +1,4 @@
 {% extends 'layouts/base.html' %}
-{% comment %} {% load website_extras %} {% endcomment %}
 
 {% block title %}
 SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
@@ -17,25 +16,27 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
     <div class="col-md-1">
       <img class="img-circle img-responsive" src="{% gravatar_url student.user.email 75 %}">
     </div>
-    <div class="col-lg-7 col-md-6">
+    <div class="col-md-6">
       <h2><strong>{{ student.user.first_name }} {{ student.user.last_name }}</strong></h2>
     </div>
-    <div class="col-lg-2 col-md-3">
-      {% comment %}
-      {% if student.rating %}
-        <h3><a href="#students-ratings-history">
-        <i class="fa fa-star"></i>
-        <i class="fa fa-star"></i>
-        <i class="fa fa-star"></i>
-        <i class="fa fa-star-o"></i>
-        <i class="fa fa-star-o"></i>
+    <div class="col-md-3 text-right">
+      {% if avg_stars %}
+        <h3><a href="{% url 'ratings' student.slug %}">
+        {% for star in avg_stars|full_stars %}
+          <i class="fa fa-star"></i>
+        {% endfor %}
+        {% if avg_stars|half_stars %}
+          <i class="fa fa-star-half-o"></i>
+        {% endif %}
+        {% for star in avg_stars|empty_stars %}
+          <i class="fa fa-star-o"></i>
+        {% endfor %}
         </h3></a>
       {% else %}
-        <em>{{ student.user.first_name }} has no ratings yet.</em>
+        <small>{{ student.user.first_name }} has no ratings yet.</small>
       {% endif %}
-      {% endcomment %}
     </div>
-    <div class="col-md-2">
+    <div class="col-md-2 text-right">
       <h3><a href="mailto:{{ student.user.email }}"><i class="fa fa-envelope"></i> {{ student.user.username }}</a></h3>
     </div>
   </div>
@@ -68,7 +69,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
           <tr>
           {% endif %}
             <td class="text-center"><h5>{{ listing.isbn }}</h5></td>
-            <td class="text-center"><h5><a href="{{ listing.get_absolute_url }}">{{ listing.title }}</h5></a></td>
+            <td class="text-center"><h5><a href="{{ listing.get_absolute_url }}">{{ listing.title|title }}</h5></a></td>
             <td class="text-center"><h5>
               {% if listing.sold %}
                 ${{ listing.final_price }}

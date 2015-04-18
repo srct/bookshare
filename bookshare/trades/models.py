@@ -61,7 +61,7 @@ class Listing(TimeStampedModel):
     price = models.PositiveIntegerField(default=0,
                                         validators=[MaxValueValidator(1000)])
     photo = models.ImageField(max_length=1000, upload_to='listing_photos',
-                              default='static/img/default_listing_photo.jpg')
+                              default='listing_photos/default_listing_photo.jpg')
 
     # these remaining fields are for internal usage, not for users
     sold = models.BooleanField(default=False)

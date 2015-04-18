@@ -3,7 +3,7 @@ from braces.views import LoginRequiredMixin
 
 from core.models import Student
 from lookouts.models import Lookout
-from trades.models import Listing, Bid
+from trades.models import Listing, Bid, Rating
 
 
 class DetailStudent(LoginRequiredMixin, DetailView):
@@ -13,7 +13,9 @@ class DetailStudent(LoginRequiredMixin, DetailView):
     login_url = 'login'
 
     def get_context_data(self, **kwargs):
+        context = super(DetailStudent, self).get_context_data(**kwargs)
 
+        # can be done with sum & filter only solds
         def total_sales(listings):
             sales = 0
             for listing in listings:
@@ -21,6 +23,7 @@ class DetailStudent(LoginRequiredMixin, DetailView):
                     sales = sales + 1
             return sales
 
+        # can be done with sum & filter only solds
         def total_proceeds(listings):
             proceeds = 0
             for listing in listings:
@@ -33,9 +36,15 @@ class DetailStudent(LoginRequiredMixin, DetailView):
 
         student_listings = Listing.objects.filter(seller=self.get_object().pk)
 
-        context = super(DetailStudent, self).get_context_data(**kwargs)
-
-        #context['listings'] = Listing.objects.filter(seller='2')
+        student_ratings = Rating.objects.filter(listing__seller__user=self.get_object())
+        if student_ratings:
+            student_stars = [int(rating.stars) for rating in student_ratings]
+            print student_stars
+            average_stars = sum(student_stars)/float((len(student_stars)))
+        else:
+            average_stars = None
+       
+        context['avg_stars'] = average_stars
         context['listings'] = student_listings
         context['me'] = self.get_object().pk
         context['lookouts'] = Lookout.objects.filter(owner=self.get_object())
@@ -44,5 +53,31 @@ class DetailStudent(LoginRequiredMixin, DetailView):
         context['sales'] = total_sales(student_listings)
 
         context['bids'] = Bid.objects.filter(bidder=self.get_object())
+
+        return context
+
+class StudentRatings(LoginRequiredMixin, DetailView):
+    model = Student
+    template_name = 'ratings.html'
+    context_object_name = 'student'
+    login_url = 'login'
+
+    def get_context_data(self, **kwargs):
+        context = super(StudentRatings, self).get_context_data(**kwargs)
+
+        student_ratings = Rating.objects.filter(listing__seller__user=self.get_object())
+
+        # copied code!
+        if student_ratings:
+            student_stars = [int(rating.stars) for rating in student_ratings]
+            print student_stars
+            average_stars = sum(student_stars)/float((len(student_stars)))
+        else:
+            average_stars = None
+       
+        context['avg_stars'] = average_stars
+
+        context['student_ratings'] = student_ratings
+        context['student_ratings_num'] = student_ratings.count()
 
         return context

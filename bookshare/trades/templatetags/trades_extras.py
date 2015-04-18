@@ -12,3 +12,26 @@ def isbn_name(isbn):
         return data['title']
     else:
         return isbn
+
+
+@register.filter(name='full_stars')
+def full_stars(avg_stars):
+    return range(int(avg_stars))
+
+@register.filter(name='half_stars')
+def half_stars(avg_stars):
+    if (avg_stars % 1) >= .5:
+        return True
+    else:
+        return False
+
+@register.filter(name='empty_stars')
+def empty_stars(avg_stars):
+    if half_stars(avg_stars):
+        return range(4 - int(avg_stars))
+    else:
+        return range(5 - int(avg_stars))
+
+@register.filter(name='int_maker')
+def int_maker(num):
+    return int(num)

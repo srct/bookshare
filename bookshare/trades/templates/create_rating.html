@@ -1,0 +1,34 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+SRCT Bookshare &bull; {{ listing.title }} | Rate
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header" id="banner">
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
+      <p class="lead text-center"><strong>Rate Your Experience with {{ listing.seller.user.get_full_name}}'s Listing <em>{{ listing.title }}</em></strong></p>
+    </div>
+  </div>
+</div>
+
+{% load crispy_forms_tags %}
+
+<div class="row">
+  <div class="col-lg-8 col-lg-offset-2">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-10 col-md-offset-1">
+           {% crispy my_form %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

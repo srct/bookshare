@@ -1,25 +1,24 @@
-from trades.models import Listing, Bid, Flag, Rating
-from trades.forms import ListingForm, BidForm, FlagForm, SellListingForm, RatingForm
-from core.models import Student
-
+# standard library imports
+from datetime import date
+from cStringIO import StringIO
+# core django imports
 from django.views.generic import View, DetailView, ListView, CreateView,\
     UpdateView, DeleteView
-
-from braces.views import LoginRequiredMixin
-
 from django.http import Http404, HttpResponseForbidden
 from django.forms.widgets import HiddenInput
 from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
-
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
-
+# third party imports
 import requests
-from datetime import date
 from PIL import Image
-from cStringIO import StringIO
+from braces.views import LoginRequiredMixin
+# imports from your apps
+from .models import Listing, Bid, Flag, Rating
+from .forms import ListingForm, BidForm, FlagForm, SellListingForm, RatingForm
+from core.models import Student
 
 
 # pulls worldcat metadata from ISBNs

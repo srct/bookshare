@@ -1,14 +1,15 @@
-from django.db import models
-from model_utils.models import TimeStampedModel
-from randomslugfield import RandomSlugField
-
-from core.models import Student#, Course
-
-from django.core.validators import MaxValueValidator, RegexValidator
-from django.core.urlresolvers import reverse
-
+# standard library imports
 from datetime import date
+# core django imports
+from django.db import models
+from django.core.urlresolvers import reverse
+from django.core.validators import MaxValueValidator, RegexValidator
+# third party imports
+from randomslugfield import RandomSlugField
+from model_utils.models import TimeStampedModel
 from dateutil.relativedelta import relativedelta
+# imports from your apps
+from core.models import Student#, Course
 
 
 class Listing(TimeStampedModel):

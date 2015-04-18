@@ -1,4 +1,6 @@
+# third party imports
 from haystack import indexes
+# imports from your apps
 from .models import Listing
 
 

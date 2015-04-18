@@ -1,6 +1,7 @@
+# core django imports
 from django.conf.urls import patterns, url
-
-from trades.views import ListListings, CreateListing, ListingPage,\
+# imports from your apps
+from .views import ListListings, CreateListing, ListingPage,\
     CreateFlag, DeleteFlag, EditListing, SellListing,\
     UnSellListing, CancelListing, ReopenListing, CreateRating,\
     EditRating, DeleteRating

@@ -1,10 +1,11 @@
+# core django imports
 from django import forms
-
+# third party imports
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Button, Submit, Layout, Fieldset, HTML, Field
 from crispy_forms.bootstrap import AppendedPrependedText, FormActions
-
-from trades.models import Listing, Bid, Flag, Rating
+# imports from your apps
+from .models import Listing, Bid, Flag, Rating
 
 
 class ListingForm(forms.ModelForm):

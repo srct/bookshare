@@ -10,6 +10,7 @@ from braces.views import LoginRequiredMixin
 from django.http import Http404, HttpResponseForbidden
 from django.forms.widgets import HiddenInput
 from django.core.urlresolvers import reverse
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
@@ -17,6 +18,8 @@ from django.template import Context
 
 import requests
 from datetime import date
+from PIL import Image
+from cStringIO import StringIO
 
 
 # pulls worldcat metadata from ISBNs
@@ -87,6 +90,30 @@ class CreateListing(LoginRequiredMixin, CreateView):
         me = Student.objects.get(user=self.request.user)
 
         form.instance.seller = me
+
+        image_name = form.instance.photo.name
+        user_image = Image.open(form.instance.photo)
+        image_format = user_image.format
+
+        print user_image
+        width, height = user_image.size
+        print user_image.size
+        print width, "width"
+        print height, "height"
+        maxsize = (2560, 1920)
+        # five megapixels is 2560x1920
+        if (width > 2560) or (height > 1920):
+            user_image.thumbnail(maxsize)
+
+            temp_image = StringIO()
+            user_image.save(temp_image, image_format)
+            temp_image.seek(0)
+
+            new_uploaded_file = SimpleUploadedFile(image_name,
+                            temp_image.read(), content_type=image_format)
+
+            form.instance.photo = new_uploaded_file
+
         return super(CreateListing, self).form_valid(form)
 
     def get_context_data(self, **kwargs):

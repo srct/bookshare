@@ -1,9 +1,10 @@
-from django.contrib.auth.models import User
+# core django imports
 from django.conf import settings
-
-from .models import Student
-
+from django.contrib.auth.models import User
+# third-part imports
 import requests
+# imports from your apps
+from .models import Student
 
 
 def pfinfo(u_name):

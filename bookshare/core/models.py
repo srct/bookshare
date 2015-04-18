@@ -1,17 +1,16 @@
+# core django imports
 from django.db import models
 from django.contrib.auth.models import User
-from autoslug import AutoSlugField
-from model_utils.models import TimeStampedModel
 #from django.core.validators import RegexValidator
 from django.core.urlresolvers import reverse
+# third-party imports
+from autoslug import AutoSlugField
+from model_utils.models import TimeStampedModel
 
 
 class Student(TimeStampedModel):
-    user = models.OneToOneField(User)
     # django user includes username, password, first name, and last name
-
-    # implement ratings later
-    #rating = models.IntegerField(null=True, default=0)
+    user = models.OneToOneField(User)
 
     slug = AutoSlugField(populate_from='user', unique=True)
 

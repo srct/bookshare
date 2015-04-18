@@ -1,7 +1,9 @@
+# core django imports
 from django.views.generic import DetailView
+# third-party imports
 from braces.views import LoginRequiredMixin
-
-from core.models import Student
+# imports from your apps
+from .models import Student
 from lookouts.models import Lookout
 from trades.models import Listing, Bid, Rating
 

@@ -1,5 +1,7 @@
+# core django imports
 from django.conf.urls import patterns, url
-from core.views import DetailStudent, StudentRatings
+# imports from your apps
+from .views import DetailStudent, StudentRatings
 
 urlpatterns = patterns('',
     url(r'^(?P<slug>[\w-]+)/$',

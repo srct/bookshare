@@ -263,6 +263,12 @@ modification is made to the application / system.
 
 For server deployment, not for most local work
 
+This project involves the uploading of files. While any images larger than five
+megapixels are automatically scaled down on upload, this does not prevent
+malicious individuals from uploading a massive file first. Nginx (or your
+favorite server) MUST be configured to halt upload streaming once a particular
+threshold is reached.
+
 ## To-do
 
 The list of to-do items is kept track of on the gitlab bookshare issues page. https://git.gmu.edu/srct/bookshare/issues Ask the project manager if you have any questions!

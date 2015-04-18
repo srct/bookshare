@@ -1,0 +1,68 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
+{% endblock %}
+
+{% block content %}
+
+{% load gravatar %}
+
+{% load trades_extras %}
+
+<div class="page-header" id="banner">
+  <div class="row">
+    <div class="col-md-1">
+      <img class="img-circle img-responsive" src="{% gravatar_url student.user.email 75 %}">
+    </div>
+    <div class="col-md-6">
+      <h2><strong><a href="{{ student.get_absolute_url }}">{{ student.user.get_full_name }}'s</a> Ratings</strong></h2>
+    </div>
+    <div class="col-md-5 text-right">
+      <h3><strong>{{ student_ratings_num }}</strong> reviews,
+        {% if avg_stars %}
+          average <strong>{{ avg_stars }}</strong> out of 5
+        {% else %}
+          no average yet
+        {% endif %}
+      </h3>
+    </div>
+</div>
+
+<div class="row" style="padding-top: 15px;">
+  <div class="col-md-10 col-md-offset-1">
+  {% for rating in student_ratings %}
+    <legend style="padding-top: 15px;">
+      <a href="{{ rating.listing.get_absolute_url }}">{{ rating.listing.title|title }}</a>
+      &nbsp;&nbsp;&nbsp;
+      {% for star in rating.stars|int_maker|full_stars %}
+        <i class="fa fa-star"></i>
+      {% endfor %}
+      {% for star in rating.stars|int_maker|empty_stars %}
+        <i class="fa fa-star-o"></i>
+      {% endfor %}
+      &nbsp;&nbsp;&nbsp;
+      {% if rating.rater.user == request.user %}
+      <small><a href="{% url 'edit_rating' rating.listing.slug rating.slug %}"><span class="label label-default">Edit</span></a></small>
+      <small><a href="{% url 'delete_rating' rating.listing.slug rating.slug %}"><span class="label label-danger">Delete</span></a></small>
+      {% endif %}
+    </legend>
+    <div class="row">
+      <div class="col-md-6">
+      <h4><strong>Reviewer:</strong> <a href="{{ rating.rater.get_absolute_url }}">{{ rating.rater.user.get_full_name }}</a></h4>
+      </div>
+      <div class="col-md-3"><h4><small><strong>Date Sold:</strong> {{ rating.listing.date_closed|date:"M d, 'y" }}</small></h4></div>
+      <div class="col-md-3"><h4><small><strong>Date Reviewed:</strong> {{ rating.created|date:"M d, 'y" }}</small></h4></div>
+    </div>
+    <div class="row">
+      {% if rating.review %}
+      <blockquote>{{ rating.review }}</blockquote>
+      {% else %}
+      <blockquote><em>No review details provided.</em></blockquote>
+      {% endif %}
+    </div>
+  {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

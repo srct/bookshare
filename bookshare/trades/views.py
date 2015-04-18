@@ -1,5 +1,5 @@
-from trades.models import Listing, Bid, Flag
-from trades.forms import ListingForm, BidForm, FlagForm, SellListingForm
+from trades.models import Listing, Bid, Flag, Rating
+from trades.forms import ListingForm, BidForm, FlagForm, SellListingForm, RatingForm
 from core.models import Student
 
 from django.views.generic import View, DetailView, ListView, CreateView,\
@@ -53,6 +53,18 @@ def flag_slug(flagger, listing):
         return None
 
 
+# rating
+# (basically) duplicated code!!!
+def can_rate(rater, listing):
+    user_rate_num = Rating.objects.filter(rater=rater,
+                                           listing=listing).count()
+    # we're assuming that this isn't going to go over 1
+    if user_rate_num:
+        return False
+    else:
+        return True
+
+
 class ListListings(LoginRequiredMixin, ListView):
     model = Listing
     context_object_name = 'listings'
@@ -100,6 +112,11 @@ class DetailListing(DetailView):
         form = BidForm(initial={'listing': self.get_object()})
         form.fields['listing'].widget = HiddenInput()
         context['my_form'] = form
+
+        try:
+            context['rating'] = Rating.objects.get(listing=self.get_object())
+        except:
+            context['rating'] = False
 
         # bids, filter by listing name of the current listing, order by date created
         context['bids'] = Bid.objects.filter(listing=self.get_object()).order_by('-price')
@@ -400,3 +417,105 @@ class ReopenListing(LoginRequiredMixin, UpdateView):
             return HttpResponseForbidden()
 
         return context
+
+
+class CreateRating(LoginRequiredMixin, CreateView):
+    model = Rating
+    fields = ['stars', 'review', ]
+    template_name = 'create_rating.html'
+    context_object_name = 'rating'
+    login_url = 'login'
+
+    def form_valid(self, form):
+        me = Student.objects.get(user=self.request.user)
+
+        current_url = self.request.get_full_path()
+        listing_slug = current_url.split('/')[3]
+        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
+        selected_listing = Listing.objects.get(slug=listing_slug)
+
+        form.instance.rater = me
+        form.instance.listing = selected_listing
+        return super(CreateRating, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('ratings',
+                       kwargs={'slug': self.object.listing.seller.slug})
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateRating, self).get_context_data(**kwargs)
+        me = Student.objects.get(user=self.request.user)
+
+        # duplicated code!!!
+        current_url = self.request.get_full_path()
+        listing_slug = current_url.split('/')[3]
+        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
+        selected_listing = Listing.objects.get(slug=listing_slug)
+
+        winning_student = selected_listing.winning_bid.bidder
+
+        # you can only rate a listing that you won
+        if not (winning_student == me):
+            return HttpResponseForbidden()
+
+        # can only create a rating if you haven't previously created one
+        if not can_rate(me, selected_listing):
+            # because the page shouldn't exist in this scenario
+            raise Http404
+
+        context['listing'] = selected_listing
+
+        form = RatingForm()
+        context['my_form'] = form
+        return context
+
+
+class EditRating(LoginRequiredMixin, UpdateView):
+    model = Rating
+    template_name = 'rating_edit.html'
+    context_object_name = 'rating'
+    #form_class = EditListingForm
+    login_url = 'login'
+
+    fields = ['stars', 'review', ]
+
+    template_suffix_name = '_edit'
+
+    def get_success_url(self):
+        return reverse('ratings',
+                       kwargs={'slug': self.object.listing.seller.slug})
+
+    def get_context_data(self, **kwargs):
+        context = super(EditRating, self).get_context_data(**kwargs)
+
+        me = Student.objects.get(user=self.request.user)
+        rating_student = self.get_object().rater
+
+        if not(rating_student == me):
+            return HttpResponseForbidden()
+
+        return context
+
+
+class DeleteRating(LoginRequiredMixin, DeleteView):
+    model = Rating
+    context_object_name = 'rating'
+    template_name = 'delete_rating.html'
+    login_url = 'login'
+
+    def get_success_url(self):
+        return reverse('detail_listing',
+                       kwargs={'slug': self.object.listing.slug})
+
+    def get_context_data(self, **kwargs):
+        context = super(DeleteRating, self).get_context_data(**kwargs)
+
+        me = Student.objects.get(user=self.request.user)
+        rating_student = self.get_object().rater
+
+        if not(rating_student == me):
+            return HttpResponseForbidden()
+
+        return context
+
+

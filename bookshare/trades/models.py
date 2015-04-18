@@ -161,3 +161,35 @@ class Flag(TimeStampedModel):
 
     class Meta:
         ordering = ['listing', 'created']
+
+
+class Rating(TimeStampedModel):
+
+    ONE_STAR = '1'
+    TWO_STAR = '2'
+    THREE_STAR = '3'
+    FOUR_STAR = '4'
+    FIVE_STAR = '5'
+
+    STAR_CHOICES = (
+        (ONE_STAR, '1'),
+        (TWO_STAR, '2'),
+        (THREE_STAR, '3'),
+        (FOUR_STAR, '4'),
+        (FIVE_STAR, '5'),
+    )
+
+    rater = models.ForeignKey(Student)
+    listing = models.ForeignKey(Listing)
+
+    stars = models.CharField(choices=STAR_CHOICES, max_length=10,)
+    review = models.TextField(blank=True, max_length=3000,)
+
+    slug = RandomSlugField(length=6)
+
+    def __unicode__(self):
+        return "%s's review of %s" % (self.rater.user.username,
+                                      self.listing.seller.user.username)
+
+    class Meta:
+        ordering = ['rater', 'listing', 'created']

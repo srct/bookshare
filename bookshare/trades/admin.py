@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Bid, Listing, Flag
+from .models import Bid, Listing, Flag, Rating
 
 
 @admin.register(Bid)
@@ -19,3 +19,4 @@ class ListingAdmin(admin.ModelAdmin):
 
 # expand this later
 admin.site.register(Flag)
+admin.site.register(Rating)

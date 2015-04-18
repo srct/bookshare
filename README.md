@@ -4,7 +4,7 @@ SRCT Bookshare is a platform for GMU students to buy and sell their textbooks.
 
 ## On Contributing
 
-Bookshare is still in its very early stages and needs all the help it can get. Even if you don't feel like you can be helpful with the more technical aspects, we definitely need designers, technical writers, and testers.
+Bookshare is still in its childhood and needs all the help it can get. Even if you don't feel like you can be helpful with the more technical aspects, we definitely need designers, technical writers, and testers.
 
 There are many things that can be done with this project (see the "To Do" section), but sometimes it's the small things that count, so don't be afraid of contributing just a small spelling mistake.
 
@@ -111,153 +111,10 @@ Run `python manage.py makemigrations` and `python manage.py migrate` to configur
 
 When your database is empty, this won't do much good, but once you've created a few objects, run 'python manage.py update_index' to set up your database objects for search.
 
-# Starting up the test server
+### Starting up the test server
 
 Now that your environment is configured, you can test out the Django test server to make
 sure everything works locally. Simply run the command ``$ python manage.py runserver``
-
-### Servers
-
-You have three options from which to choose to serve your project for deployment. Apache + nginix, pure Apache, or pure nginx.
-
-#### Apache + nginx (option 1)
-
-One of the main benefits of Apache proxy passing to an nginx application
-server is that you retain the flexibility of a front-facing Apache server
-along with the easy of configuration of an internal nginx application
-server.
-
-Globally install the Apache and/or the nginx webservers.
-
-``sudo apt-get install apache2`` || ``sudo apt-get install nginx``
-
-##### Apache config
-
-    <VirtualHost *:80>
-        ServerName bookshare.yourdomain.com
-        ProxyRequests Off
-        <Proxy *>
-            Require all granted
-        </Proxy>
-
-        ProxyPass / http://bookshare.yourdomain.com:8000/
-        ProxyPassReverse / http://bookshare.yourdomain.com:8000/
-
-        <Location />
-            Require all granted
-        </Location>
-    </VirtualHost>
-
-Note that this configuration requires the module `proxy_http` to be
-installed and enabled.
-
-    $ sudo a2enmod proxy_http
-    $ sudo service apache2 restart
-
-##### nginx config
-
-    server {
-        listen 8000;
-        server_name bookshare.yourdomain.com;
-
-        location / {
-            proxy_pass     http://127.0.0.1:8001/;
-            proxy_redirect http://127.0.0.1:8001/ /;
-            server_name_in_redirect off;
-
-            proxy_set_header  Host       $host;
-            proxy_set_header  X-Real-IP  $remote_addr;
-            proxy_set_header  X-Forwarded-For  $proxy_add_x_forwarded_for;
-        }
-
-        location /static/ {
-            alias /path/to/install/bookshare/bookshare/static/;
-        }
-
-        location /media/ {
-            alias /path/to/install/bookshare/bookshare/static/media/;
-        }
-
-    }
-
-Note that if your Django application is being hosted in a subdirectory of
-the root server (eg. http://yourdomain.com/myapp/) then your config will
-need to look like this:
-
-    server {
-        ...
-        location /myapp/ {
-            proxy_pass     http://127.0.0.1:8001/myapp/;
-            proxy_redirect http://127.0.0.1:8001/myapp/ /myapp/;
-            ...
-        }
-    }
-
-
-#### Pure Apache (option 2)
-
-This option is slightly less simple to configure and requires Apache to be
-restarted whenever a change is made, since Apache does not handle
-`mod_wsgi` threading as well as nginx.
-
-##### Apache config
-
-    <VirtualHost *:80>
-        ServerName bookshare.yourdomain.com
-
-        Alias /static/ /path/to/install/bookshare/static/
-        Alias /media/  /path/to/install/bookshare/static/media/
-
-        <Directory /path/to/install/bookshare/static>
-            Options -Indexes
-            Order deny,allow
-            Allow from all
-        </Directory>
-
-        <Directory /path/to/install/bookshare/media>
-            Options -Indexes
-            Order deny,allow
-            Allow from all
-        </Directory>
-
-        WSGIScriptAlias / /path/to/install/bookshare/bookshare/wsgi.py
-        WSGIDaemonProcess bookshare.yourdomain.com python-path=/path/to/install/bookshare:/path/to/install/.virtualenv/bookshare/lib/python2.7/site-packages
-        WSGIProcessGroup bookshare.yourdomain.com
-
-        <Directory /path/to/install/bookshare/bookshare>
-            <Files wsgi.py>
-                Options -Indexes
-                Order deny,allow
-                Allow from all
-            </Files>
-        </Directory>
-    </VirtualHost>
-
-#### Pure nginx (option 3)
-
-This option is very simple to configure. Simply make use of the nginx
-configuration from option 1, but direct the server to listen on port 80 for
-standard http connections instead of 8000.
-
-### Starting the application server (nginx only)
-
-If you use nginx to proxy pass to an application server on port 8001, you
-will need to start that application server.
-
-The project requirements include the `gunicorn` module, so let's use this.
-
-    $ gunicorn bookshare.wsgi -b 127.0.0.1:8001
-
-To send the web server to the background (ie. run it as a daemon) use
-
-    $ gunicorn bookshare.wsgi -b 127.0.0.1:8001 -D
-
-Make sure to execute this command in the same folder containing `manage.py`.
-
-This step is not required for configurations using **only** Apache, since
-those configurations use Apache to serve the entire Python application.
-Note, however, that you will need to restart Apache entirely every time a
-modification is made to the application / system.
 
 ### Docker and Deployment
 
@@ -269,6 +126,17 @@ malicious individuals from uploading a massive file first. Nginx (or your
 favorite server) MUST be configured to halt upload streaming once a particular
 threshold is reached.
 
+### Servers
+
+You have three options from which to choose to serve your project for deployment. Apache + nginix, pure Apache, or pure nginx.
+
 ## To-do
 
 The list of to-do items is kept track of on the gitlab bookshare issues page. https://git.gmu.edu/srct/bookshare/issues Ask the project manager if you have any questions!
+
+## License
+
+Copyright (C) 2013 Mason SRCT: Daniel Bond, Michel Rouly, Eric Cawi, and contributors
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. See the LICENSE file in the root directory of this project for more information.
+

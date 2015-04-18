@@ -11,6 +11,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
+from django.contrib import messages
 # third party imports
 import requests
 from PIL import Image
@@ -66,6 +67,16 @@ def can_rate(rater, listing):
     else:
         return True
 
+
+class ListingActionMixin(object):
+
+    @property
+    def success_msg(self):
+        return NotImplemented
+
+    def form_valid(self, form):
+        messages.info(self.request, self.success_msg)
+        return super(ListingActionMixin, self).form_valid(form)
 
 class ListListings(LoginRequiredMixin, ListView):
     model = Listing
@@ -277,12 +288,14 @@ class EditBid(LoginRequiredMixin, UpdateView):
     # can only be edited by the bidder
 
 
-class EditListing(LoginRequiredMixin, UpdateView):
+class EditListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
     model = Listing
     template_name = 'listing_edit.html'
     context_object_name = 'listing'
     #form_class = EditListingForm
     login_url = 'login'
+
+    success_msg = "Your listing was successfully updated!"
 
     fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition',
               'access_code', 'description', 'price', 'photo', ]
@@ -300,7 +313,7 @@ class EditListing(LoginRequiredMixin, UpdateView):
         return context
 
 
-class SellListing(LoginRequiredMixin, UpdateView):
+class SellListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
     model = Listing
     fields = ['email_message', 'winning_bid', ]
     template_suffix_name = '_sell'
@@ -308,12 +321,12 @@ class SellListing(LoginRequiredMixin, UpdateView):
     template_name = 'listing_sell.html'
     login_url = 'login'
 
+    success_msg = "Your email was successfully sent!"
+
     def form_valid(self, form):
         # filling out fields
         today = date.today()
         self.obj = self.get_object()
-        print self.obj
-        print form.instance.winning_bid
 
         form.instance.sold = True
         form.instance.date_closed = today
@@ -333,9 +346,10 @@ class SellListing(LoginRequiredMixin, UpdateView):
 
         subject, from_email, to, cc = ('Your bid has been selected on Bookshare!',
                                        'no-reply@bookshare.srct.io',
-                                       form.instance.winning_bid.bidder.user.email,
-                                       self.obj.seller.user.email)
-                                       #your-test-email@example.com')
+                                       #form.instance.winning_bid.bidder.user.email,
+                                       #self.obj.seller.user.email)
+                                       'success@simulator.amazonses.com',
+                                       'success@simulator.amazonses.com')
         text_content = text_email.render(email_context)
         html_content = html_email.render(email_context)
         msg = EmailMultiAlternatives(subject, text_content,
@@ -367,13 +381,15 @@ class SellListing(LoginRequiredMixin, UpdateView):
         return context
 
 
-class UnSellListing(LoginRequiredMixin, UpdateView):
+class UnSellListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
     model = Listing
     fields = []
     template_suffix_name = '_unsell'
     context_object_name = 'listing'
     template_name = 'listing_unsell.html'
     login_url = 'login'
+
+    success_msg = "Your sale has been successfully cancelled!"
 
     def form_valid(self, form):
         form.instance.sold = False
@@ -420,13 +436,15 @@ class CancelListing(LoginRequiredMixin, UpdateView):
         return context
 
 
-class ReopenListing(LoginRequiredMixin, UpdateView):
+class ReopenListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
     model = Listing
     fields = []
     template_suffix_name = '_reopen'
     context_object_name = 'listing'
     template_name = 'listing_reopen.html'
     login_url = 'login'
+
+    success_msg = "Your listing was successfully reopened!"
 
     def form_valid(self, form):
         form.instance.cancelled = False

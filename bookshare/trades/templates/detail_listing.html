@@ -140,7 +140,10 @@ SRCT Bookshare &bull; {{ listing.title }}
   </div>
 
   <div class="col-md-3 col-sm-6 col-xs-6">
+    {% if listing.course_abbr %}
       <h4><small>Course</small> {{ listing.course_abbr }}</h4>
+    {% else %}
+    {% endif %}
   </div>
 
   <div class="col-md-4 col-sm-6 col-xs-6 text-right">
@@ -183,8 +186,11 @@ SRCT Bookshare &bull; {{ listing.title }}
   </div>
 
   <div class="col-md-9 col-sm-6 col-xs-12">
+    {% if listing.description %}
     <h4><small>Description/Comments</small>
       {{ listing.description }}
+    {% else %}
+    {% endif %}
   </div>
 </div>
 

@@ -38,5 +38,17 @@ SRCT Bookshare &bull; Create Listing
 
 {% block javascript %}
 {% load static from staticfiles %}
+<!-- jQueryUI =/= jQuery -->
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
 <script type="text/javascript" src="{% static 'js/isbn.js' %}"></script>
+<style>
+.ui-autocomplete-category {
+  font-weight: bold;
+  padding: .2em .4em;
+  margin: .8em 0 .2em;
+  line-height: 1.5;
+}
+</style>
+<script type="text/javascript" src="{% static 'js/courses.js' %}"></script>
 {% endblock javascript %}

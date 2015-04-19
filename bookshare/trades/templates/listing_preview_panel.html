@@ -1,29 +1,60 @@
 <div class="panel panel-info">
-  <div class="panel-body">
-    <div class="col-md-10">
-    <h3>
-      {% if not listing.active %}
-        <small><span class="label label-warning"><strong>Inactive</strong></span></small>
-      {% elif listing.sold %}
-        <small><span class="label label-primary"><strong>Sold</strong></span></small>
-      {% endif %}
-      <a href="{{ listing.get_absolute_url }}">
-        <em>{{ listing.title }}</em>
-      </a>
-    </h3>
-    <h4>
-      <p><small>Seller:</small>
-        <a href="{{ listing.seller.get_absolute_url }}">
-          {{ listing.seller.user.first_name }} {{ listing.seller.user.last_name }}
+  <div class="panel-heading">
+    <div class="panel-title">
+      <h4>
+        {% if not listing.active %}
+          <small><span class="label label-warning"><strong>Inactive</strong></span></small>
+        {% elif listing.sold %}
+          <small><span class="label label-primary"><strong>Sold</strong></span></small>
+        {% endif %}
+        <a href="{{ listing.get_absolute_url }}">
+          <strong>{{ listing.title }}</strong>
         </a>
-      </p>
-      <p><small>Author(s):</small> {{ listing.author }}</p>
-      <p><small>ISBN:</small> {{ listing.isbn }}</p>
-      <p><small>Condition:</small> {{ listing.condition }}</p>
-    </h4>
+      </h4>
     </div>
-    <div class="col-md-2 text-center">
-      <h3><strong>${{ listing.price }}</strong></h3>
+  </div>
+
+  <div class="panel-body">
+
+    <div class="row">
+      <div class="col-md-8">
+        <h4><small>Seller</small>
+          <a href="{{ listing.seller.get_absolute_url }}">
+            {{ listing.seller.user.get_full_name }}
+          </a>
+        </h4>
+      </div>
+      <div class="col-md-4 text-right">
+        <h4>
+        {% if listing.sold %}
+          <small>Final</small><strong> ${{ listing.final_price }}</strong>
+        {% else %}
+          <small>Asking</small><strong> ${{ listing.price }}</strong>
+        {% endif %}
+        </h4>
+      </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-8">
+        <h4><small>Author(s)</small> {{ listing.author }}</h4>
+      </div>
+      {% if listing.course_abbr %}
+      <div class="col-md-4 text-right">
+        <h4><small>Course</small> {{ listing.course_abbr }}</h4>
+      </div>
+      {% else %}
+      {% endif %}
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h4><small>ISBN</small> {{ listing.isbn }}</h4>
+      </div>
+      <div class="col-md-6 text-right">
+        <h4><small>Condition</small> {{ listing.condition }}</h4>
+      </div>
+    </div>
+
   </div>
 </div>

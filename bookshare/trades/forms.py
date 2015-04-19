@@ -20,12 +20,14 @@ class ListingForm(forms.ModelForm):
         self.helper.layout = Layout(
             Fieldset("",
                      Field('isbn', placeholder='0801884039'),
+                     HTML('<div class="collapse" id="section-collapse">'),
                      Field('title',
                            placeholder='Squirrels: The Animal Answer Guide'),
                      Field('author',
                            placeholder='Richard W. Thorington, Jr., and Katie Ferrell'),
-                     'edition',
+                     Field('edition', placeholder='1'),
                      Field('year', placeholder='2006'),
+                     HTML('</div>'),
                      Field('course_abbr', placeholder='ENGH 302'),
                      'condition',
                      'access_code',
@@ -48,6 +50,7 @@ class ListingForm(forms.ModelForm):
         self.fields['isbn'].label = "ISBN"
         self.fields['course_abbr'].label = "Course"
         self.fields['description'].label = "Other Notes"
+        self.fields['photo'].required = False
 
     class Meta:
         model = Listing

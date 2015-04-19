@@ -1,44 +1,46 @@
 $(function() {
 
   // add input handler
-  $('#id_ISBN').on('input', function(e) {
+  $('#id_isbn').on('input', function(e) {
     e.preventDefault();
 
-    // if the section is already hidden, show it
-    if( ! $('#section-collapse').hasClass('in') ){
-      $('#section-collapse').collapse('show');
-    }
-
     // grab and validate the ISBN
-    var isbn = $('#id_ISBN').val();
-    var is_valid = isValidISBN( isbn );
+    var isbn = $('#id_isbn').val();
+    // don't check until the isbn is a real length
+    if(isbn.length >= 10){
+      var is_valid = isValidISBN(isbn);
+
+      // if the section is already hidden, show it
+      if( ! $('#section-collapse').hasClass('in') ){
+        $('#section-collapse').collapse('show');
+      }
 
     // Style the form appropriately.
-    if( ! is_valid ) {
-      $('#form-group-ISBN').addClass('has-error');
-      $('#form-group-ISBN').removeClass('has-success');
-    } else {
-      $('#form-group-ISBN').removeClass('has-error');
-      $('#form-group-ISBN').addClass('has-success');
+//    if( ! is_valid ) {
+//      $('#form-group-ISBN').addClass('has-error');
+//      $('#form-group-ISBN').removeClass('has-success');
+//    } else {
+//      $('#form-group-ISBN').removeClass('has-error');
+//      $('#form-group-ISBN').addClass('has-success');
+//    }
+
+      if( ! is_valid ){ // If invalid, clear the form.
+        $('#id_title').val( '' );
+        $('#id_author').val( '' );
+        $('#id_year').val( '' );
+        $('#id_edition').val( '' );
+      } else { // Otherwise, poll worldcat for data.
+
+        var url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + isbn + "?method=getMetadata&format=json&fl=title,author,year,ed"
+
+        $.ajax({
+          dataType: "jsonp",
+          url: url,
+        }).done( function(data) { process_ISBN_json(data); } );
+      }
     }
-
-    if( ! is_valid ){ // If invalid, clear the form.
-      $('#id_title').val( '' );
-      $('#id_author').val( '' );
-      $('#id_year').val( '' );
-      $('#id_edition').val( '' );
-    } else { // Otherwise, poll worldcat for data.
-
-      var url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + isbn + "?method=getMetadata&format=json&fl=title,author,year,ed"
-
-      $.ajax({
-        dataType: "jsonp",
-        url: url,
-      }).done( function(data) { process_ISBN_json(data); } );
-
-    }
-
   });
+
 });
 
 
@@ -52,15 +54,21 @@ function process_ISBN_json( json ) {
     year = json.list[0].year;
     edition = json.list[0].ed;
 
-    $('#id_title').val( title );
+    title_capitalizing = toTitleCase(title);
+
+    $('#id_title').val( title_capitalizing );
     $('#id_author').val( author );
     $('#id_year').val( year );
     $('#id_edition').val( edition );
   }
 }
 
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 
-function isValidISBN (isbn) { 
+function isValidISBN(isbn) { 
   isbn = isbn.replace(/[^\dX]/gi, ''); 
 
   if(isbn.length != 10 && isbn.length != 13){

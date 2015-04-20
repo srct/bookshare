@@ -15,12 +15,19 @@ SRCT Bookshare &bull; {{ listing.title }} &bull; Cancel Sale
   </div>
 </div>
 
+{% load crispy_forms_tags %}
+
 <div class="row">
-  <div class="col-md-8 col-md-offset-2 text-center">
-    <form action="" method="post">{% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="Back on the Market" class="btn btn-primary" />
-      <input type="cancel" value="Never Mind" class="btn btn-default" onclick="history.back()" />
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-10 col-md-offset-1">
+            {% crispy my_form %}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

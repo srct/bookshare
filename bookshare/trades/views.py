@@ -18,7 +18,8 @@ from PIL import Image
 from braces.views import LoginRequiredMixin
 # imports from your apps
 from .models import Listing, Bid, Flag, Rating
-from .forms import ListingForm, BidForm, FlagForm, SellListingForm, RatingForm
+from .forms import ListingForm, BidForm, FlagForm, SellListingForm,\
+    UnSellListingForm, RatingForm
 from core.models import Student
 
 
@@ -383,18 +384,47 @@ class SellListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
 
 class UnSellListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
     model = Listing
-    fields = []
+    fields = ['email_message', ]
     template_suffix_name = '_unsell'
     context_object_name = 'listing'
     template_name = 'listing_unsell.html'
     login_url = 'login'
 
-    success_msg = "Your sale has been successfully cancelled!"
+    success_msg = """Your sale has been successfully cancelled,
+                     and your email successfully sent!"""
 
     def form_valid(self, form):
+        self.obj = self.get_object()
+        text_email = get_template('email/unsold.txt')
+        html_email = get_template('email/unsold.html')
+
+        email_context = Context({
+            'bidder_first_name': self.obj.winning_bid.bidder.user.first_name,
+            'seller_name': self.obj.seller.user.get_full_name(),
+            'bid_num': self.obj.winning_bid.price,
+            'listing_title': self.obj.title,
+            'seller_email': self.obj.seller.user.email,
+            'seller_email': form.instance.email_message, })
+
+        subject, from_email, to, cc = ('Your transaction has been cancelled on Bookshare',
+                                       'no-reply@bookshare.srct.io',
+                                       #self.obj.winning_bid.bidder.user.email,
+                                       #self.obj.seller.user.email)
+                                       'success@simulator.amazonses.com',
+                                       'success@simulator.amazonses.com')
+        text_content = text_email.render(email_context)
+        html_content = html_email.render(email_context)
+        msg = EmailMultiAlternatives(subject, text_content,
+                                     from_email, [to], [cc])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+        # this has to come after the email has been sent, otherwise these are
+        # cleaned out 
         form.instance.sold = False
         form.instance.date_closed = None
         form.instance.winning_bid = None
+
         return super(UnSellListing, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -405,6 +435,9 @@ class UnSellListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
 
         if not(selling_student == me):
             return HttpResponseForbidden()
+
+        form = UnSellListingForm()
+        context['my_form'] = form
 
         return context
 

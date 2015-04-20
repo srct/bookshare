@@ -50,7 +50,7 @@ class Listing(TimeStampedModel):
     year = models.IntegerField(null=True, blank=True,
         # some professors may assign books still to be officially published
         validators=[MaxValueValidator(date.today().year+1)])
-    edition = models.PositiveIntegerField(blank=True, default=1,
+    edition = models.PositiveIntegerField(null=True, blank=True, default=1,
         validators=[MaxValueValidator(1000)])
     # would have to load in every conceivable course first
     #course = models.ForeignKey(Course)

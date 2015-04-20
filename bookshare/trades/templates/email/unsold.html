@@ -1,0 +1,47 @@
+<html>
+<head>
+  <title>Your transaction has been cancelled on Bookshare.</title>
+  <style type="text/css">
+    body { font-family: "Verdana", sans-serif; }
+    a { color: #006633; }
+    a:active { color: #FFCC33; }
+    a:visited { color: #004C25; }
+  </style>
+</head>
+<body>
+  <p>Hey there, <strong>{{ bidder_first_name }}</strong>!
+
+  <p>Seller <strong>{{ seller_name }}</strong> has cancelled your
+  ${{ bid_num }} bid for <em>{{ listing_title }}</em> on
+  <a href="http://bookshare.srct.gmu.edu/">SRCT Bookshare</a>.
+
+  <p>We certainly hope that this doesn't come as a shock. :-P</p>
+
+  <p>(If you don't know why you're getting this email, they're the cc'ed email
+  address-- {{ seller_email }}. Contact them ASAP to clear up any confusion.)</p>
+
+
+  <p><em>Seller message</em>: {{ email_message }}</p>
+
+  <p>Thanks for using SRCT Bookshare!</p>
+
+  <p><em>(Heads up: no one watches this email address. If you need to get in touch
+  with us, for any reason, see srct.gmu.edu/contact.)</em></p>
+
+  <p>---</p>
+
+  <p>Mason SRCT</p>
+
+  <p>
+  <small><a href="http://srct.gmu.edu/">SRCT</a> is a
+  <a href="https://si.gmu.edu/registered-student-organizations/">
+  registered student organization</a> at
+  <a href="http://www.gmu.edu/">George Mason University</a>. We have written and
+  provide this project for the benefit of our school's community, but offer no
+  claims to the accuracy of the information posted on our site by other students.
+  The source code for this project is available and
+  <a href="https://www.gnu.org/licenses/gpl-3.0.html/">freely licensed</a> at
+  <a href="http://git.gmu.edu/srct/bookshare/">git.gmu.edu/srct/bookshare</a>.</small>
+  </p>
+</body>
+</html>

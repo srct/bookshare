@@ -12,6 +12,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
 from django.contrib import messages
+from django.utils.safestring import mark_safe
 # third party imports
 import requests
 from PIL import Image
@@ -76,7 +77,7 @@ class ListingActionMixin(object):
         return NotImplemented
 
     def form_valid(self, form):
-        messages.info(self.request, self.success_msg)
+        messages.info(self.request, mark_safe(self.success_msg))
         return super(ListingActionMixin, self).form_valid(form)
 
 class ListListings(LoginRequiredMixin, ListView):
@@ -88,7 +89,7 @@ class ListListings(LoginRequiredMixin, ListView):
     login_url = 'login'
 
 
-class CreateListing(LoginRequiredMixin, CreateView):
+class CreateListing(LoginRequiredMixin, ListingActionMixin, CreateView):
     model = Listing
     fields = ['isbn', 'title', 'author', 'edition', 'year', 'course_abbr',
               'condition', 'access_code', 'price', 'photo', 'description']
@@ -96,6 +97,10 @@ class CreateListing(LoginRequiredMixin, CreateView):
     context_object_name = 'listing'
     # ISBN query!
     login_url = 'login'
+
+    # eventually figure out how to use {% url 'create_listing' %}
+    success_msg = """Your listing was successfully created!
+                     <a href="/share/new/">Create another here!</a>"""
 
     def form_valid(self, form):
         me = Student.objects.get(user=self.request.user)

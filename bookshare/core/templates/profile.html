@@ -54,7 +54,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
 
     {% if listings %}
     <div class="table-responsive">
-      <table class="table table-bordered table-hover text-center">
+      <table class="table table-bordered table-hover table-condensed text-center">
         <thead>
           <td class="col-md-2"><h4><strong>ISBN</strong></h4></td>
           <td class="col-md-8"><h4><strong>Title</strong></h4></td>
@@ -127,27 +127,39 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
   <div class="col-md-12">
     {% if bids %}
     <div class="table-responsive">
-      <table class="table table-bordered table-hover text-center">
+      <table class="table table-bordered table-hover table-condensed text-center">
         <thead>
-          <td class="col-md-2"><h4><strong>ISBN</strong></h4></td>
-          <td class="col-md-8"><h4><strong>Title</strong></h4></td>
+          <td class="col-md-6"><h4><strong>Title</strong></h4></td>
+          <td class="col-md-2"><h4><strong>Course</strong></h4></td>
           <td class="col-md-2"><h4><strong>Price</strong></h4></td>
+          <td class="col-md-2"><h4><strong>Listing Status</strong></h4></td>
         </thead>
         <tbody>
         {% for bid in bids %}
-        {% if bid == bid.listing.winning_bid %}
+        {% if bid.listing.winning_bid %}
         <tr class="success">
         {% else %}
         <tr>
         {% endif %}
-          <td class="text-center"><h5>{{ bid.listing.isbn }}</h5></td>
           <td class="text-center"><h5><a href="{{ bid.listing.get_absolute_url }}">{{ bid.listing.isbn|isbn_name|title }}<a/></h5></td>
+          <td class="text-center"><h5>{{ bid.listing.course_abbr }}</h5></td>
           <td class="text-center"><h5>
+          ${{ bid.price }}
           {% if bid == bid.listing.winning_bid %}
             <small><span class="label label-success"><strong>Winning Bid</strong></span></small>
           {% else %}
           {% endif %}
-          ${{ bid.price }}
+          </h5></td>
+          <td class="text-center"><h5>
+            {% if bid.listing.sold %}
+              <span class="label label-primary"><strong>Sold</strong></span>
+            {% elif bid.listing.cancelled %}
+              <span class="label label-default"><strong>Cancelled</strong></span>
+            {% elif not listing.active %}
+              <span class="label label-warning"><strong>Inactive</strong></span>
+            {% else %}
+              <span class="label label-info"><strong>Active</strong></span>
+            {% endif %}
           </h5></td>
         {% endfor %}
         </tbody>
@@ -175,7 +187,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
   <div class="col-md-12">
   {% if lookouts %}
     <div class="table-responsive">
-      <table class="table table-bordered table-hover text-center">
+      <table class="table table-bordered table-hover table-condensed text-center">
         <thead>
           <td class="col-md-2"><h4><strong>ISBN</strong></h4></td>
           <td class="col-md-8"><h4><strong>Title</strong></h4></td>

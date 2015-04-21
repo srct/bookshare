@@ -17,6 +17,8 @@ from django.utils.safestring import mark_safe
 import requests
 from PIL import Image
 from braces.views import LoginRequiredMixin
+from braces.views import FormValidMessageMixin
+from ratelimit.mixins import RatelimitMixin
 # imports from your apps
 from .models import Listing, Bid, Flag, Rating
 from .forms import ListingForm, BidForm, FlagForm, SellListingForm,\
@@ -70,16 +72,6 @@ def can_rate(rater, listing):
         return True
 
 
-class ListingActionMixin(object):
-
-    @property
-    def success_msg(self):
-        return NotImplemented
-
-    def form_valid(self, form):
-        messages.info(self.request, mark_safe(self.success_msg))
-        return super(ListingActionMixin, self).form_valid(form)
-
 class ListListings(LoginRequiredMixin, ListView):
     model = Listing
     context_object_name = 'listings'
@@ -89,7 +81,7 @@ class ListListings(LoginRequiredMixin, ListView):
     login_url = 'login'
 
 
-class CreateListing(LoginRequiredMixin, ListingActionMixin, CreateView):
+class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
     model = Listing
     fields = ['isbn', 'title', 'author', 'edition', 'year', 'course_abbr',
               'condition', 'access_code', 'price', 'photo', 'description']
@@ -99,8 +91,8 @@ class CreateListing(LoginRequiredMixin, ListingActionMixin, CreateView):
     login_url = 'login'
 
     # eventually figure out how to use {% url 'create_listing' %}
-    success_msg = """Your listing was successfully created!
-                     <a href="/share/new/">Create another here!</a>"""
+    form_valid_message = mark_safe("""Your listing was successfully created!
+                         <a href="/share/new/">Create another here!</a>""")
 
     def form_valid(self, form):
         me = Student.objects.get(user=self.request.user)
@@ -294,14 +286,14 @@ class EditBid(LoginRequiredMixin, UpdateView):
     # can only be edited by the bidder
 
 
-class EditListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
+class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     template_name = 'listing_edit.html'
     context_object_name = 'listing'
     #form_class = EditListingForm
     login_url = 'login'
 
-    success_msg = "Your listing was successfully updated!"
+    form_valid_message = "Your listing was successfully updated!"
 
     fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition',
               'access_code', 'description', 'price', 'photo', ]
@@ -319,7 +311,7 @@ class EditListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
         return context
 
 
-class SellListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
+class SellListing(LoginRequiredMixin, RatelimitMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     fields = ['email_message', 'winning_bid', ]
     template_suffix_name = '_sell'
@@ -327,7 +319,12 @@ class SellListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
     template_name = 'listing_sell.html'
     login_url = 'login'
 
-    success_msg = "Your email was successfully sent!"
+    ratelimit_key = 'user'
+    ratelimit_rate = '1/d'
+    ratelimit_block = False
+    ratelimit_method = 'POST'
+
+    form_valid_message = "Your email was successfully sent!"
 
     def form_valid(self, form):
         # filling out fields
@@ -387,7 +384,7 @@ class SellListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
         return context
 
 
-class UnSellListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
+class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     fields = ['email_message', ]
     template_suffix_name = '_unsell'
@@ -395,7 +392,7 @@ class UnSellListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
     template_name = 'listing_unsell.html'
     login_url = 'login'
 
-    success_msg = """Your sale has been successfully cancelled,
+    form_valid_message = """Your sale has been successfully cancelled,
                      and your email successfully sent!"""
 
     def form_valid(self, form):
@@ -447,13 +444,15 @@ class UnSellListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
         return context
 
 
-class CancelListing(LoginRequiredMixin, UpdateView):
+class CancelListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     fields = []
     template_suffix_name = '_cancel'
     context_object_name = 'listing'
     template_name = 'listing_cancel.html'
     login_url = 'login'
+
+    form_valid_message = "Your listing was successfully cancelled!"
 
     def form_valid(self, form):
         today = date.today()
@@ -474,7 +473,7 @@ class CancelListing(LoginRequiredMixin, UpdateView):
         return context
 
 
-class ReopenListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
+class ReopenListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     fields = []
     template_suffix_name = '_reopen'
@@ -482,7 +481,7 @@ class ReopenListing(LoginRequiredMixin, ListingActionMixin, UpdateView):
     template_name = 'listing_reopen.html'
     login_url = 'login'
 
-    success_msg = "Your listing was successfully reopened!"
+    form_valid_message = "Your listing was successfully reopened!"
 
     def form_valid(self, form):
         form.instance.cancelled = False
@@ -599,5 +598,3 @@ class DeleteRating(LoginRequiredMixin, DeleteView):
             return HttpResponseForbidden()
 
         return context
-
-

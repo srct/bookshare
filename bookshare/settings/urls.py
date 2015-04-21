@@ -31,9 +31,11 @@ urlpatterns = patterns('',
     url(r'^charts/?$', cache_page(60 * 10)(ChartsView.as_view()), name='charts'),
 
     # static pages
-    url(r'^about/?$', TemplateView.as_view(template_name='about.html'),
+    url(r'^about/?$',
+        cache_page(60 * 15)(TemplateView.as_view(template_name='about.html')),
         name='about'),
-    url(r'^privacy/?$', TemplateView.as_view(template_name='privacy.html'),
+    url(r'^privacy/?$',
+        cache_page(60 * 15)(TemplateView.as_view(template_name='privacy.html')),
         name='privacy'),
 
     # user authentication

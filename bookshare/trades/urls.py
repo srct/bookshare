@@ -10,19 +10,19 @@ from .views import ListListings, CreateListing, ListingPage,\
 
 urlpatterns = patterns('',
     url(r'^all/$',
-        cache_page(60 * 5)(ListListings.as_view()), name='list_listings'),
+        cache_page(60 * 2)(ListListings.as_view()), name='list_listings'),
 
     url(r'^new/$',
         CreateListing.as_view(), name='create_listing'),
 
     url(r'^listing/(?P<slug>[\w-]+)/$',
-        ListingPage.as_view(), name='detail_listing'),
+        cache_page(30)(ListingPage.as_view()), name='detail_listing'),
 
     url(r'^listing/(?P<listing_slug>[\w-]+)/bid/(?P<slug>[\w-]+)/$',
         EditBid.as_view(), name='edit_bid'),
 
     url(r'^listing/(?P<slug>[\w-]+)/flag/$',
-        cache_page(60 * 5)(CreateFlag.as_view()), name='create_flag'),
+        CreateFlag.as_view(), name='create_flag'),
 
     url(r'^listing/(?P<listing_slug>[\w-]+)/flag/(?P<slug>[\w-]+)/remove/$',
         DeleteFlag.as_view(), name='delete_flag'),

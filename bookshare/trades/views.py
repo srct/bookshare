@@ -285,6 +285,7 @@ class DeleteFlag(LoginRequiredMixin, DeleteView):
         return context
 
 
+# not implemented -- tbd
 class DeleteBid(LoginRequiredMixin, DeleteView):
     model = Bid
     success_url = '/'
@@ -299,7 +300,7 @@ class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     #form_class = EditBidForm
     login_url = 'login'
 
-    form_valid_message = "Your listing was successfully updated!"
+    form_valid_message = "Your bid was successfully updated!"
 
     fields = ['price', 'text', ]
 
@@ -319,7 +320,8 @@ class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         if not(bidding_student == me):
             return HttpResponseForbidden()
 
-        if bid.listing.sold or bid.listing.cancelled:
+        # if sold or cancelled, this page doesn't exist
+        if self.get_object().listing.sold or self.get_object().listing.cancelled:
             raise Http404
 
         return context

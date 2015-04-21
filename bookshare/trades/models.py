@@ -98,6 +98,9 @@ class Listing(TimeStampedModel):
         else:
             return True
 
+    def bids(self):
+        return Bid.objects.filter(listing=self)
+
     def final_price(self):
         try:
             price = self.winning_bid.price

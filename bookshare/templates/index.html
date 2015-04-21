@@ -32,6 +32,10 @@ SRCT Bookshare &bull; Homepage
           <div class="col-md-6">
             {% include 'listing_preview_panel.html' %}
           </div>
+          {% if forloop.counter|divisibleby:2 %}
+          </div>
+          <div class="row">
+          {% endif %}
           {% endif %}
         {% endfor %}
       </div>

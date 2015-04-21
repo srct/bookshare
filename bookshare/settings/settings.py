@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'haystack',
     'piwik',
+    'storages',
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -105,9 +106,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))
-
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'cas.backends.CASBackend',
@@ -145,3 +143,23 @@ EMAIL_HOST = secret.EMAIL_HOST
 EMAIL_PORT = '465'
 EMAIL_HOST_USER = secret.EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = secret.EMAIL_HOST_PASSWORD
+
+# Media configurations
+MEDIA_S3 = False
+
+if MEDIA_S3:
+
+    AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
+        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+        'Cache-Control': 'max-age=94608000',
+    }
+
+    AWS_STORAGE_BUCKET_NAME = secret.AWS_STORAGE_BUCKET_NAME
+    AWS_ACCESS_KEY_ID = secret.AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY = secret.AWS_SECRET_ACCESS_KEY
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+else:
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))

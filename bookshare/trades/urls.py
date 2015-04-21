@@ -22,7 +22,7 @@ urlpatterns = patterns('',
         EditBid.as_view(), name='edit_bid'),
 
     url(r'^listing/(?P<slug>[\w-]+)/flag/$',
-        CreateFlag.as_view(), name='create_flag'),
+        cache_page(60 * 5)(CreateFlag.as_view()), name='create_flag'),
 
     url(r'^listing/(?P<listing_slug>[\w-]+)/flag/(?P<slug>[\w-]+)/remove/$',
         DeleteFlag.as_view(), name='delete_flag'),

@@ -25,8 +25,10 @@ urlpatterns = patterns('',
     url(r'^search/', include('haystack.urls'), name='search'),
 
     # site-wide pages
+    # this page is weird for cacheing... no special url, but different content
+    # for each user
     url(r'^$', HomepageView.as_view(), name='homepage'),
-    url(r'^charts/?$', cache_page(60 * 15)(ChartsView.as_view()), name='charts'),
+    url(r'^charts/?$', cache_page(60 * 10)(ChartsView.as_view()), name='charts'),
 
     # static pages
     url(r'^about/?$', TemplateView.as_view(template_name='about.html'),

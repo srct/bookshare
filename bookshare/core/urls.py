@@ -6,7 +6,7 @@ from .views import DetailStudent, StudentRatings
 
 urlpatterns = patterns('',
     url(r'^(?P<slug>[\w-]+)/$',
-        DetailStudent.as_view(), name='profile'),
+        cache_page(60 * 5)(DetailStudent.as_view()), name='profile'),
 
     url(r'^(?P<slug>[\w-]+)/ratings/$',
         cache_page(60 * 5)(StudentRatings.as_view()), name='ratings'),

@@ -10,6 +10,7 @@ from .views import HomepageView, ChartsView
 
 admin.autodiscover()
 
+handle403 = TemplateView.as_view(template_name="403.html")
 handle404 = TemplateView.as_view(template_name="404.html")
 handle500 = TemplateView.as_view(template_name="500.html")
 

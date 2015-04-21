@@ -75,7 +75,7 @@ def can_rate(rater, listing):
 class ListListings(LoginRequiredMixin, ListView):
     model = Listing
     context_object_name = 'listings'
-    paginate_by = 15
+    paginate_by = 16
     queryset = Listing.objects.exclude(cancelled=True).order_by('-created')
     template_name = 'list_listings.html'
     login_url = 'login'

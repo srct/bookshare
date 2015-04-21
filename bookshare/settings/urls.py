@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
+from django.views.decorators.cache import cache_page
 # imports from your apps
 from .views import HomepageView, ChartsView
 
@@ -25,7 +26,7 @@ urlpatterns = patterns('',
 
     # site-wide pages
     url(r'^$', HomepageView.as_view(), name='homepage'),
-    url(r'^charts/?$', ChartsView.as_view(), name='charts'),
+    url(r'^charts/?$', cache_page(60 * 15)(ChartsView.as_view()), name='charts'),
 
     # static pages
     url(r'^about/?$', TemplateView.as_view(template_name='about.html'),

@@ -1,5 +1,6 @@
 # core django imports
 from django.conf.urls import patterns, url
+from django.views.decorators.cache import cache_page
 # imports from your apps
 from .views import ListListings, CreateListing, ListingPage,\
     CreateFlag, DeleteFlag, EditListing, SellListing,\
@@ -9,7 +10,7 @@ from .views import ListListings, CreateListing, ListingPage,\
 
 urlpatterns = patterns('',
     url(r'^all/$',
-        ListListings.as_view(), name='list_listings'),
+        cache_page(60 * 5)(ListListings.as_view()), name='list_listings'),
 
     url(r'^new/$',
         CreateListing.as_view(), name='create_listing'),

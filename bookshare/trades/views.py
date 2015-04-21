@@ -18,7 +18,7 @@ import requests
 from PIL import Image
 from braces.views import LoginRequiredMixin
 from braces.views import FormValidMessageMixin
-from ratelimit.mixins import RatelimitMixin
+from ratelimit.decorators import ratelimit
 # imports from your apps
 from .models import Listing, Bid, Flag, Rating
 from .forms import ListingForm, BidForm, FlagForm, SellListingForm,\
@@ -131,6 +131,11 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
         context['my_form'] = form
         return context
 
+    @ratelimit(key='user', rate='5/m', method='POST', block=True)
+    @ratelimit(key='user', rate='100/day', method='POST', block=True)
+    def post(self, request, *args, **kwargs):
+        return super(CreateListing, self).post(request, *args, **kwargs)
+
 
 # These next two views are tied together...
 class DetailListing(DetailView):
@@ -192,6 +197,9 @@ class ListingPage(LoginRequiredMixin, View):
         view = DetailListing.as_view()
         return view(request, *args, **kwargs)
 
+    @ratelimit(key='user', rate='5/m', method='POST', block=True)
+    # rate limit is higher for bids
+    @ratelimit(key='user', rate='200/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         view = CreateBid.as_view()
         return view(request, *args, **kwargs)
@@ -247,6 +255,11 @@ class CreateFlag(LoginRequiredMixin, CreateView):
         form = FlagForm()
         context['my_form'] = form
         return context
+
+    # no daily limit because we want people to flag everything they need to
+    @ratelimit(key='user', rate='5/m', method='POST', block=True)
+    def post(self, request, *args, **kwargs):
+        return super(CreateFlag, self).post(request, *args, **kwargs)
 
 
 class DeleteFlag(LoginRequiredMixin, DeleteView):
@@ -311,18 +324,13 @@ class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         return context
 
 
-class SellListing(LoginRequiredMixin, RatelimitMixin, FormValidMessageMixin, UpdateView):
+class SellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     fields = ['email_message', 'winning_bid', ]
     template_suffix_name = '_sell'
     context_object_name = 'listing'
     template_name = 'listing_sell.html'
     login_url = 'login'
-
-    ratelimit_key = 'user'
-    ratelimit_rate = '1/d'
-    ratelimit_block = False
-    ratelimit_method = 'POST'
 
     form_valid_message = "Your email was successfully sent!"
 
@@ -383,6 +391,11 @@ class SellListing(LoginRequiredMixin, RatelimitMixin, FormValidMessageMixin, Upd
 
         return context
 
+    @ratelimit(key='user', rate='5/m', method='POST', block=True)
+    @ratelimit(key='user', rate='100/d', method='POST', block=True)
+    def post(self, request, *args, **kwargs):
+        return super(SellListing, self).post(request, *args, **kwargs)
+
 
 class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
@@ -442,6 +455,11 @@ class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         context['my_form'] = form
 
         return context
+ 
+    @ratelimit(key='user', rate='5/m', method='POST', block=True)
+    @ratelimit(key='user', rate='100/d', method='POST', block=True)
+    def post(self, request, *args, **kwargs):
+        return super(UnSellListing, self).post(request, *args, **kwargs)
 
 
 class CancelListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
@@ -549,6 +567,11 @@ class CreateRating(LoginRequiredMixin, CreateView):
         form = RatingForm()
         context['my_form'] = form
         return context
+
+    # no per-day limit because you can only rate listings you've been sold to
+    @ratelimit(key='user', rate='5/m', method='POST', block=True)
+    def post(self, request, *args, **kwargs):
+        return super(CreateRating, self).post(request, *args, **kwargs)
 
 
 class EditRating(LoginRequiredMixin, UpdateView):

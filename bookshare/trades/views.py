@@ -133,7 +133,7 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
         return context
 
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
-    @ratelimit(key='user', rate='100/day', method='POST', block=True)
+    @ratelimit(key='user', rate='50/day', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         return super(CreateListing, self).post(request, *args, **kwargs)
 
@@ -200,7 +200,7 @@ class ListingPage(LoginRequiredMixin, View):
 
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     # rate limit is higher for bids
-    @ratelimit(key='user', rate='200/d', method='POST', block=True)
+    @ratelimit(key='user', rate='100/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         view = CreateBid.as_view()
         return view(request, *args, **kwargs)
@@ -257,8 +257,8 @@ class CreateFlag(LoginRequiredMixin, CreateView):
         context['my_form'] = form
         return context
 
-    # no daily limit because we want people to flag everything they need to
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
+    @ratelimit(key='user', rate='100/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         return super(CreateFlag, self).post(request, *args, **kwargs)
 
@@ -421,7 +421,7 @@ class SellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         return context
 
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
-    @ratelimit(key='user', rate='100/d', method='POST', block=True)
+    @ratelimit(key='user', rate='50/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         return super(SellListing, self).post(request, *args, **kwargs)
 
@@ -486,7 +486,7 @@ class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         return context
 
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
-    @ratelimit(key='user', rate='100/d', method='POST', block=True)
+    @ratelimit(key='user', rate='50/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         return super(UnSellListing, self).post(request, *args, **kwargs)
 

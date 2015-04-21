@@ -32,7 +32,7 @@ class CreateLookout(LoginRequiredMixin, CreateView):
         return context
 
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
-    @ratelimit(key='user', rate='100/d', method='POST', block=True)
+    @ratelimit(key='user', rate='50/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         return super(CreateLookout, self).post(request, *args, **kwargs)
 

@@ -4,7 +4,7 @@ from django.conf.urls import patterns, url
 from .views import ListListings, CreateListing, ListingPage,\
     CreateFlag, DeleteFlag, EditListing, SellListing,\
     UnSellListing, CancelListing, ReopenListing, CreateRating,\
-    EditRating, DeleteRating
+    EditRating, DeleteRating, EditBid
 
 
 urlpatterns = patterns('',
@@ -16,6 +16,9 @@ urlpatterns = patterns('',
 
     url(r'^listing/(?P<slug>[\w-]+)/$',
         ListingPage.as_view(), name='detail_listing'),
+
+    url(r'^listing/(?P<listing_slug>[\w-]+)/bid/(?P<slug>[\w-]+)/$',
+        EditBid.as_view(), name='edit_bid'),
 
     url(r'^listing/(?P<slug>[\w-]+)/flag/$',
         CreateFlag.as_view(), name='create_flag'),

@@ -292,11 +292,37 @@ class DeleteBid(LoginRequiredMixin, DeleteView):
     # can be deleted by either creator or person for lister
 
 
-class EditBid(LoginRequiredMixin, UpdateView):
+class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Bid
+    template_name = 'bid_edit.html'
+    context_object_name = 'bid'
+    #form_class = EditBidForm
+    login_url = 'login'
+
+    form_valid_message = "Your listing was successfully updated!"
+
+    fields = ['price', 'text', ]
+
     success_url = '/'
 
-    # can only be edited by the bidder
+    def get_success_url(self):
+        return reverse('detail_listing',
+                       kwargs={'slug': self.object.listing.slug })
+
+    def get_context_data(self, **kwargs):
+        context = super(EditBid, self).get_context_data(**kwargs)
+
+        me = Student.objects.get(user=self.request.user)
+
+        bidding_student = self.get_object().bidder
+
+        if not(bidding_student == me):
+            return HttpResponseForbidden()
+
+        if bid.listing.sold or bid.listing.cancelled:
+            raise Http404
+
+        return context
 
 
 class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):

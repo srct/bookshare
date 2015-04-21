@@ -129,6 +129,8 @@ class Bid(TimeStampedModel):
         validators=[MaxValueValidator(1000)],)
     text = models.CharField(blank=True, max_length=2000,)
 
+    slug = RandomSlugField(length=6)
+
     def __unicode__(self):
         return '%s\'s bid for $%s' % (self.bidder, str(self.price))
 

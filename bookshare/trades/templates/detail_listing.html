@@ -301,6 +301,9 @@ SRCT Bookshare &bull; {{ listing.title }}
             </div>
 
             <div class="col-md-2 col-sm-6 col-xs-6 text-center">
+            {% if not listing.sold or not listing.cancelled and bid.bidder.user == request.user %}
+              <h4><a href="{% url 'edit_bid' listing.slug bid.slug %}"<span class="label label-default">Edit</span></a></h4>
+            {% endif %}
             {% if bid == listing.winning_bid %}
               <h4><small><span class="label label-success">Winning Bid</span></small> <strong>${{ bid.price }}</strong></h4>
             {% else %}

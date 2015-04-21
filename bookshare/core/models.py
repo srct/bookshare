@@ -25,8 +25,8 @@ class Course(TimeStampedModel):
     name = models.CharField(max_length=255)
     department = models.CharField(max_length=255)
     departmentAbbreviation = models.CharField(max_length=4)
-    #number = models.CharField(max_length=255,
-                              #validators=RegexValidator('[0-9]{3,}'))
+    # number = models.CharField(max_length=255,
+                              # validators=RegexValidator('[0-9]{3,}'))
     number = models.CharField(max_length=3)
 
     def __unicode__(self):

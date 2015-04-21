@@ -17,7 +17,7 @@ class Lookout(TimeStampedModel):
         validators=[RegexValidator('[0-9xX-]{10,20}',
                     message='Please enter a valid ISBN.')])
     # would have to load in every conceivable course first
-    #course = models.ForeignKey(Course)
+    # course = models.ForeignKey(Course)
     slug = RandomSlugField(length=6)
 
     def get_listings(self):

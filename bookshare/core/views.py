@@ -31,7 +31,7 @@ class DetailStudent(LoginRequiredMixin, DetailView):
             average_stars = sum(student_stars)/float((len(student_stars)))
         else:
             average_stars = None
-       
+
         context['avg_stars'] = average_stars
         context['listings'] = student_listings
         context['lookouts'] = Lookout.objects.filter(owner=self.get_object())
@@ -42,6 +42,7 @@ class DetailStudent(LoginRequiredMixin, DetailView):
         context['bids'] = Bid.objects.filter(bidder=self.get_object())
 
         return context
+
 
 class StudentRatings(LoginRequiredMixin, DetailView):
     model = Student
@@ -61,7 +62,7 @@ class StudentRatings(LoginRequiredMixin, DetailView):
             average_stars = sum(student_stars)/float((len(student_stars)))
         else:
             average_stars = None
-       
+
         context['avg_stars'] = average_stars
 
         context['student_ratings'] = student_ratings

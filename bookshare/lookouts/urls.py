@@ -1,7 +1,7 @@
 # core django imports
 from django.conf.urls import patterns, url
 from django.views.decorators.cache import cache_page
-# imports from your apps 
+# imports from your apps
 from .views import DetailLookout, CreateLookout, DeleteLookout
 
 urlpatterns = patterns('',

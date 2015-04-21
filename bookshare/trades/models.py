@@ -9,7 +9,7 @@ from randomslugfield import RandomSlugField
 from model_utils.models import TimeStampedModel
 from dateutil.relativedelta import relativedelta
 # imports from your apps
-from core.models import Student#, Course
+from core.models import Student  # and later, Course
 
 
 class Listing(TimeStampedModel):
@@ -46,21 +46,21 @@ class Listing(TimeStampedModel):
     author = models.CharField(max_length=200)
     isbn = models.CharField(max_length=20,
                             validators=[RegexValidator('^[0-9xX-]{10,20}',
-                                message='Please enter a valid ISBN.')])
+                                        message='Please enter a valid ISBN.')])
     year = models.IntegerField(null=True, blank=True,
         # some professors may assign books still to be officially published
         validators=[MaxValueValidator(date.today().year+1)])
     edition = models.PositiveIntegerField(null=True, blank=True, default=1,
         validators=[MaxValueValidator(1000)])
     # would have to load in every conceivable course first
-    #course = models.ForeignKey(Course)
+    # course = models.ForeignKey(Course)
     condition = models.CharField(choices=BOOK_CONDITION_CHOICES,
                                  max_length=20, default=GOOD)
     access_code = models.CharField(choices=ACCESS_CODE_CHOICES,
                                    max_length=30, default=NOT_APPLICABLE)
     course_abbr = models.CharField(max_length=10, blank=True,
                                    validators=[RegexValidator('^([a-zA-Z]){2,4} (\d){3}$',
-                                       message='Please enter a valid course.')])
+                                               message='Please enter a valid course.')])
     description = models.TextField(blank=True, max_length=2000)
     price = models.PositiveIntegerField(default=0,
                                         validators=[MaxValueValidator(1000)])
@@ -88,7 +88,8 @@ class Listing(TimeStampedModel):
         modified_plus_month = self.modified.date() + relativedelta(months=1)
 
         # last login + two weeks
-        last_login_plus_two_weeks = self.seller.last_login.date() + relativedelta(weeks=2)
+        last_login_plus_two_weeks = self.seller.last_login.date() +\
+            relativedelta(weeks=2)
 
         last_poked = ((today > created_plus_month) or (today > modified_plus_month))
         recent_login = (today > last_login_plus_two_weeks)
@@ -117,7 +118,7 @@ class Listing(TimeStampedModel):
         return '%s : %s' % (self.isbn, self.title)
 
     class Meta:
-        #unique_together = (("ISBN", "seller"),)
+        # unique_together = (("ISBN", "seller"),)
         ordering = ['isbn', 'title']
 
 
@@ -126,7 +127,7 @@ class Bid(TimeStampedModel):
     bidder = models.ForeignKey(Student)
     listing = models.ForeignKey(Listing)
     price = models.PositiveIntegerField(default=0,
-        validators=[MaxValueValidator(1000)],)
+                                        validators=[MaxValueValidator(1000)],)
     text = models.CharField(blank=True, max_length=2000,)
 
     slug = RandomSlugField(length=6)

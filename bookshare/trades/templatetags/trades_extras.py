@@ -3,20 +3,22 @@ from trades.views import ISBNMetadata
 
 register = template.Library()
 
+
 @register.filter(name='isbn_name')
 def isbn_name(isbn):
     # numbers starting with 0 throw "SyntaxError: invalid token"
     isbn_str = str(isbn)
-    data = ISBNMetadata(isbn)
+    data = ISBNMetadata(isbn_str)
     if data is not None:
         return data['title']
     else:
-        return isbn
+        return isbn_str
 
 
 @register.filter(name='full_stars')
 def full_stars(avg_stars):
     return range(int(avg_stars))
+
 
 @register.filter(name='half_stars')
 def half_stars(avg_stars):
@@ -25,12 +27,14 @@ def half_stars(avg_stars):
     else:
         return False
 
+
 @register.filter(name='empty_stars')
 def empty_stars(avg_stars):
     if half_stars(avg_stars):
         return range(4 - int(avg_stars))
     else:
         return range(5 - int(avg_stars))
+
 
 @register.filter(name='int_maker')
 def int_maker(num):

@@ -11,7 +11,6 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from django.template import Context
-from django.contrib import messages
 from django.utils.safestring import mark_safe
 # third party imports
 import requests
@@ -29,7 +28,9 @@ from core.models import Student
 # pulls worldcat metadata from ISBNs
 def ISBNMetadata(standardISBN):
     # passing in numbers starting with 0 throws "SyntaxError: invalid token"
-    url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + str(standardISBN) + "?method=getMetadata&format=json&fl=title,year,author,ed"
+    url = "http://xisbn.worldcat.org/webservices/xid/isbn/" +\
+          str(standardISBN) +\
+          "?method=getMetadata&format=json&fl=title,year,author,ed"
     metadata = requests.get(url)
     # format into a dictionary
     dejson = metadata.json()
@@ -64,7 +65,7 @@ def flag_slug(flagger, listing):
 # (basically) duplicated code!!!
 def can_rate(rater, listing):
     user_rate_num = Rating.objects.filter(rater=rater,
-                                           listing=listing).count()
+                                          listing=listing).count()
     # we're assuming that this isn't going to go over 1
     if user_rate_num:
         return False
@@ -118,7 +119,7 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
             temp_image.seek(0)
 
             new_uploaded_file = SimpleUploadedFile(image_name,
-                            temp_image.read(), content_type=image_format)
+                                    temp_image.read(), content_type=image_format)
 
             form.instance.photo = new_uploaded_file
 
@@ -297,7 +298,7 @@ class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Bid
     template_name = 'bid_edit.html'
     context_object_name = 'bid'
-    #form_class = EditBidForm
+    # form_class = EditBidForm
     login_url = 'login'
 
     form_valid_message = "Your bid was successfully updated!"
@@ -308,7 +309,7 @@ class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('detail_listing',
-                       kwargs={'slug': self.object.listing.slug })
+                       kwargs={'slug': self.object.listing.slug})
 
     def get_context_data(self, **kwargs):
         context = super(EditBid, self).get_context_data(**kwargs)
@@ -331,7 +332,7 @@ class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     template_name = 'listing_edit.html'
     context_object_name = 'listing'
-    #form_class = EditListingForm
+    # form_class = EditListingForm
     login_url = 'login'
 
     form_valid_message = "Your listing was successfully updated!"
@@ -385,8 +386,8 @@ class SellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
         subject, from_email, to, cc = ('Your bid has been selected on Bookshare!',
                                        'no-reply@bookshare.srct.io',
-                                       #form.instance.winning_bid.bidder.user.email,
-                                       #self.obj.seller.user.email)
+                                       # form.instance.winning_bid.bidder.user.email,
+                                       # self.obj.seller.user.email)
                                        'success@simulator.amazonses.com',
                                        'success@simulator.amazonses.com')
         text_content = text_email.render(email_context)
@@ -451,8 +452,8 @@ class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
         subject, from_email, to, cc = ('Your transaction has been cancelled on Bookshare',
                                        'no-reply@bookshare.srct.io',
-                                       #self.obj.winning_bid.bidder.user.email,
-                                       #self.obj.seller.user.email)
+                                       # self.obj.winning_bid.bidder.user.email,
+                                       # self.obj.seller.user.email)
                                        'success@simulator.amazonses.com',
                                        'success@simulator.amazonses.com')
         text_content = text_email.render(email_context)
@@ -463,7 +464,7 @@ class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         msg.send()
 
         # this has to come after the email has been sent, otherwise these are
-        # cleaned out 
+        # cleaned out
         form.instance.sold = False
         form.instance.date_closed = None
         form.instance.winning_bid = None
@@ -483,7 +484,7 @@ class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         context['my_form'] = form
 
         return context
- 
+
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     @ratelimit(key='user', rate='100/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
@@ -606,7 +607,7 @@ class EditRating(LoginRequiredMixin, UpdateView):
     model = Rating
     template_name = 'rating_edit.html'
     context_object_name = 'rating'
-    #form_class = EditListingForm
+    # form_class = EditListingForm
     login_url = 'login'
 
     fields = ['stars', 'review', ]

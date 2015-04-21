@@ -4,10 +4,10 @@ from django.http import HttpResponseForbidden
 from django.views.generic import CreateView, DetailView, DeleteView
 # third-party imports
 from braces.views import LoginRequiredMixin
+from ratelimit.decorators import ratelimit
 # imports from your apps
 from .forms import LookoutForm
 from .models import Lookout
-
 
 
 class CreateLookout(LoginRequiredMixin, CreateView):
@@ -30,6 +30,11 @@ class CreateLookout(LoginRequiredMixin, CreateView):
         context['my_form'] = form
 
         return context
+
+    @ratelimit(key='user', rate='5/m', method='POST', block=True)
+    @ratelimit(key='user', rate='100/d', method='POST', block=True)
+    def post(self, request, *args, **kwargs):
+        return super(CreateLookout, self).post(request, *args, **kwargs)
 
 
 class DetailLookout(LoginRequiredMixin, DetailView):

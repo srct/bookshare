@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% block title %}
-SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
+SRCT Bookshare &bull; {{ student.user.get_full_name }}
 {% endblock %}
 
 {% block content %}
@@ -17,7 +17,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
       <img class="img-circle img-responsive" src="{% gravatar_url student.user.email 75 %}">
     </div>
     <div class="col-md-6">
-      <h2><strong>{{ student.user.first_name }} {{ student.user.last_name }}</strong></h2>
+      <h2><strong>{{ student.user.get_full_name }}</strong></h2>
     </div>
     <div class="col-md-3 text-right">
       {% if avg_stars %}
@@ -174,7 +174,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
     {% if student.user == request.user %}
     You don't
     {% else %}
-    {{ student.user.get_full_name }} doesn't
+    {{ student.user.get_first_name }} doesn't
     {% endif %}
     have any have any bids yet.
     {% if student.user == request.user %}

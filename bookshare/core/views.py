@@ -2,6 +2,7 @@
 from django.views.generic import DetailView
 # third-party imports
 from braces.views import LoginRequiredMixin
+from django.db.models import Sum
 # imports from your apps
 from .models import Student
 from lookouts.models import Lookout
@@ -17,26 +18,11 @@ class DetailStudent(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailStudent, self).get_context_data(**kwargs)
 
-        # can be done with sum & filter only solds
-        def total_sales(listings):
-            sales = 0
-            for listing in listings:
-                if listing.sold:
-                    sales = sales + 1
-            return sales
-
-        # can be done with sum & filter only solds
-        def total_proceeds(listings):
-            proceeds = 0
-            for listing in listings:
-                if listing.sold:
-                    try:
-                        proceeds = proceeds + listing.final_price()
-                    except:
-                        pass
-            return proceeds
-
         student_listings = Listing.objects.filter(seller=self.get_object().pk)
+
+        total_sales = student_listings.filter(sold=True).count()
+
+        total_proceeds = Bid.objects.filter(listing__seller__user=self.get_object()).filter(listing__sold=True).aggregate(Sum('price'))['price__sum']
 
         student_ratings = Rating.objects.filter(listing__seller__user=self.get_object())
         if student_ratings:
@@ -48,11 +34,10 @@ class DetailStudent(LoginRequiredMixin, DetailView):
        
         context['avg_stars'] = average_stars
         context['listings'] = student_listings
-        context['me'] = self.get_object().pk
         context['lookouts'] = Lookout.objects.filter(owner=self.get_object())
 
-        context['proceeds'] = total_proceeds(student_listings)
-        context['sales'] = total_sales(student_listings)
+        context['proceeds'] = total_proceeds
+        context['sales'] = total_sales
 
         context['bids'] = Bid.objects.filter(bidder=self.get_object())
 

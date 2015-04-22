@@ -114,7 +114,7 @@ class FlagForm(forms.ModelForm):
 #class EditListingForm( forms.ModelForm ):
 
 
-class SellListingForm(forms.ModelForm):
+class ExchangeListingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
 
@@ -126,7 +126,7 @@ class SellListingForm(forms.ModelForm):
                      'winning_bid',
                      HTML("""<hr/ >"""),
                      HTML("""<strong>Your Email to Your Bidder</strong>"""),
-                     HTML("""<div class="well"><em><p>Hey there!</p><p>Seller {{ listing.seller.user.first_name }} {{ listing.seller.user.last_name }} has picked your bid for {{ listing.title }} on SRCT Bookshare. They're the cc'ed email address-- {{ listing.seller.user.email }}.</p><p>Watch your email to arrange all the final touches to get your book.</p></em>"""),
+                     HTML("""<div class="well"><em><p>Hey there!</p><p>Poster {{ listing.poster.user.get_full_name }} has picked your bid for {{ listing.title }} on SRCT Bookshare. They're the cc'ed email address-- {{ listing.poster.user.email }}.</p><p>Watch your email to arrange all the final touches to get your book.</p></em>"""),
                      Field('email_message',
                            placeholder='Do you want to meet tomorrow by the JC Info Desk at 4?'),
                      HTML("""<em><p>Thanks for using SRCT Bookshare!</p><p>Mason SRCT</p></em></div>"""),
@@ -140,7 +140,7 @@ class SellListingForm(forms.ModelForm):
                      ),
         )
 
-        super(SellListingForm, self).__init__(*args, **kwargs)
+        super(ExchangeListingForm, self).__init__(*args, **kwargs)
         self.fields['email_message'].label = "Custom Message"
         self.fields['winning_bid'].required = True
         self.fields['email_message'].initial = ''
@@ -149,7 +149,7 @@ class SellListingForm(forms.ModelForm):
         model = Listing
 
 
-class UnSellListingForm(forms.ModelForm):
+class UnExchangeListingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
 
@@ -159,7 +159,7 @@ class UnSellListingForm(forms.ModelForm):
         self.helper.layout = Layout(
             Fieldset("",
                      HTML("""<strong>Your Email to Your Bidder</strong>"""),
-                     HTML("""<div class="well"><em><p>Hey there!</p><p>Seller {{ listing.seller.user.first_name }} {{ listing.seller.user.last_name }} has cancelled your bid for {{ listing.title }} on SRCT Bookshare.</p><p>We certainly hope that this doesn't come as a shock. :-P</p><p>(If you don't know why you're getting this email, hey're the cc'ed email address-- {{ listing.seller.user.email }}. Contact them ASAP to clear up any confusion.)<p></em>"""),
+                     HTML("""<div class="well"><em><p>Hey there!</p><p>Poster {{ listing.poster.user.get_full_name }} has cancelled your bid for {{ listing.title }} on SRCT Bookshare.</p><p>We certainly hope that this doesn't come as a shock. :-P</p><p>(If you don't know why you're getting this email, hey're the cc'ed email address-- {{ listing.poster.user.email }}. Contact them ASAP to clear up any confusion.)<p></em>"""),
                      Field('email_message',                           placeholder='I haven\'t heard from you in a couple of days, so I\'m going to have to try to exchange my textbook to someone else. :-/'),
                      HTML("""<em><p>Thanks for using SRCT Bookshare!</p><p>Mason SRCT</p></em></div>"""),
                      HTML("""<hr/ >"""),
@@ -172,7 +172,7 @@ class UnSellListingForm(forms.ModelForm):
                      ),
         )
 
-        super(UnSellListingForm, self).__init__(*args, **kwargs)
+        super(UnExchangeListingForm, self).__init__(*args, **kwargs)
         self.fields['email_message'].label = "Custom Message"
         self.fields['email_message'].initial = ''
 

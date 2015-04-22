@@ -40,7 +40,7 @@ class Listing(TimeStampedModel):
         (AC_NOT_INCLUDED, 'Access Code NOT Included'),
     )
 
-    seller = models.ForeignKey(Student)
+    poster = models.ForeignKey(Student)
 
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
@@ -73,7 +73,7 @@ class Listing(TimeStampedModel):
 
     email_message = models.TextField(blank=True, max_length=2000)
 
-    # future feature: tell sellers what price their book has been getting
+    # future feature: tell posters what price their book has been getting
     winning_bid = models.ForeignKey('Bid', blank=True, null=True,
                                     related_name='winning_bid')
     # the date either cancelled or exchanged
@@ -88,7 +88,7 @@ class Listing(TimeStampedModel):
         modified_plus_month = self.modified.date() + relativedelta(months=1)
 
         # last login + two weeks
-        last_login_plus_two_weeks = self.seller.last_login.date() +\
+        last_login_plus_two_weeks = self.poster.last_login.date() +\
             relativedelta(weeks=2)
 
         last_poked = ((today > created_plus_month) or (today > modified_plus_month))
@@ -118,7 +118,7 @@ class Listing(TimeStampedModel):
         return '%s : %s' % (self.isbn, self.title)
 
     class Meta:
-        # unique_together = (("ISBN", "seller"),)
+        # unique_together = (("ISBN", "poster"),)
         ordering = ['isbn', 'title']
 
 
@@ -198,7 +198,7 @@ class Rating(TimeStampedModel):
 
     def __unicode__(self):
         return "%s's review of %s" % (self.rater.user.username,
-                                      self.listing.seller.user.username)
+                                      self.listing.poster.user.username)
 
     class Meta:
         ordering = ['rater', 'listing', 'created']

@@ -72,9 +72,9 @@ SRCT Bookshare &bull; {{ listing.title }}
       <div class="alert alert-success text-center">
         <strong>You exchanged this listing {{ listing.date_closed|timesince }} ago.</strong>
         {% if rating %}
-          <strong><a href="{% url 'edit_rating' listing.slug rating.slug %}">Edit</a> <a href="{% url 'ratings' listing.seller.slug %}">your rating</a> of this exchange.</strong>
+          <strong><a href="{% url 'edit_rating' listing.slug rating.slug %}">Edit</a> <a href="{% url 'ratings' listing.poster.slug %}">your rating</a> of this exchange.</strong>
         {% else %}
-          <strong>Rate your experience with {{ listing.seller.user.first_name }} <a href="{% url 'create_rating' listing.slug %}">here</a>.</strong>
+          <strong>Rate your experience with {{ listing.poster.user.first_name }} <a href="{% url 'create_rating' listing.slug %}">here</a>.</strong>
         {% endif %}
       {% else %}
       <div class="alert alert-danger text-center">
@@ -147,8 +147,8 @@ SRCT Bookshare &bull; {{ listing.title }}
   </div>
 
   <div class="col-md-4 col-sm-6 col-xs-6 text-right">
-    <h4><small>Posted by</small><a href="{% url 'profile' listing.seller.user.username %}"> {{ listing.seller.user.first_name }} {{ listing.seller.user.last_name }}</a>
-    {% if request.user == listing.seller.user %}
+    <h4><small>Posted by</small><a href="{% url 'profile' listing.poster.user.username %}"> {{ listing.poster.user.get_full_name }}</a>
+    {% if request.user == listing.poster.user %}
     (Me)
     {% endif %}</h4>
   </div>
@@ -164,7 +164,7 @@ SRCT Bookshare &bull; {{ listing.title }}
   </div>
 
   <div class="col-md-5 text-right small-text-center">
-  {% if request.user == listing.seller.user %}
+  {% if request.user == listing.poster.user %}
   {% else %}
     {% if can_flag %}
     <h5><a href="{% url 'create_flag' listing.slug %}"><span class="label label-danger"><i class="fa fa-flag fa-fw fa-lg"></i> Flag</span></a></h5>
@@ -195,17 +195,17 @@ SRCT Bookshare &bull; {{ listing.title }}
 </div>
 
 <div class="row text-center">
-{% if request.user == listing.seller.user %}
+{% if request.user == listing.poster.user %}
   <div class="col-md-6 col-md-offset-3">
     <h3>
       {% if bid_count > 0 %}
         {% if not listing.exchanged and not listing.cancelled %}
         <span class="label label-default">
-          <a href="{% url 'sell_listing' listing.slug %}">Exchange</a>
+          <a href="{% url 'exchange_listing' listing.slug %}">Exchange</a>
         </a></span>
         {% elif not listing.cancelled %}
         <span class="label label-default">
-          <a href="{% url 'unsell_listing' listing.slug %}">Cancel Sale</a>
+          <a href="{% url 'unexchange_listing' listing.slug %}">Cancel Sale</a>
        </span>
         {% endif %}
       {% endif %}

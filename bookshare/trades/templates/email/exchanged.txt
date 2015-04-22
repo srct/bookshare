@@ -2,12 +2,12 @@ Hey there, {{ bidder_first_name }}!
 
 Great news!
 
-Seller {{ seller_name }} has picked your ${{ bid_num }} bid for
+Poster {{ poster_name }} has picked your ${{ bid_num }} bid for
 {{ listing_title }} on SRCT Bookshare. They're the cc'ed email address--
-{{ seller_email }}. Watch your email to arrange all the final touches to get
+{{ poster_email }}. Watch your email to arrange all the final touches to get
 your book.
 
-Seller message: {{ email_message }}
+Poster message: {{ email_message }}
 
 Thanks for using SRCT Bookshare! :-)
 

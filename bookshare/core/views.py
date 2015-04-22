@@ -18,13 +18,13 @@ class DetailStudent(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailStudent, self).get_context_data(**kwargs)
 
-        student_listings = Listing.objects.filter(seller=self.get_object().pk)
+        student_listings = Listing.objects.filter(poster=self.get_object().pk)
 
         total_exchanges = student_listings.filter(exchanged=True).count()
 
-        total_proceeds = Bid.objects.filter(listing__seller__user=self.get_object()).filter(listing__exchanged=True).aggregate(Sum('price'))['price__sum']
+        total_proceeds = Bid.objects.filter(listing__poster__user=self.get_object()).filter(listing__exchanged=True).aggregate(Sum('price'))['price__sum']
 
-        student_ratings = Rating.objects.filter(listing__seller__user=self.get_object())
+        student_ratings = Rating.objects.filter(listing__poster__user=self.get_object())
         if student_ratings:
             student_stars = [int(rating.stars) for rating in student_ratings]
             print student_stars
@@ -53,7 +53,7 @@ class StudentRatings(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(StudentRatings, self).get_context_data(**kwargs)
 
-        student_ratings = Rating.objects.filter(listing__seller__user=self.get_object())
+        student_ratings = Rating.objects.filter(listing__poster__user=self.get_object())
 
         # copied code!
         if student_ratings:

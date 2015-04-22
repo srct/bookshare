@@ -20,8 +20,8 @@ from braces.views import FormValidMessageMixin
 from ratelimit.decorators import ratelimit
 # imports from your apps
 from .models import Listing, Bid, Flag, Rating
-from .forms import ListingForm, BidForm, FlagForm, SellListingForm,\
-    UnSellListingForm, RatingForm
+from .forms import ListingForm, BidForm, FlagForm, ExchangeListingForm,\
+    UnExchangeListingForm, RatingForm
 from core.models import Student
 
 
@@ -98,7 +98,7 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
     def form_valid(self, form):
         me = Student.objects.get(user=self.request.user)
 
-        form.instance.seller = me
+        form.instance.poster = me
 
         image_name = form.instance.photo.name
         user_image = Image.open(form.instance.photo)
@@ -240,10 +240,10 @@ class CreateFlag(LoginRequiredMixin, CreateView):
         # [u'', u'share', u'listing', u'C1s3oD', u'flag']
         selected_listing = Listing.objects.get(slug=listing_slug)
 
-        selling_student = selected_listing.seller
+        posting_student = selected_listing.poster
 
         # you can't flag your own listing
-        if (selling_student == me):
+        if (posting_student == me):
             return HttpResponseForbidden()
 
         # can only create a flag if you haven't previously created one
@@ -345,20 +345,19 @@ class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         context = super(EditListing, self).get_context_data(**kwargs)
 
         me = Student.objects.get(user=self.request.user)
-        selling_student = self.get_object().seller
+        posting_student = self.get_object().poster
 
-        if not(selling_student == me):
+        if not(posting_student == me):
             return HttpResponseForbidden()
 
         return context
 
 
-class SellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
+class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     fields = ['email_message', 'winning_bid', ]
-    template_suffix_name = '_sell'
     context_object_name = 'listing'
-    template_name = 'listing_sell.html'
+    template_name = 'listing_exchange.html'
     login_url = 'login'
 
     form_valid_message = "Your email was successfully sent!"
@@ -378,16 +377,16 @@ class SellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
         email_context = Context({
             'bidder_first_name': form.instance.winning_bid.bidder.user.first_name,
-            'seller_name': self.obj.seller.user.get_full_name(),
+            'poster_name': self.obj.poster.user.get_full_name(),
             'bid_num': form.instance.winning_bid.price,
             'listing_title': self.obj.title,
-            'seller_email': self.obj.seller.user.email,
+            'poster_email': self.obj.poster.user.email,
             'email_message': form.instance.email_message, })
 
         subject, from_email, to, cc = ('Your bid has been selected on Bookshare!',
                                        'no-reply@bookshare.srct.io',
                                        # form.instance.winning_bid.bidder.user.email,
-                                       # self.obj.seller.user.email)
+                                       # self.obj.poster.user.email)
                                        'success@simulator.amazonses.com',
                                        'success@simulator.amazonses.com')
         text_content = text_email.render(email_context)
@@ -397,15 +396,15 @@ class SellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
-        return super(SellListing, self).form_valid(form)
+        return super(ExchangeListing, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(SellListing, self).get_context_data(**kwargs)
+        context = super(ExchangeListing, self).get_context_data(**kwargs)
 
         me = Student.objects.get(user=self.request.user)
-        selling_student = self.get_object().seller
+        posting_student = self.get_object().poster
 
-        if not(selling_student == me):
+        if not(posting_student == me):
             return HttpResponseForbidden()
 
         bid_count = Bid.objects.filter(listing=self.get_object).count()
@@ -413,7 +412,7 @@ class SellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
             # because the page shouldn't exist in this scenario
             raise Http404
 
-        form = SellListingForm()
+        form = ExchangeListingForm()
         form.fields['winning_bid'].queryset = Bid.objects.filter(listing=self.get_object())
 
         context['my_form'] = form
@@ -423,15 +422,14 @@ class SellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     @ratelimit(key='user', rate='50/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
-        return super(SellListing, self).post(request, *args, **kwargs)
+        return super(ExchangeListing, self).post(request, *args, **kwargs)
 
 
-class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
+class UnExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     fields = ['email_message', ]
-    template_suffix_name = '_unsell'
     context_object_name = 'listing'
-    template_name = 'listing_unsell.html'
+    template_name = 'listing_unexchange.html'
     login_url = 'login'
 
     form_valid_message = """Your exchange has been successfully cancelled,
@@ -444,16 +442,16 @@ class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
         email_context = Context({
             'bidder_first_name': self.obj.winning_bid.bidder.user.first_name,
-            'seller_name': self.obj.seller.user.get_full_name(),
+            'poster_name': self.obj.poster.user.get_full_name(),
             'bid_num': self.obj.winning_bid.price,
             'listing_title': self.obj.title,
-            'seller_email': self.obj.seller.user.email,
-            'seller_email': form.instance.email_message, })
+            'poster_email': self.obj.poster.user.email,
+            'poster_email': form.instance.email_message, })
 
         subject, from_email, to, cc = ('Your transaction has been cancelled on Bookshare',
                                        'no-reply@bookshare.srct.io',
                                        # self.obj.winning_bid.bidder.user.email,
-                                       # self.obj.seller.user.email)
+                                       # self.obj.poster.user.email)
                                        'success@simulator.amazonses.com',
                                        'success@simulator.amazonses.com')
         text_content = text_email.render(email_context)
@@ -469,18 +467,18 @@ class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         form.instance.date_closed = None
         form.instance.winning_bid = None
 
-        return super(UnSellListing, self).form_valid(form)
+        return super(UnExchangeListing, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
-        context = super(UnSellListing, self).get_context_data(**kwargs)
+        context = super(UnExchangeListing, self).get_context_data(**kwargs)
 
         me = Student.objects.get(user=self.request.user)
-        selling_student = self.get_object().seller
+        posting_student = self.get_object().poster
 
-        if not(selling_student == me):
+        if not(posting_student == me):
             return HttpResponseForbidden()
 
-        form = UnSellListingForm()
+        form = UnExchangeListingForm()
         context['my_form'] = form
 
         return context
@@ -488,7 +486,7 @@ class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     @ratelimit(key='user', rate='50/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
-        return super(UnSellListing, self).post(request, *args, **kwargs)
+        return super(UnExchangeListing, self).post(request, *args, **kwargs)
 
 
 class CancelListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
@@ -512,9 +510,9 @@ class CancelListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         context = super(CancelListing, self).get_context_data(**kwargs)
 
         me = Student.objects.get(user=self.request.user)
-        selling_student = self.get_object().seller
+        posting_student = self.get_object().poster
 
-        if not(selling_student == me):
+        if not(posting_student == me):
             return HttpResponseForbidden()
 
         return context
@@ -539,9 +537,9 @@ class ReopenListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         context = super(ReopenListing, self).get_context_data(**kwargs)
 
         me = Student.objects.get(user=self.request.user)
-        selling_student = self.get_object().seller
+        posting_student = self.get_object().poster
 
-        if not(selling_student == me):
+        if not(posting_student == me):
             return HttpResponseForbidden()
 
         return context
@@ -568,7 +566,7 @@ class CreateRating(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('ratings',
-                       kwargs={'slug': self.object.listing.seller.slug})
+                       kwargs={'slug': self.object.listing.poster.slug})
 
     def get_context_data(self, **kwargs):
         context = super(CreateRating, self).get_context_data(**kwargs)
@@ -616,7 +614,7 @@ class EditRating(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('ratings',
-                       kwargs={'slug': self.object.listing.seller.slug})
+                       kwargs={'slug': self.object.listing.poster.slug})
 
     def get_context_data(self, **kwargs):
         context = super(EditRating, self).get_context_data(**kwargs)

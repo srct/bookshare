@@ -17,7 +17,7 @@ class ListingAdmin(admin.ModelAdmin):
                     'year', 'edition', 'condition', 'description',
                     'price', 'exchanged', 'cancelled', 'winning_bid',
                     'date_closed')
-    list_filter = ('created', 'modified', 'seller', 'condition',
+    list_filter = ('created', 'modified', 'poster', 'condition',
                    'price', 'cancelled')
 
 # expand this later

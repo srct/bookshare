@@ -83,7 +83,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
               {% if listing.exchanged %}
                 <span class="label label-primary"><strong>Exchanged</strong></span>
                 {% if student.user == request.user %}
-                  <small>(<a href="{% url 'unsell_listing' listing.slug %}">Cancel Exchange</a>)</small>
+                  <small>(<a href="{% url 'unexchange_listing' listing.slug %}">Cancel Exchange</a>)</small>
                 {% endif %}
               {% elif listing.cancelled %}
                 <span class="label label-default"><strong>Cancelled</strong></span>

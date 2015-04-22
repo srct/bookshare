@@ -11,17 +11,17 @@
 <body>
   <p>Hey there, <strong>{{ bidder_first_name }}</strong>!
 
-  <p>Seller <strong>{{ seller_name }}</strong> has cancelled your
+  <p>Poster <strong>{{ poster_name }}</strong> has cancelled your
   ${{ bid_num }} bid for <em>{{ listing_title }}</em> on
   <a href="http://bookshare.srct.gmu.edu/">SRCT Bookshare</a>.
 
   <p>We certainly hope that this doesn't come as a shock. :-P</p>
 
   <p>(If you don't know why you're getting this email, they're the cc'ed email
-  address-- {{ seller_email }}. Contact them ASAP to clear up any confusion.)</p>
+  address-- {{ poster_email }}. Contact them ASAP to clear up any confusion.)</p>
 
 
-  <p><em>Seller message</em>: {{ email_message }}</p>
+  <p><em>Poster message</em>: {{ email_message }}</p>
 
   <p>Thanks for using SRCT Bookshare!</p>
 

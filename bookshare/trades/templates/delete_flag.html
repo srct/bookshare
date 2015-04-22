@@ -10,7 +10,7 @@ SRCT Bookshare &bull; {{ flag.listing.title }} &bull; Remove Flag
 
 <div class="row text-center">
   <form action="" method="post">{% csrf_token %}
-    <h3>Are you sure you want to remove your flag for {{ flag.listing.seller.user.get_full_name }}'s listing <em>{{ flag.listing.title }}</em>?</h3>
+    <h3>Are you sure you want to remove your flag for {{ flag.listing.poster.user.get_full_name }}'s listing <em>{{ flag.listing.title }}</em>?</h3>
     <input type="submit" value="Confirm" class="btn btn-danger btn-sm" />
     <input type="submit" value="Never Mind" class="btn btn-default btn-sm" onclick="history.back()" />
   </form>

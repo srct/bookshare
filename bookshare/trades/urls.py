@@ -30,10 +30,10 @@ urlpatterns = patterns('',
     url(r'^listing/(?P<slug>[\w-]+)/edit/$',
         EditListing.as_view(), name='edit_listing'),
 
-    url(r'^listing/(?P<slug>[\w-]+)/sell/$',
+    url(r'^listing/(?P<slug>[\w-]+)/exchange/$',
         SellListing.as_view(), name='sell_listing'),
 
-    url(r'^listing/(?P<slug>[\w-]+)/unsell/$',
+    url(r'^listing/(?P<slug>[\w-]+)/unexchange/$',
         UnSellListing.as_view(), name='unsell_listing'),
 
     url(r'^listing/(?P<slug>[\w-]+)/cancel/$',

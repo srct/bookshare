@@ -20,7 +20,7 @@ SRCT Bookshare &bull; Lookouts
 
 <div class="row">
   {% for listing in lookout.get_listings %}
-    {% if not listing.cancelled or listing.sold %}
+    {% if not listing.cancelled or listing.exchanged %}
     <div class="col-md-6">
       {% include 'listing_preview_panel.html' %}
     </div>

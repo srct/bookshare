@@ -4,8 +4,8 @@
       <h4>
         {% if not listing.active %}
           <small><span class="label label-warning"><strong>Inactive</strong></span></small>
-        {% elif listing.sold %}
-          <small><span class="label label-primary"><strong>Sold</strong></span></small>
+        {% elif listing.exchanged %}
+          <small><span class="label label-primary"><strong>Exchanged</strong></span></small>
         {% endif %}
         <a href="{{ listing.get_absolute_url }}">
           <strong>{{ listing.title }}</strong>
@@ -26,7 +26,7 @@
       </div>
       <div class="col-md-4 text-right">
         <h4>
-        {% if listing.sold %}
+        {% if listing.exchanged %}
           <small>Final</small><strong> ${{ listing.final_price }}</strong>
         {% else %}
           <small>Asking</small><strong> ${{ listing.price }}</strong>

@@ -68,7 +68,7 @@ class Listing(TimeStampedModel):
                               default='listing_photos/default_listing_photo.jpg')
 
     # these remaining fields are for internal usage, not for users
-    sold = models.BooleanField(default=False)
+    exchanged = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
 
     email_message = models.TextField(blank=True, max_length=2000)
@@ -76,7 +76,7 @@ class Listing(TimeStampedModel):
     # future feature: tell sellers what price their book has been getting
     winning_bid = models.ForeignKey('Bid', blank=True, null=True,
                                     related_name='winning_bid')
-    # the date either cancelled or sold
+    # the date either cancelled or exchanged
     date_closed = models.DateField(null=True, blank=True)
 
     slug = RandomSlugField(length=6)

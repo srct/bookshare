@@ -20,9 +20,9 @@ class DetailStudent(LoginRequiredMixin, DetailView):
 
         student_listings = Listing.objects.filter(seller=self.get_object().pk)
 
-        total_sales = student_listings.filter(sold=True).count()
+        total_exchanges = student_listings.filter(exchanged=True).count()
 
-        total_proceeds = Bid.objects.filter(listing__seller__user=self.get_object()).filter(listing__sold=True).aggregate(Sum('price'))['price__sum']
+        total_proceeds = Bid.objects.filter(listing__seller__user=self.get_object()).filter(listing__exchanged=True).aggregate(Sum('price'))['price__sum']
 
         student_ratings = Rating.objects.filter(listing__seller__user=self.get_object())
         if student_ratings:
@@ -37,7 +37,7 @@ class DetailStudent(LoginRequiredMixin, DetailView):
         context['lookouts'] = Lookout.objects.filter(owner=self.get_object())
 
         context['proceeds'] = total_proceeds
-        context['sales'] = total_sales
+        context['exchanges'] = total_exchanges
 
         context['bids'] = Bid.objects.filter(bidder=self.get_object())
 

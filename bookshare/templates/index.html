@@ -11,7 +11,7 @@ SRCT Bookshare &bull; Homepage
     <div class="col-md-12 license">
       <div class="jumbotron jumboindex">
         <h1 class="text-center"><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
-        <h3 class="text-center">A place for Mason students to buy and sell textbooks.</h3>
+        <h3 class="text-center">A place for Mason students to exchange textbooks.</h3>
       </div>
       <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" title="'Mason Statue Desktop' by Daniel Bond is licensed under a Creative Commons Attribution 4.0 International License."/></a>
     </div>
@@ -28,7 +28,7 @@ SRCT Bookshare &bull; Homepage
       <legend><i class="fa fa-book"></i> <a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name|title }}</a></legend>
       <div class="row">
         {% for listing in lookout.get_listings %}
-          {% if not listing.cancelled or listing.sold %}
+          {% if not listing.cancelled or listing.exchanged %}
           <div class="col-md-6">
             {% include 'listing_preview_panel.html' %}
           </div>
@@ -74,11 +74,11 @@ SRCT Bookshare &bull; Homepage
   </div>
   <div class="col-sm-3 text-center">
     <h3><i class="fa fa-gift fa-lg"></i></h3>
-    <h4>Sell your used textbooks to Mason students</h4>
+    <h4>Exchange your used textbooks with Mason students</h4>
   </div>
   <div class="col-sm-3 text-center">
     <h3><i class="fa fa-book fa-lg"></i></h3>
-    <h4>Search for textbooks by course, price, and more</h4>
+    <h4>Search for textbooks by course and more</h4>
   </div>
   <div class="col-sm-3 text-center">
     <h3><i class="fa fa-eye fa-lg"></i></h3>

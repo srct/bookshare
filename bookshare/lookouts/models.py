@@ -21,7 +21,7 @@ class Lookout(TimeStampedModel):
     slug = RandomSlugField(length=6)
 
     def get_listings(self):
-        isbn_listings = models.Q(isbn=self.isbn, sold=False, cancelled=False)
+        isbn_listings = models.Q(isbn=self.isbn, exchanged=False, cancelled=False)
         return Listing.objects.filter(isbn_listings)
 
     def get_absolute_url(self):

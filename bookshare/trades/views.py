@@ -321,8 +321,8 @@ class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         if not(bidding_student == me):
             return HttpResponseForbidden()
 
-        # if sold or cancelled, this page doesn't exist
-        if self.get_object().listing.sold or self.get_object().listing.cancelled:
+        # if exchanged or cancelled, this page doesn't exist
+        if self.get_object().listing.exchanged or self.get_object().listing.cancelled:
             raise Http404
 
         return context
@@ -368,13 +368,13 @@ class SellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         today = date.today()
         self.obj = self.get_object()
 
-        form.instance.sold = True
+        form.instance.exchanged = True
         form.instance.date_closed = today
 
         # sending email
         # I'm still second guessing as to whether this should be in this method
-        text_email = get_template('email/sold.txt')
-        html_email = get_template('email/sold.html')
+        text_email = get_template('email/exchanged.txt')
+        html_email = get_template('email/exchanged.html')
 
         email_context = Context({
             'bidder_first_name': form.instance.winning_bid.bidder.user.first_name,
@@ -434,13 +434,13 @@ class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     template_name = 'listing_unsell.html'
     login_url = 'login'
 
-    form_valid_message = """Your sale has been successfully cancelled,
+    form_valid_message = """Your exchange has been successfully cancelled,
                      and your email successfully sent!"""
 
     def form_valid(self, form):
         self.obj = self.get_object()
-        text_email = get_template('email/unsold.txt')
-        html_email = get_template('email/unsold.html')
+        text_email = get_template('email/unexchanged.txt')
+        html_email = get_template('email/unexchanged.html')
 
         email_context = Context({
             'bidder_first_name': self.obj.winning_bid.bidder.user.first_name,
@@ -465,7 +465,7 @@ class UnSellListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
         # this has to come after the email has been sent, otherwise these are
         # cleaned out
-        form.instance.sold = False
+        form.instance.exchanged = False
         form.instance.date_closed = None
         form.instance.winning_bid = None
 
@@ -597,7 +597,7 @@ class CreateRating(LoginRequiredMixin, CreateView):
         context['my_form'] = form
         return context
 
-    # no per-day limit because you can only rate listings you've been sold to
+    # no per-day limit because you can only rate listings you've exchanged
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         return super(CreateRating, self).post(request, *args, **kwargs)

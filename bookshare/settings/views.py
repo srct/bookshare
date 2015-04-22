@@ -35,8 +35,8 @@ class ChartsView(LoginRequiredMixin, TemplateView):
         grossing = []
         # set to eliminate duplicates
         for isbn in set(all_isbns):
-            # only want sold listings (not cancelled is assumed)
-            listings = Listing.objects.exclude(sold=False).filter(isbn=isbn)
+            # only want exchanged listings (not cancelled is assumed)
+            listings = Listing.objects.exclude(exchanged=False).filter(isbn=isbn)
             # make list of all of that listing's final prices (assume no Nones)
             listing_winning_bids = [listing.final_price() for listing in listings]
             # add all those together

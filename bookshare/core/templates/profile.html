@@ -64,7 +64,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
         </thead>
         {% for listing in listings %}
         <tbody>
-          {% if listing.sold %}
+          {% if listing.exchanged %}
           <tr class="success">
           {% else %}
           <tr>
@@ -72,7 +72,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
             <td class="text-center"><h5>{{ listing.isbn }}</h5></td>
             <td class="text-center"><h5><a href="{{ listing.get_absolute_url }}">{{ listing.title|title }}</h5></a></td>
             <td class="text-center"><h5>
-              {% if listing.sold %}
+              {% if listing.exchanged %}
                 ${{ listing.final_price }}
               {% else %}
                 ${{ listing.price }}
@@ -80,10 +80,10 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
             </h5></td>
             <td class="text-center"><h5>{{ listing.bids|length }}</h5></td>
             <td class="text-center"><h5>
-              {% if listing.sold %}
-                <span class="label label-primary"><strong>Sold</strong></span>
+              {% if listing.exchanged %}
+                <span class="label label-primary"><strong>Exchanged</strong></span>
                 {% if student.user == request.user %}
-                  <small>(<a href="{% url 'unsell_listing' listing.slug %}">Cancel Sale</a>)</small>
+                  <small>(<a href="{% url 'unsell_listing' listing.slug %}">Cancel Exchange</a>)</small>
                 {% endif %}
               {% elif listing.cancelled %}
                 <span class="label label-default"><strong>Cancelled</strong></span>
@@ -105,7 +105,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
       </table>
       {% if student.user == request.user %}
         <h4>
-        <strong>Total Sales:</strong> {{ sales }} |
+        <strong>Total Exchanges:</strong> {{ exchanges }} |
         <strong>Total Proceeds:</strong> ${{ proceeds }}
         </h4>
       {% endif %}
@@ -148,8 +148,8 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
           <td class="text-center"><h5>{{ bid.created|date:"m/d/y" }}</h5></td>
           <td class="text-center"><h5><a href="{{ bid.listing.get_absolute_url }}">{{ bid.listing.isbn|isbn_name|title }}<a/></h5></td>
           <td class="text-center"><h5>
-            {% if bid.listing.sold %}
-              <span class="label label-primary"><strong>Sold</strong></span>
+            {% if bid.listing.exchanged %}
+              <span class="label label-primary"><strong>Exchanged</strong></span>
             {% elif bid.listing.cancelled %}
               <span class="label label-default"><strong>Cancelled</strong></span>
             {% elif not listing.active %}

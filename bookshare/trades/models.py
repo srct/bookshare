@@ -145,13 +145,15 @@ class Flag(TimeStampedModel):
     # may eventually change as additional product categories are added
     OBSCENE = 'Obscene'
     SPAM = 'Spam'
-    ILLEGAL = 'Illegal'
+    COPYRIGHT = 'Copyright Violation'
+    ILLEGAL = 'Otherwise Illegal'
 
     FLAGGING_REASON_CHOICES = (
         (WRONG_PRODUCT_TYPE, 'Not a Textbook'),
         (OBSCENE, 'Obscene'),
         (SPAM, 'Spam'),
-        (ILLEGAL, 'Illegal'),
+        (COPYRIGHT, 'Copyright Violation'),
+        (ILLEGAL, 'Otherwise Illegal'),
     )
 
     flagger = models.ForeignKey(Student)

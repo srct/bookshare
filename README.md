@@ -107,6 +107,24 @@ Now, to configure your newly created database with the project settings, copy th
 
 Run `python manage.py makemigrations` and `python manage.py migrate` to configure something called 'migrations', which allow you to make changes to the tables in your database without screwing up existing information. Then run `python manage.py createsuperuser` to create an admin account, using the same username and email as you'll access through CAS. Finally, run `python manage.py syncdb` to set up all the tables in your empty database.
 
+### Email
+
+Note: if you do not set this, the app will work 95% fine, except you will not be able to test sending email.
+
+Amazon's Simple Email Service (SES) is set to the default on Bookshare, but these are actually generic settings that can handle any smtp server. Simply change the EMAIL_HOST, EMAIL_HOST_USER, and EMAIL_HOST_PASSWORD in secret.py, and change the EMAIL_PORT if necessary in settings.py.
+
+You will also need to change the default recipient email addresses in trades/views.py; these are set by default to Amazon's testing email address with the actual user email addresses commented out above. (The same holds for deployment; change the recipent address to send emails to the actual recipients!)
+
+### API Keys
+
+Optional: sending email with Amazon's SES is set to the default on Bookshare. Create an SES account and set the host, user, and password in secret.py.
+
+Optional: if you want to upload user media files to Amazon's Simple Storage Service (S3), you can add API keys for an S3 bucket to secret.py and set MEDIA_S3 to True in settings.py.
+
+### Cacheing
+
+Bookshare's urls are set by default to be cached for periods of time set so that ordinary user experience will not be impacted, but a substantial load will be lifted from a deployment server. However, this can be annoying when you're making and want to check small changes rapidly on development. You can edit the respective apps' urls.py files and remove the cacheing configurations, but make sure that you do not include such edits in any pushes!
+
 ### Haystack Configuration
 
 When your database is empty, this won't do much good, but once you've created a few objects, run 'python manage.py update_index' to set up your database objects for search.
@@ -129,6 +147,10 @@ threshold is reached.
 ### Servers
 
 You have three options from which to choose to serve your project for deployment. Apache + nginix, pure Apache, or pure nginx.
+
+### Cacheing
+
+Bookshare is in the process of being configured to use Redis for its cacheing.
 
 ## To-do
 

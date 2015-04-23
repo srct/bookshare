@@ -41,7 +41,7 @@ Now on your computer, navigate to the directory you in which you want to downloa
 
 Next, install these packages from the standard repositories
 
-`$ sudo apt-get install libldap2-dev mysql-server mysql-client libmysqlclient-dev python-mysqldb libsasl2-dev libjpeg-dev`
+`$ sudo apt-get install libldap2-dev mysql-server mysql-client libmysqlclient-dev python-mysqldb libsasl2-dev libjpeg-dev redis-server`
 
 If prompted to install additional required packages, install those as well.
 
@@ -107,6 +107,14 @@ Now, to configure your newly created database with the project settings, copy th
 
 Run `python manage.py makemigrations` and `python manage.py migrate` to configure something called 'migrations', which allow you to make changes to the tables in your database without screwing up existing information. Then run `python manage.py createsuperuser` to create an admin account, using the same username and email as you'll access through CAS. Finally, run `python manage.py syncdb` to set up all the tables in your empty database.
 
+### Configuring the Cache
+
+#### Notes on Cacheing
+
+Bookshare's urls are set to be cached for periods of time set so that ordinary user experience will not be impacted, but a substantial load will be lifted from a deployment server. However, this can be annoying when you're making and want to check small changes rapidly on development. You can edit the respective apps' urls.py files and remove the cacheing configurations, but make sure that you do not include such edits in any pushes!
+
+
+
 ### Email
 
 Note: if you do not set this, the app will work 95% fine, except you will not be able to test sending email.
@@ -120,10 +128,6 @@ You will also need to change the default recipient email addresses in trades/vie
 Optional: sending email with Amazon's SES is set to the default on Bookshare. Create an SES account and set the host, user, and password in secret.py.
 
 Optional: if you want to upload user media files to Amazon's Simple Storage Service (S3), you can add API keys for an S3 bucket to secret.py and set MEDIA_S3 to True in settings.py.
-
-### Cacheing
-
-Bookshare's urls are set by default to be cached for periods of time set so that ordinary user experience will not be impacted, but a substantial load will be lifted from a deployment server. However, this can be annoying when you're making and want to check small changes rapidly on development. You can edit the respective apps' urls.py files and remove the cacheing configurations, but make sure that you do not include such edits in any pushes!
 
 ### Haystack Configuration
 

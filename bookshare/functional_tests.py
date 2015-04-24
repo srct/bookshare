@@ -6,11 +6,10 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 
-import secret
 
-
-username = secret.USERNAME
-password = secret.PASSWORD
+# your mason username and password are neccessary to log in for test cases
+username = 'gmason'
+password = 'Gunston_Ha11'
 
 def sign_in_user(self):
     """ Hits the proper buttons to log a student in through Mason CAS."""
@@ -54,7 +53,8 @@ class SeleniumSetUpTearDown(unittest.TestCase):
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
-        self.browser.quit()
+        pass
+        # self.browser.quit()
 
 
 class FirstTimeLogIn(SeleniumSetUpTearDown):
@@ -263,35 +263,53 @@ class ListingTests(SeleniumSetUpTearDown):
 class LookoutTests(SeleniumSetUpTearDown):
     """Tests all the user interactions pertaining to the models in the lookouts app."""
 
-    def not_test_lookout_management(self):
-        # George Mason wishes to create a lookout for a book for his class.
-        #  self.browser.get('http://localhost:8000')
+    def tearDown(self):
+        # delete the George Mason Lookout
+        return super(LookoutTests, self).tearDown()
 
-        # sign_in_user(self)
+    def test_lookout_management(self):
+        # George Mason wishes to create a lookout for a book for his class.
+        self.browser.get('http://localhost:8000')
+        self.assertIn(u'SRCT Bookshare \u2022 Homepage', self.browser.title)
+
+        sign_in_user(self)
 
         # George decides to create a lookout by clicking the Create button
         # on the front page.
+        self.browser.find_element_by_link_text('Create').click()
 
-        # He then sees the ISBN field on the Lookout Creation page.
+        # He is sent to the Lookout creation page...
+        self.assertIn(u'SRCT Bookshare \u2022 Create Lookout', self.browser.title)
+
+        # and then sees the ISBN field.
+        isbn_input = self.browser.find_element_by_id('id_isbn')
 
         # He types in the ISBN of a textbook he'd like to automatically
         # search for...
+        isbn_input.send_keys('0743482743')
 
         # ...and then hits submit.
+        self.browser.find_element_by_id('submit-id-submit').click()
 
         # He is then redirected to the lookout detail page, where he can see a
         # lookout has been created, and all the listings to choose from.
+        self.assertIn(u'SRCT Bookshare \u2022 Lookouts \u2022 The Tragedy Of Julius Caesar',
+                      self.browser.title)
 
         # George however decides that he doesn't actually need a lookout for
         # this ISBN, and clicks the delete button.
+        self.browser.find_element_by_link_text('Delete this Lookout').click()
 
         # He's redirected to a confirmation page. George clicks 'delete'.
+        self.assertIn(u'SRCT Bookshare \u2022 Delete Lookout',
+                      self.browser.title)
+        self.browser.find_element_by_xpath("//input[@value='Confirm']").click()
 
         # George gets redirected back the the homepage.
+        self.assertIn(u'SRCT Bookshare \u2022 Homepage', self.browser.title)
 
         # Finished, he hits the log out button in the navbar.
-        # sign_out_user(self)
-        pass
+        sign_out_user(self)
 
 if __name__ == '__main__':
     unittest.main()

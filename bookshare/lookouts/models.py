@@ -32,4 +32,5 @@ class Lookout(TimeStampedModel):
 
     class Meta:
         ordering = ['isbn']
+        # a student can't create the same lookout twice
         unique_together = ['owner', 'isbn']

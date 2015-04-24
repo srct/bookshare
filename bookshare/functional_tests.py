@@ -263,6 +263,10 @@ class ListingTests(SeleniumSetUpTearDown):
 class LookoutTests(SeleniumSetUpTearDown):
     """Tests all the user interactions pertaining to the models in the lookouts app."""
 
+    def setUp(self):
+        # make sure that a Julius Caesar Lookout doesn't already exist
+        return super(LookoutTests, self).setUp()
+
     def tearDown(self):
         # delete the George Mason Lookout
         return super(LookoutTests, self).tearDown()

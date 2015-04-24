@@ -16,7 +16,7 @@ urlpatterns = patterns('',
         CreateListing.as_view(), name='create_listing'),
 
     url(r'^listing/(?P<slug>[\w-]+)/$',
-        cache_page(30)(ListingPage.as_view()), name='detail_listing'),
+        ListingPage.as_view(), name='detail_listing'),
 
     url(r'^listing/(?P<listing_slug>[\w-]+)/bid/(?P<slug>[\w-]+)/$',
         EditBid.as_view(), name='edit_bid'),

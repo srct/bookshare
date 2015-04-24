@@ -102,7 +102,7 @@ SRCT Bookshare &bull; {{ listing.title }}
     </h1>
   </div>
   <div class="col-xs-4 text-right">
-    <h1>
+    <h1 class="price">
       {% if listing.exchanged %}
         <small>Final</small> <strong>${{ listing.final_price }}</strong>
       {% else %}
@@ -220,7 +220,7 @@ SRCT Bookshare &bull; {{ listing.title }}
       <span class="label label-default">
         <a href="{% url 'cancel_listing' listing.slug %}">Cancel Listing</a>
       </span>
-      {% elif not listing.exchanged %}
+      {% elif listing.cancelled and not listing.exchanged %}
       <span class="label label-default">
         <a href="{% url 'reopen_listing' listing.slug %}">Reopen Listing</a>
       </span>

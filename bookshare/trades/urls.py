@@ -5,7 +5,7 @@ from django.views.decorators.cache import cache_page
 from .views import ListListings, CreateListing, ListingPage,\
     CreateFlag, DeleteFlag, EditListing, ExchangeListing,\
     UnExchangeListing, CancelListing, ReopenListing, CreateRating,\
-    EditRating, DeleteRating, EditBid
+    EditRating, DeleteRating, EditBid, DeleteListing
 
 
 urlpatterns = patterns('',
@@ -17,6 +17,9 @@ urlpatterns = patterns('',
 
     url(r'^listing/(?P<slug>[\w-]+)/$',
         ListingPage.as_view(), name='detail_listing'),
+
+    url(r'^listing/(?P<slug>[\w-]+)/delete/$',
+        DeleteListing.as_view(), name='delete_listing'),
 
     url(r'^listing/(?P<listing_slug>[\w-]+)/bid/(?P<slug>[\w-]+)/$',
         EditBid.as_view(), name='edit_bid'),

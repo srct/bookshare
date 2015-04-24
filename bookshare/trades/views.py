@@ -15,7 +15,7 @@ from django.utils.safestring import mark_safe
 # third party imports
 import requests
 from PIL import Image
-from braces.views import LoginRequiredMixin
+from braces.views import LoginRequiredMixin, SuperuserRequiredMixin
 from braces.views import FormValidMessageMixin
 from ratelimit.decorators import ratelimit
 # imports from your apps
@@ -168,6 +168,16 @@ class DetailListing(DetailView):
         context['can_flag'] = can_flag(me, self.get_object())
         context['flag_slug'] = flag_slug(me, self.get_object())
         return context
+
+
+class DeleteListing(LoginRequiredMixin, SuperuserRequiredMixin, DeleteView):
+    model = Listing
+    context_object_name = 'listing'
+    template_name = 'delete_listing.html'
+    login_url = 'login'
+
+    def get_success_url(self):
+        return reverse('mod')
 
 
 class CreateBid(CreateView):

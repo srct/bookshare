@@ -163,3 +163,14 @@ if MEDIA_S3:
 else:
     MEDIA_URL = '/media/'
     MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))
+
+# don't use redis when in develoment
+if DEBUG:
+    pass
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'redis_cache.RedisCache',
+            'LOCATION': '/var/run/redis/redis.sock',
+        },
+    }

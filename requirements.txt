@@ -15,7 +15,7 @@ django-model-utils==2.2
 django-piwik==0.1
 django-randomslugfield==0.3.0
 django-ratelimit==0.5.0
-django-redis==3.8.3
+django-redis-cache==0.13.0
 django-smtp-ssl==1.0
 django-storages==1.1.8
 djangorestframework==3.0.4
@@ -29,6 +29,7 @@ pyisbn==1.0.0
 python-dateutil==2.4.1
 pytz==2014.10
 requests==2.5.1
+redis==2.10.3
 selenium==2.45.0
 six==1.9.0
 wsgiref==0.1.2

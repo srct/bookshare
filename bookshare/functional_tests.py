@@ -1,11 +1,53 @@
-# functional tests
+# functional tests describe a 'user story', testing how the implementation works
+# with a complete black box as to how it works on the backend
 
-#import mechanize
 import unittest
 from selenium import webdriver
+from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException
 
+import secret
+
+
+username = secret.USERNAME
+password = secret.PASSWORD
+
+def sign_in_user(self):
+    """ Hits the proper buttons to log a student in through Mason CAS."""
+
+    # He lands on the the front page, and decide to log in.
+    self.browser.find_element_by_link_text('Log In').click()
+
+    # He is redirected login.gmu.edu, where he sees the username and
+    # password fields.
+    self.assertIn('Mason Central Authentication Service', self.browser.title)
+    username_input = self.browser.find_element_by_id('username')
+    password_input = self.browser.find_element_by_id('password')
+
+    # He types in his username and password...
+    username_input.send_keys(username)
+    password_input.send_keys(password)
+
+    # ...and hits the submit button.
+    self.browser.find_element_by_class_name('btn-submit').click()
+
+    # George is then redirected back to the homepage.
+    self.assertIn(u'SRCT Bookshare \u2022 Homepage', self.browser.title)
+
+def sign_out_user(self):
+    """ Hits the proper buttons to log a student out through Mason CAS."""
+
+    # George is on a nonadmin page with SRCT Bookshare, and wants to log out.
+    self.browser.find_element_by_link_text('Log Out').click()
+
+    # He is redirected to login.gmu.edu...
+    self.assertIn('Mason Central Authentication Service', self.browser.title)
+
+    # and sees a successful logout message.
+    self.assertIn(u'Logout successful', self.browser.find_element_by_tag_name('h2').text)
 
 class SeleniumSetUpTearDown(unittest.TestCase):
+    """TestCase subclass to add Selenium setup and teardown."""
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -15,137 +57,241 @@ class SeleniumSetUpTearDown(unittest.TestCase):
         self.browser.quit()
 
 
-class BookshareNotLoggedInTest(SeleniumSetUpTearDown):
+class FirstTimeLogIn(SeleniumSetUpTearDown):
+    """Tests that a Student is created and all their attributes set on a user's
+       initial login."""
 
-    def test_static_pages_load(self):
-        # George Mason is going to Bookshare for the first time and wants to
-        # see what it's all about. He tries to go to each of the pages he
-        # can visit without logging in.
+    def setUp(self):
+        # in the database
+        # other Student
+        # good Listing (other Student)
+        # bad Listing (other Student)
+        # George's other Listing
+        return super(FirstTimeLogIn, self).setUp()
 
+    def tearDown(self):
+        return super(FirstTimeLogIn, self).tearDown()
+
+    def not_test_student_creation(self):
+        # George Mason lands on Bookshare for the first time, and decides to
+        # log in.
+
+        # sign_in_user()
+
+        # He lands on the homepage (not an error page!)
+
+        # He then clicks on his gravatar icon in the navbar...
+
+        # ...and is redirected to his user page.
+
+        # His full name and email are displayed on his user page.
+
+        # George has to run, so he hits the log out button, but he's excited
+        # to return later.        
+        # sign_out_user()
+        pass
+
+class ListingTests(SeleniumSetUpTearDown):
+    """Tests all the user interactions pertaining to the models in the trades app."""
+
+    def setUp(self):
+        # in the database
+        # other Student
+        # good Listing (other Student)
+        # bad Listing (other Student)
+        # George's other Listing
+        return super(ListingTests, self).setUp()
+
+    def tearDown(self):
+        # delete the George Mason book listing
+        return super(ListingTests, self).tearDown()
+
+    def test_listing_management(self):
+        # George Mason has previously used Bookshare, but wants to sign in and
+        # create a new Listing.
         self.browser.get('http://localhost:8000')
-
-        heading = self.browser.find_element_by_tag_name('h1')
-        self.assertEquals(heading.text, 'Current Polls')
-
-        self.browser.find_element_by_link_text('How awesome is TDD?').click()
-
         self.assertIn(u'SRCT Bookshare \u2022 Homepage', self.browser.title)
 
-        self.browser.get('http://localhost:8000/about')
+        sign_in_user(self)
 
-        self.assertIn(u'SRCT Bookshare \u2022 About', self.browser.title)
+        # He clicks on 'Create Listing' button in the navbar to add his new
+        # textbook.
+        self.browser.find_element_by_link_text('Create Listing').click()
 
-        self.browser.get('http://localhost:8000/privacy')
+        # He his sent to the Create Listing page, where he sees a number of
+        # fields to post his Listing.
+        self.assertIn(u'SRCT Bookshare \u2022 Create Listing', self.browser.title)
+        isbn_input = self.browser.find_element_by_id('id_isbn')
+        course_abbr_input = self.browser.find_element_by_id('id_course_abbr')
+        condition_input = Select(self.browser.find_element_by_id('id_condition'))
+        access_code_input = Select(self.browser.find_element_by_id('id_access_code'))
+        price_input = self.browser.find_element_by_id('id_price')
+        # TODO: uploading a photo
+        description_input = self.browser.find_element_by_id('id_description')
 
-        self.assertIn(u'SRCT Bookshare \u2022 Privacy', self.browser.title)
+        # He types in his ISBN...
+        isbn_input.send_keys('0807830534')
+        # ...and is pleasantly surprised to see the title and more autocompleted.
 
-class BookshareLoggedInActionTest(SeleniumSetUpTearDown):
+        # TODO: test javascript
 
-    def test_new_user(self):
+        # He then fills out his post's remaining fields.
+        course_abbr_input.send_keys('HIST 121')
+
+        condition_input.select_by_value(u'Like New')
+        access_code_input.select_by_value(u'Access Code NOT Included')
+
+        price_input.send_keys('20')
+        description_input.send_keys('I would be willing to trade this book for one that I need next semester.')
+
+        # George has gotten to the bottom of the page and clicks on Submit...
+        self.browser.find_element_by_id('submit-id-submit').click()
+
+        # ...where he is redirected to his new listing's page.
+        self.assertIn(u'SRCT Bookshare \u2022 George Mason : Forgotten Founder',
+                      self.browser.title)
+
+        # George thinks he may have acted in haste, so decides to cancel his
+        # Listing. He sees the 'Cancel Listing' button and clicks it.
+        self.browser.find_element_by_link_text('Cancel Listing').click()
+
+        # George then sees the confirmation page...
+        self.assertIn(u'SRCT Bookshare \u2022 George Mason : Forgotten Founder \u2022 Cancel',
+                      self.browser.title)
+        
+        # and elects follow through with the cancellation.
+        self.browser.find_element_by_xpath("//input[@value='Cancel Your Listing']").click()
+
+        # He is then redirected back to his listing page, and now there's a
+        # large danger alert saying the listing has been cancelled.
+        self.assertIn(u'SRCT Bookshare \u2022 George Mason : Forgotten Founder',
+                      self.browser.title)
+        self.assertIn(u'This listing has been cancelled.',
+                      self.browser.find_element_by_class_name('alert-danger').text)
+
+        # George however is indecisive, and decides he in fact does want the
+        # the listing open for others to bid on it. He clicks on the 'Reopen
+        # Listing' button...
+        self.browser.find_element_by_link_text('Reopen Listing').click()
+
+        # ...and is sent to a confirmation page to reopen his Listing.
+        self.assertIn(u'SRCT Bookshare \u2022 George Mason : Forgotten Founder \u2022 Reopen',
+                      self.browser.title)
+
+        # He clicks to confirm he wants his listing back open...
+        self.browser.find_element_by_xpath("//input[@value='Reopen Your Listing']").click()
+
+        # ...and is sent back to the Listing's page, this time sans any alerts
+        self.assertIn(u'SRCT Bookshare \u2022 George Mason : Forgotten Founder',
+                      self.browser.title)
+        with self.assertRaises(NoSuchElementException):
+            self.assertIn(u'This listing has been cancelled.',
+                          self.browser.find_element_by_class_name('alert-danger').text)
+
+        # George thinks he's offering his textbook for a little too low of a
+        # price, so decides to edit his Listing to increase the price. He clicks
+        # on the 'Edit Listing' button...
+        self.browser.find_element_by_link_text('Edit Listing').click()
+
+        # ...where he's sent to a Listing editing page.
+        self.assertIn(u'SRCT Bookshare \u2022 George Mason : Forgotten Founder \u2022 Edit',
+                      self.browser.title)
+
+        # He sees the fields on the page and finds the one for price.
+        price_input = self.browser.find_element_by_id('id_price')
+
+        # George increases his asking price for the textbook.
+        price_input.clear()
+        price_input.send_keys('30')
+
+        # He then hits Submit...
+        self.browser.find_element_by_xpath("//input[@value='Update']").click()
+        
+        # and is sent back to the Listing page...
+        self.assertIn(u'SRCT Bookshare \u2022 George Mason : Forgotten Founder',
+                      self.browser.title)
+       
+        # and his asking price has also been updated.
+        self.assertIn(u'$30', self.browser.find_element_by_class_name('price').text)
+
+        # George is finished up for now, so he hits the log out button on the navbar.
+        sign_out_user(self)
+
+    def not_test_bidding(self):
+        # self.browser.get('http://localhost:8000')
+
+        # sign_in_user()
+
+        # George finds himself on someone else's listing page.
+
+        # George drives a hard bargain
+
+        # sign_out_user()
+
         pass
 
-    def test_returing_user(self):
+    def not_test_flagging(self):
+
+        # self.browser.get('http://localhost:8000')
+
+        # sign_in_user()
+
+        # sign_out_user()
+
         pass
 
-    def test_post_a_listing(self):
-        # George is on the Bookshare homepage, and decides he wants to post
-        # a listing. He clicks the 'Create Listing' button in the navbar.
+    def not_test_exchanging(self):
 
-        # He is taken to Create Listing page.
+       # self.browser.get('http://localhost:8000')
 
-        # He sees a form to post his Listing.
+       # sign_in_user()
 
-        # He creates a listing for his biography, 'George Mason, Forgotten Founder'.
+       # sign_out_user()
 
-        # He clicks 'Create'.
-
-        # He is redirected to a page with the details of his listing.
         pass
 
-    def test_edit_a_listing(self):
+    def not_test_rating(self):
+
+       # self.browser.get('http://localhost:8000')
+
+       # sign_in_user()
+
+       # sign_out_user()
+
         pass
 
-    def test_cancel_a_listing(self):
-        # George is on his listing page, and decides to cancel his listing. He
-        # clicks on the 'Cancel Listing' button in the middle of the page.
+class LookoutTests(SeleniumSetUpTearDown):
+    """Tests all the user interactions pertaining to the models in the lookouts app."""
 
-        # He is taken to a confirmation page.
+    def not_test_lookout_management(self):
+        # George Mason wishes to create a lookout for a book for his class.
+        #  self.browser.get('http://localhost:8000')
 
-        # He clicks that yes, he does want to cancel his listing.
+        # sign_in_user(self)
 
-        # He is redirected back to his listing page, but this time with a
-        # 'This listing has been cancelled' danger banner across the top.
+        # George decides to create a lookout by clicking the Create button
+        # on the front page.
+
+        # He then sees the ISBN field on the Lookout Creation page.
+
+        # He types in the ISBN of a textbook he'd like to automatically
+        # search for...
+
+        # ...and then hits submit.
+
+        # He is then redirected to the lookout detail page, where he can see a
+        # lookout has been created, and all the listings to choose from.
+
+        # George however decides that he doesn't actually need a lookout for
+        # this ISBN, and clicks the delete button.
+
+        # He's redirected to a confirmation page. George clicks 'delete'.
+
+        # George gets redirected back the the homepage.
+
+        # Finished, he hits the log out button in the navbar.
+        # sign_out_user(self)
         pass
-
-    def reopen_a_listing(self):
-        # George decides perhaps he didn't want to cancel his listing after all.
-        # He clicks on the 'Reopen Listing' button in the middle of the page.
-
-        # He is taken to a confirmation page.
-
-        # He clicks that yes, he does want to reopen his listing.
-
-        # He is redirected back to his listing page, which now no longer has
-        # the cancellation danger banner across the top.
-        pass
-
-
-    def test_flag_a_listing(self):
-        pass
-
-    def test_remove_a_flag(self):
-        pass
-
-    def test_create_a_bid(self):
-        pass
-
-    def test_edit_a_bid(self):
-        pass
-
-    def test_exchange_a_listing(self):
-        pass
-
-    def test_cancel_an_exchange(self):
-        pass
-
-    def test_rate_an_exchange(self):
-        pass
-
-    def test_edit_a_rating(self):
-        pass
-
-    def test_delete_a_rating(self):
-        pass
-
-    def test_create_a_lookout(self):
-        pass
-
-    def test_delete_a_lookout(self):
-        pass
-
-    def test_search_for_a_listing(self):
-        pass
-
-# class BookshareLoggedInPassiveTest(SeleniumSetUpTearDown):
-
-# visit recent listings
-# visit charts
-# visit a lookout page
-# visit your profile page
-# visit another user's profile page
-# your profile ratings
-# visit another's profile ratings
-
-# cas_url = 'https://login.gmu.edu/login'
-# br = mechanize.Browser()
-# br.set_handle_robots(False)
-# br.open(cas_url)
-# print br.open(cas_url)
-# br.select_form(nr=0)
-# br['username'] = 'dbond2'
-# br['password'] = 'chG4b6a33n'
-# br.method = "POST"
-# response = br.submit()
 
 if __name__ == '__main__':
     unittest.main()

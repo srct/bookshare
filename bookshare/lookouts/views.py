@@ -1,6 +1,11 @@
 # core django imports
 from core.models import Student
 from django.http import HttpResponseForbidden
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect
+from django.db import IntegrityError
+from django.core.urlresolvers import reverse
+from django.utils.safestring import mark_safe
 from django.views.generic import CreateView, DetailView, DeleteView
 # third-party imports
 from braces.views import LoginRequiredMixin
@@ -17,12 +22,6 @@ class CreateLookout(LoginRequiredMixin, CreateView):
     template_name = 'create_lookout.html'
     login_url = 'login'
 
-    def form_valid(self, form):
-        me = Student.objects.get(user=self.request.user)
-
-        form.instance.owner = me
-        return super(CreateLookout, self).form_valid(form)
-
     def get_context_data(self, **kwargs):
         context = super(CreateLookout, self).get_context_data(**kwargs)
 
@@ -31,11 +30,24 @@ class CreateLookout(LoginRequiredMixin, CreateView):
 
         return context
 
+    def form_valid(self, form):
+        me = Student.objects.get(user=self.request.user)
+
+        form.instance.owner = me
+        try:
+            return super(CreateLookout, self).form_valid(form)
+        except IntegrityError:
+            preexisting_lookout = Lookout.objects.get(owner=form.instance.owner, isbn=form.instance.isbn)
+            link_lookout = '<a href="/lookouts/%s/">' % (preexisting_lookout.slug)
+            integrity_msg = mark_safe("""You already have a lookout for that ISBN!
+                                         %sSee it here.</a>""" % (link_lookout))
+            messages.add_message(self.request, messages.INFO, integrity_msg)
+            return HttpResponseRedirect(reverse('create_lookout'))
+
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     @ratelimit(key='user', rate='50/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         return super(CreateLookout, self).post(request, *args, **kwargs)
-
 
 class DetailLookout(LoginRequiredMixin, DetailView):
     model = Lookout

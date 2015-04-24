@@ -1,12 +1,12 @@
 {% extends 'layouts/base.html' %}
 
+{% load trades_extras %}
+
 {% block title %}
-SRCT Bookshare &bull; Lookouts
+SRCT Bookshare &bull; Lookouts &bull; {{ lookout.isbn|isbn_name|title }}
 {% endblock %}
 
 {% block content %}
-
-{% load trades_extras %}
 
 <div class="page-header" id="banner">
   <div class="row">

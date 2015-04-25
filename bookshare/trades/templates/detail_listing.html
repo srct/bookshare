@@ -2,7 +2,7 @@
 
 {% block title %}
 SRCT Bookshare &bull; {{ listing.title }}
-{% endblock %}
+{% endblock title %}
 
 {% block content %}
 
@@ -19,7 +19,7 @@ SRCT Bookshare &bull; {{ listing.title }}
         $('#myModal').modal('show');
     });
 </script>
-{% endblock %}
+{% endblock javascript %}
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -318,4 +318,4 @@ SRCT Bookshare &bull; {{ listing.title }}
 
 </div>
 
-{% endblock %}
+{% endblock content %}

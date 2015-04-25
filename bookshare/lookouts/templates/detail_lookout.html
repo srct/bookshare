@@ -4,7 +4,7 @@
 
 {% block title %}
 SRCT Bookshare &bull; Lookouts &bull; {{ lookout.isbn|isbn_name|title }}
-{% endblock %}
+{% endblock title %}
 
 {% block content %}
 
@@ -32,4 +32,4 @@ SRCT Bookshare &bull; Lookouts &bull; {{ lookout.isbn|isbn_name|title }}
   {% endfor %}
 </div>
 
-{% endblock %}
+{% endblock content %}

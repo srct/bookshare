@@ -315,8 +315,6 @@ class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     fields = ['price', 'text', ]
 
-    success_url = '/'
-
     def get_success_url(self):
         return reverse('detail_listing',
                        kwargs={'slug': self.object.listing.slug})
@@ -349,7 +347,6 @@ class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition',
               'access_code', 'description', 'price', 'photo', ]
-    template_suffix_name = '_edit'
 
     def get_context_data(self, **kwargs):
         context = super(EditListing, self).get_context_data(**kwargs)

@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     url(r'^listing/(?P<slug>[\w-]+)/delete/$',
         DeleteListing.as_view(), name='delete_listing'),
 
-    url(r'^listing/(?P<listing_slug>[\w-]+)/bid/(?P<slug>[\w-]+)/$',
+    url(r'^listing/(?P<listing_slug>[\w-]+)/bid/(?P<slug>[\w-]+)/edit/$',
         EditBid.as_view(), name='edit_bid'),
 
     url(r'^listing/(?P<slug>[\w-]+)/flag/$',

@@ -40,6 +40,8 @@ class Listing(TimeStampedModel):
         (AC_NOT_INCLUDED, 'Access Code NOT Included'),
     )
 
+    # django automatically creates an index for all ForeignKey fields
+    # e.g. no need for 'db_index = True' on relational fields
     poster = models.ForeignKey(Student)
 
     title = models.CharField(max_length=200)
@@ -68,6 +70,7 @@ class Listing(TimeStampedModel):
                               default='listing_photos/default_listing_photo.jpg')
 
     # these remaining fields are for internal usage, not for users
+    # possibly should be indexed-- used commonly on .exclude() or .filter()
     exchanged = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
 

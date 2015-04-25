@@ -28,12 +28,19 @@ def create_user(tree):
 
     if user_created:
         user.email = "%s@%s" % (username, settings.ORGANIZATION_EMAIL_DOMAIN)
-#        print "hello"
-#        name_list = pfinfo(str(username))
-#        print "world"
-#        user.first_name = name_list[1].rstrip()
-#        print "something"
-#        user.last_name = name_list[0]
+        print "hello"
+        name_list = pfinfo(str(username))
+        print name_list, "name_list"
+        first_name = name_list[1].lstrip().split(' ')
+        if len(first_name) > 1:
+            no_mi = first_name[:-1]
+            user.first_name = ' '.join(no_mi)
+        else:
+            user.first_name = ' '.join(first_name)
+        last_name = name_list[0]
+        user.last_name = name_list[0]
+
+        print "world"
         user.save()
         new_student = Student.objects.create(user=user)
         new_student.save()

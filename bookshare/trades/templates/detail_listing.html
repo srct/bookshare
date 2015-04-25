@@ -84,6 +84,8 @@ SRCT Bookshare &bull; {{ listing.title }}
   </div>
 {% endif %}
 
+{% load trades_extras %}
+
 <div class="row">
   <div class="col-xs-8">
     <h1>
@@ -106,7 +108,7 @@ SRCT Bookshare &bull; {{ listing.title }}
     <h4>
       <small>by</small> {{ listing.author }}
       {% if listing.year %}
-        ({{ listing.year }})
+        ({{ listing.year|bc }})
       {% endif %}
     </h4>
   </div>

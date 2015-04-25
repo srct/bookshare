@@ -39,3 +39,11 @@ def empty_stars(avg_stars):
 @register.filter(name='int_maker')
 def int_maker(num):
     return int(num)
+
+@register.filter(name='bc')
+def bc(num):
+    if num < 0:
+        positive_value = str(abs(num))
+        return "%s B.C." % (positive_value)
+    else:
+        return num

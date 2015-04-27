@@ -17,8 +17,12 @@ def pfinfo(u_name):
         print e
     else:
         pf_json = metadata.json()
-        name = pf_json['results'][0]['name']
-        return name.split(',')
+        try:
+            name = pf_json['results'][0]['name']
+            return name.split(',')
+        # if the name is not in peoplefinder, return empty first and last name
+        except IndexError:
+            return ['', '']
 
 
 def create_user(tree):

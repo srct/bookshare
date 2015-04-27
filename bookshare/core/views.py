@@ -1,10 +1,13 @@
 # core django imports
-from django.views.generic import DetailView
+from django.views.generic import DetailView, FormView
+from django.core.urlresolvers import reverse
 # third-party imports
 from braces.views import LoginRequiredMixin
 from django.db.models import Sum
+from ratelimit.decorators import ratelimit
 # imports from your apps
 from .models import Student
+from .forms import UserNameForm
 from lookouts.models import Lookout
 from trades.models import Listing, Bid, Rating
 
@@ -43,6 +46,37 @@ class DetailStudent(LoginRequiredMixin, DetailView):
 
         return context
 
+
+class UpdateStudent(LoginRequiredMixin, FormView):
+    template_name = 'update_student.html'
+    form_class = UserNameForm
+    login_url = 'login'
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateStudent, self).get_context_data(**kwargs)
+
+        form = UserNameForm()
+
+        form.fields['first_name'].initial = self.request.user.first_name
+        form.fields['last_name'].initial = self.request.user.last_name
+
+        context['form'] = form
+        return context
+
+    def form_valid(self, form):
+        self.request.user.first_name = form.instance.first_name
+        self.request.user.last_name = form.instance.last_name
+        self.request.user.save()
+        return super(UpdateStudent, self).form_valid(form)
+
+    @ratelimit(key='user', rate='5/m', method='POST', block=True)
+    @ratelimit(key='user', rate='10/day', method='POST', block=True)
+    def post(self, request, *args, **kwargs):
+        return super(UpdateStudent, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('profile',
+                        kwargs={'slug': self.request.user.student.slug})
 
 class StudentRatings(LoginRequiredMixin, DetailView):
     model = Student

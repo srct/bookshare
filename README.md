@@ -4,13 +4,15 @@ SRCT Bookshare is a platform for GMU students to buy and sell their textbooks.
 
 ## On Contributing
 
-Bookshare is still in its childhood and needs all the help it can get. Even if you don't feel like you can be helpful with the more technical aspects, we definitely need designers, technical writers, and testers.
+While Bookshare has made its way into a beta release, it still needs all the help it can get. Even if you don't feel like you can be helpful with the more technical aspects, we definitely need designers, technical writers, and testers.
 
 There are many things that can be done with this project (see the "To Do" section), but sometimes it's the small things that count, so don't be afraid of contributing just a small spelling mistake.
 
+The beta release was tagged April 26, 2015 in the master branch. All development aside from emergency exception handling and security vulnerabilities, additional test cases, and supplemental documentation should be made in the 1.0 release branch.
+
 If you need help at all please contact any SRCT member. We want people to contribute, so if you are struggling, or just want to learn we are more than willing to help.
 
-The project lead for this project is **Eric Cawi** ( *ecawi@gmu.edu* ) and lead developer is **Michel Rouly** ( *jrouly@gmu.edu* ).
+The project lead for this project is **Daniel Bond** (*dbond2@gmu.edu* ).
 
 Please visit the [SRCT Wiki](http://wiki.srct.gmu.edu/) for more information on this and other SRCT projects, along with other helpful links and tutorials.
 
@@ -169,4 +171,3 @@ The list of to-do items is kept track of on the gitlab bookshare issues page. ht
 Copyright (C) 2013 Mason SRCT: Daniel Bond, Michel Rouly, Eric Cawi, and contributors
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. See the LICENSE file in the root directory of this project for more information.
-

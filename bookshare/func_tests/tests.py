@@ -1,10 +1,14 @@
 # functional tests describe a 'user story', testing how the implementation works
 # with a complete black box as to how it works on the backend
 
-import unittest
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
+
+from django.contrib.auth.models import User
+from core.models import Student
+from trades.models import Listing
 
 
 # your mason username and password are neccessary to log in for test cases
@@ -45,7 +49,7 @@ def sign_out_user(self):
     # and sees a successful logout message.
     self.assertIn(u'Logout successful', self.browser.find_element_by_tag_name('h2').text)
 
-class SeleniumSetUpTearDown(unittest.TestCase):
+class SeleniumSetUpTearDown(StaticLiveServerTestCase):
     """TestCase subclass to add Selenium setup and teardown."""
 
     def setUp(self):
@@ -95,7 +99,6 @@ class ListingTests(SeleniumSetUpTearDown):
     """Tests all the user interactions pertaining to the models in the trades app."""
 
     def setUp(self):
-        # in the database
         # other Student
         # good Listing (other Student)
         # bad Listing (other Student)
@@ -103,13 +106,12 @@ class ListingTests(SeleniumSetUpTearDown):
         return super(ListingTests, self).setUp()
 
     def tearDown(self):
-        # delete the George Mason book listing
         return super(ListingTests, self).tearDown()
 
     def test_listing_management(self):
         # George Mason has previously used Bookshare, but wants to sign in and
         # create a new Listing.
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         self.assertIn(u'SRCT Bookshare \u2022 Homepage', self.browser.title)
 
         sign_in_user(self)
@@ -273,7 +275,7 @@ class LookoutTests(SeleniumSetUpTearDown):
 
     def test_lookout_management(self):
         # George Mason wishes to create a lookout for a book for his class.
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         self.assertIn(u'SRCT Bookshare \u2022 Homepage', self.browser.title)
 
         sign_in_user(self)
@@ -314,6 +316,3 @@ class LookoutTests(SeleniumSetUpTearDown):
 
         # Finished, he hits the log out button in the navbar.
         sign_out_user(self)
-
-if __name__ == '__main__':
-    unittest.main()

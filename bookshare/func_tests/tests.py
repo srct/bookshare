@@ -66,11 +66,6 @@ class FirstTimeLogIn(SeleniumSetUpTearDown):
        initial login."""
 
     def setUp(self):
-        # in the database
-        # other Student
-        # good Listing (other Student)
-        # bad Listing (other Student)
-        # George's other Listing
         return super(FirstTimeLogIn, self).setUp()
 
     def tearDown(self):
@@ -90,6 +85,18 @@ class FirstTimeLogIn(SeleniumSetUpTearDown):
 
         # His full name and email are displayed on his user page.
 
+        # George wants to edit his name.
+
+        # He clicks on the edit button.
+
+        # He adds a 'IV' to the end of his last name.
+
+        # George Mason IV then hits Save.
+
+        # He's redirected to the user page...
+
+        # ...where his name has been updated.
+
         # George has to run, so he hits the log out button, but he's excited
         # to return later.        
         # sign_out_user()
@@ -99,10 +106,6 @@ class ListingTests(SeleniumSetUpTearDown):
     """Tests all the user interactions pertaining to the models in the trades app."""
 
     def setUp(self):
-        # other Student
-        # good Listing (other Student)
-        # bad Listing (other Student)
-        # George's other Listing
         return super(ListingTests, self).setUp()
 
     def tearDown(self):
@@ -223,8 +226,10 @@ class ListingTests(SeleniumSetUpTearDown):
         # self.browser.get('http://localhost:8000')
 
         # sign_in_user()
+ 
+        # George goes to the Latest Listings page in the navbar.
 
-        # George finds himself on someone else's listing page.
+        # He clicks on the listing for John Adams
 
         # George drives a hard bargain
 
@@ -238,27 +243,55 @@ class ListingTests(SeleniumSetUpTearDown):
 
         # sign_in_user()
 
+        # George clicks on the Search button in the navbar
+
         # sign_out_user()
 
         pass
 
+    # note about SES!
     def not_test_exchanging(self):
 
-       # self.browser.get('http://localhost:8000')
+        # self.browser.get('http://localhost:8000')
 
-       # sign_in_user()
+        # sign_in_user()
 
-       # sign_out_user()
+        # George goes to his user page.
+
+        # He sees there is a bid on one of his listings.
+
+        # He goes to his listing page and sees the listing.
+
+        # Deeming it satisfactory, George decides to exchange his listing
+        # with Abagail
+
+        # George is fickle and gets cold feet.
+
+        # He decides to leave his listing unsold, and await a better bid,
+        # perhaps something in the text box.
+
+        # sign_out_user()
 
         pass
 
     def not_test_rating(self):
 
-       # self.browser.get('http://localhost:8000')
+        # self.browser.get('http://localhost:8000')
 
-       # sign_in_user()
+        # Some time has passed.
 
-       # sign_out_user()
+        # sign_in_user()
+
+        # George has sold his listing to Abagail.
+
+        # He decides to leave a rating.
+
+        # He gives Abagail five out of five stars...
+
+        # ...and leaves the following review.
+
+        # Finished, he signs out.
+        # sign_out_user()
 
         pass
 

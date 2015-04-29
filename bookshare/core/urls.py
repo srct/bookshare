@@ -1,5 +1,6 @@
 # core django imports
 from django.conf.urls import patterns, url
+from django.views.decorators.cache import cache_page
 # imports from your apps
 from .views import DetailStudent, StudentRatings, UpdateStudent
 
@@ -8,8 +9,8 @@ urlpatterns = patterns('',
         UpdateStudent.as_view(), name='name_change'),
 
     url(r'^(?P<slug>[\w-]+)/$',
-        DetailStudent.as_view(), name='profile'),
+        cache_page(12)(DetailStudent.as_view()), name='profile'),
 
     url(r'^(?P<slug>[\w-]+)/ratings/$',
-        StudentRatings.as_view(), name='ratings'),
+        cache_page(12)(StudentRatings.as_view()), name='ratings'),
 )

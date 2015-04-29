@@ -12,7 +12,7 @@ Poster message: {{ email_message }}
 Thanks for using SRCT Bookshare! :-)
 
 (Heads up: no one watches this email address. If you need to get in touch with
-us, for any reason, see srct.gmu.edu/contact.)
+us, for any reason, email bookshare@srct.gmu.edu or see srct.gmu.edu/contact.)
 
 ---
 

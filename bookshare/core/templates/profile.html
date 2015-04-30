@@ -110,7 +110,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
       {% if student.user == request.user %}
         <h4>
         <strong>Total Exchanges:</strong> {{ exchanges }} |
-        <strong>Total Proceeds:</strong> ${{ proceeds }}
+        <strong>Total Proceeds:</strong> ${{ proceeds|default_if_none:"0" }}
         </h4>
       {% endif %}
     </div>

@@ -22,7 +22,7 @@ SRCT Bookshare &bull; Charts
 <div class="row">
   <div class="col-md-12 text-center">
   <p><h2>Featuring <strong>{{ total_bids|intcomma }} bids</strong> on <strong>{{ total_listings|intcomma }} listings</strong> from <strong>{{ total_students|intcomma }} students</strong> (so far).</h2></p>
-  <p><h2>Total Proceeds: <strong>${{ total_proceeds|intcomma }}</strong></h2></p>
+  <p><h2>Total Proceeds: <strong>${{ total_proceeds|default_if_none:"0"|intcomma }}</strong></h2></p>
   </div>
 </div>
 

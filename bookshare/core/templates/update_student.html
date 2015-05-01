@@ -21,8 +21,14 @@ SRCT Bookshare &bull; Edit Name
       <div class="panel-heading">
         <form action="" method="post">{% csrf_token %}
           {{ form.as_p }}
-          <input type="submit" value="Submit" class="btn btn-primary" />
-          <input type="cancel" value="Never Mind" class="btn btn-default" onclick="history.back()"/>
+          <div class="row">
+            <div class="col-md-3">
+              <input type="submit" value="Submit" class="btn btn-primary btn-block" />
+            </div>
+            <div class="col-md-3">
+              <input type="cancel" value="Never Mind" class="btn btn-default btn-block" onclick="history.back()"/>
+            </div>
+          </div>
         </form>
       </div>
     </div>

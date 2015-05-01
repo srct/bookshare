@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.views.decorators.cache import cache_page
 # imports from your apps
-from .views import HomepageView, ChartsView, ModView
+from .views import HomepageView, ChartsView
 
 
 admin.autodiscover()
@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^share/', include('trades.urls')),
     url(r'^student/', include('core.urls')),
     url(r'^lookouts/', include('lookouts.urls')),
+    url(r'^mod/', include('mod.urls')),
 
     # search
     url(r'^search/', include('haystack.urls'), name='search'),
@@ -29,8 +30,6 @@ urlpatterns = patterns('',
     # for each user
     url(r'^$', HomepageView.as_view(), name='homepage'),
     url(r'^charts/?$', cache_page(60 * 10)(ChartsView.as_view()), name='charts'),
-
-    url(r'^mod/?$', ModView.as_view(), name='mod'),
 
     # static pages
     url(r'^about/?$',

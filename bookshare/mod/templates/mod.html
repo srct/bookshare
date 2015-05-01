@@ -1,0 +1,46 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+SRCT Bookshare &bull; Mod
+{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1 text-center">
+    <h1>Listings by number of Flags</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <table class="table table-bordered table-hover table-condensed text-center">
+      <thead>
+        <td class="col-md-1"><h4><strong>Number</strong></h4></td>
+        <td class="col-md-6"><h4><strong>Title</strong></h4></td>
+        <td class="col-md-3"><h4><strong>Poster</strong></h4></td>
+        <td class="col-md-2"><h4><strong>Action</strong></h4></td>
+      </thead>
+      <tbody>
+        {% for listing in listings %}
+          <tr>
+            <td>{{ listing.num_flags }}</td>
+            <td><a href="{{ listing.get_absolute_url }}" target="_blank">
+              <strong>{{ listing.title }}</strong>
+            </a></td>
+            <td><a href="{{ listing.poster.get_absolute_url }}" target="_blank">
+              {{ listing.poster.user.get_full_name }}
+            </a></td>
+            <td><a href="{% url 'delete_listing' listing.slug %}">
+              <span class="label label-danger"><strong>Delete</strong></span>
+            </a></td>
+          </tr>
+        {% empty %}
+          Nothing Here!
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock content %}

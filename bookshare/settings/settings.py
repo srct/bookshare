@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'trades',
     'core',
     'lookouts',
+    'mod',
     # packages
     'randomslugfield',
     'django_gravatar',

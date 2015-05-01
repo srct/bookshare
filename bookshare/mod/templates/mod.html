@@ -1,0 +1,35 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+SRCT Bookshare &bull; Mod
+{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1 text-center">
+    <h1>Moderation</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+
+    <legend class="text-center">Moderate by...</legend>
+
+    <div class="col-md-4">
+      <a href="{% url 'flag_mod' %}" class="btn btn-primary btn-lg btn-block text-center">Flags</a>
+    </div>
+
+    <div class="col-md-4">
+      <a href="{% url 'listing_nums' %}" class="btn btn-primary btn-lg btn-block text-center">Listings</a>
+    </div>
+
+    <div class="col-md-4">
+      <a href="{% url 'email_ratio' %}" class="btn btn-primary btn-lg btn-block text-center">Emails</a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock content %}

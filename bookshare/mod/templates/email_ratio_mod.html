@@ -1,0 +1,52 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+SRCT Bookshare &bull; Mod
+{% endblock title %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1 text-center">
+    <h1>Ratio Emails Sent to Listings Posted</h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10 col-md-offset-1">
+    <table class="table table-bordered table-hover table-condensed text-center">
+      <thead>
+        <td class="col-md-2"><h4><strong>Emails Sent</strong></h4></td>
+        <td class="col-md-2"><h4><strong>Listings Posted</strong></h4></td>
+        <td class="col-md-1"><h4><strong>Ratio</strong></h4></td>
+        <td class="col-md-5"><h4><strong>Student</strong></h4></td>
+        <td class="col-md-2"><h4><strong>Action</strong></h4></td>
+      </thead>
+      <tbody>
+        {% for student in email_happy_students %}
+          <tr>
+            <td>{{ student.emails_sent }}</td>
+            <td>{{ student.num_books }}</td>
+            {% widthratio student.emails_sent student.num_books 1 as ratio %}
+            <td>{{ ratio }}</td>
+            <td><a href="{{ student.get_absolute_url }}" target="_blank">
+              <strong>{{ student.user.get_full_name }}</strong> (<em>{{ student.user.username }}</em>)
+            </a></td>
+            <td>
+              <a href="#">
+                <span class="label label-warning"><strong>Email</strong></span>
+              </a>
+              <a href="#">
+                <span class="label label-danger"><strong>Make Inactive</strong></span>
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          Nothing Here!
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock content %}

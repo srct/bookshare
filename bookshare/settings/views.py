@@ -1,10 +1,10 @@
 # standard library imports
 from collections import Counter
 # core django imports
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView
 from django.db.models import Sum, Count
 # third party imports
-from braces.views import LoginRequiredMixin, SuperuserRequiredMixin
+from braces.views import LoginRequiredMixin
 # imports from your apps
 from lookouts.models import Lookout
 from trades.models import Listing, Bid
@@ -55,9 +55,3 @@ class ChartsView(LoginRequiredMixin, TemplateView):
         context['total_students'] = Student.objects.count()
         context['total_proceeds'] = total_proceeds
         return context
-
-class ModView(LoginRequiredMixin, SuperuserRequiredMixin, ListView):
-    queryset = Listing.objects.annotate(num_flags=Count('flag')).order_by('-num_flags')[:20]
-    context_object_name = 'listings'
-    template_name = 'mod.html'
-    login_url = 'login'

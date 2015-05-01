@@ -14,6 +14,8 @@ class Student(TimeStampedModel):
 
     slug = AutoSlugField(populate_from='user', unique=True)
 
+    emails_sent = models.PositiveIntegerField(default=0)
+
     def get_absolute_url(self):
         return reverse('profile', kwargs={'slug': self.slug})
 

@@ -403,6 +403,9 @@ class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
+        self.obj.poster.emails_sent += 2
+        self.obj.poster.save()
+
         return super(ExchangeListing, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -467,6 +470,9 @@ class UnExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
                                      from_email, [to], [cc])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
+
+        self.obj.poster.emails_sent += 2
+        self.obj.poster.save()
 
         # this has to come after the email has been sent, otherwise these are
         # cleaned out

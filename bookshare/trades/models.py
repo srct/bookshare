@@ -47,8 +47,10 @@ class Listing(TimeStampedModel):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
     isbn = models.CharField(max_length=20,
-                            validators=[RegexValidator('^[0-9xX-]{10,20}',
-                                        message='Please enter a valid ISBN.')])
+                            validators=[RegexValidator(
+                                        regex='^[0-9xX-]{10,20}',
+                                        message='Please enter a valid ISBN.',
+                                        code='invalid_isbn')])
     year = models.IntegerField(null=True, blank=True,
         # some professors may assign books still to be officially published
         validators=[MaxValueValidator(date.today().year+1)])
@@ -61,8 +63,10 @@ class Listing(TimeStampedModel):
     access_code = models.CharField(choices=ACCESS_CODE_CHOICES,
                                    max_length=30, default=NOT_APPLICABLE)
     course_abbr = models.CharField(max_length=10, blank=True,
-                                   validators=[RegexValidator('^([a-zA-Z]){2,4} (\d){3}$',
-                                               message='Please enter a valid course.')])
+                                   validators=[RegexValidator(
+                                               regex='^([a-zA-Z]){2,4} (\d){3}$',
+                                               message='Please enter a valid course.',
+                                               code='invalid_course_abbr')])
     description = models.TextField(blank=True, max_length=2000)
     price = models.PositiveIntegerField(default=0,
                                         validators=[MaxValueValidator(1000)])

@@ -8,38 +8,27 @@ SRCT Bookshare &bull; Mod
 
 <div class="row">
   <div class="col-md-10 col-md-offset-1 text-center">
-    <h1>Listings by number of Flags</h1>
+    <h1>Moderation</h1>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-10 col-md-offset-1">
-    <table class="table table-bordered table-hover table-condensed text-center">
-      <thead>
-        <td class="col-md-1"><h4><strong>Number</strong></h4></td>
-        <td class="col-md-6"><h4><strong>Title</strong></h4></td>
-        <td class="col-md-3"><h4><strong>Poster</strong></h4></td>
-        <td class="col-md-2"><h4><strong>Action</strong></h4></td>
-      </thead>
-      <tbody>
-        {% for listing in listings %}
-          <tr>
-            <td>{{ listing.num_flags }}</td>
-            <td><a href="{{ listing.get_absolute_url }}" target="_blank">
-              <strong>{{ listing.title }}</strong>
-            </a></td>
-            <td><a href="{{ listing.poster.get_absolute_url }}" target="_blank">
-              {{ listing.poster.user.get_full_name }}
-            </a></td>
-            <td><a href="{% url 'delete_listing' listing.slug %}">
-              <span class="label label-danger"><strong>Delete</strong></span>
-            </a></td>
-          </tr>
-        {% empty %}
-          Nothing Here!
-        {% endfor %}
-      </tbody>
-    </table>
+
+    <legend class="text-center">Moderate by...</legend>
+
+    <div class="col-md-4">
+      <a href="{% url 'flag_mod' %}" class="btn btn-primary btn-lg btn-block text-center">Flags</a>
+    </div>
+
+    <div class="col-md-4">
+      <a href="{% url 'listing_nums' %}" class="btn btn-primary btn-lg btn-block text-center">Listings</a>
+    </div>
+
+    <div class="col-md-4">
+      <a href="{% url 'email_ratio' %}" class="btn btn-primary btn-lg btn-block text-center">Emails</a>
+    </div>
+
   </div>
 </div>
 

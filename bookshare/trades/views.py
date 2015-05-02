@@ -224,6 +224,44 @@ class CreateFlag(LoginRequiredMixin, CreateView):
     context_object_name = 'flag'
     login_url = 'login'
 
+    def get(self, request, *args, **kwargs):
+        me = Student.objects.get(user=self.request.user)
+
+        # duplicated code!!!
+        current_url = self.request.get_full_path()
+        listing_slug = current_url.split('/')[3]
+        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
+        selected_listing = Listing.objects.get(slug=listing_slug)
+
+        posting_student = selected_listing.poster
+
+        # can only create a flag if you haven't previously created one
+        if not can_flag(me, selected_listing):
+            # because the page shouldn't exist in this scenario
+            raise Http404
+
+        # you can't flag your own listing
+        if (posting_student == me):
+            return HttpResponseForbidden()
+        else:
+            return super(CreateFlag, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateFlag, self).get_context_data(**kwargs)
+        me = Student.objects.get(user=self.request.user)
+
+        # duplicated code!!!
+        current_url = self.request.get_full_path()
+        listing_slug = current_url.split('/')[3]
+        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
+        selected_listing = Listing.objects.get(slug=listing_slug)
+
+        context['listing'] = selected_listing
+
+        form = FlagForm()
+        context['my_form'] = form
+        return context
+
     def form_valid(self, form):
         me = Student.objects.get(user=self.request.user)
 
@@ -236,41 +274,14 @@ class CreateFlag(LoginRequiredMixin, CreateView):
         form.instance.listing = selected_listing
         return super(CreateFlag, self).form_valid(form)
 
-    def get_success_url(self):
-        return reverse('detail_listing',
-                       kwargs={'slug': self.object.listing.slug})
-
-    def get_context_data(self, **kwargs):
-        context = super(CreateFlag, self).get_context_data(**kwargs)
-        me = Student.objects.get(user=self.request.user)
-
-        # duplicated code!!!
-        current_url = self.request.get_full_path()
-        listing_slug = current_url.split('/')[3]
-        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
-        selected_listing = Listing.objects.get(slug=listing_slug)
-
-        posting_student = selected_listing.poster
-
-        # you can't flag your own listing
-        if (posting_student == me):
-            return HttpResponseForbidden()
-
-        # can only create a flag if you haven't previously created one
-        if not can_flag(me, selected_listing):
-            # because the page shouldn't exist in this scenario
-            raise Http404
-
-        context['listing'] = selected_listing
-
-        form = FlagForm()
-        context['my_form'] = form
-        return context
-
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     @ratelimit(key='user', rate='100/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         return super(CreateFlag, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('detail_listing',
+                       kwargs={'slug': self.object.listing.slug})
 
 
 class DeleteFlag(LoginRequiredMixin, DeleteView):
@@ -279,21 +290,19 @@ class DeleteFlag(LoginRequiredMixin, DeleteView):
     template_name = 'delete_flag.html'
     login_url = 'login'
 
-    def get_success_url(self):
-        return reverse('detail_listing',
-                       kwargs={'slug': self.object.listing.slug})
-
-    def get_context_data(self, **kwargs):
-        context = super(DeleteFlag, self).get_context_data(**kwargs)
+    def get(self, request, *args, **kwargs):
         me = Student.objects.get(user=self.request.user)
-
         flag_student = self.get_object().flagger
 
         # if you didn't create the flag, you can't delete the flag
-        if not(me == flag_student):
+        if not(flag_student == me):
             return HttpResponseForbidden()
+        else:
+            return super(DeleteFlag, self).get(request, *args, **kwargs)
 
-        return context
+    def get_success_url(self):
+        return reverse('detail_listing',
+                       kwargs={'slug': self.object.listing.slug})
 
 
 # not implemented -- tbd
@@ -309,31 +318,28 @@ class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     template_name = 'bid_edit.html'
     context_object_name = 'bid'
     # form_class = EditBidForm
+    fields = ['price', 'text', ]
+
     login_url = 'login'
 
     form_valid_message = "Your bid was successfully updated!"
 
-    fields = ['price', 'text', ]
-
-    def get_success_url(self):
-        return reverse('detail_listing',
-                       kwargs={'slug': self.object.listing.slug})
-
-    def get_context_data(self, **kwargs):
-        context = super(EditBid, self).get_context_data(**kwargs)
-
+    def get(self, request, *args, **kwargs):
         me = Student.objects.get(user=self.request.user)
-
         bidding_student = self.get_object().bidder
-
-        if not(bidding_student == me):
-            return HttpResponseForbidden()
 
         # if exchanged or cancelled, this page doesn't exist
         if self.get_object().listing.exchanged or self.get_object().listing.cancelled:
             raise Http404
 
-        return context
+        if not(bidding_student == me):
+            return HttpResponseForbidden()
+        else:
+            return super(EditBid, self).get(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('detail_listing',
+                       kwargs={'slug': self.object.listing.slug})
 
 
 class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
@@ -341,12 +347,24 @@ class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     template_name = 'listing_edit.html'
     context_object_name = 'listing'
     # form_class = EditListingForm
+    fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition',
+              'access_code', 'description', 'price', 'photo', ]
+
     login_url = 'login'
 
     form_valid_message = "Your listing was successfully updated!"
 
-    fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition',
-              'access_code', 'description', 'price', 'photo', ]
+    def get(self, request, *args, **kwargs):
+        me = Student.objects.get(user=self.request.user)
+        posting_student = self.get_object().poster
+
+        if (self.get_object().cancelled is True):
+            raise Http404
+
+        if not(posting_student == me):
+            return HttpResponseForbidden()
+        else:
+            return super(EditListing, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(EditListing, self).get_context_data(**kwargs)
@@ -368,6 +386,33 @@ class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     login_url = 'login'
 
     form_valid_message = "Your email was successfully sent!"
+
+    def get(self, request, *args, **kwargs):
+        me = Student.objects.get(user=self.request.user)
+        posting_student = self.get_object().poster
+
+        bid_count = Bid.objects.filter(listing=self.get_object).count()
+        if bid_count < 1:
+            # because the page shouldn't exist in this scenario
+            raise Http404
+
+        if (self.get_object().cancelled is True):
+            raise Http404
+
+        if not(posting_student == me):
+            return HttpResponseForbidden()
+        else:
+            return super(ExchangeListing, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ExchangeListing, self).get_context_data(**kwargs)
+
+        form = ExchangeListingForm()
+        form.fields['winning_bid'].queryset = Bid.objects.filter(listing=self.get_object())
+
+        context['my_form'] = form
+
+        return context
 
     def form_valid(self, form):
         # filling out fields
@@ -408,27 +453,6 @@ class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
         return super(ExchangeListing, self).form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(ExchangeListing, self).get_context_data(**kwargs)
-
-        me = Student.objects.get(user=self.request.user)
-        posting_student = self.get_object().poster
-
-        if not(posting_student == me):
-            return HttpResponseForbidden()
-
-        bid_count = Bid.objects.filter(listing=self.get_object).count()
-        if bid_count < 1:
-            # because the page shouldn't exist in this scenario
-            raise Http404
-
-        form = ExchangeListingForm()
-        form.fields['winning_bid'].queryset = Bid.objects.filter(listing=self.get_object())
-
-        context['my_form'] = form
-
-        return context
-
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     @ratelimit(key='user', rate='50/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
@@ -444,6 +468,26 @@ class UnExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     form_valid_message = """Your exchange has been successfully cancelled,
                      and your email successfully sent!"""
+
+    def get(self, request, *args, **kwargs):
+        me = Student.objects.get(user=self.request.user)
+        posting_student = self.get_object().poster
+
+        if (self.get_object().cancelled is True):
+            raise Http404
+
+        if not(posting_student == me):
+            return HttpResponseForbidden()
+        else:
+            return super(UnExchangeListing, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(UnExchangeListing, self).get_context_data(**kwargs)
+
+        form = UnExchangeListingForm()
+        context['my_form'] = form
+
+        return context
 
     def form_valid(self, form):
         self.obj = self.get_object()
@@ -482,20 +526,6 @@ class UnExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
         return super(UnExchangeListing, self).form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(UnExchangeListing, self).get_context_data(**kwargs)
-
-        me = Student.objects.get(user=self.request.user)
-        posting_student = self.get_object().poster
-
-        if not(posting_student == me):
-            return HttpResponseForbidden()
-
-        form = UnExchangeListingForm()
-        context['my_form'] = form
-
-        return context
-
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     @ratelimit(key='user', rate='50/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
@@ -512,23 +542,25 @@ class CancelListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     form_valid_message = "Your listing was successfully cancelled!"
 
+    def get(self, request, *args, **kwargs):
+        me = Student.objects.get(user=self.request.user)
+        posting_student = self.get_object().poster
+
+        # you can only cancel the listing if the listing isn't already cancelled
+        if (self.get_object().cancelled is True):
+            raise Http404
+
+        if not(posting_student == me):
+            return HttpResponseForbidden()
+        else:
+            return super(CancelListing, self).get(request, *args, **kwargs)
+
     def form_valid(self, form):
         today = date.today()
 
         form.instance.cancelled = True
         form.instance.date_closed = today
         return super(CancelListing, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super(CancelListing, self).get_context_data(**kwargs)
-
-        me = Student.objects.get(user=self.request.user)
-        posting_student = self.get_object().poster
-
-        if not(posting_student == me):
-            return HttpResponseForbidden()
-
-        return context
 
 
 class ReopenListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
@@ -541,21 +573,23 @@ class ReopenListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     form_valid_message = "Your listing was successfully reopened!"
 
+    def get(self, request, *args, **kwargs):
+        me = Student.objects.get(user=self.request.user)
+        posting_student = self.get_object().poster
+
+        # you can only reopen the listing if the listing is cancelled
+        if (self.get_object().cancelled is False):
+            raise Http404
+
+        if not(posting_student == me):
+            return HttpResponseForbidden()
+        else:
+            return super(ReopenListing, self).get(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.instance.cancelled = False
         form.instance.date_closed = None
         return super(ReopenListing, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super(ReopenListing, self).get_context_data(**kwargs)
-
-        me = Student.objects.get(user=self.request.user)
-        posting_student = self.get_object().poster
-
-        if not(posting_student == me):
-            return HttpResponseForbidden()
-
-        return context
 
 
 class CreateRating(LoginRequiredMixin, CreateView):
@@ -565,21 +599,27 @@ class CreateRating(LoginRequiredMixin, CreateView):
     context_object_name = 'rating'
     login_url = 'login'
 
-    def form_valid(self, form):
+    def get(self, request, *args, **kwargs):
         me = Student.objects.get(user=self.request.user)
 
+        # duplicated code!!!
         current_url = self.request.get_full_path()
         listing_slug = current_url.split('/')[3]
         # [u'', u'share', u'listing', u'C1s3oD', u'flag']
         selected_listing = Listing.objects.get(slug=listing_slug)
 
-        form.instance.rater = me
-        form.instance.listing = selected_listing
-        return super(CreateRating, self).form_valid(form)
+        winning_student = selected_listing.winning_bid.bidder
 
-    def get_success_url(self):
-        return reverse('ratings',
-                       kwargs={'slug': self.object.listing.poster.slug})
+        # can only create a rating if you haven't previously created one
+        if not can_rate(me, selected_listing):
+            # because the page shouldn't exist in this scenario
+            raise Http404
+
+        # you can only rate a listing that you won
+        if not (winning_student == me):
+            return HttpResponseForbidden()
+        else:
+            return super(CreateRating, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(CreateRating, self).get_context_data(**kwargs)
@@ -593,25 +633,32 @@ class CreateRating(LoginRequiredMixin, CreateView):
 
         winning_student = selected_listing.winning_bid.bidder
 
-        # you can only rate a listing that you won
-        if not (winning_student == me):
-            return HttpResponseForbidden()
-
-        # can only create a rating if you haven't previously created one
-        if not can_rate(me, selected_listing):
-            # because the page shouldn't exist in this scenario
-            raise Http404
-
         context['listing'] = selected_listing
 
         form = RatingForm()
         context['my_form'] = form
         return context
 
+    def form_valid(self, form):
+        me = Student.objects.get(user=self.request.user)
+
+        current_url = self.request.get_full_path()
+        listing_slug = current_url.split('/')[3]
+        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
+        selected_listing = Listing.objects.get(slug=listing_slug)
+
+        form.instance.rater = me
+        form.instance.listing = selected_listing
+        return super(CreateRating, self).form_valid(form)
+
     # no per-day limit because you can only rate listings you've exchanged
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     def post(self, request, *args, **kwargs):
         return super(CreateRating, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('ratings',
+                       kwargs={'slug': self.object.listing.poster.slug})
 
 
 class EditRating(LoginRequiredMixin, UpdateView):
@@ -623,22 +670,18 @@ class EditRating(LoginRequiredMixin, UpdateView):
 
     fields = ['stars', 'review', ]
 
-    template_suffix_name = '_edit'
-
-    def get_success_url(self):
-        return reverse('ratings',
-                       kwargs={'slug': self.object.listing.poster.slug})
-
-    def get_context_data(self, **kwargs):
-        context = super(EditRating, self).get_context_data(**kwargs)
-
+    def get(self, request, *args, **kwargs):
         me = Student.objects.get(user=self.request.user)
         rating_student = self.get_object().rater
 
         if not(rating_student == me):
             return HttpResponseForbidden()
+        else:
+            return super(EditRating, self).get(request, *args, **kwargs)
 
-        return context
+    def get_success_url(self):
+        return reverse('ratings',
+                       kwargs={'slug': self.object.listing.poster.slug})
 
 
 class DeleteRating(LoginRequiredMixin, DeleteView):
@@ -647,17 +690,15 @@ class DeleteRating(LoginRequiredMixin, DeleteView):
     template_name = 'delete_rating.html'
     login_url = 'login'
 
-    def get_success_url(self):
-        return reverse('detail_listing',
-                       kwargs={'slug': self.object.listing.slug})
-
-    def get_context_data(self, **kwargs):
-        context = super(DeleteRating, self).get_context_data(**kwargs)
-
+    def get(self, request, *args, **kwargs):
         me = Student.objects.get(user=self.request.user)
         rating_student = self.get_object().rater
 
         if not(rating_student == me):
             return HttpResponseForbidden()
+        else:
+            return super(DeleteRating, self).get(request, *args, **kwargs)
 
-        return context
+    def get_success_url(self):
+        return reverse('detail_listing',
+                       kwargs={'slug': self.object.listing.slug})

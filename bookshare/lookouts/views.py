@@ -1,8 +1,6 @@
 # core django imports
-from core.models import Student
-from django.http import HttpResponseForbidden
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.db import IntegrityError
 from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
@@ -13,6 +11,7 @@ from ratelimit.decorators import ratelimit
 # imports from your apps
 from .forms import LookoutForm
 from .models import Lookout
+from core.models import Student
 
 
 class CreateLookout(LoginRequiredMixin, CreateView):
@@ -55,16 +54,14 @@ class DetailLookout(LoginRequiredMixin, DetailView):
     template_name = 'detail_lookout.html'
     login_url = 'login'
 
-    def get_context_data(self, **kwargs):
-        context = super(DetailLookout, self).get_context_data(**kwargs)
-
+    def get(self, request, *args, **kwargs):
         me = Student.objects.get(user=self.request.user)
         lookout_student = self.get_object().owner
 
         if not(lookout_student == me):
             return HttpResponseForbidden()
 
-        return context
+        return super(DetailLookout, self).get(request, *args, **kwargs)
 
 # updating is not neccessary since it's just literally an isbn and a course
 
@@ -76,13 +73,11 @@ class DeleteLookout(LoginRequiredMixin, DeleteView):
     success_url = '/'
     login_url = 'login'
 
-    def get_context_data(self, **kwargs):
-        context = super(DeleteLookout, self).get_context_data(**kwargs)
-
+    def get(self, request, *args, **kwargs):
         me = Student.objects.get(user=self.request.user)
         lookout_student = self.get_object().owner
 
         if not(lookout_student == me):
             return HttpResponseForbidden()
 
-        return context
+        return super(DeleteLookout, self).get(request, *args, **kwargs)

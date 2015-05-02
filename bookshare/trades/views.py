@@ -177,7 +177,7 @@ class DeleteListing(LoginRequiredMixin, SuperuserRequiredMixin, DeleteView):
     login_url = 'login'
 
     def get_success_url(self):
-        return reverse('mod')
+        return reverse('flag_mod')
 
 
 class CreateBid(CreateView):

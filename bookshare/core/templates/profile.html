@@ -144,7 +144,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
         </thead>
         <tbody>
         {% for bid in bids %}
-        {% if bid.listing.winning_bid %}
+        {% if bid == bid.listing.winning_bid %}
         <tr class="success">
         {% else %}
         <tr>

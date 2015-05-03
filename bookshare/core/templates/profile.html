@@ -144,7 +144,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
         </thead>
         <tbody>
         {% for bid in bids %}
-        {% if bid.listing.winning_bid %}
+        {% if bid == bid.listing.winning_bid %}
         <tr class="success">
         {% else %}
         <tr>
@@ -156,7 +156,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
               <span class="label label-primary"><strong>Exchanged</strong></span>
             {% elif bid.listing.cancelled %}
               <span class="label label-default"><strong>Cancelled</strong></span>
-            {% elif not listing.active %}
+            {% elif listing.active %}
               <span class="label label-warning"><strong>Inactive</strong></span>
             {% else %}
               <span class="label label-info"><strong>Active</strong></span>

@@ -16,7 +16,7 @@ urlpatterns = patterns('',
         CreateListing.as_view(), name='create_listing'),
 
     url(r'^listing/(?P<slug>[\w-]+)/$',
-        cache_page(6)(ListingPage.as_view()), name='detail_listing'),
+        cache_page(4)(ListingPage.as_view()), name='detail_listing'),
 
     url(r'^listing/(?P<slug>[\w-]+)/delete/$',
         DeleteListing.as_view(), name='delete_listing'),

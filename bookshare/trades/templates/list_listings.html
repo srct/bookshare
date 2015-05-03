@@ -19,13 +19,16 @@ SRCT Bookshare &bull; Latest Listings
 
   <div class="row">
     <div class="col-md-10 col-md-offset-1 text-center">
-      <h4><p><em>Want to <strong><a href="/search">search</a></strong> for something specific?</em></p></h4>
+      <h4><p>Want to instead <strong><a href="/search">search</a></strong> for something specific?</p></h4>
     </div>
   </div>
 
   <legend></legend>
 
   <div class="row">
+    <div class="col-md-10 col-md-offset-1 text-center bottom-padding">
+      <small><em>New listings may take a few moments to appear.</em></small>
+    </div>
     {% for listing in listings %}
       <div class="col-md-6">
         {% include 'listing_preview_panel.html' %}

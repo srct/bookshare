@@ -52,6 +52,11 @@ class ListingForm(forms.ModelForm):
         self.fields['description'].label = "Other Notes"
         self.fields['photo'].required = False
 
+    def clean(self):
+        cleaned_data = super(ListingForm, self).clean()
+        print cleaned_data
+        return super(ListingForm, self).clean()
+
     class Meta:
         model = Listing
 

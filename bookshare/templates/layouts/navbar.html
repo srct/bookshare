@@ -15,10 +15,10 @@
       {% if user.is_authenticated %}
         <li><a href="{% url 'create_listing' %}">Create Listing</a></li>
         <li><a href="{% url 'list_listings' %}">Latest Listings</a></li>
-        <li><a href="{% url 'charts' %}">Listing Charts</a></li>
       {% else %}
         <li><a href="{% url 'about' %}">About</a></li>
       {% endif %}
+        <li><a href="{% url 'charts' %}">Listing Charts</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if user.is_authenticated %}

@@ -21,7 +21,7 @@ class HomepageView(TemplateView):
         return context
 
 
-class ChartsView(LoginRequiredMixin, TemplateView):
+class ChartsView(TemplateView):
     template_name = 'charts.html'
     login_url = 'login'
 

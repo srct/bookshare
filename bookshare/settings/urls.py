@@ -5,6 +5,9 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 from django.views.decorators.cache import cache_page
+from django.contrib.auth.decorators import login_required
+# third party imports
+from haystack.views import SearchView
 # imports from your apps
 from .views import HomepageView, ChartsView
 
@@ -23,13 +26,13 @@ urlpatterns = patterns('',
     url(r'^mod/', include('mod.urls')),
 
     # search
-    url(r'^search/', include('haystack.urls'), name='search'),
+    url(r'^search/', login_required(SearchView(), login_url='login'), name='search'),
 
     # site-wide pages
     # homepage is weird for cacheing... no special url, but different content
     # for each user
     url(r'^$', HomepageView.as_view(), name='homepage'),
-    url(r'^charts/?$', cache_page(60 * 10)(ChartsView.as_view()), name='charts'),
+    url(r'^charts/?$', ChartsView.as_view(), name='charts'),
 
     # static pages
     url(r'^about/?$',

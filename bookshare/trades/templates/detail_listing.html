@@ -4,6 +4,19 @@
 SRCT Bookshare &bull; {{ listing.title }}
 {% endblock title %}
 
+{% block social_metadata %}
+<meta property="og:title" content="{{ listing.title }}"/>
+<meta property="og:type" content="book"/>
+<meta property="og:url" content="{{ request.build_absolute_uri }}"/>
+<meta property="og:image" content-"{{ listing.photo.url }}"/>
+<meta property="books:author" content="{{ listing.author }}"/>
+<meta property="books:isbn" content=" {{ listing.isbn }}"/>
+{% if listing.year %}
+<meta property="books:release_date" content="{{ listing.year }}"
+{% endif %}
+
+{% endblock social_metadata %}
+
 {% block content %}
 
 {% load crispy_forms_tags %}

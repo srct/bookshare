@@ -1,7 +1,7 @@
 {% load piwik_tags %}
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
         "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns# books: http://ogp.me/ns/books#">
 <head>
   <meta charset="utf-8">
   <meta name="description" content="A place for Mason students to exchange textbooks.">
@@ -37,6 +37,7 @@
   </script>
   <link rel="icon" href="{% static 'img/favicon.ico' %}">
   <title>{% block title %} {% endblock title %}</title>
+  {% block social_metadata %} {% endblock social_metadata %}
 </head>
 <body>
   <div id="wrap">

@@ -25,10 +25,11 @@ $(function() {
 //    }
 
       if( ! is_valid ){ // If invalid, clear the form.
-        $('#id_title').val( '' );
-        $('#id_author').val( '' );
-        $('#id_year').val( '' );
-        $('#id_edition').val( '' );
+        // Ben Ward pointed out this is bad usability
+        //$('#id_title').val( '' );
+        //$('#id_author').val( '' );
+        //$('#id_year').val( '' );
+        //$('#id_edition').val( '' );
       } else { // Otherwise, poll worldcat for data.
 
         var url = "http://xisbn.worldcat.org/webservices/xid/isbn/" + isbn + "?method=getMetadata&format=json&fl=title,author,year,ed"

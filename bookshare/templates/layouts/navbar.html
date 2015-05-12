@@ -28,7 +28,7 @@
           <img class="img-circle img-responsive center center-block" src="{% gravatar_url student.user.email 21 %}"></a></li>
         <li><a href="/logout">Log Out</a></li>
         {% else %}
-        <li><a href="/login">Log In</a></li>
+        <li><a href="/login" title="use your Mason username and password">Log In</a></li>
         {% endif %}
       </ul>
     </div><!-- /.navbar-collapse -->

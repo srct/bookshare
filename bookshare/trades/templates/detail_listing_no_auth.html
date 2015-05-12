@@ -5,6 +5,7 @@ SRCT Bookshare &bull; {{ listing.title }}
 {% endblock title %}
 
 {% block social_metadata %}
+<!-- Facebook -->
 <meta property="og:title" content="{{ listing.title }}"/>
 <meta property="og:url" content="{{ request.build_absolute_uri }}"/>
 <meta property="og:type" content="book"/>
@@ -15,7 +16,13 @@ SRCT Bookshare &bull; {{ listing.title }}
 {% if listing.year %}
 <meta property="books:release_date" content="{{ listing.year }}"/>
 {% endif %}
-
+<!-- Twitter -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@MasonSRCT" />
+<meta name="twitter:title" content="{{ listing.title }}" />
+<meta name="twitter:description" content="is up for exchange on SRCT Bookshare! Log in with your Mason username and password to see more!" />
+<meta name="twitter:image" content="{{ listing.photo.url }}" /> 
+<meta name="twitter:url" content="{{ request.build_absolute_uri }}" />
 {% endblock social_metadata %}
 
 {% block content %}

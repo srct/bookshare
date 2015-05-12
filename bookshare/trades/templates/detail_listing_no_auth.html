@@ -6,9 +6,10 @@ SRCT Bookshare &bull; {{ listing.title }}
 
 {% block social_metadata %}
 <meta property="og:title" content="{{ listing.title }}"/>
+<meta property="og:url" content="{{ request.build_absolute_uri }}"/>
 <meta property="og:type" content="book"/>
-<meta property="og.url" content="{{ request.build_absolute_uri }}"/>
-<meta property="og.image" content="{{ listing.photo.url }}"/>
+<meta property="og:description" content="is up for exchange on SRCT Bookshare! Log in with your Mason username and password to see more!"/>
+<meta property="og:image" content="{{ listing.photo.url }}"/>
 <meta property="books:author" content="{{ listing.author }}"/>
 <meta property="books:isbn" content="{{ listing.isbn }}"/>
 {% if listing.year %}

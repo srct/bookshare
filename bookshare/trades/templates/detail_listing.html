@@ -10,7 +10,6 @@ SRCT Bookshare &bull; {{ listing.title }}
 
 {% load humanize %}
 
-<!-- you can't actually dismiss this for some reason -->
 {% if flag_count > 4 %}
 
 {% block javascript %}
@@ -170,7 +169,7 @@ SRCT Bookshare &bull; {{ listing.title }}
   <div class="col-md-3 col-sm-6 col-xs-12">
     <div class="text-center">
       <a href="{{ listing.photo.url }}">
-        <img src="{{ listing.photo.url  }}"
+        <img src="{{ listing.photo.url }}"
         alt="User submitted textbook photo" class="img-thumbnail" />
       </a>
     </div>

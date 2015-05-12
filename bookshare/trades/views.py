@@ -138,11 +138,23 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
         return super(CreateListing, self).post(request, *args, **kwargs)
 
 
-# These next two views are tied together...
-class DetailListing(DetailView):
+class DeleteListing(LoginRequiredMixin, SuperuserRequiredMixin, DeleteView):
+    model = Listing
+    context_object_name = 'listing'
+    template_name = 'delete_listing.html'
+    login_url = 'login'
+
+    def get_success_url(self):
+        return reverse('flag_mod')
+
+
+# These next three views are tied together...
+class DetailListing(LoginRequiredMixin, DetailView):
     model = Listing
     context_object_name = 'listing'
     template_name = 'detail_listing.html'
+
+    login_url = 'login'
 
     def get_context_data(self, **kwargs):
         context = super(DetailListing, self).get_context_data(**kwargs)
@@ -170,21 +182,24 @@ class DetailListing(DetailView):
         return context
 
 
-class DeleteListing(LoginRequiredMixin, SuperuserRequiredMixin, DeleteView):
+class DetailListingNoAuth(DetailView):
     model = Listing
     context_object_name = 'listing'
-    template_name = 'delete_listing.html'
-    login_url = 'login'
+    template_name = 'detail_listing_no_auth.html'
 
-    def get_success_url(self):
-        return reverse('flag_mod')
+    def get_context_data(self, **kwargs):
+        context = super(DetailListingNoAuth, self).get_context_data(**kwargs)
+        context['flag_count'] = Flag.objects.filter(listing=self.get_object()).count()
+        context['flags'] = Flag.objects.filter(listing=self.get_object()).order_by('-created')
+        return context
 
-
-class CreateBid(CreateView):
+class CreateBid(LoginRequiredMixin, CreateView):
     model = Bid
     fields = ['listing', 'price', 'text', ]
     context_object_name = 'bid'
     template_name = 'detail_listing.html'
+
+    login_url = 'login'
 
     def form_valid(self, form):
         me = Student.objects.get(user=self.request.user)
@@ -198,22 +213,28 @@ class CreateBid(CreateView):
 
 
 # ...to make this single view
-class ListingPage(LoginRequiredMixin, View):
-    login_url = 'login'
+class ListingPage(View):
 
     # see this page for an explanation
     # https://docs.djangoproject.com/en/1.7/topics/class-based-views/mixins/#an-alternative-better-solution
 
     def get(self, request, *args, **kwargs):
-        view = DetailListing.as_view()
-        return view(request, *args, **kwargs)
+        if self.request.user.is_authenticated():
+            view = DetailListing.as_view()
+            return view(request, *args, **kwargs)
+        else:
+            view = DetailListingNoAuth.as_view()
+            return view(request, *args, **kwargs)
 
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     # rate limit is higher for bids
     @ratelimit(key='user', rate='100/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
-        view = CreateBid.as_view()
-        return view(request, *args, **kwargs)
+        if self.request.user.is_authenticated():
+            view = CreateBid.as_view()
+            return view(request, *args, **kwargs)
+        else:
+            pass
 
 
 # and we return to our regularly schedule programming

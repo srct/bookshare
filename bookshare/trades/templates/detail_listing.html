@@ -4,26 +4,12 @@
 SRCT Bookshare &bull; {{ listing.title }}
 {% endblock title %}
 
-{% block social_metadata %}
-<meta property="og:title" content="{{ listing.title }}"/>
-<meta property="og:type" content="book"/>
-<meta property="og:url" content="{{ request.build_absolute_uri }}"/>
-<meta property="og:image" content-"{{ listing.photo.url }}"/>
-<meta property="books:author" content="{{ listing.author }}"/>
-<meta property="books:isbn" content=" {{ listing.isbn }}"/>
-{% if listing.year %}
-<meta property="books:release_date" content="{{ listing.year }}"
-{% endif %}
-
-{% endblock social_metadata %}
-
 {% block content %}
 
 {% load crispy_forms_tags %}
 
 {% load humanize %}
 
-<!-- you can't actually dismiss this for some reason -->
 {% if flag_count > 4 %}
 
 {% block javascript %}
@@ -183,7 +169,7 @@ SRCT Bookshare &bull; {{ listing.title }}
   <div class="col-md-3 col-sm-6 col-xs-12">
     <div class="text-center">
       <a href="{{ listing.photo.url }}">
-        <img src="{{ listing.photo.url  }}"
+        <img src="{{ listing.photo.url }}"
         alt="User submitted textbook photo" class="img-thumbnail" />
       </a>
     </div>

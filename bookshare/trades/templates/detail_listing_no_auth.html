@@ -1,0 +1,182 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+SRCT Bookshare &bull; {{ listing.title }}
+{% endblock title %}
+
+{% block social_metadata %}
+<meta property="og:title" content="{{ listing.title }}"/>
+<meta property="og:type" content="book"/>
+<meta property="og.url" content="{{ request.build_absolute_uri }}"/>
+<meta property="og.image" content="{{ listing.photo.url }}"/>
+<meta property="books:author" content="{{ listing.author }}"/>
+<meta property="books:isbn" content="{{ listing.isbn }}"/>
+{% if listing.year %}
+<meta property="books:release_date" content="{{ listing.year }}"/>
+{% endif %}
+
+{% endblock social_metadata %}
+
+{% block content %}
+
+{% load humanize %}
+
+{% if flag_count > 4 %}
+
+{% block javascript %}
+<script type="text/javascript">
+    $(window).load(function(){
+        $('#myModal').modal('show');
+    });
+</script>
+{% endblock javascript %}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h3 class="modal-title"><strong class="text-danger"><i class="fa fa-exclamation-triangle fa-fw"></i> Warning:</strong> This listing has been flagged!</h3>
+      </div>
+      <div class="modal-body text-center">
+        {% for flag in flags %}
+        <h4><strong>{{ flag.reason }}</strong> {{ flag.created|date:"M d, 'y P" }} <small>({{ flag.created|naturaltime }})</small></h4>
+        {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <div class="text-center"><!-- not sure why this doesn't work in the above div... -->
+        <!-- also, why is the dismissing not working... >__> -->
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Proceed</button>
+        <a href="javascript:history.back()"><button type="button" class="btn btn-default">Get Me Out of Here</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if listing.cancelled %}
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="alert alert-danger text-center">
+        <strong>This listing has been cancelled.</strong>
+      </div>
+    </div>
+  </div>
+{% elif listing.exchanged %}
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="alert alert-danger text-center">
+        <strong>This listing has been exchanged.</strong>
+      </div>
+    </div>
+  </div>
+{% elif not listing.active %}
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="alert alert-warning text-center alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert"
+        aria-hidden="true">&times;</button>
+        Heads up, this listing is <strong>over a month old</strong> and we haven't seen the student who posted it around recently either. It may no longer be valid!
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% load trades_extras %}
+
+<div class="row">
+  <div class="col-xs-8">
+    <h1>
+      <em><strong>{{ listing.title }}</strong></em>
+    </h1>
+  </div>
+  <div class="col-xs-4 text-right">
+    <h1 class="price">
+      {% if listing.exchanged %}
+        <small>Final</small> <strong>${{ listing.final_price }}</strong>
+      {% else %}
+        <small>Asking</small> <strong>${{ listing.price }}</strong>
+      {% endif %}
+    </h1>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-6">
+    <h4>
+      <small>by</small> {{ listing.author }}
+      {% if listing.year %}
+        ({{ listing.year|bc }})
+      {% endif %}
+    </h4>
+  </div>
+  <div class="col-xs-6 text-right">
+    <h4><small>Listed</small> {{ listing.created|date:"M d, 'y P" }} <small>({{ listing.created|naturaltime }})</small></h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 col-sm-6 col-xs-6">
+      <h4><small>ISBN</small> {{ listing.isbn }}</h4>
+  </div>
+
+  <div class="col-md-2 col-sm-6 col-xs-6 small-text-right">
+    <h4>
+      {% if listing.edition %}
+        {{ listing.edition|ordinal }}<small> edition</small>
+      {% endif %}
+    </h4>
+  </div>
+
+  <div class="col-md-3 col-sm-6 col-xs-6">
+    {% if listing.course_abbr %}
+      <h4><small>Course</small> {{ listing.course_abbr }}</h4>
+    {% else %}
+    {% endif %}
+  </div>
+
+  <div class="col-md-4 col-sm-6 col-xs-6 text-right">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 col-sm-6 col-xs-6">
+    <h4><small>Condition</small> {{ listing.condition }}</h4>
+  </div>
+
+  <div class="col-md-4 col-sm-6 col-xs-6 small-text-right">
+    <h4><small>Access Code</small> {{ listing.access_code }}</h4>
+  </div>
+
+  <div class="col-md-5 text-right small-text-center">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="text-center">
+      <a href="{{ listing.photo.url }}">
+        <img src="{{ listing.photo.url  }}"
+        alt="User submitted textbook photo" class="img-thumbnail" />
+      </a>
+    </div>
+  </div>
+
+  <div class="col-md-9 col-sm-6 col-xs-12">
+    {% if listing.description %}
+    <h4><small>Description/Comments</small>
+      {{ listing.description }}
+    {% else %}
+    {% endif %}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 text-center">
+
+    <a href="{% url 'login' %}" class="btn btn-primary btn-block">See the full page by logging in with your Mason username and password!</a>
+
+  </div>
+</div>
+
+{% endblock content %}

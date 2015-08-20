@@ -4,11 +4,12 @@ from django.contrib.auth.models import User
 # third-part imports
 import requests
 # imports from your apps
+from django.conf import settings
 from .models import Student
 
 
 def pfinfo(u_name):
-    pf_url = "http://peoplefinder.b1.akshaykarthik.com/"
+    pf_url = settings.PF_URL
     url = str(pf_url) + "basic/all/" + str(u_name)
     try:
         metadata = requests.get(url)

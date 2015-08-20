@@ -112,6 +112,9 @@ AUTHENTICATION_BACKENDS = (
     'cas.backends.CASBackend',
 )
 
+# Peoplefinder API for user creation
+PF_URL = "http://peoplefinder.b1.akshaykarthik.com/"
+
 CAS_SERVER_URL = 'https://login.gmu.edu'
 CAS_LOGOUT_COMPLETELY = True
 CAS_PROVIDE_URL_TO_LOGOUT = True

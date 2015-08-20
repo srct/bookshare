@@ -12,9 +12,34 @@ class Student(TimeStampedModel):
     # django user includes username, password, first name, and last name
     user = models.OneToOneField(User)
 
+    pf_first_name = models.CharField(max_length=255, blank=True)
+    pf_last_name = models.CharField(max_length=255, blank=True)
+
     slug = AutoSlugField(populate_from='user', unique=True)
 
     emails_sent = models.PositiveIntegerField(default=0)
+
+    def has_nickname(self):
+        pf_name = "%s %s" % (self.pf_first_name, self.pf_last_name)
+
+        if (self.user.get_full_name() != pf_name) and (pf_name != " "):
+            return True
+        else:
+            return False
+
+    def get_nickname(self):
+        # different first name
+        if (self.user.first_name != self.pf_first_name) and (self.user.last_name == self.pf_last_name):
+            return "%s \"%s\" %s" % (self.pf_first_name, self.user.first_name, self.user.last_name)
+        # different last name
+        elif (self.user.first_name == self.pf_first_name) and (self.user.last_name != self.pf_last_name):
+            return "%s %s \"%s\"" % (self.user.first_name, self.pf_last_name, self.user.last_name)
+        # both
+        elif (self.user.first_name != self.pf_first_name) and (self.user.last_name != self.pf_last_name):
+            return "%s \"%s %s\" %s" % (self.pf_first_name, self.user.first_name, self.user.last_name, self.pf_last_name)
+        # failing gracefully
+        else:
+            return self.user.get_full_name()
 
     def get_absolute_url(self):
         return reverse('profile', kwargs={'slug': self.slug})

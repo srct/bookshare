@@ -29,7 +29,11 @@ SRCT Bookshare &bull; Mod
               <strong>{{ listing.title }}</strong>
             </a></td>
             <td><a href="{{ listing.poster.get_absolute_url }}" target="_blank">
-              {{ listing.poster.user.get_full_name }}
+              {% if listing.poster.has_nickname %}
+                {{ listing.poster.get_nickname }}
+              {% else %}
+                {{ listing.poster.user.get_full_name }}
+              {% endif %}
             </a></td>
             <td><a href="{% url 'delete_listing' listing.slug %}">
               <span class="label label-danger"><strong>Delete</strong></span>

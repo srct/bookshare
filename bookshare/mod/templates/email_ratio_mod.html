@@ -30,7 +30,12 @@ SRCT Bookshare &bull; Mod
             {% widthratio student.emails_sent student.num_books 1 as ratio %}
             <td>{{ ratio }}</td>
             <td><a href="{{ student.get_absolute_url }}" target="_blank">
-              <strong>{{ student.user.get_full_name }}</strong> (<em>{{ student.user.username }}</em>)
+              {% if student.has_nickname %}
+                <strong>{{ student.get_nickname }}</strong>
+              {% else %}
+                <strong>{{ student.user.get_full_name }}</strong>
+              {% endif %}
+              (<em>{{ student.user.username }}</em>)
             </a></td>
             <td>
               <a href="#">

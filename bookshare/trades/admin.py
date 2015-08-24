@@ -1,7 +1,7 @@
 # core django imports
 from django.contrib import admin
 # imports from your apps
-from .models import Bid, Listing, Flag, Rating
+from .models import Bid, Listing, Flag, BidFlag, Rating
 
 
 @admin.register(Bid)
@@ -22,4 +22,5 @@ class ListingAdmin(admin.ModelAdmin):
 
 # expand this later
 admin.site.register(Flag)
+admin.site.register(BidFlag)
 admin.site.register(Rating)

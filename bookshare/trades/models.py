@@ -163,14 +163,14 @@ class Flag(TimeStampedModel):
     OBSCENE = 'Obscene'
     SPAM = 'Spam'
     COPYRIGHT = 'Copyright Violation'
-    ILLEGAL = 'Otherwise Illegal'
+    ILLEGAL = 'Otherwise Problematic'
 
     FLAGGING_REASON_CHOICES = (
         (WRONG_PRODUCT_TYPE, 'Not a Textbook'),
         (OBSCENE, 'Obscene'),
         (SPAM, 'Spam'),
         (COPYRIGHT, 'Copyright Violation'),
-        (ILLEGAL, 'Otherwise Illegal'),
+        (ILLEGAL, 'Otherwise Problematic'),
     )
 
     flagger = models.ForeignKey(Student)
@@ -187,6 +187,32 @@ class Flag(TimeStampedModel):
 
     class Meta:
         ordering = ['listing', 'created']
+
+
+class BidFlag(TimeStampedModel):
+
+    OBSCENE = 'Obscene'
+    SPAM = 'Spam'
+    ILLEGAL = 'Otherwise Problematic'
+
+    FLAGGING_REASON_CHOICES = (
+        (OBSCENE, 'Obscene'),
+        (SPAM, 'Spam'),
+        (ILLEGAL, 'Otherwise Problematic'),
+    )
+
+    flagger = models.ForeignKey(Student)
+    bid = models.ForeignKey(Bid)
+
+    slug = RandomSlugField(length=6)
+
+    def __unicode__(self):
+        return "%s's %s for %s" % (self.flagger.user.username,
+                                   self.bid.listing.title,
+                                   self.reason)
+
+    class Meta:
+        ordering = ['bid', 'created']
 
 
 class Rating(TimeStampedModel):

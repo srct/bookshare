@@ -19,9 +19,9 @@ from braces.views import LoginRequiredMixin, SuperuserRequiredMixin
 from braces.views import FormValidMessageMixin
 from ratelimit.decorators import ratelimit
 # imports from your apps
-from .models import Listing, Bid, Flag, Rating
-from .forms import ListingForm, BidForm, FlagForm, ExchangeListingForm,\
-    UnExchangeListingForm, RatingForm
+from .models import Listing, Bid, Flag, BidFlag, Rating
+from .forms import ListingForm, BidForm, FlagForm, BidFlagForm,\
+                   ExchangeListingForm, UnExchangeListingForm, RatingForm
 from core.models import Student
 
 
@@ -53,10 +53,26 @@ def can_flag(flagger, listing):
         return True
 
 
+def can_flag_bid(flagger, bid):
+    user_flag_num = BidFlag.objects.filter(flagger=flagger,
+                                           bid=bid).count()
+    if user_flag_num:
+        return False
+    else:
+        return True
+
+
 # get the listing's slug to pass to the create flag page
 def flag_slug(flagger, listing):
     if not can_flag(flagger, listing):
         return Flag.objects.get(flagger=flagger, listing=listing).slug
+    else:
+        return None
+
+
+def bid_flag_slug(flagger, bid):
+    if not can_flag_bid(flagger, bid):
+        return BidFlag.objects.get(flagger=flagger, bid=bid).slug
     else:
         return None
 
@@ -172,7 +188,21 @@ class DetailListing(LoginRequiredMixin, DetailView):
             context['rating'] = False
 
         # bids, filter by listing name of the current listing, order by date created
-        context['bids'] = Bid.objects.filter(listing=self.get_object()).order_by('-price')
+        bids  = Bid.objects.filter(listing=self.get_object()).order_by('-price')
+
+        bids_with_info = []
+        flagged_bids_with_info = []
+        for bid in bids:
+            flaggable = can_flag_bid(me, bid)
+            the_slug = bid_flag_slug(me, bid)
+            info_tuple = (bid, (flaggable, the_slug))
+            if not bid.too_many_flags():
+                bids_with_info.append(info_tuple)
+            else:
+                flagged_bids_with_info.append(info_tuple)
+
+        context['bids'] = bids_with_info
+        context['flagged_bids'] = flagged_bids_with_info
         context['bid_count'] = Bid.objects.filter(listing=self.get_object).count()
         # flags
         context['flags'] = Flag.objects.filter(listing=self.get_object()).order_by('-created')
@@ -192,6 +222,7 @@ class DetailListingNoAuth(DetailView):
         context['flag_count'] = Flag.objects.filter(listing=self.get_object()).count()
         context['flags'] = Flag.objects.filter(listing=self.get_object()).order_by('-created')
         return context
+
 
 class CreateBid(LoginRequiredMixin, CreateView):
     model = Bid
@@ -237,7 +268,7 @@ class ListingPage(View):
             pass
 
 
-# and we return to our regularly schedule programming
+# and we return to our regularly scheduled programming
 class CreateFlag(LoginRequiredMixin, CreateView):
     model = Flag
     fields = ['reason', ]
@@ -324,6 +355,96 @@ class DeleteFlag(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse('detail_listing',
                        kwargs={'slug': self.object.listing.slug})
+
+
+# so much almost replication, but not sure what else to do
+class CreateBidFlag(LoginRequiredMixin, CreateView):
+    model = BidFlag
+    fields = ['reason', ]
+    template_name = 'create_bid_flag.html'
+    context_object_name = 'bidflag'
+    login_url = 'login'
+
+    def get(self, request, *args, **kwargs):
+        me = Student.objects.get(user=self.request.user)
+
+        # duplicated code!!!
+        current_url = self.request.get_full_path()
+        bid_slug = current_url.split('/')[5]
+        # [u'', u'share', u'listing', u'C1s3oD', u'bid', 'u'F17jal', u'flag']
+        selected_bid = Bid.objects.get(slug=bid_slug)
+
+        bidding_student = selected_bid.bidder
+
+        # can only create a flag if you haven't previously created one
+        if not can_flag_bid(me, selected_bid):
+            # because the page shouldn't exist in this scenario
+            raise Http404
+
+        # you can't flag your own bid
+        if (bidding_student == me):
+            return HttpResponseForbidden()
+        else:
+            return super(CreateBidFlag, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(CreateBidFlag, self).get_context_data(**kwargs)
+        me = Student.objects.get(user=self.request.user)
+
+        # duplicated code!!!
+        current_url = self.request.get_full_path()
+        bid_slug = current_url.split('/')[5]
+        # [u'', u'share', u'listing', u'C1s3oD', u'bid', 'u'F17jal', u'flag']
+        selected_bid = Bid.objects.get(slug=bid_slug)
+
+        context['bid'] = selected_bid
+
+        form = BidFlagForm()
+        context['my_form'] = form
+        return context
+
+    def form_valid(self, form):
+        me = Student.objects.get(user=self.request.user)
+
+        # duplicated code!!!
+        current_url = self.request.get_full_path()
+        bid_slug = current_url.split('/')[5]
+        # [u'', u'share', u'listing', u'C1s3oD', u'bid', 'u'F17jal', u'flag']
+        selected_bid = Bid.objects.get(slug=bid_slug)
+
+        form.instance.flagger = me
+        form.instance.bid = selected_bid
+        return super(CreateBidFlag, self).form_valid(form)
+
+    @ratelimit(key='user', rate='5/m', method='POST', block=True)
+    @ratelimit(key='user', rate='100/d', method='POST', block=True)
+    def post(self, request, *args, **kwargs):
+        return super(CreateBidFlag, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('detail_listing',
+                       kwargs={'slug': self.object.bid.listing.slug})
+
+
+class DeleteBidFlag(LoginRequiredMixin, DeleteView):
+    model = BidFlag
+    context_object_name = 'bidflag'
+    template_name = 'delete_bid_flag.html'
+    login_url = 'login'
+
+    def get(self, request, *args, **kwargs):
+        me = Student.objects.get(user=self.request.user)
+        flag_student = self.get_object().flagger
+
+        # if you didn't create the flag, you can't delete the flag
+        if not(flag_student == me):
+            return HttpResponseForbidden()
+        else:
+            return super(DeleteBidFlag, self).get(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('detail_listing',
+                       kwargs={'slug': self.object.bid.listing.slug})
 
 
 # not implemented -- tbd

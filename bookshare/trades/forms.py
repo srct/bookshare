@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Button, Submit, Layout, Fieldset, HTML, Field
 from crispy_forms.bootstrap import AppendedPrependedText, FormActions
 # imports from your apps
-from .models import Listing, Bid, Flag, Rating
+from .models import Listing, Bid, Flag, BidFlag, Rating
 
 
 class ListingForm(forms.ModelForm):
@@ -115,6 +115,32 @@ class FlagForm(forms.ModelForm):
 
     class Meta:
         model = Flag
+
+
+class BidFlagForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+
+        self.helper = FormHelper()
+
+        self.helper.label_class = 'be-bold'
+        self.helper.layout = Layout(
+            Fieldset("",
+                     'reason',
+                     HTML("""<hr/ >"""),
+                     FormActions(Submit('submit', 'Create',
+                                        css_class='btn-primary'),
+                                 Button('cancel', 'Never Mind',
+                                        css_class='btn-default',
+                                        onclick="history.back()")
+                                 ),
+                     ),
+        )
+        super(BidFlagForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = BidFlag
+
 
 #class EditListingForm( forms.ModelForm ):
 

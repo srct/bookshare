@@ -22,6 +22,8 @@ class DetailStudent(LoginRequiredMixin, DetailView):
         context = super(DetailStudent, self).get_context_data(**kwargs)
 
         student_listings = Listing.objects.filter(poster=self.get_object().pk)
+        new_student_listings = [li for li in student_listings if not li.old()]
+        old_student_listings = [li for li in student_listings if li.old()]
 
         total_exchanges = student_listings.filter(exchanged=True).count()
 
@@ -35,14 +37,20 @@ class DetailStudent(LoginRequiredMixin, DetailView):
         else:
             average_stars = None
 
+        student_bids = Bid.objects.filter(bidder=self.get_object())
+        new_bids = [bid for bid in student_bids if not bid.listing.old()]
+        old_bids = [bid for bid in student_bids if bid.listing.old()]
+
         context['avg_stars'] = average_stars
-        context['listings'] = student_listings
+        context['new_listings'] = new_student_listings
+        context['old_listings'] = old_student_listings
         context['lookouts'] = Lookout.objects.filter(owner=self.get_object())
 
         context['proceeds'] = total_proceeds
         context['exchanges'] = total_exchanges
 
-        context['bids'] = Bid.objects.filter(bidder=self.get_object())
+        context['new_bids'] = new_bids
+        context['old_bids'] = old_bids
 
         return context
 

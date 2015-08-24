@@ -1,0 +1,20 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}
+SRCT Bookshare &bull; {{ bidflag.bid.listing.title }} &bull; {{ bidflag.bid.bidder.user.first_name }}'s Bid &bull; Remove Flag
+{% endblock title %}
+
+{% block content %}
+
+<hr />
+
+<div class="row text-center">
+  <form action="" method="post">{% csrf_token %}
+    <h3>Are you sure you want to remove your flag on {{ bidflag.bid.bidder.user.get_full_name }}'s Bid for ${{ bidflag.bid.price }} on {{ bidflag.bid.listing.poster.user.get_full_name }}'s listing <em>{{ bidflag.bid.listing.title }}</em>?</h3>
+    <input type="submit" value="Confirm" class="btn btn-danger btn-sm" />
+    <input type="submit" value="Never Mind" class="btn btn-default btn-sm" onclick="history.back()" />
+  </form>
+</div>
+
+<hr />
+{% endblock content %}

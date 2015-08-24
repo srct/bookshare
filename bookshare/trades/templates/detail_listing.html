@@ -157,9 +157,15 @@ SRCT Bookshare &bull; {{ listing.title }}
   {% if request.user == listing.poster.user %}
   {% else %}
     {% if can_flag %}
-    <h5><a href="{% url 'create_flag' listing.slug %}"><span class="label label-danger"><i class="fa fa-flag fa-fw fa-lg"></i> Flag</span></a></h5>
+    <h5><a href="{% url 'create_flag' listing.slug %}"><i class="fa fa-flag fa-fw fa-lg"></i> Flag Listing</a></h5>
     {% else %}
-    <h5><a href="{% url 'delete_flag' listing.slug flag_slug %}"><span class="label label-danger"><i class="fa fa-flag fa-fw fa-lg"></i>Remove Flag</span></a></h5>
+    <h5><a href="{% url 'delete_flag' listing.slug flag_slug %}">
+     <span class="fa-stack fa-lg">
+     <i class="fa fa-flag fa-stack-1x"></i>
+     <i class="fa fa-ban fa-stack-2x text-danger"></i>
+     </span>
+     Remove Flag
+    </a></h5>
     {% endif %}
   {% endif %}
   </div>
@@ -262,53 +268,27 @@ SRCT Bookshare &bull; {{ listing.title }}
       </div>
       <div class="panel-body">
 
-        {% if bids %}
+        {% if bids or flagged_bids %}
         <div id="bids" class="panel-collapse collapse in">
         {% endif %}
 
-        {% for bid in bids %}
-        <!-- BID DISPLAY -->
-          <div class="row">
-
-            <div class="col-md-3 col-sm-6 col-xs-6 text-center">
-              <h4><a href="{{ bid.bidder.get_absolute_url }}">
-                {{ bid.bidder.user.first_name }}
-                {{ bid.bidder.user.last_name }}
-              </a></h4>
-            </div>
-
-            <div class="col-md-2 col-sm-6 col-xs-6 small-text-center">
-              <h4><small>{{ bid.created|naturaltime }}</small></h4>
-            </div>
-
-            <div class="col-md-5 col-sm-6 col-xs-6 small-text-center">
-              <h4><small>
-              {% if bid.text %}
-                {{ bid.text }}
-              {% else %}
-              {% endif %}
-              </small></h4>
-            </div>
-
-            <div class="col-md-2 col-sm-6 col-xs-6 text-center">
-            {% if request.user == bid.bidder.user and not listing.exchanged and not listing.cancelled %}
-              <h4><a href="{% url 'edit_bid' listing.slug bid.slug %}"<span class="label label-default">Edit</span></a></h4>
-            {% endif %}
-            {% if bid == listing.winning_bid %}
-              <h4><small><span class="label label-success">Winning Bid</span></small> <strong>${{ bid.price }}</strong></h4>
-            {% else %}
-              <h4><strong>${{ bid.price }}</strong></h4>
-            {% endif %}
-            </div>
-
-          </div>
-
-          <hr/>
-
-        <!-- BID DISPLAY -->
+        {% for bid, info in bids %}
+          {% include 'bid_display.html' %}
         {% endfor %}
 
-        {% if bids %}
+        {% if flagged_bids %}
+        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#flaggedBids" aria-expanded="false" aria-controls="flaggedBids">
+          <i class="fa fa-exclamation-triangle fa-fw"></i> See flagged bids
+        </button>
+        <div class="collapse" id="flaggedBids">
+          <br />
+          {% for bid, info in flagged_bids %}
+            {% include 'bid_display.html' %}
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if bids or flagged_bids %}
         </div>
         {% endif %}
 

@@ -1,0 +1,67 @@
+{% load humanize %}
+  <div class="row">
+
+    <div class="col-md-3 col-sm-6 col-xs-6 text-center">
+      <h4><a href="{{ bid.bidder.get_absolute_url }}">
+        {{ bid.bidder.user.first_name }}
+        {{ bid.bidder.user.last_name }}
+      </a></h4>
+    </div>
+
+    <div class="col-md-1 col-sm-6 col-xs-6 text-center">
+      <h6>{{ bid.created|naturaltime }}</h6>
+    </div>
+
+    <div class="col-md-5 col-sm-6 col-xs-6">
+      <h4><small>
+      {% if bid.text %}
+        {{ bid.text }}
+      {% else %}
+      {% endif %}
+      </small></h4>
+    </div>
+
+    <div class="col-md-2 col-sm-4 col-xs-4 text-center">
+    {% if request.user == bid.bidder.user and not listing.exchanged and not listing.cancelled %}
+      <h4><a href="{% url 'edit_bid' listing.slug bid.slug %}"<span class="label label-default">Edit</span></a></h4>
+    {% endif %}
+    {% if bid == listing.winning_bid %}
+      <h4><small><span class="label label-success">Winning Bid</span></small> <strong>${{ bid.price }}</strong></h4>
+    {% else %}
+      <h4><strong>${{ bid.price }}</strong></h4>
+    {% endif %}
+    </div>
+
+    <div class="col-md-1 col-sm-2 col-xs-2">
+      {% if request.user == bid.bidder.user %}
+      {% else %}
+
+        {% comment %}
+        Annoyingly convoluted way of getting needed info: see
+        bids_with_info in view to see what's going on.
+        tuple is (flaggable, the slug)
+        {% endcomment %}
+                   
+        {% if info.0 %}
+        <h5 class="text-center"><a href="{% url 'create_bid_flag' bid.listing.slug bid.slug %}">
+          <i class="fa fa-flag fa-fw fa-lg"></i>
+          <br />
+          <small>Flag Bid</small>
+        </a></h5>
+        {% else %}
+        <h5 class="text-center"><a href="{% url 'delete_bid_flag' bid.listing.slug bid.slug info.1 %}">
+          <span class="fa-stack fa-lg">
+          <i class="fa fa-flag fa-stack-1x"></i>
+          <i class="fa fa-ban fa-stack-2x text-danger"></i>
+          </span>
+          <br />
+          <small>Remove Flag</small>
+        </a></h5>
+        {% endif %}
+
+      {% endif %}
+    </div>
+
+  </div>
+
+  <hr/>

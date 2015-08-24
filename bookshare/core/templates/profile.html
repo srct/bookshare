@@ -56,64 +56,63 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
     <legend><h3><i class="fa fa-book fa-fw"></i> Listings</h3></legend>
     {% endif %}
 
-    {% if listings %}
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover table-condensed text-center">
-        <thead>
-          <td class="col-md-2"><h4><strong>ISBN</strong></h4></td>
-          <td class="col-md-7"><h4><strong>Title</strong></h4></td>
-          <td class="col-md-1"><h4><strong>Price</strong></h4></td>
-          <td class="col-md-1"><h4><strong>Bids</strong></h4></td>
-          <td class="col-md-1"><h4><strong>Status</strong></h4></td>
-        </thead>
-        {% for listing in listings %}
-        <tbody>
-          {% if listing.exchanged %}
-          <tr class="success">
-          {% else %}
-          <tr>
-          {% endif %}
-            <td class="text-center"><h5>{{ listing.isbn }}</h5></td>
-            <td class="text-center"><h5><a href="{{ listing.get_absolute_url }}">{{ listing.title|title }}</h5></a></td>
-            <td class="text-center"><h5>
-              {% if listing.exchanged %}
-                ${{ listing.final_price }}
-              {% else %}
-                ${{ listing.price }}
-              {% endif %}
-            </h5></td>
-            <td class="text-center"><h5>{{ listing.bids|length }}</h5></td>
-            <td class="text-center"><h5>
-              {% if listing.exchanged %}
-                <span class="label label-primary"><strong>Exchanged</strong></span>
-                {% if student.user == request.user %}
-                  <small>(<a href="{% url 'unexchange_listing' listing.slug %}">Cancel Exchange</a>)</small>
-                {% endif %}
-              {% elif listing.cancelled %}
-                <span class="label label-default"><strong>Cancelled</strong></span>
-                {% if student.user == request.user %}
-                  <small>(<a href="{% url 'reopen_listing' listing.slug %}">Reopen</a>)</small>
-                {% endif %}
-              {% elif not listing.active %}
-                <span class="label label-warning"><strong>Inactive</strong></span>
-              {% else %}
-                <span class="label label-info"><strong>Active</strong></span>
-                {% if student.user == request.user %}
-                  <small>(<a href="{% url 'cancel_listing' listing.slug %}">Cancel</a>)</small>
-                {% endif %}
-              {% endif %}
-            </h5></td>
-          </tr>
-        </tbody>
-        {% endfor %}
-      </table>
+    {% if new_listings or old_listings %}
+
+      {% if old_listings and not new_listings %}
+      {% else %}
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover table-condensed text-center">
+            <thead>
+              <td><h4><strong>ISBN</strong></h4></td>
+              <td><h4><strong>Title</strong></h4></td>
+              <td><h4><strong>Price</strong></h4></td>
+              <td><h4><strong>Bids</strong></h4></td>
+              <td><h4><strong>Status</strong></h4></td>
+            </thead>
+            <tbody>
+              {% for listing in new_listings %}
+                {% include 'listing_row.html' %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+
+      {% if old_listings %}
+      <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapseListings" aria-expanded="false" aria-controls="collapseListings">
+        See older listings
+      </button>
+      <div class="collapse" id="collapseListings">
+        <br />
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover table-condensed text-center">
+            {% if not new_listings %}
+            <thead>
+              <td><h4><strong>ISBN</strong></h4></td>
+              <td><h4><strong>Title</strong></h4></td>
+              <td><h4><strong>Price</strong></h4></td>
+              <td><h4><strong>Bids</strong></h4></td>
+              <td><h4><strong>Status</strong></h4></td>
+            </thead>
+            {% endif %}
+            <tbody>
+              {% for listing in old_listings %}
+                {% include 'listing_row.html' %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endif %}
+
       {% if student.user == request.user %}
         <h4>
         <strong>Total Exchanges:</strong> {{ exchanges }} |
         <strong>Total Proceeds:</strong> ${{ proceeds|default_if_none:"0" }}
         </h4>
       {% endif %}
-    </div>
+
     {% else %}
       {% if student.user == request.user %}
       You don't
@@ -131,54 +130,63 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
 <legend><h3><i class="fa fa-gift fa-fw"></i>  Bids</h3></legend>
 <div class="row">
   <div class="col-md-12">
-    {% if bids %}
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover table-condensed text-center">
-        <thead>
-          <!-- the br's is a really shitty way of doing this -->
-          <td class="col-md-1"><h4><strong>Date<br />Bid</strong></h4></td>
-          <td class="col-md-8"><h4><strong><br />Title</strong></h4></td>
-          <td class="col-md-1"><h4><strong>Listing Status</strong></h4></td>
-          <td class="col-md-1"><h4><strong><br />Course</strong></h4></td>
-          <td class="col-md-1"><h4><strong><br />Price</strong></h4></td>
-        </thead>
-        <tbody>
-        {% for bid in bids %}
-        {% if bid == bid.listing.winning_bid %}
-        <tr class="success">
-        {% else %}
-        <tr>
-        {% endif %}
-          <td class="text-center"><h5>{{ bid.created|date:"m/d/y" }}</h5></td>
-          <td class="text-center"><h5><a href="{{ bid.listing.get_absolute_url }}">{{ bid.listing.isbn|isbn_name|title }}<a/></h5></td>
-          <td class="text-center"><h5>
-            {% if bid.listing.exchanged %}
-              <span class="label label-primary"><strong>Exchanged</strong></span>
-            {% elif bid.listing.cancelled %}
-              <span class="label label-default"><strong>Cancelled</strong></span>
-            {% elif listing.active %}
-              <span class="label label-warning"><strong>Inactive</strong></span>
-            {% else %}
-              <span class="label label-info"><strong>Active</strong></span>
-            {% endif %}
-          </h5></td>
-          <td class="text-center"><h5>{{ bid.listing.course_abbr }}</h5></td>
-          <td class="text-center"><h5>
-          ${{ bid.price }}
-          {% if bid == bid.listing.winning_bid %}
-            <br /><small><span class="label label-success"><strong>Winning Bid</strong></span></small>
-          {% else %}
-          {% endif %}
-          </h5></td>
-        {% endfor %}
-        </tbody>
-      </table>
-    </div>
+    {% if new_bids or old_bids %}
+
+      {% if old_bids and not new_bids %}
+      {% else %}
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover table-condensed text-center">
+            <thead>
+              <!-- the br's is a really shitty way of doing this -->
+              <td><h4><strong>Date<br />Bid</strong></h4></td>
+              <td><h4><strong><br />Title</strong></h4></td>
+              <td><h4><strong>Listing Status</strong></h4></td>
+              <td><h4><strong><br />Course</strong></h4></td>
+              <td><h4><strong><br />Price</strong></h4></td>
+            </thead>
+            <tbody>
+              {% for bid in new_bids %}
+                {% include 'bids_row.html' %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+
+      {% if old_bids %}
+        <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse" data-target="#collapseBids" aria-expanded="false" aria-controls="collapseBids">
+          See older bids
+        </button>
+        <div class="collapse" id="collapseBids">
+          <br />
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed text-center">
+              {% if not new_bids %}
+              <thead>
+                <!-- the br's is a really shitty way of doing this -->
+                <td><h4><strong>Date<br />Bid</strong></h4></td>
+                <td><h4><strong><br />Title</strong></h4></td>
+                <td><h4><strong>Listing Status</strong></h4></td>
+                <td><h4><strong><br />Course</strong></h4></td>
+                <td><h4><strong><br />Price</strong></h4></td>
+              </thead>
+              {% endif %}
+              <tbody>
+                {% for bid in old_bids %}
+                  {% include 'bids_row.html' %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endif %}
+
   {% else %}
     {% if student.user == request.user %}
     You don't
     {% else %}
-    {{ student.user.get_first_name }} doesn't
+    {{ student.user.first_name }} doesn't
     {% endif %}
     have any have any bids yet.
     {% if student.user == request.user %}

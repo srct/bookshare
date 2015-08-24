@@ -149,6 +149,12 @@ class Bid(TimeStampedModel):
 
     slug = RandomSlugField(length=6)
 
+    def too_many_flags(self):
+        if BidFlag.objects.filter(bid=self).count() > 0:
+            return True
+        else:
+            return False
+
     def __unicode__(self):
         return '%s\'s bid for $%s' % (self.bidder, str(self.price))
 
@@ -203,6 +209,8 @@ class BidFlag(TimeStampedModel):
 
     flagger = models.ForeignKey(Student)
     bid = models.ForeignKey(Bid)
+
+    reason = models.CharField(choices=FLAGGING_REASON_CHOICES, max_length=30,)
 
     slug = RandomSlugField(length=6)
 

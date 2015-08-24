@@ -1,0 +1,37 @@
+
+  {% if listing.exchanged %}
+  <tr class="success">
+  {% else %}
+  <tr>
+  {% endif %}
+    <td class="text-center col-md-2"><h5>{{ listing.isbn }}</h5></td>
+    <td class="text-center col-md-7"><h5><a href="{{ listing.get_absolute_url }}">{{ listing.title|title }}</h5></a></td>
+    <td class="text-center col-md-1"><h5>
+      {% if listing.exchanged %}
+        ${{ listing.final_price }}
+      {% else %}
+        ${{ listing.price }}
+      {% endif %}
+    </h5></td>
+    <td class="text-center col-md-1"><h5>{{ listing.bids|length }}</h5></td>
+    <td class="text-center col-md-1"><h5>
+      {% if listing.exchanged %}
+        <span class="label label-primary"><strong>Exchanged</strong></span>
+        {% if student.user == request.user %}
+          <small>(<a href="{% url 'unexchange_listing' listing.slug %}">Cancel Exchange</a>)</small>
+        {% endif %}
+      {% elif listing.cancelled %}
+        <span class="label label-default"><strong>Cancelled</strong></span>
+        {% if student.user == request.user %}
+          <small>(<a href="{% url 'reopen_listing' listing.slug %}">Reopen</a>)</small>
+        {% endif %}
+      {% elif not listing.active %}
+        <span class="label label-warning"><strong>Inactive</strong></span>
+      {% else %}
+        <span class="label label-info"><strong>Active</strong></span>
+        {% if student.user == request.user %}
+          <small>(<a href="{% url 'cancel_listing' listing.slug %}">Cancel</a>)</small>
+        {% endif %}
+      {% endif %}
+    </h5></td>
+  </tr>

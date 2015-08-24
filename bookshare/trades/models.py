@@ -116,6 +116,16 @@ class Listing(TimeStampedModel):
             price = None
         return price
 
+    def old(self):
+        today = date.today()
+        # listing last created + six months
+        created_plus_six = self.created.date() + relativedelta(months=6)
+
+        if today < created_plus_six:
+            return False
+        else:
+            return True
+
     # retrieve url for object
     def get_absolute_url(self):
         return reverse('detail_listing', kwargs={'slug': self.slug})

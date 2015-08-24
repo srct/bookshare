@@ -1,0 +1,28 @@
+{% load trades_extras %}
+{% if bid == bid.listing.winning_bid %}
+<tr class="success">
+{% else %}
+<tr>
+{% endif %}
+  <td class="text-center col-md-1"><h5>{{ bid.created|date:"m/d/y" }}</h5></td>
+  <td class="text-center col-md-8"><h5><a href="{{ bid.listing.get_absolute_url }}">{{ bid.listing.isbn|isbn_name|title }}<a/></h5></td>
+  <td class="text-center col-md-1"><h5>
+    {% if bid.listing.exchanged %}
+      <span class="label label-primary"><strong>Exchanged</strong></span>
+    {% elif bid.listing.cancelled %}
+      <span class="label label-default"><strong>Cancelled</strong></span>
+    {% elif listing.active %}
+      <span class="label label-warning"><strong>Inactive</strong></span>
+    {% else %}
+      <span class="label label-info"><strong>Active</strong></span>
+    {% endif %}
+  </h5></td>
+  <td class="text-center col-md-1"><h5>{{ bid.listing.course_abbr }}</h5></td>
+  <td class="text-center col-md-1"><h5>
+  ${{ bid.price }}
+  {% if bid == bid.listing.winning_bid %}
+    <br /><small><span class="label label-success"><strong>Winning Bid</strong></span></small>
+  {% else %}
+  {% endif %}
+  </h5></td>
+</tr>

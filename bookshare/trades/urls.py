@@ -3,9 +3,10 @@ from django.conf.urls import patterns, url
 from django.views.decorators.cache import cache_page
 # imports from your apps
 from .views import ListListings, CreateListing, ListingPage,\
-    CreateFlag, DeleteFlag, EditListing, ExchangeListing,\
-    UnExchangeListing, CancelListing, ReopenListing, CreateRating,\
-    EditRating, DeleteRating, EditBid, DeleteListing
+    CreateFlag, DeleteFlag, CreateBidFlag, DeleteBidFlag,\
+    EditListing, ExchangeListing, UnExchangeListing, CancelListing,\
+    ReopenListing, CreateRating, EditRating, DeleteRating,\
+    EditBid, DeleteListing
 
 
 urlpatterns = patterns('',
@@ -29,6 +30,12 @@ urlpatterns = patterns('',
 
     url(r'^listing/(?P<listing_slug>[\w-]+)/flag/(?P<slug>[\w-]+)/remove/$',
         DeleteFlag.as_view(), name='delete_flag'),
+
+    url(r'^listing/(?P<listing_slug>[\w-]+)/bid/(?P<slug>[\w-]+)/flag/$',
+        CreateBidFlag.as_view(), name='create_bid_flag'),
+
+    url(r'^listing/(?P<listing_slug>[\w-]+)/bid/(?P<bid_slug>[\w-]+)/flag/(?P<slug>[\w-]+)/remove/$',
+        DeleteBidFlag.as_view(), name='delete_bid_flag'),
 
     url(r'^listing/(?P<slug>[\w-]+)/edit/$',
         EditListing.as_view(), name='edit_listing'),

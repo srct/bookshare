@@ -27,32 +27,48 @@ def pfinfo(u_name):
 
 
 def create_user(tree):
-    username = tree[0][0].text
-    print username
-    user, user_created = User.objects.get_or_create(username=username)
 
-    if user_created:
-        user.email = "%s@%s" % (username, settings.ORGANIZATION_EMAIL_DOMAIN)
-        print "hello"
-        name_list = pfinfo(str(username))
-        print name_list, "name_list"
-        first_name = name_list[1].lstrip().split(' ')
-        if len(first_name) > 1:
-            no_mi = first_name[:-1]
-            user.first_name = ' '.join(no_mi)
+    print("Parsing CAS information.")
+
+    try:
+        username = tree[0][0].text
+        print username
+        user, user_created = User.objects.get_or_create(username=username)
+
+        if user_created:
+            user.email = "%s@%s" % (username, settings.ORGANIZATION_EMAIL_DOMAIN)
+            print "hello"
+            name_list = pfinfo(str(username))
+            print name_list, "name_list"
+            first_name = name_list[1].lstrip().split(' ')
+            if len(first_name) > 1:
+                no_mi = first_name[:-1]
+                user.first_name = ' '.join(no_mi)
+            else:
+                user.first_name = ' '.join(first_name)
+            last_name = name_list[0]
+            user.last_name = name_list[0]
+
+            print "world"
+            user.save()
+
+            print("Created user %s!" % username)
+
         else:
-            user.first_name = ' '.join(first_name)
-        last_name = name_list[0]
-        user.last_name = name_list[0]
+            print("User object already exists.")
 
-        print "world"
-        user.save()
-        new_student = Student.objects.create(user=user)
+        try:
+            Student.objects.get(user=user)
+            print("Student object already exists.")
 
-        # save the name off of peoplefinder for later quality assurance purposes
-        new_student.pf_first_name = user.first_name
-        new_student.pf_last_name = user.last_name
+        except ObjectDoesNotExist:
+            new_student = Student.objects.create(user=user)
 
-        new_student.save()
+            # save the name off of peoplefinder for later quality assurance purposes
+            new_student.pf_first_name = user.first_name
+            new_student.pf_last_name = user.last_name
 
-        print("Created user %s!" % username)
+            new_student.save()
+
+    except Exception as e:
+        print("CAS callback unsuccessful: ", e)

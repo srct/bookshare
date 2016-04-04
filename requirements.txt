@@ -7,7 +7,7 @@ argparse==1.2.1
 boto==2.38.0
 django-autoslug==1.7.2
 django-braces==1.4.0
-git+https://github.com/the-ben-waters/django-cas.git
+git+https://github.com/kstateome/django-cas.git
 django-crispy-forms==1.4.0
 django-gravatar2==1.1.4
 django-haystack==2.3.1

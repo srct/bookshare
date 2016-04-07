@@ -13,7 +13,7 @@ SRCT Bookshare &bull; {{ student.user.first_name }} {{ student.user.last_name }}
 <div class="page-header" id="banner">
   <div class="row">
     <div class="col-md-1">
-      <img class="img-circle img-responsive" src="{% gravatar_url student.user.email 75 %}">
+      <img class="img-circle img-responsive" src="{% gravatar_url request.user.email 75 %}">
     </div>
     <div class="col-md-6">
       <h2><strong><a href="{{ student.get_absolute_url }}">{{ student.user.get_full_name }}'s</a> Ratings</strong></h2>

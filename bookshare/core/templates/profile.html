@@ -14,7 +14,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
   <legend>
   <div class="row">
     <div class="col-md-1">
-      <img class="img-circle img-responsive" src="{% gravatar_url student.user.email 75 %}">
+      <img class="img-circle img-responsive" src="{% gravatar_url request.user.email 75 %}">
     </div>
     <div class="col-md-6">
       <h2><strong>{{ student.user.get_full_name }}</strong>
@@ -41,7 +41,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
       {% endif %}
     </div>
     <div class="col-md-2 text-right">
-      <h3><a href="mailto:{{ student.user.email }}"><i class="fa fa-envelope"></i> {{ student.user.username }}</a></h3>
+      <h3><a href="mailto:{{ request.user.email }}"><i class="fa fa-envelope"></i> {{ student.user.username }}</a></h3>
     </div>
   </div>
   </legend>

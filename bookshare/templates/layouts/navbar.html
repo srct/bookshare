@@ -25,7 +25,7 @@
         <li><a href="/search"><i class="fa fa-search fa-lg"></i></a></li>
         {% load gravatar %}
         <li><a href="{% url 'profile' request.user.username %}">
-          <img class="img-circle img-responsive center center-block" src="{% gravatar_url student.user.email 21 %}"></a></li>
+          <img class="img-circle img-responsive center center-block" src="{% gravatar_url request.user.email 21 %}"></a></li>
         <li><a href="/logout">Log Out</a></li>
         {% else %}
         <li><a href="/login" title="use your Mason username and password">Log In</a></li>

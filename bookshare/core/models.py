@@ -19,6 +19,12 @@ class Student(TimeStampedModel):
 
     emails_sent = models.PositiveIntegerField(default=0)
 
+    def get_full_name(self):
+        if (self.user.get_full_name() == ""):
+            return self.user.username
+        else:
+            return self.user.get_full_name()
+
     def has_nickname(self):
         pf_name = "%s %s" % (self.pf_first_name, self.pf_last_name)
 

@@ -33,7 +33,7 @@ SRCT Bookshare &bull; Mod
               {% if student.has_nickname %}
                 <strong>{{ student.get_nickname }}</strong>
               {% else %}
-                <strong>{{ student.user.get_full_name }}</strong>
+                <strong>{{ student.get_full_name_or_uname }}</strong>
               {% endif %}
               (<em>{{ student.user.username }}</em>)
             </a></td>

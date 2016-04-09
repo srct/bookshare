@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% block title %}
-SRCT Bookshare &bull; {{ student.user.get_full_name }}
+  SRCT Bookshare &bull; {{ student.get_full_name_or_uname }}
 {% endblock title %}
 
 {% block content %}
@@ -17,7 +17,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
       <img class="img-circle img-responsive" src="{% gravatar_url request.user.email 75 %}">
     </div>
     <div class="col-md-6">
-      <h2><strong>{{ student.user.get_full_name }}</strong>
+      <h2><strong>{{ student.get_full_name_or_uname }}</strong>
         {% if student.user == request.user %}
           <small><a href="{% url 'name_change' %}">(Edit)</a></small>
         {% endif %}
@@ -37,7 +37,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
         {% endfor %}
         </h3></a>
       {% else %}
-        <small>{{ student.user.first_name }} has no ratings yet.</small>
+        <small>{{ student.get_first_name_or_uname }} has no ratings yet.</small>
       {% endif %}
     </div>
     <div class="col-md-2 text-right">
@@ -117,7 +117,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
       {% if student.user == request.user %}
       You don't
       {% else %}
-      {{ student.user.first_name }} doesn't
+      {{ student.get_first_name_or_uname }} doesn't
       {% endif %}
       have any listings posted yet.
       {% if student.user == request.user %}
@@ -186,7 +186,7 @@ SRCT Bookshare &bull; {{ student.user.get_full_name }}
     {% if student.user == request.user %}
     You don't
     {% else %}
-    {{ student.user.first_name }} doesn't
+    {{ student.get_first_name_or_uname }} doesn't
     {% endif %}
     have any have any bids yet.
     {% if student.user == request.user %}

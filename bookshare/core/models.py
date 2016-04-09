@@ -20,7 +20,7 @@ class Student(TimeStampedModel):
     emails_sent = models.PositiveIntegerField(default=0)
 
     def get_full_name(self):
-        if (self.user.get_full_name() == ""):
+        if not(self.user.get_full_name()):
             return self.user.username
         else:
             return self.user.get_full_name()

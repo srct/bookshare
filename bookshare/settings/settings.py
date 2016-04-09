@@ -113,7 +113,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 # Peoplefinder API for user creation
-PF_URL = "http://peoplefinder.b1.akshaykarthik.com/"
+PF_URL = "https://api.srct.gmu.edu/pf/v1/"
 
 CAS_SERVER_URL = 'https://login.gmu.edu'
 CAS_LOGOUT_COMPLETELY = True

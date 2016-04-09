@@ -37,11 +37,7 @@
         {% endfor %}
         </h3></a>
       {% else %}
-        {% if student.user.get_full_name == "" %}
-          <small>{{ student.user.username }} has no ratings yet.</small>
-        {% else %}
-          <small>{{ student.get_first_name_or_uname }} has no ratings yet.</small>
-        {% endif %}
+        <small>{{ student.get_first_name_or_uname }} has no ratings yet.</small>
       {% endif %}
     </div>
     <div class="col-md-2 text-right">

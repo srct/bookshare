@@ -6,19 +6,32 @@ SRCT Bookshare &bull; Edit Name
 
 {% block content %}
 
+{% load gravatar %}
+
 <div class="page-header" id="banner">
   <div class="row">
-    <div class="col-lg-12 text-center">
+    <div class="col-md-12 text-center">
       <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
-      <p class="lead text-center"><strong>Edit Your Name</strong></p>
+      <p class="lead text-center"><strong>Edit Your Name</strong>
+        
+      </p>
     </div>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-md-8 col-md-offset-2">
+  <div class="col-md-4 center-block">
+    <img class="img-circle img-responsive" style="margin-left:auto;margin-right:auto;padding:10px"; src="{% gravatar_url request.user.email 200 %}">
+    <p class="text-center">
+      If you have a <a href="https://en.gravatar.com/">Gravatar profile</a> associated
+      with your <a href="https://masonlive.gmu.edu/">Masonlive email</a> address, your
+      default profile picture on this service will that Gravatar profile picture.
+    </p>
+  </div>
+  <div class="col-md-8 center-block">
     <div class="panel panel-default">
       <div class="panel-heading">
+
         <form action="" method="post">{% csrf_token %}
           {{ form.as_p }}
           <div class="row">

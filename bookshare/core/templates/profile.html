@@ -19,7 +19,7 @@
     <div class="col-md-6">
       <h2><strong>{{ student.get_full_name_or_uname }}</strong>
         {% if student.user == request.user %}
-          <small><a title="Edit your name" href="{% url 'name_change' %}"><i class="fa fa-pencil"></i></a></small>
+          <small><a href="{% url 'name_change' %}"><i class="fa fa-pencil"></i> Edit</a></small>
         {% endif %}
       </h2>
     </div>

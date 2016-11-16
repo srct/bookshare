@@ -37,7 +37,7 @@
         {% endfor %}
         </h3></a>
       {% else %}
-        <small>{{ student.get_first_name_or_uname }} has no ratings yet.</small>
+          <h3><a href="{% url 'ratings' student.slug %}">No ratings yet</a></h3>
       {% endif %}
     </div>
     <div class="col-md-2 text-right">

@@ -1,9 +1,11 @@
 # core django imports
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 # third party imports
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Button, Submit, Layout, Fieldset, HTML, Field
 from crispy_forms.bootstrap import AppendedPrependedText, FormActions
+from haystack.forms import SearchForm
 # imports from your apps
 from .models import Listing, Bid, Flag, BidFlag, Rating
 
@@ -239,3 +241,10 @@ class RatingForm(forms.ModelForm):
 
     class Meta:
         model = Rating
+
+# overwrites the search form to include bootstrap css classes and autofocus
+class ListingSearchForm(SearchForm):
+    q = forms.CharField(required=False, label=_('Search'),
+                        widget=forms.TextInput(attrs={'type': 'search',  # default
+                                                      'class': 'form-control',  # bootstrap
+                                                      'autofocus': 'autofocus'}))  # field already selected

@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from haystack.views import SearchView
 # imports from your apps
 from .views import HomepageView, ChartsView
+from trades.forms import ListingSearchForm
 
 
 admin.autodiscover()
@@ -26,7 +27,8 @@ urlpatterns = patterns('',
     url(r'^mod/', include('mod.urls')),
 
     # search
-    url(r'^search/', login_required(SearchView(), login_url='login'), name='search'),
+    url(r'^search/', login_required(SearchView(form_class=ListingSearchForm),
+                                    login_url='login'), name='search'),
 
     # site-wide pages
     # homepage is weird for cacheing... no special url, but different content

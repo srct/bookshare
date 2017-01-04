@@ -4,6 +4,11 @@
 <html lang="en" prefix="og: http://ogp.me/ns# books: http://ogp.me/ns/books#">
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- The above 3 meta tags *must* come first in the <head>;
+       any other head content must come *after* these tags:
+       otherwise mobile responsiveness doesn't work. -->
   <meta name="description" content="A place for Mason students to exchange textbooks.">
   {% load static from staticfiles %}
   <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
@@ -36,6 +41,7 @@
     */
   </script>
   <link rel="icon" href="{% static 'img/favicon.ico' %}">
+  <meta name="theme-color" content="#006633">
   <title>{% block title %} {% endblock title %}</title>
   {% block social_metadata %} {% endblock social_metadata %}
 </head>

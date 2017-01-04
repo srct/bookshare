@@ -21,7 +21,7 @@ SRCT Bookshare &bull; Search Listings
     <div class="col-md-2">
       {{ form.q }}
     </div>
-    <button type="submut" class="btn btn-default"><i class="fa fa-search fa-fw fa-lg"></i></button>
+    <button type="submit" class="btn btn-default"><i class="fa fa-search fa-fw fa-lg"></i></button>
   </div>
 </form>
 
@@ -43,28 +43,31 @@ SRCT Bookshare &bull; Search Listings
     {% endif %}
 
     {% for result in page.object_list %}
+      {% with result.object as listing %}
       <tr>
         <td class="text-center">
-          <h5>{{ result.object.isbn }}</h5>
+          <h5>{{ listing.isbn }}</h5>
         </td>
         <td class="text-center">
-          <a href="{{ result.object.get_absolute_url }}"><h5><strong>{{ result.object.title }}</strong></h5></a>
+          <h5><strong>
+            <a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a>
+          </strong></h5>
         </td>
         <td class="text-center">
-          <h5>{{ result.object.author }}</h5>
+          <h5>{{ listing.author }}</h5>
         </td>
         <td class="text-center">
-          <h5>{{ result.object.course_abbr }}</h5>
+          <h5>{{ listing.course_abbr }}</h5>
         </td>
         <td class="text-center">
           <h5>
-            <a href="{{ result.object.poster.get_absolute_url }}">
-            {{ result.object.poster.user.first_name }} {{ result.object.poster.user.last_name }}
+            <a href="{{ listing.poster.get_absolute_url }}">
+              {{ listing.poster.user.get_full_name }}
             </a>
           </h5>
         </td>
         <td class="text-center">
-          <h5>${{ result.object.price }}</h5>
+          <h5>${{ listing.price }}</h5>
         </td>
       </tr>
     {% empty %}

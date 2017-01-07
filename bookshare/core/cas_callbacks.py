@@ -20,12 +20,21 @@ def pfinfo(u_name):
         metadata.raise_for_status()
     except requests.exceptions.RequestException as e:
         print("Cannot resolve to peoplefinder api:", e)
-        return ['', '']
+        return ['', '']  # return empty response
     else:
         pf_json = metadata.json()
         try:
-            name = pf_json['results'][0]['name']
-            return name.split(',')
+            if len(pf_json['results']) == 1:  # ordinary case
+                if pf_json['method'] == 'peoplefinder':
+                    name = pf_json['results'][0]['name']
+                    return name.split(',')
+                elif pf_json['method'] == 'ldap':
+                    name = [pf_json['results'][0]['surname'],
+                            pf_json['results'][0]['givenname']]
+                    return name
+            else:  # handles student employees, whose employment info is listed first
+                name = pf_json['results'][1]['name']
+                return name.split(',')
         # if the name is not in peoplefinder, return empty first and last name
         except IndexError:
             return ['', '']
@@ -49,7 +58,7 @@ def create_user(tree):
         print("Start peoplefinder parsing")
         try:
             name_list = pfinfo(str(username))
-            print name_list, "name_list"
+            print(name_list, "name_list")
             first_name = name_list[1].lstrip().split(' ')
             if len(first_name) > 1:
                 no_mi = first_name[:-1]
@@ -58,9 +67,9 @@ def create_user(tree):
                 user.first_name = ' '.join(first_name)
             last_name = name_list[0]
             user.last_name = name_list[0]
-
+            print("Added user's name, %s %s." % (user.first_name, user.last_name))
         except Exception as e:
-            print("Unhandled peoplefinder exception:", e)
+            print("Unable to add user's name:", e)
 
         user.save()
         print("Created user %s!" % username)

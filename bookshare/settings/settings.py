@@ -1,5 +1,30 @@
+"""
+Django settings for the bookshare project.
+"""
+
+# standard library imports
+from __future__ import absolute_import, print_function, unicode_literals
 import os
+# core django imports
+from django.contrib.messages import constants as messages
+# imports from your apps
+from . import secret
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+# cryptography-- make this unique and don't share it with anybody.
+SECRET_KEY = secret.SECRET_KEY
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+ALLOWED_HOSTS = ['127.0.0.1']
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
@@ -49,6 +74,8 @@ INSTALLED_APPS = (
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
+MESSAGE_TAGS = {messages.ERROR: 'danger', }
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -64,16 +91,11 @@ ROOT_URLCONF = 'settings.urls'
 
 WSGI_APPLICATION = 'settings.wsgi.application'
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 MANAGERS = ADMINS
 ORGANIZATION_EMAIL_DOMAIN = 'masonlive.gmu.edu'
-
-import secret
-SECRET_KEY = secret.SECRET_KEY
 
 DATABASES = {
     'default': {
@@ -87,25 +109,14 @@ DATABASES = {
 }
 
 LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'America/New_York'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
 
 SITE_ID = 1
 
-TIME_ZONE = 'America/New_York'
-
-ALLOWED_HOSTS = ['127.0.0.1']
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
-
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
@@ -152,7 +163,7 @@ EMAIL_HOST_PASSWORD = secret.EMAIL_HOST_PASSWORD
 MEDIA_S3 = False
 
 if MEDIA_S3:
-
+# Upload user files to AWS S3
     AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
         'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
         'Cache-Control': 'max-age=94608000',
@@ -165,6 +176,7 @@ if MEDIA_S3:
     MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 else:
+# Upload user files to your server; by default a /media directory
     MEDIA_URL = '/media/'
     MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))
 

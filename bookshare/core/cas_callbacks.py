@@ -1,3 +1,5 @@
+# standard library imports
+from __future__ import absolute_import, print_function, unicode_literals
 # core django imports
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -13,10 +15,12 @@ def pfinfo(u_name):
     pf_url = settings.PF_URL
     url = str(pf_url) + "basic/all/" + str(u_name)
     try:
-        metadata = requests.get(url)
+        metadata = requests.get(url, timeout=3)
+        print("Retrieving information from the peoplefinder api.")
         metadata.raise_for_status()
     except requests.exceptions.RequestException as e:
-        print e
+        print("Cannot resolve to peoplefinder api:", e)
+        return ['', '']
     else:
         pf_json = metadata.json()
         try:
@@ -25,19 +29,24 @@ def pfinfo(u_name):
         # if the name is not in peoplefinder, return empty first and last name
         except IndexError:
             return ['', '']
+        except Exception as e:
+            print("Unknown peoplefinder error:", e)
+            return ['', '']
 
 
 def create_user(tree):
+
+    print("Parsing CAS information.")
     username = tree[0][0].text
-    print username
     user, user_created = User.objects.get_or_create(username=username)
 
     if user_created:
         user.email = "%s@%s" % (username, settings.ORGANIZATION_EMAIL_DOMAIN)
-        user.set_password('cas_used_instead')
-        print("Added user email and default password.")
+        irrelevant_password = User.objects.make_random_password()
+        user.set_password(irrelevant_password)
+        print("Added user email, %s, and created random password." % user.email)
 
-        print "Start peoplefinder parsing"
+        print("Start peoplefinder parsing")
         try:
             name_list = pfinfo(str(username))
             print name_list, "name_list"
@@ -59,7 +68,6 @@ def create_user(tree):
     else:
         print("User object already exists.")
 
-
     # Student Creation Section
     try:
         Student.objects.get(user=user)
@@ -76,4 +84,3 @@ def create_user(tree):
         print("Created student object for user %s!" % username)
 
     print("CAS callback completed.")
-

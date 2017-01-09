@@ -61,6 +61,8 @@ class ListingForm(forms.ModelForm):
 
     class Meta:
         model = Listing
+        fields = ['isbn', 'title', 'author', 'edition', 'year', 'course_abbr',
+                  'condition', 'access_code', 'price', 'photo', 'description', ]
 
 
 class BidForm(forms.ModelForm):
@@ -92,6 +94,7 @@ class BidForm(forms.ModelForm):
 
     class Meta:
         model = Bid
+        fields = ['listing', 'price', 'text', ]
 
 
 class FlagForm(forms.ModelForm):
@@ -117,6 +120,7 @@ class FlagForm(forms.ModelForm):
 
     class Meta:
         model = Flag
+        fields = ['reason', ]
 
 
 class BidFlagForm(forms.ModelForm):
@@ -142,6 +146,7 @@ class BidFlagForm(forms.ModelForm):
 
     class Meta:
         model = BidFlag
+        fields = ['reason', ]
 
 
 #class EditListingForm( forms.ModelForm ):
@@ -182,6 +187,7 @@ class ExchangeListingForm(forms.ModelForm):
 
     class Meta:
         model = Listing
+        fields = ['email_message', 'winning_bid', ]
 
 
 class UnExchangeListingForm(forms.ModelForm):
@@ -215,6 +221,7 @@ class UnExchangeListingForm(forms.ModelForm):
 
     class Meta:
         model = Listing
+        fields = ['email_message', ]
 
 
 class RatingForm(forms.ModelForm):
@@ -241,6 +248,7 @@ class RatingForm(forms.ModelForm):
 
     class Meta:
         model = Rating
+        fields = ['stars', 'review', ]
 
 # overwrites the search form to include bootstrap css classes and autofocus
 class ListingSearchForm(SearchForm):

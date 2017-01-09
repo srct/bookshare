@@ -94,12 +94,6 @@ ROOT_URLCONF = 'settings.urls'
 
 WSGI_APPLICATION = 'settings.wsgi.application'
 
-ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
-)
-MANAGERS = ADMINS
-ORGANIZATION_EMAIL_DOMAIN = 'masonlive.gmu.edu'
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -121,13 +115,14 @@ SITE_ID = 1
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
+# Peoplefinder API for user creation
+PF_URL = "https://api.srct.gmu.edu/pf/v1/"
+ORGANIZATION_EMAIL_DOMAIN = 'masonlive.gmu.edu'
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'cas.backends.CASBackend',
 )
-
-# Peoplefinder API for user creation
-PF_URL = "https://api.srct.gmu.edu/pf/v1/"
 
 CAS_SERVER_URL = 'https://login.gmu.edu'
 CAS_LOGOUT_COMPLETELY = True
@@ -156,40 +151,107 @@ PIWIK_SITE_ID = secret.PIWIK_SITE_ID
 PIWIK_URL = secret.PIWIK_URL
 
 # Email configurations
-EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
-EMAIL_HOST = secret.EMAIL_HOST
-EMAIL_PORT = '465'
-EMAIL_HOST_USER = secret.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = secret.EMAIL_HOST_PASSWORD
+# the email address that error messages come from; sent to admins
+ADMINS = (
+         #('Bookshare Devs', 'bookshare@lists.srct.gmu.edu'),
+         #('SRCT Execs', 'srct@gmu.edu'),
+)
+MANAGERS = ADMINS
+
+USE_SES = False
+if not USE_SES:
+    if DEBUG:
+        # print emails to the terminal where manage.py is running
+        EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    else:
+        EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+        EMAIL_HOST = 'localhost'
+        EMAIL_PORT = 25
+        EMAIL_HOST_USER = secret.HOST_EMAIL_USER
+        EMAIL_HOST_PASSWORD = secret.EMAIL_HOST_PASSWORD
+        # includes implicit TLS
+        EMAIL_USE_SSL = False
+else:
+    # configurations to send email via Amazon SES
+    EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+    EMAIL_HOST = secret.SES_HOST
+    EMAIL_PORT = '465'
+    EMAIL_HOST_USER = secret.SES_USER
+    EMAIL_HOST_PASSWORD = secret.SES_PASSWORD
 
 # Media configurations
-MEDIA_S3 = False
-
-if MEDIA_S3:
-# Upload user files to AWS S3
+USE_S3 = False
+if not USE_S3:
+    # Upload user files to your server; by default a /media directory
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))
+    # make sure to comment out line in settings/urls.py
+else:
+    # configurations to upload user media files to Amazon S3
     AWS_HEADERS = {  # see http://developer.yahoo.com/performance/rules.html#expires
         'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
         'Cache-Control': 'max-age=94608000',
     }
 
-    AWS_STORAGE_BUCKET_NAME = secret.AWS_STORAGE_BUCKET_NAME
-    AWS_ACCESS_KEY_ID = secret.AWS_ACCESS_KEY_ID
-    AWS_SECRET_ACCESS_KEY = secret.AWS_SECRET_ACCESS_KEY
-    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    AWS_STORAGE_BUCKET_NAME = secret.S3_BUCKET_NAME
+    AWS_ACCESS_KEY_ID = secret.S3_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY = secret.S3_SECRET_ACCESS_KEY
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % S3_STORAGE_BUCKET_NAME
     MEDIA_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-else:
-# Upload user files to your server; by default a /media directory
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = (os.path.join(BASE_DIR, 'media'))
 
-# don't use redis when in develoment
 if DEBUG:
-    pass
+    # dummy cache for development-- doesn't actually cache things
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        },
+    }
 else:
     CACHES = {
         'default': {
             'BACKEND': 'redis_cache.RedisCache',
+            # configure to redis port
             'LOCATION': '/var/run/redis/redis.sock',
+        },
+    }
+
+if not DEBUG:
+    LOGGING = {
+        'version': 1,
+        # the ones the print everything out to the terminal
+        # and the ones that email on SuspiciousOperation occurrences
+        'disable_existing_loggers': False,
+        'handlers': {
+            'file': {
+                'level': 'WARNING',
+                'class': 'logging.FileHandler',
+                # make sure to change this to the proper path, and one that
+                # can be written to
+                'filename': '/path/to/django/debug.log',
+            },
+            # 'mail_admins' by default does not include a traceback attachment
+            # setting 'include_html' to True will attach an html traceback file to the email
+            # you can also set an additional 'email_backend' arg to a custom email handler (e.g. SES)
+            'mail_admins': {
+                'level': 'ERROR',
+                'class': 'django.utils.log.AdminEmailHandler',
+                'include_html': True,
+            },
+        },
+        'loggers': {
+            # logs request errors
+            # 5XX responses are raised as ERROR messages
+            # 4XX responses are raised as WARNING messages
+            'django.request': {
+                'handlers': ['file', 'mail_admins'],
+                'propagate': True,
+            },
+            'django.template': {
+                'handlers': ['file',],
+                'propagate': True,
+            },
+        # django's default loggers send request and security messages at the ERROR
+        # or CRITICAL level to the AdminEmailHandler via mail_admins
         },
     }

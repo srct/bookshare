@@ -1,5 +1,5 @@
 # core django imports
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
@@ -8,6 +8,7 @@ from django.views.decorators.cache import cache_page
 from django.contrib.auth.decorators import login_required
 # third party imports
 from haystack.views import SearchView
+from cas.views import login, logout
 # imports from your apps
 from .views import HomepageView, ChartsView
 from trades.forms import ListingSearchForm
@@ -19,7 +20,7 @@ handle403 = TemplateView.as_view(template_name="403.html")
 handle404 = TemplateView.as_view(template_name="404.html")
 handle500 = TemplateView.as_view(template_name="500.html")
 
-urlpatterns = patterns('',
+urlpatterns = [
     # app-level urls
     url(r'^share/', include('trades.urls')),
     url(r'^student/', include('core.urls')),
@@ -45,12 +46,12 @@ urlpatterns = patterns('',
         name='privacy'),
 
     # user authentication
-    url(r'^login/$', 'cas.views.login', name='login'),
-    url(r'^logout/$', 'cas.views.logout', name='logout'),
+    url(r'^login/$', login, name='login'),
+    url(r'^logout/$', logout, name='logout'),
 
     # admin pages
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
     # location of user-uploaded media files from settings.py (for local)
-) #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

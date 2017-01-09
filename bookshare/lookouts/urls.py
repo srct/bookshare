@@ -1,10 +1,10 @@
 # core django imports
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.views.decorators.cache import cache_page
 # imports from your apps
 from .views import DetailLookout, CreateLookout, DeleteLookout
 
-urlpatterns = patterns('',
+urlpatterns = [
 
     url(r'^new/$',
         CreateLookout.as_view(), name='create_lookout'),
@@ -14,4 +14,4 @@ urlpatterns = patterns('',
 
     url(r'^(?P<slug>[\w-]+)/delete/$',
         DeleteLookout.as_view(), name='delete_lookout'),
-)
+]

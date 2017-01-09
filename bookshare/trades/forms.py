@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 # third party imports
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Button, Submit, Layout, Fieldset, HTML, Field
-from crispy_forms.bootstrap import AppendedPrependedText, FormActions
+from crispy_forms.bootstrap import PrependedAppendedText, FormActions
 from haystack.forms import SearchForm
 # imports from your apps
 from .models import Listing, Bid, Flag, BidFlag, Rating
@@ -33,7 +33,7 @@ class ListingForm(forms.ModelForm):
                      Field('course_abbr', placeholder='ENGH 302'),
                      'condition',
                      'access_code',
-                     AppendedPrependedText('price', '$', '.00',
+                     PrependedAppendedText('price', '$', '.00',
                                            placeholder="whole numbers"),
                      'photo',
                      Field('description',

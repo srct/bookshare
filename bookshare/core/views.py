@@ -27,7 +27,7 @@ class DetailStudent(LoginRequiredMixin, DetailView):
 
         total_exchanges = student_listings.filter(exchanged=True).count()
 
-        total_proceeds = Bid.objects.filter(listing__poster__user=self.get_object()).filter(listing__exchanged=True).aggregate(Sum('price'))['price__sum']
+        total_proceeds = Bid.objects.filter(listing__poster__user=self.get_object().user).filter(listing__exchanged=True).aggregate(Sum('price'))['price__sum']
 
         student_ratings = Rating.objects.filter(listing__poster=self.get_object())
         if student_ratings:

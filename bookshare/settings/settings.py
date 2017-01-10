@@ -102,6 +102,9 @@ DATABASES = {
         'PASSWORD': secret.DB_PASSWORD,
         'HOST': secret.DB_HOST,
         'PORT': secret.DB_PORT,
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 

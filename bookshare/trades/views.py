@@ -203,7 +203,7 @@ class DetailListing(LoginRequiredMixin, DetailView):
 
         context['bids'] = bids_with_info
         context['flagged_bids'] = flagged_bids_with_info
-        context['bid_count'] = Bid.objects.filter(listing=self.get_object).count()
+        context['bid_count'] = Bid.objects.filter(listing=self.get_object()).count()
         # flags
         context['flags'] = Flag.objects.filter(listing=self.get_object()).order_by('-created')
         context['flag_count'] = Flag.objects.filter(listing=self.get_object()).count()

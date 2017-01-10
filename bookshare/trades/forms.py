@@ -77,7 +77,7 @@ class BidForm(forms.ModelForm):
             Fieldset("",
                      'listing',
                      HTML("<div class='col-md-4'>"),
-                     AppendedPrependedText('price', '$', '.00',
+                     PrependedAppendedText('price', '$', '.00',
                                            placeholder="whole numbers"),
                      HTML("</div><div class='col-md-6'>"),
                      'text',

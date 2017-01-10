@@ -46,8 +46,11 @@ def pfinfo(u_name):
 def create_user(tree):
 
     print("Parsing CAS information.")
-    username = tree[0][0].text
-    user, user_created = User.objects.get_or_create(username=username)
+    try:
+        username = tree[0][0].text
+        user, user_created = User.objects.get_or_create(username=username)
+    except Exception as e:
+        print("CAS callback unsuccessful:", e)
 
     if user_created:
         user.email = "%s@%s" % (username, settings.ORGANIZATION_EMAIL_DOMAIN)

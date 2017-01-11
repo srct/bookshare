@@ -31,7 +31,13 @@ def ISBNMetadata(standardISBN):
     url = "http://xisbn.worldcat.org/webservices/xid/isbn/" +\
           str(standardISBN) +\
           "?method=getMetadata&format=json&fl=title,year,author,ed"
-    metadata = requests.get(url)
+
+    # In case the API fails to return, simply return None.
+    try:
+        metadata = requests.get(url, timeout=3)
+    except ConnectionError:
+        return None
+
     # format into a dictionary
     dejson = metadata.json()
     try:

@@ -10,25 +10,21 @@ SRCT Bookshare &bull; Latest Listings
   <div class="col-lg-12">
     <h1 class="text-center"><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
     <p class="lead text-center"><strong>Latest Listings</strong></p>
+    <p class="text-center"><small><em>New listings may take a few moments to appear.</em></small></p>
   </div>
 </div>
 
+{% load humanize %}
+
 {% if listings %}
 
-  <div class="row">
-    <div class="col-md-10 col-md-offset-1 text-center">
-      <h4><p>Want to instead <strong><a href="/search">search</a></strong> for something specific?</p></h4>
-    </div>
-  </div>
-
-  <legend></legend>
+  <hr />
 
   <div class="row">
-    <div class="col-md-10 col-md-offset-1 text-center bottom-padding">
-      <small><em>New listings may take a few moments to appear.</em></small>
-    </div>
     {% for listing in listings %}
       <div class="col-md-6">
+        <p class="pull-right text-muted">{{ listing.created|naturaltime }}</p>
+        <br />
         {% include 'listing_preview_panel.html' %}
       </div>
       {% if forloop.counter|divisibleby:2 %}

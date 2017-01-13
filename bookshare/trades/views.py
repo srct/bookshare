@@ -533,7 +533,7 @@ class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         me = Student.objects.get(user=self.request.user)
         posting_student = self.get_object().poster
 
-        bid_count = Bid.objects.filter(listing=self.get_object).count()
+        bid_count = Bid.objects.filter(listing=self.get_object()).count()
         if bid_count < 1:
             # because the page shouldn't exist in this scenario
             raise Http404

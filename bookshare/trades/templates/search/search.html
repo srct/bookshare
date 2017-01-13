@@ -45,28 +45,28 @@ SRCT Bookshare &bull; Search Listings
       {% with result.object as listing %}
       <tr>
         <td class="text-center">
-          <h5>{{ listing.isbn }}</h5>
+          <h4>{{ listing.isbn }}</h4>
         </td>
         <td class="text-center">
-          <h5><strong>
+          <h4><strong>
             <a href="{{ listing.get_absolute_url }}">{{ listing.title }}</a>
-          </strong></h5>
+          </strong></h4>
         </td>
         <td class="text-center">
-          <h5>{{ listing.author }}</h5>
+          <h4>{{ listing.author }}</h4>
         </td>
         <td class="text-center">
-          <h5>{{ listing.course_abbr }}</h5>
+          <h4>{{ listing.course_abbr }}</h4>
         </td>
         <td class="text-center">
-          <h5>
+          <h4>
             <a href="{{ listing.poster.get_absolute_url }}">
               {{ listing.poster.user.get_full_name }}
             </a>
-          </h5>
+          </h4>
         </td>
         <td class="text-center">
-          <h5>${{ listing.price }}</h5>
+          <h4>${{ listing.price }}</h4>
         </td>
       </tr>
       {% endwith %}

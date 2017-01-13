@@ -13,45 +13,62 @@ from .models import Listing, Bid, Flag, BidFlag, Rating
 class ListingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-
+        super(ListingForm, self).__init__(*args, **kwargs)
+        # Define the basics for crispy-forms
         self.helper = FormHelper()
-        # bootstrap3 formatting
+        self.helper.form_method = 'POST'
+
+        # Some extra vars for form css purposes
         self.helper.label_class = 'col-md-3 be-bold'
         self.helper.field_class = 'col-md-9 bottom-padding'
 
+        # The main "layout" defined
         self.helper.layout = Layout(
             Fieldset("",
-                     Field('isbn', placeholder='0801884039'),
-                     HTML('<div class="collapse" id="section-collapse">'),
-                     Field('title',
-                           placeholder='Squirrels: The Animal Answer Guide'),
-                     Field('author',
-                           placeholder='Richard W. Thorington, Jr., and Katie Ferrell'),
-                     Field('edition', placeholder='1'),
-                     Field('year', placeholder='2006'),
-                     HTML('</div>'),
-                     Field('course_abbr', placeholder='ENGH 302'),
-                     'condition',
-                     'access_code',
-                     PrependedAppendedText('price', '$', '.00',
-                                           placeholder="whole numbers"),
-                     'photo',
-                     Field('description',
-                           placeholder='I would be willing to exchange this textbook for one that I need next semester. /// This is for Professor Smith\'s section ONLY. /// I can give you the workbook as well.'),
-                     FormActions(Submit('submit', 'Create',
-                                 css_class='btn-primary'),
-                                 Button('cancel', 'Never Mind',
-                                        css_class='btn-default',
-                                        onclick="history.back()")
-                                 ),
+                #######################
+                Field('isbn', placeholder='0801884039'),
 
-                     ),
+                # Collapsed elements
+                HTML('<div class="collapse" id="section-collapse">'),
+                    Field('title',
+                           placeholder='Squirrels: The Animal Answer Guide'),
+
+                    Field('author',
+                           placeholder='Richard W. Thorington, Jr., and Katie Ferrell'),
+
+                    Field('edition', placeholder='1'),
+
+                    Field('year', placeholder='2006'),
+                HTML('</div>'),
+
+                Field('course_abbr', placeholder='ENGH 302'),
+
+                'condition',
+                'access_code',
+
+                PrependedAppendedText('price', '$', '.00',
+                    placeholder="whole numbers"),
+
+                'photo',
+
+                Field('description',
+                    placeholder='I would be willing to exchange this textbook for one that I need next semester. /// This is for Professor Smith\'s section ONLY. /// I can give you the workbook as well.'),
+
+                #######################
+                FormActions(
+                    Submit('submit', 'Create', css_class='btn-primary'),
+                    Button('cancel', 'Never Mind',
+                        css_class='btn-default',
+                        onclick="history.back()")
+                ),
+            ),
         )
 
-        super(ListingForm, self).__init__(*args, **kwargs)
+        # Field labeling
         self.fields['isbn'].label = "ISBN"
         self.fields['course_abbr'].label = "Course"
         self.fields['description'].label = "Other Notes"
+        # Define required attribute for 'photo'
         self.fields['photo'].required = False
 
     def clean(self):

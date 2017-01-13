@@ -11,6 +11,7 @@ SRCT Bookshare &bull; {{ student.get_full_name_or_uname }}
 {% load trades_extras %}
 
 <div class="page-header" id="banner">
+  <legend>
   <div class="row">
     <div class="col-md-1">
       <img class="img-circle img-responsive" src="{% gravatar_url request.user.email 75 %}">
@@ -28,6 +29,7 @@ SRCT Bookshare &bull; {{ student.get_full_name_or_uname }}
       </h3>
     </div>
   </div>
+  </legend>
 </div>
 
 <div class="row" style="padding-top: 15px;">

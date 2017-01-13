@@ -6,6 +6,8 @@ SRCT Bookshare &bull; Homepage
 
 {% block content %}
 
+{% if not user.is_authenticated %}
+
 <div class="container">
   <div class="row">
     <div class="col-md-12 license">
@@ -17,14 +19,39 @@ SRCT Bookshare &bull; Homepage
     </div>
   </div>
 </div>
-{% if user.is_authenticated %}
+
+<hr />
+
+<div class="row">
+  <div class="col-sm-3 text-center">
+    <h3><i class="fa fa-key fa-lg"></i></h3>
+    <h4>Log in with your Mason credentials</h4>
+  </div>
+  <div class="col-sm-3 text-center">
+    <h3><i class="fa fa-gift fa-lg"></i></h3>
+    <h4>Exchange your used textbooks with Mason students</h4>
+  </div>
+  <div class="col-sm-3 text-center">
+    <h3><i class="fa fa-book fa-lg"></i></h3>
+    <h4>Search for textbooks by course and more</h4>
+  </div>
+  <div class="col-sm-3 text-center">
+    <h3><i class="fa fa-eye fa-lg"></i></h3>
+    <h4>Get updates when textbooks you want are posted</h4>
+  </div>
+</div>
+
+{% else %}
 
 {% load trades_extras %}
+
+<h2>Welcome, {{ request.user.student.get_first_name_or_uname }}!</h2>
 
 <legend class="text-center">
   <i class="fa fa-eye"></i> <strong>Your Lookouts</strong>
   <small>(<a href="{% url 'create_lookout' %}">Create</a>)</small>
 </legend>
+
   {% if lookouts %}
 
     {% for lookout in lookouts %}
@@ -48,19 +75,14 @@ SRCT Bookshare &bull; Homepage
 
   {% else %}
     <div class="row">
-      <div class="col-md-10 col-md-offset-1">
+      <div class="col-md-8 col-md-offset-2">
         <div class="panel panel-warning">
           <div class="panel-body text-center">
             <div class="row">
               <div class="col-md-10 col-md-offset-1">
-                <h3>No lookout results.</h3>
-                  <p>
-                  You don't have any lookouts yet. Lookouts are automatic
-                  searches for books you have an eye out for. You can
-                  <a href="{% url 'create_lookout' %}">create some</a>, and
-                  we'll immediately let you know  when a listing you want 
-                  goes up.
-                  </p>
+                <p>Lookouts are automatic searches for books you designate.</p>
+                <p><a href="{% url 'create_lookout' %}">Save an ISBN</a>,
+                and we'll immediately let you know when a book you want is listed.</p>
               </div>
             </div>
           </div>
@@ -68,28 +90,9 @@ SRCT Bookshare &bull; Homepage
       </div>
     </div>
   {% endif %}
-{% else %}
-<hr />
 
-<div class="row">
-  <div class="col-sm-3 text-center">
-    <h3><i class="fa fa-key fa-lg"></i></h3>
-    <h4>Log in with your Mason credentials</h4>
-  </div>
-  <div class="col-sm-3 text-center">
-    <h3><i class="fa fa-gift fa-lg"></i></h3>
-    <h4>Exchange your used textbooks with Mason students</h4>
-  </div>
-  <div class="col-sm-3 text-center">
-    <h3><i class="fa fa-book fa-lg"></i></h3>
-    <h4>Search for textbooks by course and more</h4>
-  </div>
-  <div class="col-sm-3 text-center">
-    <h3><i class="fa fa-eye fa-lg"></i></h3>
-    <h4>Get updates when textbooks you want are posted</h4>
-  </div>
-</div>
 {% endif %}
+
 <hr />
 
 <div class="row">

@@ -73,6 +73,7 @@ INSTALLED_APPS = (
     'haystack',
     'piwik',
     'randomslugfield',
+    'rest_framework',
     'storages',
 )
 

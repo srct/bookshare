@@ -36,9 +36,12 @@ class ListingForm(forms.ModelForm):
         self.helper = FormHelper()
 
         # Some extra vars for form css purposes
-        self.helper.form_class = 'form-horizontal'
+        # self.helper.form_class = 'form-horizontal'
+        #self.helper.label_class = 'col-lg-2 be-bold bottom-padding'
+        #self.helper.field_class = 'col-lg-8 bottom-padding'
         self.helper.label_class = 'col-lg-2 be-bold bottom-padding'
         self.helper.field_class = 'col-lg-8 bottom-padding'
+
 
         self.helper.help_text_inline = True
 
@@ -54,7 +57,7 @@ class ListingForm(forms.ModelForm):
         self.helper.layout = Layout(
             Fieldset("",
                 #######################
-                Field('isbn', placeholder='0801884039'),
+                Field('isbn', placeholder='0801884039', style="width: 155px;"),
 
                 # Collapsed elements
                 HTML('<div class="collapse" id="section-collapse">'),
@@ -64,18 +67,17 @@ class ListingForm(forms.ModelForm):
                     Field('author',
                            placeholder='Richard W. Thorington, Jr., and Katie Ferrell'),
 
-                    Field('edition', placeholder='1'),
+                    Field('edition', placeholder='1', style="width: 82px;"),
 
-                    Field('year', placeholder='2006'),
+                    Field('year', placeholder='2006', style="width: 82px;"),
                 HTML('</div>'),
 
-                Field('course_abbr', placeholder='ENGH 302'),
+                Field('course_abbr', placeholder='ENGH 302', style="width: 82px;"),
 
-                'condition',
-                'access_code',
-
-                PrependedAppendedText('price', '$', '.00',
-                    placeholder="whole numbers"),
+                Field('condition', style="width: 190px;"),
+                Field('access_code', style="width: 190px;"),
+                # width: 46px;
+                PrependedAppendedText('price', '$', '.00', placeholder="whole numbers", style="width: 46px;"),
 
                 'photo',
 

@@ -1,26 +1,54 @@
 # core django imports
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import MaxValueValidator
 # third party imports
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Button, Submit, Layout, Fieldset, HTML, Field
 from crispy_forms.bootstrap import PrependedAppendedText, FormActions
 from haystack.forms import SearchForm
+from datetime import date
 # imports from your apps
 from .models import Listing, Bid, Flag, BidFlag, Rating
 
 
 class ListingForm(forms.ModelForm):
 
+    def clean(self):
+        cleaned_data = super(ListingForm, self).clean()
+        print cleaned_data
+        return super(ListingForm, self).clean()
+
+    #
+    year = forms.IntegerField(
+        max_value = date.today().year + 1,
+    )
+
+    #
+    edition = forms.IntegerField(
+        max_value = 1000,
+        min_value = 0
+    )
+
     def __init__(self, *args, **kwargs):
         super(ListingForm, self).__init__(*args, **kwargs)
         # Define the basics for crispy-forms
         self.helper = FormHelper()
-        self.helper.form_method = 'POST'
 
         # Some extra vars for form css purposes
-        self.helper.label_class = 'col-md-3 be-bold'
-        self.helper.field_class = 'col-md-9 bottom-padding'
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2 be-bold bottom-padding'
+        self.helper.field_class = 'col-lg-8 bottom-padding'
+
+        self.helper.help_text_inline = True
+
+        # Field labeling
+        self.fields['isbn'].label = "ISBN"
+        self.fields['course_abbr'].label = "Course"
+        self.fields['description'].label = "Other Notes"
+        # Define required attribute for 'photo'
+        self.fields['photo'].required = False
+
 
         # The main "layout" defined
         self.helper.layout = Layout(
@@ -56,25 +84,13 @@ class ListingForm(forms.ModelForm):
 
                 #######################
                 FormActions(
-                    Submit('submit', 'Create', css_class='btn-primary'),
+                    Submit('submit', 'Create Listing', css_class='btn-primary'),
                     Button('cancel', 'Never Mind',
                         css_class='btn-default',
                         onclick="history.back()")
                 ),
             ),
         )
-
-        # Field labeling
-        self.fields['isbn'].label = "ISBN"
-        self.fields['course_abbr'].label = "Course"
-        self.fields['description'].label = "Other Notes"
-        # Define required attribute for 'photo'
-        self.fields['photo'].required = False
-
-    def clean(self):
-        cleaned_data = super(ListingForm, self).clean()
-        print cleaned_data
-        return super(ListingForm, self).clean()
 
     class Meta:
         model = Listing

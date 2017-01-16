@@ -36,9 +36,7 @@ class ListingForm(forms.ModelForm):
         self.helper = FormHelper()
 
         # Some extra vars for form css purposes
-        # self.helper.form_class = 'form-horizontal'
-        #self.helper.label_class = 'col-lg-2 be-bold bottom-padding'
-        #self.helper.field_class = 'col-lg-8 bottom-padding'
+        self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2 be-bold bottom-padding'
         self.helper.field_class = 'col-lg-8 bottom-padding'
 

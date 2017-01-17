@@ -13,22 +13,6 @@ from .models import Listing, Bid, Flag, BidFlag, Rating
 
 class ListingForm(forms.ModelForm):
 
-    def clean(self):
-        cleaned_data = super(ListingForm, self).clean()
-        print cleaned_data
-        return super(ListingForm, self).clean()
-
-    #
-    year = forms.IntegerField(
-        max_value = date.today().year + 1,
-    )
-
-    #
-    edition = forms.IntegerField(
-        max_value = 1000,
-        min_value = 0
-    )
-
     def __init__(self, *args, **kwargs):
         super(ListingForm, self).__init__(*args, **kwargs)
         # Define the basics for crispy-forms
@@ -38,7 +22,6 @@ class ListingForm(forms.ModelForm):
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2 be-bold bottom-padding'
         self.helper.field_class = 'col-lg-8 bottom-padding'
-        self.helper.help_text_inline = True
 
         # Field labeling
         self.fields['isbn'].label = "ISBN"
@@ -89,6 +72,12 @@ class ListingForm(forms.ModelForm):
                 ),
             ),
         )
+
+    def clean(self):
+        cleaned_data = super(ListingForm, self).clean()
+        print cleaned_data
+        return super(ListingForm, self).clean()
+
 
     class Meta:
         model = Listing

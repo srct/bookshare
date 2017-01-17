@@ -20,10 +20,12 @@ SRCT Bookshare &bull; Create Lookout
 </div>
 
 <div class="row">
-  <div class="col-lg-8 col-lg-offset-2">
+  <div class="col-md-8 col-md-offset-2">
     <span class="help-block">
       <strong>Lookouts</strong> help you find the textbooks you
-      need. Input the ISBN of a textbook you'd like to look out
+      need.
+      <br></br>
+      Input the ISBN of a textbook you'd like to look out
       for, and any new listings with that ISBN will show up on
       your homepage, automatically!
     </span>
@@ -33,7 +35,9 @@ SRCT Bookshare &bull; Create Lookout
       </div>
       <div class="panel-body">
         <div class="row">
-          {% crispy my_form %}
+          <div class="col-md-10 col-md-offset-1">
+            {% crispy my_form %}
+          </div>
         </div>
       </div>
     </div>

@@ -19,3 +19,4 @@ class ListingViewSet(ReadOnlyModelViewSet):
     queryset = Listing.objects.all().order_by('-created')
     serializer_class = ListingSerializer
     pagination_class = ListingPagination
+    lookup_field = 'slug'

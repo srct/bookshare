@@ -36,7 +36,8 @@ class ListingSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Listing
-        fields = ('url', 'title', 'author', 'isbn', 'year', 'edition', 'condition',
+        fields = ('url', 'slug',
+                  'title', 'author', 'isbn', 'year', 'edition', 'condition',
                   'access_code', 'course_abbr', 'description', 'price', 'photo',
                   'num_bids', 'num_flags', 'active', 'old',
                   'exchanged', 'cancelled', 'date_closed', 'final_price')

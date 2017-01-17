@@ -18,7 +18,7 @@ django-ratelimit==0.6.0
 django-redis-cache==1.6.4
 django-smtp-ssl==1.0
 django-storages==1.1.8
-djangorestframework==3.3.2
+djangorestframework==3.5.3
 docutils==0.12
 flake8==3.0.4
 gunicorn==19.6.0

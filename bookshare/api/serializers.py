@@ -13,8 +13,22 @@ class ListingSerializer(serializers.HyperlinkedModelSerializer):
         lookup_field = 'slug'
     )
 
+    active = serializers.SerializerMethodField('active')
+    active = serializers.SerializerMethodField('final_price')
+    active = serializers.SerializerMethodField('old')
+
+    def active(self, listing):
+        return listing.active()
+
+    def final_price(self, listing):
+        return listing.final_price()
+
+    def old(self, listing):
+        return listing.old()
+
     class Meta:
         model = Listing
-        fields = ('url', 'title', 'author', 'isbn', 'year', 'edition',
-                  'condition', 'access_code', 'course_abbr', 'description',
-                  'price', 'photo', 'exchanged', 'cancelled', 'exchanged')
+        fields = ('url', 'title', 'author', 'isbn', 'year', 'edition', 'condition',
+                  'access_code', 'course_abbr', 'description', 'price', 'photo',
+                  'active', 'old',
+                  'exchanged', 'cancelled', 'date_closed', 'final_price')

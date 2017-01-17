@@ -1,7 +1,6 @@
 # core django imports
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.core.validators import MaxValueValidator
 # third party imports
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Button, Submit, Layout, Fieldset, HTML, Field
@@ -39,17 +38,14 @@ class ListingForm(forms.ModelForm):
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2 be-bold bottom-padding'
         self.helper.field_class = 'col-lg-8 bottom-padding'
-
-
         self.helper.help_text_inline = True
 
         # Field labeling
         self.fields['isbn'].label = "ISBN"
         self.fields['course_abbr'].label = "Course"
         self.fields['description'].label = "Other Notes"
-        # Define required attribute for 'photo'
+        # Define 'required' attribute for 'photo'
         self.fields['photo'].required = False
-
 
         # The main "layout" defined
         self.helper.layout = Layout(
@@ -60,10 +56,10 @@ class ListingForm(forms.ModelForm):
                 # Collapsed elements
                 HTML('<div class="collapse" id="section-collapse">'),
                     Field('title',
-                           placeholder='Squirrels: The Animal Answer Guide'),
+                        placeholder='Squirrels: The Animal Answer Guide'),
 
                     Field('author',
-                           placeholder='Richard W. Thorington, Jr., and Katie Ferrell'),
+                        placeholder='Richard W. Thorington, Jr., and Katie Ferrell'),
 
                     Field('edition', placeholder='1', style="width: 82px;"),
 
@@ -71,17 +67,19 @@ class ListingForm(forms.ModelForm):
                 HTML('</div>'),
 
                 Field('course_abbr', placeholder='ENGH 302', style="width: 82px;"),
-
                 Field('condition', style="width: 190px;"),
                 Field('access_code', style="width: 190px;"),
-                # width: 46px;
-                PrependedAppendedText('price', '$', '.00', placeholder="whole numbers", style="width: 46px;"),
 
-                'photo',
+                PrependedAppendedText(
+                    'price', '$', '.00',
+                    placeholder="whole nums",
+                    style="width: 107px;",
+                    template='crispy/prepended_appended_text.html'
+                ),
 
+                Field('photo'),
                 Field('description',
-                    placeholder='I would be willing to exchange this textbook for one that I need next semester. /// This is for Professor Smith\'s section ONLY. /// I can give you the workbook as well.'),
-
+                    placeholder='I would be willing to exchange this textbook for one that I need next semester. \n\n/// This is for Professor Smith\'s section ONLY. ///\n\nI can give you the workbook as well.'),
                 #######################
                 FormActions(
                     Submit('submit', 'Create Listing', css_class='btn-primary'),

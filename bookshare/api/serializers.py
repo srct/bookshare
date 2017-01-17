@@ -6,10 +6,15 @@ from rest_framework import serializers
 from trades.models import Listing
 
 
-class ListingSerializer(serializers.ModelSerializer):
+class ListingSerializer(serializers.HyperlinkedModelSerializer):
+
+    url = serializers.HyperlinkedIdentityField(
+        view_name = 'detail_listing',
+        lookup_field = 'slug'
+    )
 
     class Meta:
         model = Listing
-        fields = ('title', 'author', 'isbn', 'year', 'edition',
+        fields = ('url', 'title', 'author', 'isbn', 'year', 'edition',
                   'condition', 'access_code', 'course_abbr', 'description',
                   'price', 'photo', 'exchanged', 'cancelled', 'exchanged')

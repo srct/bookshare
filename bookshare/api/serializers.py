@@ -3,7 +3,19 @@ from __future__ import absolute_import, print_function, unicode_literals
 # third party imports
 from rest_framework import serializers
 # imports from your apps
-from trades.models import Listing
+from trades.models import Bid, Listing
+
+
+class BidSerializer(serializers.ModelSerializer):
+
+    num_bid_flags = serializers.SerializerMethodField()
+
+    def get_num_bid_flags(self, bid):
+        return bid.bidflag_set.all().count()
+
+    class Meta:
+        model = Bid
+        fields = ('price', 'text', 'num_bid_flags')
 
 
 class ListingSerializer(serializers.HyperlinkedModelSerializer):
@@ -16,6 +28,7 @@ class ListingSerializer(serializers.HyperlinkedModelSerializer):
     active = serializers.SerializerMethodField()
     final_price = serializers.SerializerMethodField()
     old = serializers.SerializerMethodField()
+    bids = BidSerializer(many=True, read_only=True)
     num_bids = serializers.SerializerMethodField()
     num_flags = serializers.SerializerMethodField()
 
@@ -39,5 +52,5 @@ class ListingSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'slug',
                   'title', 'author', 'isbn', 'year', 'edition', 'condition',
                   'access_code', 'course_abbr', 'description', 'price', 'photo',
-                  'num_bids', 'num_flags', 'active', 'old',
+                  'num_bids', 'bids', 'num_flags', 'active', 'old',
                   'exchanged', 'cancelled', 'date_closed', 'final_price')

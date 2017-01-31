@@ -29,7 +29,7 @@ Open a terminal and run the following commands.
 
 `sudo apt-get update`
 
-`sudo apt-get install python python-dev`python-pip git`
+`sudo apt-get install python python-dev python-pip git`
 
 Next, we're going to download a copy of the bookshare codebase from git.gmu.edu, the SRCT code repository.
 

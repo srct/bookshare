@@ -1,3 +1,7 @@
+# Archival Warning
+
+WARNING: This project is abandoned. As such, we cannot garauntee functionality or the security of the project. Please contact srct@gmu.edu to either take up this project or for questions regarding it.
+
 # SRCT Bookshare
 
 SRCT Bookshare is a platform for GMU students to buy and sell their textbooks.

@@ -1,5 +1,5 @@
 DateTime==4.0.1
-Django==1.10.5
+Django==1.11.28
 MySQL-python==1.2.5
 Pillow==2.9.0
 Whoosh==2.6.0
@@ -10,7 +10,7 @@ django-braces==1.9.0
 django-cas-client==1.2.0
 django-crispy-forms==1.6.1
 django-gravatar2==1.4.0
-django-haystack==2.5.1
+django-haystack==2.7.0
 django-model-utils==2.6
 django-piwik==0.1
 django-randomslugfield==0.3.0

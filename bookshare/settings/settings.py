@@ -137,10 +137,8 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'cas.backends.CASBackend',
 )
-if DEBUG:
-    CAS_SERVER_URL = 'https://cas.srct.gmu.edu'  # the testing one
-else:
-    CAS_SERVER_URL = 'https://login.gmu.edu'  # the *real* one
+
+CAS_SERVER_URL = 'https://login.gmu.edu/'
 CAS_LOGOUT_COMPLETELY = True
 CAS_PROVIDE_URL_TO_LOGOUT = True
 #LOGIN_URL = '/login/'

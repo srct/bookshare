@@ -141,8 +141,10 @@ AUTHENTICATION_BACKENDS = (
 CAS_SERVER_URL = 'https://login.gmu.edu/'
 CAS_LOGOUT_COMPLETELY = True
 CAS_PROVIDE_URL_TO_LOGOUT = True
-#LOGIN_URL = '/login/'
-#LOGOUT_URL = '/logout/'
+# These fields are commented out because the views are
+# specified directly in settings.urls
+#LOGIN_URL = '/login'
+#LOGOUT_URL = '/logout'
 
 CAS_RESPONSE_CALLBACKS = (
     'core.cas_callbacks.create_user',

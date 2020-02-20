@@ -87,9 +87,10 @@ def create_user(tree):
 
     except ObjectDoesNotExist:
         new_student = Student.objects.create(user=user)
-            # save the name off of peoplefinder for later quality assurance purposes
-            new_student.pf_first_name = user.first_name
-            new_student.pf_last_name = user.last_name
+
+        # save the name off of peoplefinder for later quality assurance purposes
+        new_student.pf_first_name = user.first_name
+        new_student.pf_last_name = user.last_name
 
         new_student.save()
         print("Created student object for user %s!" % username)

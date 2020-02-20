@@ -1,12 +1,12 @@
 DateTime==4.0.1
-Django==1.11.28
+Django>1.11, <1.12
 Pillow==2.9.0
 Whoosh==2.6.0
 argparse==1.2.1
 boto==2.38.0
 django-autoslug==1.9.3
 django-braces==1.9.0
-django-cas-client==1.2.0
+django-cas-client==1.5.3
 django-crispy-forms==1.6.1
 django-gravatar2==1.4.0
 django-haystack==2.7.0

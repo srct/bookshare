@@ -1,5 +1,5 @@
 from django import template
-from trades.views import ISBNMetadata
+from trades.utils import ISBNMetadata
 
 register = template.Library()
 

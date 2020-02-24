@@ -35,7 +35,7 @@ def ISBNMetadata(standardISBN):
     # In case the API fails to return, simply return None.
     try:
         metadata = requests.get(url, timeout=3)
-    except ConnectionError:
+    except requests.ConnectionError:
         return None
 
     # format into a dictionary

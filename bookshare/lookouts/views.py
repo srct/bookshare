@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 from django.utils.safestring import mark_safe
 from django.views.generic import CreateView, DetailView, DeleteView
 # third-party imports
-from braces.views import LoginRequiredMixin
+from braces.views import LoginRequiredMixin, FormValidMessageMixin
 from ratelimit.decorators import ratelimit
 # imports from your apps
 from .forms import LookoutForm
@@ -66,12 +66,14 @@ class DetailLookout(LoginRequiredMixin, DetailView):
 # updating is not neccessary since it's just literally an isbn and a course
 
 
-class DeleteLookout(LoginRequiredMixin, DeleteView):
+class DeleteLookout(LoginRequiredMixin, FormValidMessageMixin, DeleteView):
     model = Lookout
     context_object_name = 'lookout'
     template_name = 'delete_lookout.html'
     success_url = '/'
     login_url = 'login'
+
+    form_valid_message = "Your lookout was successfully deleted."
 
     def get(self, request, *args, **kwargs):
         me = self.request.user.student

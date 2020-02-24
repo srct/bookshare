@@ -21,7 +21,7 @@ django-storages==1.1.8
 djangorestframework==3.0.4
 docutils==0.12
 flake8==2.4.0
-gunicorn==19.1.1
+gunicorn==19.5.0
 mccabe==0.3
 pep8==1.5.7
 pyflakes==0.8.1

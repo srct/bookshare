@@ -6,12 +6,10 @@ SRCT Bookshare &bull; {{ bid.listing.title }} &bull; {{ bid.bidder.user.first_na
 
 {% block content %}
 
-<div class="page-header" id="banner">
-  <div class="row">
-    <div class="col-lg-12 text-center">
-      <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
-      <p class="lead text-center"><strong>Flag {{ bid.bidder.user.get_full_name }}'s Bid for ${{ bid.price }} on {{ bid.listing.poster.user.get_full_name }}'s Listing <em>{{ bid.listing.title }}</em></strong></p>
-    </div>
+<div class="row">
+  <div class="col-lg-12 text-center">
+    <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
+    <p class="lead text-center"><strong>Flag {{ bid.bidder.user.get_full_name }}'s Bid for ${{ bid.price }} on {{ bid.listing.poster.user.get_full_name }}'s Listing <em>{{ bid.listing.title }}</em></strong></p>
   </div>
 </div>
 

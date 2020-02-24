@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.views.decorators.cache import cache_page
 from django.contrib.auth.decorators import login_required
+from django.views.generic import RedirectView
 # third party imports
 from haystack.views import SearchView
 from cas.views import login, logout
@@ -52,6 +53,12 @@ urlpatterns = [
     # admin pages
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+
+    # api
+    url(r'^api/v1/', include('api.urls')),
+    # establishing versioning already so we easily can move to another API release
+    # without specific version redirects to latest version
+    url(r'^api/$', RedirectView.as_view(url="v1/")),
 
     # location of user-uploaded media files from settings.py (for local)
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -73,10 +73,20 @@ INSTALLED_APPS = (
     'haystack',
     'piwik',
     'randomslugfield',
+    'rest_framework',
     'storages',
 )
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
 
 MESSAGE_TAGS = {messages.ERROR: 'danger', }
 
@@ -128,11 +138,13 @@ AUTHENTICATION_BACKENDS = (
     'cas.backends.CASBackend',
 )
 
-CAS_SERVER_URL = 'https://login.gmu.edu'
+CAS_SERVER_URL = 'https://login.gmu.edu/'
 CAS_LOGOUT_COMPLETELY = True
 CAS_PROVIDE_URL_TO_LOGOUT = True
-#LOGIN_URL = '/login/'
-#LOGOUT_URL = '/logout/'
+# These fields are commented out because the views are
+# specified directly in settings.urls
+#LOGIN_URL = '/login'
+#LOGOUT_URL = '/logout'
 
 CAS_RESPONSE_CALLBACKS = (
     'core.cas_callbacks.create_user',
@@ -257,5 +269,33 @@ if not DEBUG:
             },
         # django's default loggers send request and security messages at the ERROR
         # or CRITICAL level to the AdminEmailHandler via mail_admins
+        },
+    }
+else:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'filters': {
+            'require_debug_false': {
+                '()': 'django.utils.log.RequireDebugFalse'
+            },
+        },
+        'handlers': {
+            'mail_admins': {
+                'level': 'ERROR',
+                'filters': ['require_debug_false'],
+                'class': 'django.utils.log.AdminEmailHandler'
+            },
+            'console':{
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler'
+            },
+        },
+        'loggers': {
+            'django.request': {
+                'handlers': ['mail_admins'],
+                'level': 'ERROR',
+                'propagate': True,
+            },
         },
     }

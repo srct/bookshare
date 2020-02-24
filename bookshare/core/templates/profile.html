@@ -19,7 +19,7 @@
     <div class="col-md-6">
       <h2><strong>{{ student.get_full_name_or_uname }}</strong>
         {% if student.user == request.user %}
-          <small><a href="{% url 'name_change' %}">(Edit)</a></small>
+          <small><a href="{% url 'name_change' %}"><i class="fa fa-pencil"></i></a></small>
         {% endif %}
       </h2>
     </div>
@@ -139,7 +139,7 @@
           <table class="table table-bordered table-hover table-condensed text-center">
             <thead>
               <!-- the br's is a really shitty way of doing this -->
-              <td><h4><strong>Date<br />Bid</strong></h4></td>
+              <td><h4><strong><br />Date Bid</strong></h4></td>
               <td><h4><strong><br />Title</strong></h4></td>
               <td><h4><strong>Listing Status</strong></h4></td>
               <td><h4><strong><br />Course</strong></h4></td>
@@ -213,9 +213,9 @@
         <tbody>
         {% for lookout in lookouts %}
         <tr>
-          <td class="text-center"><h5>{{ lookout.isbn }}</h5></td>
-          <td class="text-center"><h5><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name|title }}<a/></h5></td>
-          <td class="text-center"><h5><a href="{% url 'delete_lookout' lookout.slug %}"><span class="label label-danger">Delete</span></a></h5></td>
+          <td class="text-center"><h4>{{ lookout.isbn }}</h4></td>
+          <td class="text-center"><h4><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name|title }}<a/></h4></td>
+          <td class="text-center"><h4><a href="{% url 'delete_lookout' lookout.slug %}"><span class="label label-danger">Delete</span></a></h4></td>
         {% endfor %}
         </tbody>
       </table>

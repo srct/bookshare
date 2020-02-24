@@ -31,7 +31,13 @@ def ISBNMetadata(standardISBN):
     url = "http://xisbn.worldcat.org/webservices/xid/isbn/" +\
           str(standardISBN) +\
           "?method=getMetadata&format=json&fl=title,year,author,ed"
-    metadata = requests.get(url)
+
+    # In case the API fails to return, simply return None.
+    try:
+        metadata = requests.get(url, timeout=3)
+    except requests.ConnectionError:
+        return None
+
     # format into a dictionary
     dejson = metadata.json()
     try:
@@ -533,7 +539,7 @@ class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         me = Student.objects.get(user=self.request.user)
         posting_student = self.get_object().poster
 
-        bid_count = Bid.objects.filter(listing=self.get_object).count()
+        bid_count = Bid.objects.filter(listing=self.get_object()).count()
         if bid_count < 1:
             # because the page shouldn't exist in this scenario
             raise Http404

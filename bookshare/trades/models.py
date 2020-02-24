@@ -95,7 +95,7 @@ class Listing(TimeStampedModel):
         modified_plus_month = self.modified.date() + relativedelta(months=1)
 
         # last login + two weeks
-        last_login_plus_two_weeks = self.poster.last_login.date() +\
+        last_login_plus_two_weeks = self.poster.user.last_login.date() +\
             relativedelta(weeks=2)
 
         last_poked = ((today > created_plus_month) or (today > modified_plus_month))

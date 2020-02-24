@@ -118,7 +118,7 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
                          <a href="/share/new/">Create another here!</a>""")
 
     def form_valid(self, form):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         form.instance.poster = me
 
@@ -180,7 +180,7 @@ class DetailListing(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DetailListing, self).get_context_data(**kwargs)
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         # make the form available to the template on get
         # set the bidder and the listing
@@ -239,7 +239,7 @@ class CreateBid(LoginRequiredMixin, CreateView):
     login_url = 'login'
 
     def form_valid(self, form):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         form.instance.bidder = me
         return super(CreateBid, self).form_valid(form)
@@ -283,7 +283,7 @@ class CreateFlag(LoginRequiredMixin, CreateView):
     login_url = 'login'
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         # duplicated code!!!
         current_url = self.request.get_full_path()
@@ -306,7 +306,7 @@ class CreateFlag(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CreateFlag, self).get_context_data(**kwargs)
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         # duplicated code!!!
         current_url = self.request.get_full_path()
@@ -321,7 +321,7 @@ class CreateFlag(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         current_url = self.request.get_full_path()
         listing_slug = current_url.split('/')[3]
@@ -349,7 +349,7 @@ class DeleteFlag(LoginRequiredMixin, DeleteView):
     login_url = 'login'
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         flag_student = self.get_object().flagger
 
         # if you didn't create the flag, you can't delete the flag
@@ -372,7 +372,7 @@ class CreateBidFlag(LoginRequiredMixin, CreateView):
     login_url = 'login'
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         # duplicated code!!!
         current_url = self.request.get_full_path()
@@ -395,7 +395,7 @@ class CreateBidFlag(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CreateBidFlag, self).get_context_data(**kwargs)
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         # duplicated code!!!
         current_url = self.request.get_full_path()
@@ -410,7 +410,7 @@ class CreateBidFlag(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         # duplicated code!!!
         current_url = self.request.get_full_path()
@@ -439,7 +439,7 @@ class DeleteBidFlag(LoginRequiredMixin, DeleteView):
     login_url = 'login'
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         flag_student = self.get_object().flagger
 
         # if you didn't create the flag, you can't delete the flag
@@ -473,7 +473,7 @@ class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     form_valid_message = "Your bid was successfully updated!"
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         bidding_student = self.get_object().bidder
 
         # if exchanged or cancelled, this page doesn't exist
@@ -503,7 +503,7 @@ class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     form_valid_message = "Your listing was successfully updated!"
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         posting_student = self.get_object().poster
 
         if (self.get_object().cancelled is True):
@@ -517,7 +517,7 @@ class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(EditListing, self).get_context_data(**kwargs)
 
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         posting_student = self.get_object().poster
 
         if not(posting_student == me):
@@ -536,7 +536,7 @@ class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     form_valid_message = "Your email was successfully sent!"
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         posting_student = self.get_object().poster
 
         bid_count = Bid.objects.filter(listing=self.get_object()).count()
@@ -618,7 +618,7 @@ class UnExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
                      and your email successfully sent!"""
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         posting_student = self.get_object().poster
 
         if (self.get_object().cancelled is True):
@@ -691,7 +691,7 @@ class CancelListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     form_valid_message = "Your listing was successfully cancelled!"
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         posting_student = self.get_object().poster
 
         # you can only cancel the listing if the listing isn't already cancelled
@@ -722,7 +722,7 @@ class ReopenListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     form_valid_message = "Your listing was successfully reopened!"
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         posting_student = self.get_object().poster
 
         # you can only reopen the listing if the listing is cancelled
@@ -748,7 +748,7 @@ class CreateRating(LoginRequiredMixin, CreateView):
     login_url = 'login'
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         # duplicated code!!!
         current_url = self.request.get_full_path()
@@ -771,7 +771,7 @@ class CreateRating(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CreateRating, self).get_context_data(**kwargs)
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         # duplicated code!!!
         current_url = self.request.get_full_path()
@@ -788,7 +788,7 @@ class CreateRating(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         current_url = self.request.get_full_path()
         listing_slug = current_url.split('/')[3]
@@ -819,7 +819,7 @@ class EditRating(LoginRequiredMixin, UpdateView):
     fields = ['stars', 'review', ]
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         rating_student = self.get_object().rater
 
         if not(rating_student == me):
@@ -839,7 +839,7 @@ class DeleteRating(LoginRequiredMixin, DeleteView):
     login_url = 'login'
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         rating_student = self.get_object().rater
 
         if not(rating_student == me):

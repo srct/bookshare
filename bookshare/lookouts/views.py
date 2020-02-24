@@ -30,7 +30,7 @@ class CreateLookout(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
 
         form.instance.owner = me
         try:
@@ -55,7 +55,7 @@ class DetailLookout(LoginRequiredMixin, DetailView):
     login_url = 'login'
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         lookout_student = self.get_object().owner
 
         if not(lookout_student == me):
@@ -74,7 +74,7 @@ class DeleteLookout(LoginRequiredMixin, DeleteView):
     login_url = 'login'
 
     def get(self, request, *args, **kwargs):
-        me = Student.objects.get(user=self.request.user)
+        me = self.request.user.student
         lookout_student = self.get_object().owner
 
         if not(lookout_student == me):

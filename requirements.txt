@@ -1,6 +1,6 @@
 DateTime==4.0.1
 Django>1.11, <1.12
-Pillow==2.9.0
+Pillow==6.2.0
 Whoosh==2.6.0
 argparse==1.2.1
 boto==2.38.0

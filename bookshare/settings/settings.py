@@ -66,6 +66,7 @@ INSTALLED_APPS = (
     'core',
     'lookouts',
     'mod',
+#    'api',
     # packages
     'crispy_forms',
     'django_gravatar',

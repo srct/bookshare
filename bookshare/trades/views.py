@@ -187,7 +187,7 @@ class ListingPage(View):
     # https://docs.djangoproject.com/en/1.7/topics/class-based-views/mixins/#an-alternative-better-solution
 
     def get(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             view = DetailListing.as_view()
             return view(request, *args, **kwargs)
         else:
@@ -198,7 +198,7 @@ class ListingPage(View):
     # rate limit is higher for bids
     @ratelimit(key='user', rate='100/d', method='POST', block=True)
     def post(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             view = CreateBid.as_view()
             return view(request, *args, **kwargs)
         else:

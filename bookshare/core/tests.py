@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.http import HttpRequest
-from django.core.urlresolvers import resolve
+from django.urls import resolve
 from .models import Student
 from .views import DetailStudent, StudentRatings
 

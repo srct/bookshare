@@ -2,7 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 #from django.core.validators import RegexValidator
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 # third-party imports
 from autoslug import AutoSlugField
 from model_utils.models import TimeStampedModel

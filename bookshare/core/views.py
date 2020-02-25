@@ -1,6 +1,6 @@
 # core django imports
 from django.views.generic import DetailView, FormView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 # third-party imports
 from braces.views import LoginRequiredMixin
 from django.db.models import Sum

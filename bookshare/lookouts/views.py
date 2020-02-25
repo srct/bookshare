@@ -2,7 +2,7 @@
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.db import IntegrityError
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.views.generic import CreateView, DetailView, DeleteView
 # third-party imports

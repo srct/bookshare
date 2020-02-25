@@ -2,7 +2,7 @@
 from datetime import date
 # core django imports
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.validators import MaxValueValidator, RegexValidator
 # third party imports
 from randomslugfield import RandomSlugField

@@ -6,7 +6,7 @@ from django.views.generic import View, DetailView, ListView, CreateView,\
     UpdateView, DeleteView
 from django.http import Http404, HttpResponseForbidden
 from django.forms.widgets import HiddenInput
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template

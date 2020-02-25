@@ -1,7 +1,3 @@
-# Archival Warning
-
-WARNING: This project is abandoned. As such, we cannot garauntee functionality or the security of the project. Please contact srct@gmu.edu to either take up this project or for questions regarding it.
-
 # SRCT Bookshare
 
 SRCT Bookshare is a platform for GMU students to buy and sell their textbooks.
@@ -61,17 +57,19 @@ It's often recommended to create a special directory to store all of your virtua
 
 (For example, `mkdir ~/venv`, `cd ~/venv`)
 
-Run `sudo pip install virtualenv`
+With Python 2, you had to install an additional package to create these virtual environments, but now, with Python 3, virtual environments are built in.
 
-to install virtualenv system-wide, and then run
+Run `python3 -m venv bookshare`
 
-`virtualenv bookshare`
-
-in your virtualenvironment directory to create your virtualenvironment. Activate it by running
+in your virtual environment directory to create your virtual environment. Activate it by running
 
 `source bookshare/bin/activate`
 
 in the virtualenvironment directory.
+
+There are a variety of packages, from django itself to a project that helps us connect to Mason's central authentication service, that you need to install. The python package management tool is called 'pip'.
+
+Outside of your virtual environment, depending on what operating system you are running, you may have multiple versions of python installed on your machine, which require you to specify 'python3' when excuting files. Inside your virtual environment, you should not need to run `python3` or `pip3`. If you wish to verify this, run `python --version` or `pip3 --version`.
 
 Now, the packages you need to install for bookshare are in the top level of the project's directory structure. Run
 
@@ -106,16 +104,22 @@ For local development, password strength is less important, but use a strong pas
 ``GRANT ALL ON bookshare.* TO 'bookworm'@'localhost';``
 This allows your database user to create all the tables it needs on the bookshare database. (Each model in each app's models.py is a separate table, and each attribute a column, and each instance a row.)
 
-``GRANT ALL ON test_bookshare.* TO 'bookworm'@'localhost';`` ``FLUSH PRIVILEGES;``
+``GRANT ALL ON test_bookshare.* TO 'bookworm'@'localhost';`` and then ``FLUSH PRIVILEGES;``
 When running test cases, django creates a test database so your 'real' database doesn't get screwed up. This database is called 'test_' + whatever your normal database is named. Note that for permissions it doesn't matter that this database hasn't yet been created.
 
 The .\* is to grant access all tables in the database, and 'flush privileges' reloads privileges to ensure that your user is ready to go.
 
 Exit the mysql shell by typing `exit`.
 
-Now, to configure your newly created database with the project settings, copy the secret.py.template in settings/ to secret.py. Follow the comment instructions provided in each file to set your secret key and database info.
+Now, to configure your newly created database with the project settings, copy the secret.py.template in settings/ to secret.py, `cp secret.py.template secret.py`. Follow the comment instructions provided in each file to set your secret key and database info.
 
-Run `python manage.py makemigrations` and `python manage.py migrate` to configure something called 'migrations', which allow you to make changes to the tables in your database without screwing up existing information. Then run `python manage.py createsuperuser` to create an admin account, using the same username and email as you'll access through CAS. Finally, run `python manage.py syncdb` to set up all the tables in your empty database.
+Run `python manage.py makemigrations` and `python manage.py migrate` to configure something called 'migrations', which allow you to make changes to the tables in your database without screwing up existing information.
+
+The first time you run this command, you may have to specify each of the 'apps' associated with the project. The three apps that have database models are core, lookouts, and trades. Run `python manage.py makemigrations <app_name>` for each of the three.
+
+The command generates sql syntax so you don't have to worry about the database yourself. If you wish what's created, run, for instance, `python manage.py sqlmigrate trades 0001`.
+
+Then run `python manage.py createsuperuser` to create an admin account, using the same username and email as you'll access through CAS. Finally, run `python manage.py syncdb` to set up all the tables in your empty database.
 
 ### Configuring the Cache
 

@@ -1,17 +1,17 @@
 # core django imports
-from django.conf.urls import url
+from django.urls import path
 from django.views.decorators.cache import cache_page
 # imports from your apps
 from .views import ModLandingView, FlagModView, ListingNumModView,\
     UserEmailRatioModView
 
 urlpatterns = [
-    url(r'^$', cache_page(60 * 15)(ModLandingView.as_view()), name='mod_page'),
+    path(r'^$', cache_page(60 * 15)(ModLandingView.as_view()), name='mod_page'),
 
-    url(r'^flags/$', FlagModView.as_view(), name='flag_mod'),
+    path(r'^flags/$', FlagModView.as_view(), name='flag_mod'),
 
-    url(r'^listing-nums/$', ListingNumModView.as_view(), name='listing_nums'),
+    path(r'^listing-nums/$', ListingNumModView.as_view(), name='listing_nums'),
 
-    url(r'^email-ratio/$', UserEmailRatioModView.as_view(), name='email_ratio'),
+    path(r'^email-ratio/$', UserEmailRatioModView.as_view(), name='email_ratio'),
 
 ]

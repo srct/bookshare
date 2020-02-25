@@ -1,7 +1,7 @@
 # standard libary imports
 from __future__ import absolute_import, print_function, unicode_literals
 # core django imports
-from django.conf.urls import include, url
+from django.urls import include, path
 # third party imports
 from rest_framework.routers import DefaultRouter
 # imports from your apps

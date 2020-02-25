@@ -1,6 +1,6 @@
 # standard library imports
 from datetime import date
-from cStringIO import StringIO
+from io import StringIO
 # core django imports
 from django.views.generic import View, DetailView, ListView, CreateView,\
     UpdateView, DeleteView

@@ -75,7 +75,7 @@ class ListingForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(ListingForm, self).clean()
-        print cleaned_data
+        print(cleaned_data)
         return super(ListingForm, self).clean()
 
 

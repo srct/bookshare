@@ -32,7 +32,7 @@ class DetailStudent(LoginRequiredMixin, DetailView):
         student_ratings = Rating.objects.filter(listing__poster=self.get_object())
         if student_ratings:
             student_stars = [int(rating.stars) for rating in student_ratings]
-            print student_stars
+            print(student_stars)
             average_stars = sum(student_stars)/float((len(student_stars)))
         else:
             average_stars = None
@@ -100,7 +100,7 @@ class StudentRatings(LoginRequiredMixin, DetailView):
         # copied code!
         if student_ratings:
             student_stars = [int(rating.stars) for rating in student_ratings]
-            print student_stars
+            print(student_stars)
             average_stars = sum(student_stars)/float((len(student_stars)))
         else:
             average_stars = None

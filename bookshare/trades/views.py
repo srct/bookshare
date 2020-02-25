@@ -57,11 +57,11 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
         user_image = Image.open(form.instance.photo)
         image_format = user_image.format
 
-        print user_image
+        print(user_image)
         width, height = user_image.size
-        print user_image.size
-        print width, "width"
-        print height, "height"
+        print(user_image.size)
+        print(width, "width")
+        print(height, "height")
         maxsize = (2560, 1920)
         # five megapixels is 2560x1920
         if (width > 2560) or (height > 1920):

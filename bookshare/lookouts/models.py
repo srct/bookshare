@@ -11,7 +11,8 @@ from core.models import Student
 
 
 class Lookout(TimeStampedModel):
-    owner = models.ForeignKey(Student)
+    owner = models.ForeignKey(Student,
+                              on_delete=models.CASCADE)
     isbn = models.CharField(
         max_length=20,
         validators=[RegexValidator('[0-9xX-]{10,20}',

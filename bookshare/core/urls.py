@@ -5,12 +5,12 @@ from django.views.decorators.cache import cache_page
 from .views import DetailStudent, StudentRatings, UpdateStudent
 
 urlpatterns = [
-    path(r'^name-change/$',
+    path('name-change/',
         UpdateStudent.as_view(), name='name_change'),
 
-    path(r'^(?P<slug>[\w-]+)/$',
+    path('<slug>/',
         cache_page(6)(DetailStudent.as_view()), name='profile'),
 
-    path(r'^(?P<slug>[\w-]+)/ratings/$',
+    path('<slug>/ratings/',
         cache_page(6)(StudentRatings.as_view()), name='ratings'),
 ]

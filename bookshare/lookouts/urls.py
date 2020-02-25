@@ -6,12 +6,12 @@ from .views import DetailLookout, CreateLookout, DeleteLookout
 
 urlpatterns = [
 
-    path(r'^new/$',
+    path('new/',
         CreateLookout.as_view(), name='create_lookout'),
 
-    path(r'^(?P<slug>[\w-]+)/$',
+    path('<slug>/',
         cache_page(60 * 2)(DetailLookout.as_view()), name='detail_lookout'),
 
-    path(r'^(?P<slug>[\w-]+)/delete/$',
+    path('<slug>/delete/',
         DeleteLookout.as_view(), name='delete_lookout'),
 ]

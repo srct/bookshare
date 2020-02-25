@@ -10,55 +10,55 @@ from .views import ListListings, CreateListing, ListingPage,\
 
 
 urlpatterns = [
-    path(r'^all/$',
+    path('all/',
         cache_page(60 * 2)(ListListings.as_view()), name='list_listings'),
 
-    path(r'^new/$',
+    path('new/',
         CreateListing.as_view(), name='create_listing'),
 
-    path(r'^listing/(?P<slug>[\w-]+)/$',
+    path('listing/<slug>/',
          cache_page(4)(ListingPage.as_view()), name='detail_listing'),
 
-    path(r'^listing/(?P<slug>[\w-]+)/delete/$',
+    path('listing/<slug>/delete/',
         DeleteListing.as_view(), name='delete_listing'),
 
-    path(r'^listing/(?P<listing_slug>[\w-]+)/bid/(?P<slug>[\w-]+)/edit/$',
+    path('listing/<listing_slug>/bid/<slug>/edit/',
         EditBid.as_view(), name='edit_bid'),
 
-    path(r'^listing/(?P<slug>[\w-]+)/flag/$',
+    path('listing/<slug>/flag/',
         CreateFlag.as_view(), name='create_flag'),
 
-    path(r'^listing/(?P<listing_slug>[\w-]+)/flag/(?P<slug>[\w-]+)/remove/$',
+    path('listing/<listing_slug>/flag/<slug>/remove/',
         DeleteFlag.as_view(), name='delete_flag'),
 
-    path(r'^listing/(?P<listing_slug>[\w-]+)/bid/(?P<slug>[\w-]+)/flag/$',
+    path('listing/<listing_slug>/bid/<slug>/flag/',
         CreateBidFlag.as_view(), name='create_bid_flag'),
 
-    path(r'^listing/(?P<listing_slug>[\w-]+)/bid/(?P<bid_slug>[\w-]+)/flag/(?P<slug>[\w-]+)/remove/$',
+    path('listing/<listing_slug>/bid/<bid_slug>/flag/<slug>/remove/',
         DeleteBidFlag.as_view(), name='delete_bid_flag'),
 
-    path(r'^listing/(?P<slug>[\w-]+)/edit/$',
+    path('listing/<slug>/edit/',
         EditListing.as_view(), name='edit_listing'),
 
-    path(r'^listing/(?P<slug>[\w-]+)/exchange/$',
+    path('listing/<slug>/exchange/',
         ExchangeListing.as_view(), name='exchange_listing'),
 
-    path(r'^listing/(?P<slug>[\w-]+)/unexchange/$',
+    path('listing/<slug>/unexchange/',
         UnExchangeListing.as_view(), name='unexchange_listing'),
 
-    path(r'^listing/(?P<slug>[\w-]+)/cancel/$',
+    path('listing/<slug>/cancel/',
         CancelListing.as_view(), name='cancel_listing'),
 
-    path(r'^listing/(?P<slug>[\w-]+)/reopen/$',
+    path('listing/<slug>/reopen/',
         ReopenListing.as_view(), name='reopen_listing'),
 
-    path(r'^listing/(?P<slug>[\w-]+)/rate/$',
+    path('listing/<slug>/rate/',
         CreateRating.as_view(), name='create_rating'),
 
-    path(r'^listing/(?P<listing_slug>[\w-]+)/rating/(?P<slug>[\w-]+)/edit/$',
+    path('listing/<listing_slug>/rating/<slug>/edit/',
         EditRating.as_view(), name='edit_rating'),
 
-    path(r'^listing/(?P<listing_slug>[\w-]+)/rating/(?P<slug>[\w-]+)/remove/$',
+    path('listing/<listing_slug>/rating/<slug>/remove/',
         DeleteRating.as_view(), name='delete_rating'),
 
 ]

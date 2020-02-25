@@ -10,7 +10,8 @@ from model_utils.models import TimeStampedModel
 
 class Student(TimeStampedModel):
     # django user includes username, password, first name, and last name
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User,
+                                on_delete=models.CASCADE)
 
     pf_first_name = models.CharField(max_length=255, blank=True)
     pf_last_name = models.CharField(max_length=255, blank=True)

@@ -42,7 +42,8 @@ class Listing(TimeStampedModel):
 
     # django automatically creates an index for all ForeignKey fields
     # e.g. no need for 'db_index = True' on relational fields
-    poster = models.ForeignKey(Student)
+    poster = models.ForeignKey(Student,
+                               on_delete=models.CASCADE)
 
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
@@ -81,7 +82,9 @@ class Listing(TimeStampedModel):
     email_message = models.TextField(blank=True, max_length=2000)
 
     # future feature: tell posters what price their book has been getting
-    winning_bid = models.ForeignKey('Bid', blank=True, null=True,
+    winning_bid = models.ForeignKey('Bid',
+                                    on_delete=models.CASCADE,
+                                    blank=True, null=True,
                                     related_name='winning_bid')
     # the date either cancelled or exchanged
     date_closed = models.DateField(null=True, blank=True)
@@ -141,8 +144,10 @@ class Listing(TimeStampedModel):
 
 class Bid(TimeStampedModel):
 
-    bidder = models.ForeignKey(Student)
-    listing = models.ForeignKey(Listing)
+    bidder = models.ForeignKey(Student,
+                               on_delete=models.CASCADE)
+    listing = models.ForeignKey(Listing,
+                                on_delete=models.CASCADE)
     price = models.PositiveIntegerField(default=0,
                                         validators=[MaxValueValidator(1000)],)
     text = models.CharField(blank=True, max_length=2000,)
@@ -179,8 +184,10 @@ class Flag(TimeStampedModel):
         (ILLEGAL, 'Otherwise Problematic'),
     )
 
-    flagger = models.ForeignKey(Student)
-    listing = models.ForeignKey(Listing)
+    flagger = models.ForeignKey(Student,
+                                on_delete=models.CASCADE)
+    listing = models.ForeignKey(Listing,
+                                on_delete=models.CASCADE)
 
     reason = models.CharField(choices=FLAGGING_REASON_CHOICES, max_length=30,)
 
@@ -207,8 +214,10 @@ class BidFlag(TimeStampedModel):
         (ILLEGAL, 'Otherwise Problematic'),
     )
 
-    flagger = models.ForeignKey(Student)
-    bid = models.ForeignKey(Bid)
+    flagger = models.ForeignKey(Student,
+                                on_delete=models.CASCADE)
+    bid = models.ForeignKey(Bid,
+                            on_delete=models.CASCADE)
 
     reason = models.CharField(choices=FLAGGING_REASON_CHOICES, max_length=30,)
 
@@ -239,8 +248,10 @@ class Rating(TimeStampedModel):
         (FIVE_STAR, '5'),
     )
 
-    rater = models.ForeignKey(Student)
-    listing = models.ForeignKey(Listing)
+    rater = models.ForeignKey(Student,
+                              on_delete=models.CASCADE)
+    listing = models.ForeignKey(Listing,
+                                on_delete=models.CASCADE)
 
     stars = models.CharField(choices=STAR_CHOICES, max_length=10,)
     review = models.TextField(blank=True, max_length=3000,)

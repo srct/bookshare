@@ -52,7 +52,7 @@ urlpatterns = [
 
     # admin pages
     path(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    path(r'^admin/', include(admin.site.urls)),
+    path(r'^admin/', admin.site.urls),
 
     # api
     path(r'^api/v1/', include('api.urls')),

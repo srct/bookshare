@@ -1,5 +1,3 @@
-# standard libary imports
-from __future__ import absolute_import, print_function, unicode_literals
 # core django imports
 from django.urls import include, path
 # third party imports

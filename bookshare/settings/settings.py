@@ -3,7 +3,6 @@ Django settings for the bookshare project.
 """
 
 # standard library imports
-from __future__ import absolute_import, print_function, unicode_literals
 import os
 # core django imports
 from django.contrib.messages import constants as messages

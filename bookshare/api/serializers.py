@@ -1,5 +1,3 @@
-# standard library imports
-from __future__ import absolute_import, print_function, unicode_literals
 # third party imports
 from rest_framework import serializers
 # imports from your apps

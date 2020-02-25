@@ -1,5 +1,3 @@
-# standard library imports
-from __future__ import absolute_import, print_function
 # third party imports
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ReadOnlyModelViewSet

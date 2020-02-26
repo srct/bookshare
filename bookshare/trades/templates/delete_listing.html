@@ -6,7 +6,7 @@ SRCT Bookshare &bull; {{ flag.listing.title }} &bull; Delete Listing
 
 {% block content %}
 
-<hr />
+{% include 'layouts/bookshare_title.html' with subtitle="Delete Listing" %}
 
 <div class="row text-center">
   <form action="" method="post">{% csrf_token %}

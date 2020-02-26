@@ -6,7 +6,7 @@ SRCT Bookshare &bull; {{ flag.listing.title }} &bull; Remove Flag
 
 {% block content %}
 
-<hr />
+{% include 'layouts/bookshare_title.html' with subtitle="Remove Flag" %}
 
 <div class="row text-center">
   <form action="" method="post">{% csrf_token %}

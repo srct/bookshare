@@ -16,18 +16,10 @@ from core.models import Student
 
 class CreateLookout(LoginRequiredMixin, CreateView):
     model = Lookout
-    fields = ['isbn', ]
+    form_class = LookoutForm
     context_object_name = 'lookout'
     template_name = 'create_lookout.html'
     login_url = 'login'
-
-    def get_context_data(self, **kwargs):
-        context = super(CreateLookout, self).get_context_data(**kwargs)
-
-        form = LookoutForm()
-        context['my_form'] = form
-
-        return context
 
     def form_valid(self, form):
         me = self.request.user.student

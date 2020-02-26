@@ -1,0 +1,39 @@
+version: '3.7'
+services:
+  web:
+    build: .
+    restart: always
+    ports:
+      - '8000:8000'
+    command: /bin/bash ./startup.sh
+    volumes:
+      - .:/go
+    depends_on:
+      - db
+    environment:
+      - DOCKER=true
+      - GO_ENV=development
+      - GO_ALLOWED_HOSTS=*
+      - GO_EMAIL_DOMAIN=@masonlive.gmu.edu
+      - GO_CAS_URL=https://login.gmu.edu/
+      - GO_DB_NAME=go
+      - GO_DB_USER=go
+      - GO_DB_PASSWORD=go
+      - GO_DB_HOST=db
+      - GO_DB_PORT=3306
+      - GO_EMAIL_HOST=
+      - GO_EMAIL_PORT=
+      - GO_EMAIL_HOST_USER=
+      - GO_EMAIL_HOST_PASSWORD=
+      - GO_EMAIL_FROM=
+      - GO_EMAIL_TO=
+      - GO_SECRET_KEY=spookyspecret
+      - superuser=zwood2
+
+  db:
+    image: registry.srct.gmu.edu/srct/go/db
+    environment:
+      MYSQL_DATABASE: go
+      MYSQL_USER: go
+      MYSQL_PASSWORD: go
+      MYSQL_ROOT_PASSWORD: go

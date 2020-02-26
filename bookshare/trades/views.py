@@ -37,9 +37,8 @@ class ListListings(LoginRequiredMixin, ListView):
 
 class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
     model = Listing
-    fields = ['isbn', 'title', 'author', 'edition', 'year', 'course_abbr',
-              'condition', 'access_code', 'price', 'photo', 'description']
     template_name = 'create_listing.html'
+    form_class = ListingForm
     context_object_name = 'listing'
     # ISBN query!
     login_url = 'login'
@@ -77,13 +76,6 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
             form.instance.photo = new_uploaded_file
 
         return super(CreateListing, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super(CreateListing, self).get_context_data(**kwargs)
-
-        form = ListingForm()
-        context['my_form'] = form
-        return context
 
     @ratelimit(key='user', rate='5/m', method='POST', block=True)
     @ratelimit(key='user', rate='50/day', method='POST', block=True)
@@ -208,8 +200,8 @@ class ListingPage(View):
 # and we return to our regularly scheduled programming
 class CreateFlag(LoginRequiredMixin, CreateView):
     model = Flag
-    fields = ['reason', ]
     template_name = 'create_flag.html'
+    form_class = FlagForm
     context_object_name = 'flag'
     login_url = 'login'
 
@@ -246,9 +238,6 @@ class CreateFlag(LoginRequiredMixin, CreateView):
         selected_listing = Listing.objects.get(slug=listing_slug)
 
         context['listing'] = selected_listing
-
-        form = FlagForm()
-        context['my_form'] = form
         return context
 
     def form_valid(self, form):
@@ -297,8 +286,8 @@ class DeleteFlag(LoginRequiredMixin, DeleteView):
 # so much almost replication, but not sure what else to do
 class CreateBidFlag(LoginRequiredMixin, CreateView):
     model = BidFlag
-    fields = ['reason', ]
     template_name = 'create_bid_flag.html'
+    form_class = BidFlagForm
     context_object_name = 'bidflag'
     login_url = 'login'
 
@@ -335,9 +324,6 @@ class CreateBidFlag(LoginRequiredMixin, CreateView):
         selected_bid = Bid.objects.get(slug=bid_slug)
 
         context['bid'] = selected_bid
-
-        form = BidFlagForm()
-        context['my_form'] = form
         return context
 
     def form_valid(self, form):
@@ -540,9 +526,9 @@ class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
 class UnExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
-    fields = ['email_message', ]
     context_object_name = 'listing'
     template_name = 'listing_unexchange.html'
+    form_class = UnExchangeListingForm
     login_url = 'login'
 
     form_valid_message = """Your exchange has been successfully cancelled,
@@ -559,14 +545,6 @@ class UnExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
             return HttpResponseForbidden()
         else:
             return super(UnExchangeListing, self).get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(UnExchangeListing, self).get_context_data(**kwargs)
-
-        form = UnExchangeListingForm()
-        context['my_form'] = form
-
-        return context
 
     def form_valid(self, form):
         self.obj = self.get_object()
@@ -673,8 +651,8 @@ class ReopenListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
 class CreateRating(LoginRequiredMixin, CreateView):
     model = Rating
-    fields = ['stars', 'review', ]
     template_name = 'create_rating.html'
+    form_class = RatingForm
     context_object_name = 'rating'
     login_url = 'login'
 
@@ -713,9 +691,6 @@ class CreateRating(LoginRequiredMixin, CreateView):
         winning_student = selected_listing.winning_bid.bidder
 
         context['listing'] = selected_listing
-
-        form = RatingForm()
-        context['my_form'] = form
         return context
 
     def form_valid(self, form):

@@ -6,6 +6,8 @@ SRCT Bookshare &bull; {{ listing.title }} &bull; Edit
 
 {% block content %}
 
+{% load crispy_forms_tags %}
+
 <div class="row">
   <div class="col-lg-12 text-center">
     <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
@@ -16,12 +18,16 @@ SRCT Bookshare &bull; {{ listing.title }} &bull; Edit
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default">
-      <div class="panel-heading">
-        <form action="" method="post">{% csrf_token %}
-          {{ form.as_p }}
-          <input type="submit" value="Update" class="btn btn-primary" />
-          <input type="cancel" value="Never Mind" class="btn btn-default" onclick="history.back()"/>
-        </form>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-10 col-md-offset-1">
+            <form action="" method="post">{% csrf_token %}
+              {{ form|crispy }}
+              <input type="submit" value="Update" class="btn btn-primary" />
+              <input type="cancel" value="Never Mind" class="btn btn-default" onclick="history.back()"/>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>

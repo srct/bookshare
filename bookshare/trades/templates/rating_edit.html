@@ -6,14 +6,16 @@ SRCT Bookshare &bull; {{ listing.title }} &bull; Edit Rating
 
 {% block content %}
 
+{% load crispy_forms_tags %}
+
 {% include 'layouts/bookshare_title.html' with subtitle="Edit Rating" %}
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default">
-      <div class="panel-heading">
+      <div class="panel-body">
         <form action="" method="post">{% csrf_token %}
-          {{ form.as_p }}
+          {{ form|crispy }}
           <input type="submit" value="Update" class="btn btn-primary" />
           <input type="cancel" value="Never Mind" class="btn btn-default" onclick="history.back()"/>
         </form>

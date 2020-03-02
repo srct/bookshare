@@ -6,7 +6,7 @@ from django.views.generic import View, DetailView, ListView, CreateView,\
     UpdateView, DeleteView
 from django.http import Http404, HttpResponseForbidden
 from django.forms.widgets import HiddenInput
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
@@ -89,8 +89,7 @@ class DeleteListing(LoginRequiredMixin, SuperuserRequiredMixin, DeleteView):
     template_name = 'delete_listing.html'
     login_url = 'login'
 
-    def get_success_url(self):
-        return reverse('flag_mod')
+    success_url = reverse_lazy('flag_mod')
 
 
 # These next three views are tied together...

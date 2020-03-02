@@ -13,12 +13,14 @@ SRCT Bookshare &bull; {{ bid.listing.title }} &bull; Edit Bid
   </div>
 </div>
 
+{% load crispy_forms_tags %}
+
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default">
-      <div class="panel-heading">
+      <div class="panel-body">
         <form action="" method="post">{% csrf_token %}
-          {{ form.as_p }}
+          {{ form|crispy }}
           <input type="submit" value="Update" class="btn btn-primary" />
           <input type="cancel" value="Never Mind" class="btn btn-default" onclick="history.back()"/>
         </form>

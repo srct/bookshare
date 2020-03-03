@@ -50,6 +50,8 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
     def form_valid(self, form):
         me = self.request.user.student
 
+        # you will see this throughout-- this field is not exposed to the user
+        # and is instead handled here
         form.instance.poster = me
 
         # take uploaded image and scale it down before storing
@@ -84,7 +86,7 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
         return super(CreateListing, self).post(request, *args, **kwargs)
 
 
-class DeleteListing(LoginRequiredMixin, SuperuserRequiredMixin, DeleteView):
+class DeleteListing(LoginRequiredMixin, SuperuserRequiredMixin, FormValidMessageMixin, DeleteView):
     model = Listing
     context_object_name = 'listing'
     template_name = 'delete_listing.html'
@@ -99,7 +101,6 @@ class DetailListing(LoginRequiredMixin, DetailView):
     model = Listing
     context_object_name = 'listing'
     template_name = 'detail_listing.html'
-
     login_url = 'login'
 
     def get_context_data(self, **kwargs):
@@ -257,7 +258,7 @@ class CreateFlag(LoginRequiredMixin, CreateView):
                        kwargs={'slug': self.object.listing.slug})
 
 
-class DeleteFlag(LoginRequiredMixin, DeleteView):
+class DeleteFlag(LoginRequiredMixin, FormValidMessageMixin, DeleteView):
     model = Flag
     context_object_name = 'flag'
     template_name = 'delete_flag.html'
@@ -334,7 +335,7 @@ class CreateBidFlag(LoginRequiredMixin, CreateView):
                        kwargs={'slug': self.object.bid.listing.slug})
 
 
-class DeleteBidFlag(LoginRequiredMixin, DeleteView):
+class DeleteBidFlag(LoginRequiredMixin, FormValidMessageMixin, DeleteView):
     model = BidFlag
     context_object_name = 'bidflag'
     template_name = 'delete_bid_flag.html'
@@ -441,9 +442,11 @@ class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
             # because the page shouldn't exist in this scenario
             raise Http404
 
+        # can't exchange a cancelled listing
         if (self.obj.cancelled is True):
             raise Http404
 
+        # only you can confirm the exchange of your own listing
         if not(posting_student == me):
             return HttpResponseForbidden()
         else:
@@ -714,7 +717,7 @@ class EditRating(LoginRequiredMixin, UpdateView):
                        kwargs={'slug': self.object.listing.poster.slug})
 
 
-class DeleteRating(LoginRequiredMixin, DeleteView):
+class DeleteRating(LoginRequiredMixin, FormValidMessageMixin, DeleteView):
     model = Rating
     context_object_name = 'rating'
     template_name = 'delete_rating.html'

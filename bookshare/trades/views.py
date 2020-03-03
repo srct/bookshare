@@ -668,12 +668,8 @@ class CreateRating(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CreateRating, self).get_context_data(**kwargs)
-        me = self.request.user.student
-        selected_listing = self.parse_url_for_listing(self.request)
 
-        winning_student = selected_listing.winning_bid.bidder
-
-        context['listing'] = selected_listing
+        context['listing'] = self.parse_url_for_listing(self.request)
         return context
 
     def form_valid(self, form):

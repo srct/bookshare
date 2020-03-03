@@ -104,20 +104,21 @@ class DetailListing(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailListing, self).get_context_data(**kwargs)
         me = self.request.user.student
+        self.obj = self.get_object()
 
         # make the form available to the template on get
         # set the bidder and the listing
-        form = BidForm(initial={'listing': self.get_object()})
+        form = BidForm(initial={'listing': self.obj})
         form.fields['listing'].widget = HiddenInput()
         context['my_form'] = form
 
         try:
-            context['rating'] = Rating.objects.get(listing=self.get_object())
+            context['rating'] = Rating.objects.get(listing=self.obj)
         except:
             context['rating'] = False
 
         # bids, filter by listing name of the current listing, order by date created
-        bids  = Bid.objects.filter(listing=self.get_object()).order_by('-price')
+        bids  = Bid.objects.filter(listing=self.obj).order_by('-price')
 
         bids_with_info = []
         flagged_bids_with_info = []
@@ -132,12 +133,12 @@ class DetailListing(LoginRequiredMixin, DetailView):
 
         context['bids'] = bids_with_info
         context['flagged_bids'] = flagged_bids_with_info
-        context['bid_count'] = Bid.objects.filter(listing=self.get_object()).count()
+        context['bid_count'] = Bid.objects.filter(listing=self.obj).count()
         # flags
-        context['flags'] = Flag.objects.filter(listing=self.get_object()).order_by('-created')
-        context['flag_count'] = Flag.objects.filter(listing=self.get_object()).count()
-        context['can_flag'] = can_flag(me, self.get_object())
-        context['flag_slug'] = flag_slug(me, self.get_object())
+        context['flags'] = Flag.objects.filter(listing=self.obj).order_by('-created')
+        context['flag_count'] = Flag.objects.filter(listing=self.obj).count()
+        context['can_flag'] = can_flag(me, self.obj)
+        context['flag_slug'] = flag_slug(me, self.obj)
         return context
 
 
@@ -148,8 +149,9 @@ class DetailListingNoAuth(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DetailListingNoAuth, self).get_context_data(**kwargs)
-        context['flag_count'] = Flag.objects.filter(listing=self.get_object()).count()
-        context['flags'] = Flag.objects.filter(listing=self.get_object()).order_by('-created')
+        self.obj = self.get_object()
+        context['flag_count'] = Flag.objects.filter(listing=self.obj).count()
+        context['flags'] = Flag.objects.filter(listing=self.obj).order_by('-created')
         return context
 
 
@@ -374,10 +376,11 @@ class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         me = self.request.user.student
-        bidding_student = self.get_object().bidder
+        self.obj = self.get_object()
+        bidding_student = self.obj.bidder
 
         # if exchanged or cancelled, this page doesn't exist
-        if self.get_object().listing.exchanged or self.get_object().listing.cancelled:
+        if self.obj.listing.exchanged or self.obj.listing.cancelled:
             raise Http404
 
         if not(bidding_student == me):
@@ -404,10 +407,11 @@ class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         me = self.request.user.student
-        posting_student = self.get_object().poster
+        self.obj = self.get_object()
+        posting_student = self.obj.poster
 
         # can't edit a bid on a cancelled listing
-        if (self.get_object().cancelled is True):
+        if (self.obj.cancelled is True):
             raise Http404
 
         # can only edit your own bids
@@ -439,14 +443,15 @@ class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         me = self.request.user.student
-        posting_student = self.get_object().poster
+        self.obj = self.obj
+        posting_student = self.obj.poster
 
-        bid_count = Bid.objects.filter(listing=self.get_object()).count()
+        bid_count = Bid.objects.filter(listing=self.obj).count()
         if bid_count < 1:
             # because the page shouldn't exist in this scenario
             raise Http404
 
-        if (self.get_object().cancelled is True):
+        if (self.obj.cancelled is True):
             raise Http404
 
         if not(posting_student == me):
@@ -521,9 +526,10 @@ class UnExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         me = self.request.user.student
-        posting_student = self.get_object().poster
+        self.obj = self.get_object()
+        posting_student = self.obj.poster
 
-        if (self.get_object().cancelled is True):
+        if (self.obj.cancelled is True):
             raise Http404
 
         if not(posting_student == me):
@@ -586,10 +592,11 @@ class CancelListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         me = self.request.user.student
-        posting_student = self.get_object().poster
+        self.obj = self.get_object()
+        posting_student = self.obj.poster
 
         # you can only cancel the listing if the listing isn't already cancelled
-        if (self.get_object().cancelled is True):
+        if (self.obj.cancelled is True):
             raise Http404
 
         # only you can cancel your own listing
@@ -618,10 +625,11 @@ class ReopenListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
     def get(self, request, *args, **kwargs):
         me = self.request.user.student
-        posting_student = self.get_object().poster
+        self.obj = self.get_object()
+        posting_student = self.obj.poster
 
         # you can only reopen the listing if the listing is cancelled
-        if (self.get_object().cancelled is False):
+        if (self.obj.cancelled is False):
             raise Http404
 
         # only you can re-open your own listing

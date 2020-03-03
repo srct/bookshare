@@ -72,5 +72,8 @@ class Course(TimeStampedModel):
                               # validators=RegexValidator('[0-9]{3,}'))
     number = models.CharField(max_length=3)
 
+    def __str__(self):
+        return "%s %s" % (self.departmentAbbreviation, self.number)
+
     def __unicode__(self):
         return "%s %s" % (self.departmentAbbreviation, self.number)

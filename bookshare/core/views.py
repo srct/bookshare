@@ -15,7 +15,6 @@ from trades.models import Listing, Bid, Rating
 class DetailStudent(LoginRequiredMixin, DetailView):
     model = Student
     template_name = 'profile.html'
-    context_object_name = 'student'
     login_url = 'login'
 
     def get_context_data(self, **kwargs):
@@ -89,7 +88,6 @@ class UpdateStudent(LoginRequiredMixin, FormView):
 class StudentRatings(LoginRequiredMixin, DetailView):
     model = Student
     template_name = 'ratings.html'
-    context_object_name = 'student'
     login_url = 'login'
 
     def get_context_data(self, **kwargs):

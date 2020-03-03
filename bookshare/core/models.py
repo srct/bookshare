@@ -57,6 +57,9 @@ class Student(TimeStampedModel):
     def get_absolute_url(self):
         return reverse('profile', kwargs={'slug': self.slug})
 
+    def __str__(self):
+        return self.get_full_name_or_uname()
+
     def __unicode__(self):
         return '%s' % self.user.username
 

@@ -52,6 +52,7 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
 
         form.instance.poster = me
 
+        # take uploaded image and scale it down before storing
         image_name = form.instance.photo.name
         user_image = Image.open(form.instance.photo)
         image_format = user_image.format
@@ -420,17 +421,6 @@ class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         else:
             return super(EditListing, self).get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(EditListing, self).get_context_data(**kwargs)
-
-        me = self.request.user.student
-        posting_student = self.get_object().poster
-
-        if not(posting_student == me):
-            return HttpResponseForbidden()
-
-        return context
-
 
 class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
@@ -529,9 +519,11 @@ class UnExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         self.obj = self.get_object()
         posting_student = self.obj.poster
 
+        # you can only cancel the exchange if the listing itself is not cancelled
         if (self.obj.cancelled is True):
             raise Http404
 
+        # only you can cancel the exchange of your own listing
         if not(posting_student == me):
             return HttpResponseForbidden()
         else:
@@ -711,6 +703,7 @@ class EditRating(LoginRequiredMixin, UpdateView):
         me = self.request.user.student
         rating_student = self.get_object().rater
 
+        # you can only rate exchanges you're party to
         if not(rating_student == me):
             return HttpResponseForbidden()
         else:
@@ -732,6 +725,7 @@ class DeleteRating(LoginRequiredMixin, DeleteView):
         me = self.request.user.student
         rating_student = self.get_object().rater
 
+        # you can only delete your own ratings
         if not(rating_student == me):
             return HttpResponseForbidden()
         else:

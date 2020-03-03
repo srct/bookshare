@@ -87,6 +87,7 @@ class DeleteListing(LoginRequiredMixin, SuperuserRequiredMixin, DeleteView):
     model = Listing
     context_object_name = 'listing'
     template_name = 'delete_listing.html'
+    form_valid_message = "The listing was successfully deleted."
     login_url = 'login'
 
     success_url = reverse_lazy('flag_mod')
@@ -259,6 +260,7 @@ class DeleteFlag(LoginRequiredMixin, DeleteView):
     model = Flag
     context_object_name = 'flag'
     template_name = 'delete_flag.html'
+    form_valid_message = "Your flag was successfully deleted."
     login_url = 'login'
 
     def get(self, request, *args, **kwargs):
@@ -346,6 +348,7 @@ class DeleteBidFlag(LoginRequiredMixin, DeleteView):
     model = BidFlag
     context_object_name = 'bidflag'
     template_name = 'delete_bid_flag.html'
+    form_valid_message = "Your flag was successfully deleted."
     login_url = 'login'
 
     def get(self, request, *args, **kwargs):
@@ -739,6 +742,7 @@ class DeleteRating(LoginRequiredMixin, DeleteView):
     model = Rating
     context_object_name = 'rating'
     template_name = 'delete_rating.html'
+    form_valid_message = "Your rating was successfully deleted."
     login_url = 'login'
 
     def get(self, request, *args, **kwargs):

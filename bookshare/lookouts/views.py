@@ -17,7 +17,6 @@ from core.models import Student
 class CreateLookout(LoginRequiredMixin, CreateView):
     model = Lookout
     form_class = LookoutForm
-    context_object_name = 'lookout'
     template_name = 'create_lookout.html'
     login_url = 'login'
 
@@ -42,7 +41,6 @@ class CreateLookout(LoginRequiredMixin, CreateView):
 
 class DetailLookout(LoginRequiredMixin, DetailView):
     model = Lookout
-    context_object_name = 'lookout'
     template_name = 'detail_lookout.html'
     login_url = 'login'
 
@@ -60,7 +58,6 @@ class DetailLookout(LoginRequiredMixin, DetailView):
 
 class DeleteLookout(LoginRequiredMixin, FormValidMessageMixin, DeleteView):
     model = Lookout
-    context_object_name = 'lookout'
     template_name = 'delete_lookout.html'
     success_url = '/'
     login_url = 'login'

@@ -83,6 +83,8 @@ SRCT Bookshare &bull; {{ student.get_full_name_or_uname }}
       <blockquote><em>No review details provided.</em></blockquote>
       {% endif %}
     </div>
+  {% empty %}
+  <p>No ratings yet</p>
   {% endfor %}
   </div>
 </div>

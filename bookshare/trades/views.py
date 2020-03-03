@@ -232,10 +232,8 @@ class CreateFlag(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CreateFlag, self).get_context_data(**kwargs)
-        me = self.request.user.student
-        selected_listing = self.parse_url_for_listing(self.request)
 
-        context['listing'] = selected_listing
+        context['listing'] = self.parse_url_for_listing(self.request)
         return context
 
     def form_valid(self, form):
@@ -286,15 +284,16 @@ class CreateBidFlag(LoginRequiredMixin, CreateView):
     context_object_name = 'bidflag'
     login_url = 'login'
 
-    def get(self, request, *args, **kwargs):
-        me = self.request.user.student
-
-        # duplicated code!!!
-        current_url = self.request.get_full_path()
+    def parse_url_for_bid(self, request):
+        # there's possibly a better way than url parsing, but here we are
+        current_url = request.get_full_path()
         bid_slug = current_url.split('/')[5]
         # [u'', u'share', u'listing', u'C1s3oD', u'bid', 'u'F17jal', u'flag']
-        selected_bid = Bid.objects.get(slug=bid_slug)
+        return Bid.objects.get(slug=bid_slug)
 
+    def get(self, request, *args, **kwargs):
+        me = self.request.user.student
+        selected_bid = self.parse_url_for_bid(self.request)
         bidding_student = selected_bid.bidder
 
         # can only create a flag if you haven't previously created one
@@ -310,25 +309,13 @@ class CreateBidFlag(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CreateBidFlag, self).get_context_data(**kwargs)
-        me = self.request.user.student
 
-        # duplicated code!!!
-        current_url = self.request.get_full_path()
-        bid_slug = current_url.split('/')[5]
-        # [u'', u'share', u'listing', u'C1s3oD', u'bid', 'u'F17jal', u'flag']
-        selected_bid = Bid.objects.get(slug=bid_slug)
-
-        context['bid'] = selected_bid
+        context['bid'] = self.parse_url_for_bid(self.request)
         return context
 
     def form_valid(self, form):
         me = self.request.user.student
-
-        # duplicated code!!!
-        current_url = self.request.get_full_path()
-        bid_slug = current_url.split('/')[5]
-        # [u'', u'share', u'listing', u'C1s3oD', u'bid', 'u'F17jal', u'flag']
-        selected_bid = Bid.objects.get(slug=bid_slug)
+        selected_bid = self.parse_url_for_bid(self.request)
 
         form.instance.flagger = me
         form.instance.bid = selected_bid
@@ -656,15 +643,16 @@ class CreateRating(LoginRequiredMixin, CreateView):
     context_object_name = 'rating'
     login_url = 'login'
 
-    def get(self, request, *args, **kwargs):
-        me = self.request.user.student
-
-        # duplicated code!!!
-        current_url = self.request.get_full_path()
+    def parse_url_for_listing(self, request):
+        # there's possibly a better way than url parsing, but here we are
+        current_url = request.get_full_path()
         listing_slug = current_url.split('/')[3]
         # [u'', u'share', u'listing', u'C1s3oD', u'flag']
-        selected_listing = Listing.objects.get(slug=listing_slug)
+        return Listing.objects.get(slug=listing_slug)
 
+    def get(self, request, *args, **kwargs):
+        me = self.request.user.student
+        selected_listing = self.parse_url_for_listing(self.request)
         winning_student = selected_listing.winning_bid.bidder
 
         # can only create a rating if you haven't previously created one
@@ -681,12 +669,7 @@ class CreateRating(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(CreateRating, self).get_context_data(**kwargs)
         me = self.request.user.student
-
-        # duplicated code!!!
-        current_url = self.request.get_full_path()
-        listing_slug = current_url.split('/')[3]
-        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
-        selected_listing = Listing.objects.get(slug=listing_slug)
+        selected_listing = self.parse_url_for_listing(self.request)
 
         winning_student = selected_listing.winning_bid.bidder
 
@@ -695,11 +678,7 @@ class CreateRating(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         me = self.request.user.student
-
-        current_url = self.request.get_full_path()
-        listing_slug = current_url.split('/')[3]
-        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
-        selected_listing = Listing.objects.get(slug=listing_slug)
+        selected_listing = self.parse_url_for_listing(self.request)
 
         form.instance.rater = me
         form.instance.listing = selected_listing

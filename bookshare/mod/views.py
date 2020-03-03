@@ -10,7 +10,6 @@ from core.models import Student
 
 class ModLandingView(LoginRequiredMixin, SuperuserRequiredMixin, TemplateView):
     template_name = 'mod.html'
-
     login_url = 'login'
 
 class FlagModView(LoginRequiredMixin, SuperuserRequiredMixin, ListView):

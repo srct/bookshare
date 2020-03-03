@@ -28,7 +28,6 @@ from core.models import Student
 
 class ListListings(LoginRequiredMixin, ListView):
     model = Listing
-    context_object_name = 'listings'
     paginate_by = 16
     queryset = Listing.objects.exclude(cancelled=True).order_by('-created')
     template_name = 'list_listings.html'
@@ -39,10 +38,8 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
     model = Listing
     template_name = 'create_listing.html'
     form_class = ListingForm
-    context_object_name = 'listing'
     # ISBN query!
     login_url = 'login'
-
     # eventually figure out how to use {% url 'create_listing' %}
     form_valid_message = mark_safe("""Your listing was successfully created!
                          <a href="/share/new/">Create another here!</a>""")
@@ -88,18 +85,15 @@ class CreateListing(LoginRequiredMixin, FormValidMessageMixin, CreateView):
 
 class DeleteListing(LoginRequiredMixin, SuperuserRequiredMixin, FormValidMessageMixin, DeleteView):
     model = Listing
-    context_object_name = 'listing'
     template_name = 'delete_listing.html'
     form_valid_message = "The listing was successfully deleted."
     login_url = 'login'
-
     success_url = reverse_lazy('flag_mod')
 
 
 # These next three views are tied together...
 class DetailListing(LoginRequiredMixin, DetailView):
     model = Listing
-    context_object_name = 'listing'
     template_name = 'detail_listing.html'
     login_url = 'login'
 
@@ -146,7 +140,6 @@ class DetailListing(LoginRequiredMixin, DetailView):
 
 class DetailListingNoAuth(DetailView):
     model = Listing
-    context_object_name = 'listing'
     template_name = 'detail_listing_no_auth.html'
 
     def get_context_data(self, **kwargs):
@@ -160,9 +153,7 @@ class DetailListingNoAuth(DetailView):
 class CreateBid(LoginRequiredMixin, CreateView):
     model = Bid
     fields = ['listing', 'price', 'text', ]
-    context_object_name = 'bid'
     template_name = 'detail_listing.html'
-
     login_url = 'login'
 
     def form_valid(self, form):
@@ -207,9 +198,7 @@ class CreateFlag(LoginRequiredMixin, CreateView):
     model = Flag
     template_name = 'create_flag.html'
     form_class = FlagForm
-    context_object_name = 'flag'
     login_url = 'login'
-
 
     def parse_url_for_listing(self, request):
         # there's possibly a better way than url parsing, but here we are
@@ -260,7 +249,6 @@ class CreateFlag(LoginRequiredMixin, CreateView):
 
 class DeleteFlag(LoginRequiredMixin, FormValidMessageMixin, DeleteView):
     model = Flag
-    context_object_name = 'flag'
     template_name = 'delete_flag.html'
     form_valid_message = "Your flag was successfully deleted."
     login_url = 'login'
@@ -368,12 +356,9 @@ class DeleteBid(LoginRequiredMixin, DeleteView):
 class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Bid
     template_name = 'bid_edit.html'
-    context_object_name = 'bid'
     # form_class = EditBidForm
     fields = ['price', 'text', ]
-
     login_url = 'login'
-
     form_valid_message = "Your bid was successfully updated!"
 
     def get(self, request, *args, **kwargs):
@@ -398,13 +383,10 @@ class EditBid(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     template_name = 'listing_edit.html'
-    context_object_name = 'listing'
     # form_class = EditListingForm
     fields = ['title', 'author', 'isbn', 'year', 'edition', 'condition',
               'access_code', 'description', 'price', 'photo', ]
-
     login_url = 'login'
-
     form_valid_message = "Your listing was successfully updated!"
 
     def get(self, request, *args, **kwargs):
@@ -426,10 +408,8 @@ class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     fields = ['email_message', 'winning_bid', ]
-    context_object_name = 'listing'
     template_name = 'listing_exchange.html'
     login_url = 'login'
-
     form_valid_message = "Your email was successfully sent!"
 
     def get(self, request, *args, **kwargs):
@@ -509,11 +489,9 @@ class ExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 
 class UnExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
-    context_object_name = 'listing'
     template_name = 'listing_unexchange.html'
     form_class = UnExchangeListingForm
     login_url = 'login'
-
     form_valid_message = """Your exchange has been successfully cancelled,
                      and your email successfully sent!"""
 
@@ -578,11 +556,8 @@ class UnExchangeListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 class CancelListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     fields = []
-    template_suffix_name = '_cancel'
-    context_object_name = 'listing'
     template_name = 'listing_cancel.html'
     login_url = 'login'
-
     form_valid_message = "Your listing was successfully cancelled!"
 
     def get(self, request, *args, **kwargs):
@@ -611,8 +586,6 @@ class CancelListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
 class ReopenListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
     model = Listing
     fields = []
-    template_suffix_name = '_reopen'
-    context_object_name = 'listing'
     template_name = 'listing_reopen.html'
     login_url = 'login'
 
@@ -643,7 +616,6 @@ class CreateRating(LoginRequiredMixin, CreateView):
     model = Rating
     template_name = 'create_rating.html'
     form_class = RatingForm
-    context_object_name = 'rating'
     login_url = 'login'
 
     def parse_url_for_listing(self, request):
@@ -696,10 +668,8 @@ class CreateRating(LoginRequiredMixin, CreateView):
 class EditRating(LoginRequiredMixin, UpdateView):
     model = Rating
     template_name = 'rating_edit.html'
-    context_object_name = 'rating'
     # form_class = EditListingForm
     login_url = 'login'
-
     fields = ['stars', 'review', ]
 
     def get(self, request, *args, **kwargs):
@@ -719,7 +689,6 @@ class EditRating(LoginRequiredMixin, UpdateView):
 
 class DeleteRating(LoginRequiredMixin, FormValidMessageMixin, DeleteView):
     model = Rating
-    context_object_name = 'rating'
     template_name = 'delete_rating.html'
     form_valid_message = "Your rating was successfully deleted."
     login_url = 'login'

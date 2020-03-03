@@ -192,6 +192,7 @@ class ListingPage(View):
         if self.request.user.is_authenticated:
             view = CreateBid.as_view()
             return view(request, *args, **kwargs)
+        # the nonauthenticated version cannot post
         else:
             pass
 
@@ -204,15 +205,17 @@ class CreateFlag(LoginRequiredMixin, CreateView):
     context_object_name = 'flag'
     login_url = 'login'
 
-    def get(self, request, *args, **kwargs):
-        me = self.request.user.student
 
-        # duplicated code!!!
-        current_url = self.request.get_full_path()
+    def parse_url_for_listing(self, request):
+        # there's possibly a better way than url parsing, but here we are
+        current_url = request.get_full_path()
         listing_slug = current_url.split('/')[3]
         # [u'', u'share', u'listing', u'C1s3oD', u'flag']
-        selected_listing = Listing.objects.get(slug=listing_slug)
+        return Listing.objects.get(slug=listing_slug)
 
+    def get(self, request, *args, **kwargs):
+        me = self.request.user.student
+        selected_listing = self.parse_url_for_listing(self.request)
         posting_student = selected_listing.poster
 
         # can only create a flag if you haven't previously created one
@@ -229,23 +232,14 @@ class CreateFlag(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(CreateFlag, self).get_context_data(**kwargs)
         me = self.request.user.student
-
-        # duplicated code!!!
-        current_url = self.request.get_full_path()
-        listing_slug = current_url.split('/')[3]
-        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
-        selected_listing = Listing.objects.get(slug=listing_slug)
+        selected_listing = self.parse_url_for_listing(self.request)
 
         context['listing'] = selected_listing
         return context
 
     def form_valid(self, form):
         me = self.request.user.student
-
-        current_url = self.request.get_full_path()
-        listing_slug = current_url.split('/')[3]
-        # [u'', u'share', u'listing', u'C1s3oD', u'flag']
-        selected_listing = Listing.objects.get(slug=listing_slug)
+        selected_listing = self.parse_url_for_listing(self.request)
 
         form.instance.flagger = me
         form.instance.listing = selected_listing
@@ -422,9 +416,11 @@ class EditListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         me = self.request.user.student
         posting_student = self.get_object().poster
 
+        # can't edit a bid on a cancelled listing
         if (self.get_object().cancelled is True):
             raise Http404
 
+        # can only edit your own bids
         if not(posting_student == me):
             return HttpResponseForbidden()
         else:
@@ -606,6 +602,7 @@ class CancelListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         if (self.get_object().cancelled is True):
             raise Http404
 
+        # only you can cancel your own listing
         if not(posting_student == me):
             return HttpResponseForbidden()
         else:
@@ -637,6 +634,7 @@ class ReopenListing(LoginRequiredMixin, FormValidMessageMixin, UpdateView):
         if (self.get_object().cancelled is False):
             raise Http404
 
+        # only you can re-open your own listing
         if not(posting_student == me):
             return HttpResponseForbidden()
         else:

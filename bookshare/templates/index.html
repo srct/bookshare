@@ -56,7 +56,7 @@ SRCT Bookshare &bull; Homepage
 
     {% for lookout in lookouts %}
       <legend><i class="fa fa-book"></i>
-        <a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name|title }}</a>
+        <a href="{{ lookout.get_absolute_url }}">{{ lookout.get_title_or_isbn }}</a>
       </legend>
       <div class="row">
         {% for listing in lookout.get_listings %}

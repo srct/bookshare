@@ -3,7 +3,7 @@
 {% load trades_extras %}
 
 {% block title %}
-SRCT Bookshare &bull; Lookouts &bull; {{ lookout.isbn|isbn_name|title }}
+SRCT Bookshare &bull; Lookouts &bull; {{ lookout.get_title_or_isbn }}
 {% endblock title %}
 
 {% block content %}
@@ -11,7 +11,7 @@ SRCT Bookshare &bull; Lookouts &bull; {{ lookout.isbn|isbn_name|title }}
 <div class="row">
   <div class="col-sm-12 text-center">
     <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
-    <p class="lead"><strong>Your lookout for <em>{{ lookout.isbn|isbn_name|title }}</em>.</strong></p>
+    <p class="lead"><strong>Your lookout for <em>{{ lookout.get_title_or_isbn }}</em>.</strong></p>
     <a href="{% url 'delete_lookout' lookout.slug %}"><button type="button" class="btn btn-danger btn-xs">Delete this Lookout</button></a>
   </div>
 </div>

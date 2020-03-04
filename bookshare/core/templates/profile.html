@@ -214,7 +214,7 @@
         {% for lookout in lookouts %}
         <tr>
           <td class="text-center"><h4>{{ lookout.isbn }}</h4></td>
-          <td class="text-center"><h4><a href="{{ lookout.get_absolute_url }}">{{ lookout.isbn|isbn_name|title }}<a/></h4></td>
+          <td class="text-center"><h4><a href="{{ lookout.get_absolute_url }}">{{ lookout.get_title_or_isbn }}<a/></h4></td>
           <td class="text-center"><h4><a href="{% url 'delete_lookout' lookout.slug %}"><span class="label label-danger">Delete</span></a></h4></td>
         {% endfor %}
         </tbody>

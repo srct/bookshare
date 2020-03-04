@@ -31,7 +31,7 @@ def ISBNMetadata(standardISBN):
             full_title = '%s: %s' % (title, subtitle)
         else:
             full_title = title
-        metadataDict = {'title': full_title}
+        metadataDict = {'title': full_title.title()}
 
         date = isbn_data.get('publish_date' ,'')
         # unfortunately, dates are formatted in a variety of different ways

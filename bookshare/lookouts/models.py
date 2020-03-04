@@ -44,7 +44,7 @@ class Lookout(TimeStampedModel):
         return reverse('detail_lookout', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
-        if not(self.title):  # only run when initially created
+        if not(self.title and self.author):  # only run when initially created
             isbn_metadata = ISBNMetadata(self.isbn)
             self.title = isbn_metadata.get('title')
             self.author = isbn_metadata.get('authors')

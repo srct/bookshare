@@ -17,7 +17,13 @@
       <span class="label label-info"><strong>Active</strong></span>
     {% endif %}
   </h4></td>
-  <td class="text-center col-md-1"><h4>{{ bid.listing.course_abbr }}</h4></td>
+  <td class="text-center col-md-1"><h4>
+    {% if bid.listing.course_abbr %}
+      {{ bid.listing.course_abbr }}
+    {% else %}
+      &mdash;
+    {% endif %}
+  </h4></td>
   <td class="text-center col-md-1"><h4>
   ${{ bid.price }}
   {% if bid == bid.listing.winning_bid %}

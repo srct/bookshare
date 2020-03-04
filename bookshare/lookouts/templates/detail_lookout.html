@@ -11,7 +11,18 @@ SRCT Bookshare &bull; Lookouts &bull; {{ lookout.get_title_or_isbn }}
 <div class="row">
   <div class="col-sm-12 text-center">
     <h1><strong>SRCT</strong>&#8203;BOOKSHARE</h1>
-    <p class="lead"><strong>Your lookout for <em>{{ lookout.get_title_or_isbn }}</em>.</strong></p>
+    <p class="lead"><em>Your lookout for</em></p>
+    <p class="lead"><strong>{{ lookout.get_title_or_isbn }}</strong></p>
+    <p class="lead"><small>
+      {% if lookout.author %}
+        by {{ lookout.author }}
+      {% endif %}
+      (ISBN {{ lookout.isbn }})</small>
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 text-center">
     <a href="{% url 'delete_lookout' lookout.slug %}"><button type="button" class="btn btn-danger btn-xs">Delete this Lookout</button></a>
   </div>
 </div>

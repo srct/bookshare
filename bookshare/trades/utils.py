@@ -1,13 +1,19 @@
+# standard libary imports
+from datetime import datetime
+# third party imports
 import requests
+# imports from your apps
 from .models import Flag, Rating, BidFlag
 
 
-# pulls worldcat metadata from ISBNs
+# previously pulled worldcat metadata from ISBNs, worldcat is now a paid service
+# thankfully, the internet archive has stepped in with a free api replacement
 def ISBNMetadata(standardISBN):
-    # passing in numbers starting with 0 throws "SyntaxError: invalid token"
-    url = "http://xisbn.worldcat.org/webservices/xid/isbn/" +\
-          str(standardISBN) +\
-          "?method=getMetadata&format=json&fl=title,year,author,ed"
+    # supports both ISBN 10 and ISBN 13
+    key_format = 'ISBN:%s' % str(standardISBN)
+    url = "https://openlibrary.org/api/books?bibkeys=" +\
+          key_format +\
+          "&format=json&jscmd=data"
 
     # In case the API fails to return, simply return None.
     try:
@@ -16,10 +22,28 @@ def ISBNMetadata(standardISBN):
         return None
 
     # format into a dictionary
-    dejson = metadata.json()
+    json_response = metadata.json()
+    isbn_data = json_response.get(key_format)
     try:
-        metadataDict = dejson.get('list')
-        return metadataDict[0]
+        title = isbn_data.get('title', '')
+        subtitle = isbn_data.get('subtitle', '')
+        if subtitle:
+            full_title = '%s: %s' % (title, subtitle)
+        else:
+            full_title = title
+        metadataDict = {'title': full_title}
+
+        date = isbn_data.get('publish_date' ,'')
+        # unfortunately, dates are formatted in a variety of different ways
+        # but year should be the final four digits regardless of, say,  month formatting
+        metadataDict['year'] = date[-4:]
+
+        authors = isbn_data.get('authors', 'wat')
+        metadataDict['authors'] = ' and '.join([author.get('name', '')
+                                                for author in authors])
+
+        # unlike worldcat, openlibrary does not provide edition information
+        return metadataDict
     except:
         return None
 

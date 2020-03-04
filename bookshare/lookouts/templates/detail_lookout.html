@@ -28,6 +28,8 @@ SRCT Bookshare &bull; Lookouts &bull; {{ lookout.isbn|isbn_name|title }}
     <div class="row">
     {% endif %}
     {% endif %}
+  {% empty %}
+    <p class="text-center">No listings currently match your lookout. We'll keep you updated!</p>
   {% endfor %}
 </div>
 

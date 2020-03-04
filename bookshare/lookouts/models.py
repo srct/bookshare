@@ -44,9 +44,10 @@ class Lookout(TimeStampedModel):
         return reverse('detail_lookout', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
-        isbn_metadata = ISBNMetadata(self.isbn)
-        self.title = isbn_metadata.get('title')
-        self.author = isbn_metadata.get('authors')
+        if not(self.title):  # only run when initially created
+            isbn_metadata = ISBNMetadata(self.isbn)
+            self.title = isbn_metadata.get('title')
+            self.author = isbn_metadata.get('authors')
         super().save(*args, **kwargs)
 
     def __unicode__(self):

@@ -29,7 +29,7 @@ pyisbn==1.0.1
 python-dateutil==2.4.1
 pytz==2014.10
 redis==2.10.5
-requests==2.11.1
+requests==2.20.0
 selenium==2.45.0
 six==1.10.0
 sqlparse==0.3.0

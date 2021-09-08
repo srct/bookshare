@@ -22,7 +22,7 @@ gunicorn==20.0.4
 mccabe==0.6.1
 mysqlclient==1.4.6
 pep8==1.7.1
-Pillow==8.2.0
+Pillow==8.3.2
 pycodestyle==2.4.0
 pyflakes==1.0.0
 pyisbn==1.0.1
